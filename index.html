@@ -8148,19 +8148,19 @@
 
       // --- HÀM ĐỌC ĐỒNG BỘ MỌI THIẾT BỊ (TÀNG HÌNH ĐỘC LẬP & XÓA BỘ NHỚ LỖI) ---
       function speak(t, lang = "vi-VN") {
-        stopAudio();
-        if (window.globalVoicePlayer) window.globalVoicePlayer.pause();
-
+        stopAudio(); 
+        if (window.globalVoicePlayer) window.globalVoicePlayer.pause(); 
+        
         isAiSpeaking = !0;
-        let myToken = currentAudioToken;
-
+        let myToken = currentAudioToken; 
+        
         let ct = t
           .replace(/<a\b[^>]*>(.*?)<\/a>/gi, "")
           .replace(/<[^>]*>?/gm, "")
           .replace(/Tìm kiếm trên/gi, "")
           .replace(/[*_🌍✨🎬🎵📄🖼️🔍📖📝]/g, "")
           .trim();
-
+          
         if (!ct) {
           isAiSpeaking = !1;
           window.currentAudio = null;
@@ -8172,8 +8172,7 @@
         let rawChunks = ct.match(/[^.!?\n]+[.!?\n]*/g) || [ct];
         rawChunks.forEach((c) => {
           if (c.length > 200) {
-            let words = c.split(" "),
-              temp = "";
+            let words = c.split(" "), temp = "";
             words.forEach((w) => {
               if (temp.length + w.length > 180) {
                 chunks.push(temp.trim());
@@ -8189,7 +8188,7 @@
         });
 
         let i = 0;
-
+        
         if (!window.globalVoicePlayer) {
           window.globalVoicePlayer = new Audio();
           // TUYỆT CHIÊU: Chỉ tàng hình riêng biệt cái loa, không làm ảnh hưởng Micro
@@ -8204,15 +8203,15 @@
           }
           if (i >= chunks.length) {
             isAiSpeaking = !1;
-            window.currentAudio = null; // FIX LỖI KẸT MICRO: Trả lại bộ nhớ khi hát xong!
+            window.currentAudio = null; // Trả lại bộ nhớ khi hát xong!
             return;
           }
 
           let url = `https://translate.googleapis.com/translate_tts?ie=UTF-8&tl=${lang.split("-")[0]}&client=tw-ob&q=${encodeURIComponent(chunks[i])}`;
-
+          
           let a = window.globalVoicePlayer;
           a.src = url;
-          a.playbackRate = 1.25;
+          a.playbackRate = 1.25; 
           window.currentAudio = a;
 
           let bumpInterval;
@@ -8232,7 +8231,7 @@
             clearInterval(bumpInterval);
             if (myToken !== currentAudioToken) return;
             i++;
-            playNext();
+            playNext(); 
           };
 
           a.onerror = () => {
@@ -9515,14 +9514,9 @@
           }
 
           if (recog) {
-            // ĐÃ XÓA BỎ LỆNH GETUSERMEDIA TRANH GIÀNH PHẦN CỨNG
-            // Để AI tự động bật Mic và lắng nghe!
             try {
               recog.start();
-            } catch (e) {
-              // Bỏ qua lỗi nếu mic đang bật sẵn
-            }
-
+            } catch (e) {}
             if (isLiveMode) {
               isLive = !0;
               lt.innerText = "Đang lắng nghe...";
