@@ -9507,30 +9507,42 @@
           !(window.speechSynthesis && window.speechSynthesis.speaking)
         ) {
           try {
-            // Tắt tàng hình để Micro hoạt động
+            // 1. Ép Chrome hiện danh tính để hệ thống Nhận diện giọng nói hoạt động
             let m = document.querySelector('meta[name="referrer"]');
-            if (m) m.remove();
+            if (!m) {
+              m = document.createElement("meta");
+              m.name = "referrer";
+              document.head.appendChild(m);
+            }
+            m.content = "strict-origin-when-cross-origin";
+
             recog.start();
           } catch (e) {}
         }
       }, 2500);
 
       async function startMic(isLiveMode) {
-        // Tắt tàng hình để Micro hoạt động
+        // 1. Ép Chrome hiện danh tính để hệ thống Nhận diện giọng nói hoạt động
         let m = document.querySelector('meta[name="referrer"]');
-        if (m) m.remove();
+        if (!m) {
+          m = document.createElement("meta");
+          m.name = "referrer";
+          document.head.appendChild(m);
+        }
+        m.content = "strict-origin-when-cross-origin";
 
         try {
           if (isLiveMode) {
             ls.classList.add("show");
             lt.innerText = "Đang kết nối...";
           }
+
+          // 2. QUAN TRỌNG NHẤT: Giải phóng Micro ngay lập tức!
+          // Xin quyền xong phải ngắt luồng ngay để nhường phần cứng cho AI nghe.
           let str = await navigator.mediaDevices.getUserMedia({ audio: !0 });
-          window.currentMicStream = str;
-          if (!isLiveMode) {
-            str.getTracks().forEach((tr) => tr.stop());
-            window.currentMicStream = null;
-          }
+          str.getTracks().forEach((tr) => tr.stop());
+          window.currentMicStream = null;
+
           if (recog) {
             try {
               recog.stop();
