@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="vi">
   <head>
+    <meta name="referrer" content="no-referrer" />
     <meta charset="UTF-8" />
     <meta
       name="viewport"
@@ -8146,21 +8147,21 @@
         return { e: null, k: query };
       }
 
-      // --- HÀM ĐỌC ĐỒNG BỘ MỌI THIẾT BỊ (TÀNG HÌNH ĐỘC LẬP & XÓA BỘ NHỚ LỖI) ---
+      // --- HÀM ĐỌC GIỌNG GOOGLE ĐỒNG BỘ MỌI THIẾT BỊ ---
       function speak(t, lang = "vi-VN") {
-        stopAudio(); 
-        if (window.globalVoicePlayer) window.globalVoicePlayer.pause(); 
-        
+        stopAudio();
+        if (window.globalVoicePlayer) window.globalVoicePlayer.pause();
+
         isAiSpeaking = !0;
-        let myToken = currentAudioToken; 
-        
+        let myToken = currentAudioToken;
+
         let ct = t
           .replace(/<a\b[^>]*>(.*?)<\/a>/gi, "")
           .replace(/<[^>]*>?/gm, "")
           .replace(/Tìm kiếm trên/gi, "")
           .replace(/[*_🌍✨🎬🎵📄🖼️🔍📖📝]/g, "")
           .trim();
-          
+
         if (!ct) {
           isAiSpeaking = !1;
           window.currentAudio = null;
@@ -8172,7 +8173,8 @@
         let rawChunks = ct.match(/[^.!?\n]+[.!?\n]*/g) || [ct];
         rawChunks.forEach((c) => {
           if (c.length > 200) {
-            let words = c.split(" "), temp = "";
+            let words = c.split(" "),
+              temp = "";
             words.forEach((w) => {
               if (temp.length + w.length > 180) {
                 chunks.push(temp.trim());
@@ -8188,12 +8190,7 @@
         });
 
         let i = 0;
-        
-        if (!window.globalVoicePlayer) {
-          window.globalVoicePlayer = new Audio();
-          // TUYỆT CHIÊU: Chỉ tàng hình riêng biệt cái loa, không làm ảnh hưởng Micro
-          window.globalVoicePlayer.referrerPolicy = "no-referrer";
-        }
+        if (!window.globalVoicePlayer) window.globalVoicePlayer = new Audio();
 
         function playNext() {
           if (myToken !== currentAudioToken) {
@@ -8203,15 +8200,15 @@
           }
           if (i >= chunks.length) {
             isAiSpeaking = !1;
-            window.currentAudio = null; // Trả lại bộ nhớ khi hát xong!
+            window.currentAudio = null;
             return;
           }
 
           let url = `https://translate.googleapis.com/translate_tts?ie=UTF-8&tl=${lang.split("-")[0]}&client=tw-ob&q=${encodeURIComponent(chunks[i])}`;
-          
+
           let a = window.globalVoicePlayer;
           a.src = url;
-          a.playbackRate = 1.25; 
+          a.playbackRate = 1.25;
           window.currentAudio = a;
 
           let bumpInterval;
@@ -8231,11 +8228,12 @@
             clearInterval(bumpInterval);
             if (myToken !== currentAudioToken) return;
             i++;
-            playNext(); 
+            playNext();
           };
 
           a.onerror = () => {
             clearInterval(bumpInterval);
+            // Kể cả có lỗi cũng phải nhả loa ra để Micro không bị kẹt
             if (myToken !== currentAudioToken) return;
             i++;
             playNext();
@@ -9493,6 +9491,7 @@
         };
       }
 
+      // --- VÒNG LẶP KIỂM TRA MICRO ---
       setInterval(() => {
         if (
           isLive &&
@@ -9506,23 +9505,36 @@
         }
       }, 2500);
 
-      function startMic(isLiveMode) {
+      // --- HÀM KHỞI ĐỘNG MICRO CHUẨN XÁC ---
+      async function startMic(isLiveMode) {
         try {
           if (isLiveMode) {
             ls.classList.add("show");
             lt.innerText = "Đang kết nối...";
           }
 
+          // Tuyệt chiêu: Xin quyền Micro 1 lần duy nhất, lấy xong đóng liền để nhường phần cứng cho AI
+          if (!window.micPermissionGranted) {
+            let stream = await navigator.mediaDevices.getUserMedia({
+              audio: true,
+            });
+            stream.getTracks().forEach((track) => track.stop());
+            window.micPermissionGranted = true;
+          }
+
           if (recog) {
             try {
-              recog.start();
+              recog.stop();
             } catch (e) {}
-            if (isLiveMode) {
-              isLive = !0;
-              lt.innerText = "Đang lắng nghe...";
-            }
-          } else {
-            if (isLiveMode) lt.innerText = "Lỗi: Trình duyệt không hỗ trợ Mic.";
+            setTimeout(() => {
+              try {
+                recog.start();
+              } catch (e) {}
+              if (isLiveMode) {
+                isLive = !0;
+                lt.innerText = "Đang lắng nghe...";
+              }
+            }, 300);
           }
         } catch (err) {
           if (isLiveMode) lt.innerText = "Quyền Micro bị từ chối.";
