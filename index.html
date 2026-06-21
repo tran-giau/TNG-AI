@@ -8146,19 +8146,10 @@
         return { e: null, k: query };
       }
 
-      // --- HÀM ĐỌC ĐỒNG BỘ MỌI THIẾT BỊ (FIX LỖI MẤT GIỌNG ĐỌC VÀ TỐC ĐỘ 1.25x) ---
+      // --- HÀM ĐỌC ĐỒNG BỘ MỌI THIẾT BỊ (TÀNG HÌNH ĐỘC LẬP & XÓA BỘ NHỚ LỖI) ---
       function speak(t, lang = "vi-VN") {
-        // Bật tàng hình để Google không chặn giọng đọc
-        let m = document.querySelector('meta[name="referrer"]');
-        if (!m) {
-          m = document.createElement("meta");
-          m.name = "referrer";
-          document.head.appendChild(m);
-        }
-        m.content = "no-referrer";
-
         stopAudio();
-        if (window.globalVoicePlayer) window.globalVoicePlayer.pause(); // Ép dừng triệt để
+        if (window.globalVoicePlayer) window.globalVoicePlayer.pause();
 
         isAiSpeaking = !0;
         let myToken = currentAudioToken;
@@ -8172,6 +8163,7 @@
 
         if (!ct) {
           isAiSpeaking = !1;
+          window.currentAudio = null;
           return;
         }
         window.currentSpeakingText = ct;
@@ -8198,26 +8190,29 @@
 
         let i = 0;
 
-        // GIẢI PHÁP CHỐNG CHẶN TRÊN ĐIỆN THOẠI: Dùng duy nhất 1 thẻ Audio
         if (!window.globalVoicePlayer) {
           window.globalVoicePlayer = new Audio();
+          // TUYỆT CHIÊU: Chỉ tàng hình riêng biệt cái loa, không làm ảnh hưởng Micro
+          window.globalVoicePlayer.referrerPolicy = "no-referrer";
         }
 
         function playNext() {
           if (myToken !== currentAudioToken) {
             isAiSpeaking = !1;
+            window.currentAudio = null;
             return;
           }
           if (i >= chunks.length) {
             isAiSpeaking = !1;
+            window.currentAudio = null; // FIX LỖI KẸT MICRO: Trả lại bộ nhớ khi hát xong!
             return;
           }
 
-          let url = `https://translate.googleapis.com/translate_tts?ie=UTF-8&tl=${lang.split("-")[0]}&client=gtx&q=${encodeURIComponent(chunks[i])}`;
+          let url = `https://translate.googleapis.com/translate_tts?ie=UTF-8&tl=${lang.split("-")[0]}&client=tw-ob&q=${encodeURIComponent(chunks[i])}`;
 
           let a = window.globalVoicePlayer;
           a.src = url;
-          a.playbackRate = 1.25; // Mình đã giữ nguyên tốc độ 1.25x của bạn ở đây
+          a.playbackRate = 1.25;
           window.currentAudio = a;
 
           let bumpInterval;
@@ -9507,41 +9502,25 @@
           !(window.speechSynthesis && window.speechSynthesis.speaking)
         ) {
           try {
-            // 1. Ép Chrome hiện danh tính để hệ thống Nhận diện giọng nói hoạt động
-            let m = document.querySelector('meta[name="referrer"]');
-            if (!m) {
-              m = document.createElement("meta");
-              m.name = "referrer";
-              document.head.appendChild(m);
-            }
-            m.content = "strict-origin-when-cross-origin";
-
             recog.start();
           } catch (e) {}
         }
       }, 2500);
 
       async function startMic(isLiveMode) {
-        // 1. Ép Chrome hiện danh tính để hệ thống Nhận diện giọng nói hoạt động
-        let m = document.querySelector('meta[name="referrer"]');
-        if (!m) {
-          m = document.createElement("meta");
-          m.name = "referrer";
-          document.head.appendChild(m);
-        }
-        m.content = "strict-origin-when-cross-origin";
-
         try {
           if (isLiveMode) {
             ls.classList.add("show");
             lt.innerText = "Đang kết nối...";
           }
 
-          // 2. QUAN TRỌNG NHẤT: Giải phóng Micro ngay lập tức!
-          // Xin quyền xong phải ngắt luồng ngay để nhường phần cứng cho AI nghe.
           let str = await navigator.mediaDevices.getUserMedia({ audio: !0 });
-          str.getTracks().forEach((tr) => tr.stop());
-          window.currentMicStream = null;
+          window.currentMicStream = str;
+
+          if (!isLiveMode) {
+            str.getTracks().forEach((tr) => tr.stop());
+            window.currentMicStream = null;
+          }
 
           if (recog) {
             try {
