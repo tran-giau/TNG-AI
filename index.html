@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="vi">
   <head>
-    <meta name="referrer" content="no-referrer" />
     <meta charset="UTF-8" />
     <meta
       name="viewport"
@@ -8149,6 +8148,15 @@
 
       // --- HÀM ĐỌC ĐỒNG BỘ MỌI THIẾT BỊ (FIX LỖI MẤT GIỌNG ĐỌC VÀ TỐC ĐỘ 1.25x) ---
       function speak(t, lang = "vi-VN") {
+        // Bật tàng hình để Google không chặn giọng đọc
+        let m = document.querySelector('meta[name="referrer"]');
+        if (!m) {
+          m = document.createElement("meta");
+          m.name = "referrer";
+          document.head.appendChild(m);
+        }
+        m.content = "no-referrer";
+
         stopAudio();
         if (window.globalVoicePlayer) window.globalVoicePlayer.pause(); // Ép dừng triệt để
 
@@ -9499,12 +9507,19 @@
           !(window.speechSynthesis && window.speechSynthesis.speaking)
         ) {
           try {
+            // Tắt tàng hình để Micro hoạt động
+            let m = document.querySelector('meta[name="referrer"]');
+            if (m) m.remove();
             recog.start();
           } catch (e) {}
         }
       }, 2500);
 
       async function startMic(isLiveMode) {
+        // Tắt tàng hình để Micro hoạt động
+        let m = document.querySelector('meta[name="referrer"]');
+        if (m) m.remove();
+
         try {
           if (isLiveMode) {
             ls.classList.add("show");
