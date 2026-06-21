@@ -9507,34 +9507,28 @@
         }
       }, 2500);
 
-      async function startMic(isLiveMode) {
+      function startMic(isLiveMode) {
         try {
           if (isLiveMode) {
             ls.classList.add("show");
             lt.innerText = "Đang kết nối...";
           }
 
-          let str = await navigator.mediaDevices.getUserMedia({ audio: !0 });
-          window.currentMicStream = str;
-
-          if (!isLiveMode) {
-            str.getTracks().forEach((tr) => tr.stop());
-            window.currentMicStream = null;
-          }
-
           if (recog) {
+            // ĐÃ XÓA BỎ LỆNH GETUSERMEDIA TRANH GIÀNH PHẦN CỨNG
+            // Để AI tự động bật Mic và lắng nghe!
             try {
-              recog.stop();
-            } catch (e) {}
-            setTimeout(() => {
-              try {
-                recog.start();
-              } catch (e) {}
-              if (isLiveMode) {
-                isLive = !0;
-                lt.innerText = "Đang lắng nghe...";
-              }
-            }, 100);
+              recog.start();
+            } catch (e) {
+              // Bỏ qua lỗi nếu mic đang bật sẵn
+            }
+
+            if (isLiveMode) {
+              isLive = !0;
+              lt.innerText = "Đang lắng nghe...";
+            }
+          } else {
+            if (isLiveMode) lt.innerText = "Lỗi: Trình duyệt không hỗ trợ Mic.";
           }
         } catch (err) {
           if (isLiveMode) lt.innerText = "Quyền Micro bị từ chối.";
