@@ -8147,7 +8147,7 @@
         return { e: null, k: query };
       }
 
-      // --- HÀM GIỌNG ĐỌC AI (CÔNG TẮC TÀNG HÌNH ĐỘNG) ---
+      // --- HÀM GIỌNG ĐỌC AI (KẾT HỢP BẬT MICRO SIÊU TỐC ĐỘ) ---
       function speak(t, lang = "vi-VN") {
         stopAudio();
         if (window.globalVoicePlayer) window.globalVoicePlayer.pause();
@@ -8190,7 +8190,6 @@
         let i = 0;
         if (!window.globalVoicePlayer) window.globalVoicePlayer = new Audio();
 
-        // BẬT TÀNG HÌNH: Lừa Google để lấy file âm thanh (Cứu Loa không bị câm)
         let m = document.querySelector('meta[name="referrer"]');
         if (!m) {
           m = document.createElement("meta");
@@ -8209,7 +8208,6 @@
             return;
           }
 
-          // Dùng cổng gtx bản gốc an toàn nhất
           let url = `https://translate.googleapis.com/translate_tts?ie=UTF-8&tl=${lang.split("-")[0]}&client=gtx&q=${encodeURIComponent(chunks[i])}`;
 
           let a = window.globalVoicePlayer;
@@ -8220,6 +8218,7 @@
           let bumpInterval;
           a.onplay = () => {
             isAiSpeaking = !0;
+            window.aiDoneSpeakingTime = Date.now();
             bumpInterval = setInterval(() => {
               if (myToken !== currentAudioToken) {
                 clearInterval(bumpInterval);
@@ -8227,6 +8226,7 @@
                 return;
               }
               if (window.triggerSphereBump) window.triggerSphereBump(true);
+              window.aiDoneSpeakingTime = Date.now();
             }, 250);
           };
 
@@ -8253,17 +8253,22 @@
         function finishSpeaking() {
           isAiSpeaking = !1;
           window.currentAudio = null;
+          window.aiDoneSpeakingTime = Date.now(); // Cắm cờ "Vừa dứt lời" để kích hoạt lớp bảo vệ 1 giây
 
-          // TẮT TÀNG HÌNH TRẢ LẠI MICRO: Xóa ngay lập tức để điện thoại thu âm câu tiếp theo
           let meta = document.querySelector('meta[name="referrer"]');
           if (meta) meta.remove();
 
-          if (isLive) {
+          if (isLive && recog) {
+            // [TỐC ĐỘ BÀN THỜ]: Gỡ bộ đệm và bật lại Mic NGAY LẬP TỨC (Chỉ trễ 50ms = 0.05 giây)
+            try {
+              recog.abort();
+            } catch (e) {}
             setTimeout(() => {
               try {
                 recog.start();
               } catch (e) {}
-            }, 500);
+              lt.innerText = "Đang lắng nghe...";
+            }, 50);
           }
         }
 
@@ -9443,7 +9448,7 @@
         }, 100);
       }
 
-      // --- 1. HÀM XỬ LÝ VĂN BẢN (DÙNG CHUNG CẢ PC & ĐIỆN THOẠI) ---
+      // --- 1. HÀM XỬ LÝ VĂN BẢN ---
       async function processLiveText(finalT) {
         window.lastStrLen = 0;
         let t = finalT.trim();
@@ -9456,15 +9461,16 @@
         }
 
         if (isLive) {
+          // [CỨU CÁNH SỐ 1]: Ép tắt Micro NGAY LẬP TỨC để 100% không thu âm nhầm tiếng AI
           if (recog) {
             try {
-              recog.stop();
+              recog.abort();
             } catch (e) {}
           }
+
           currentReqId++;
           let mR = currentReqId;
           try {
-            // Đưa giao diện nền về màn hình Chat
             if (home.style.display !== "none") {
               home.style.display = "none";
               if (typeof mcView !== "undefined" && mcView)
@@ -9474,7 +9480,6 @@
               cc.style.display = "flex";
             }
 
-            // Khởi tạo cuộc hội thoại
             if (!curId) {
               curId = Date.now().toString();
               sessions.unshift({
@@ -9490,7 +9495,6 @@
               sessions.unshift(s);
             }
 
-            // In câu hỏi của bạn ra màn hình chat phía sau
             s.msgs.push({ r: "user", t: t });
             cb.insertAdjacentHTML(
               "beforeend",
@@ -9499,14 +9503,9 @@
             chat.scrollTop = chat.scrollHeight;
             if (typeof safeSaveHist === "function") safeSaveHist();
 
-            // ĐÃ XÓA DÒNG "Đang suy nghĩ..." Ở ĐÂY.
-            // Lúc này câu hỏi của bạn (lt.innerText) sẽ vẫn được giữ nguyên trên màn hình Live
-
-            // Gọi AI trả lời
             let rO = await genAns(t, s.msgs, "", mR);
             if (mR !== currentReqId || !rO) return;
 
-            // In câu trả lời của AI ra màn hình chat phía sau
             s.msgs.push({ r: "ai", t: rO.h });
             cb.insertAdjacentHTML(
               "beforeend",
@@ -9516,13 +9515,11 @@
             if (typeof safeSaveHist === "function") safeSaveHist();
             if (typeof renderHist === "function") renderHist();
 
-            // Hiện câu trả lời của AI lên màn hình Live
             lt.innerText = rO.s;
             speak(rO.s, rO.l);
             if (rO.action) startEffect(rO.action);
           } catch (err) {}
         } else {
-          // Khi nhắn tin bình thường
           let f = home.style.display === "none" ? "chat" : "home";
           let inp = document.getElementById(
             f === "home" ? "ui-home" : "ui-chat",
@@ -9532,7 +9529,7 @@
         }
       }
 
-      // --- 2. BỘ NHẬN DIỆN GIỌNG NÓI STT (CHỈ DÙNG CHO PC) ---
+      // --- 2. BỘ NHẬN DIỆN GIỌNG NÓI STT ---
       let stt = window.SpeechRecognition || window.webkitSpeechRecognition,
         recog = stt ? new stt() : null;
       if (recog) {
@@ -9542,7 +9539,6 @@
 
         recog.onend = () => {
           let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-          // Tắt tự động nối mic trên Điện thoại để không bị kẹt phần cứng
           if (!isMobile && isLive && !isAiSpeaking && !window.currentAudio) {
             try {
               recog.start();
@@ -9551,6 +9547,11 @@
         };
 
         recog.onresult = async (e) => {
+          // Cắm mốc thời gian liên tục khi AI đang nói
+          if (isAiSpeaking || window.currentAudio) {
+            window.aiDoneSpeakingTime = Date.now();
+          }
+
           let interim = "";
           let finalT = "";
           for (let i = e.resultIndex; i < e.results.length; i++) {
@@ -9576,6 +9577,15 @@
             return;
           }
 
+          // [CỨU CÁNH SỐ 2]: BỘ LỌC TẠP ÂM TỪ LOA VỌNG LẠI
+          // Nếu AI vừa dứt lời chưa được 1 giây, bỏ qua mọi chữ lọt vào mic!
+          if (
+            window.aiDoneSpeakingTime &&
+            Date.now() - window.aiDoneSpeakingTime < 1000
+          ) {
+            return;
+          }
+
           if (isLive && currentStr) {
             lt.innerText = currentStr;
             if (currentStr.length > (window.lastStrLen || 0)) {
@@ -9585,12 +9595,12 @@
           }
 
           if (finalT) {
-            processLiveText(finalT); // Chuyển chữ cho hàm xử lý chung
+            processLiveText(finalT);
           }
         };
       }
 
-      // --- 3. VÒNG LẶP KIỂM TRA TAI NGHE (CHỈ CHO PC) ---
+      // --- 3. VÒNG LẶP KIỂM TRA TAI NGHE ---
       setInterval(() => {
         let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         if (
@@ -9608,67 +9618,53 @@
         }
       }, 2500);
 
-      // --- 4. HÀM KHỞI ĐỘNG MICRO (TÍCH HỢP BÀN PHÍM ĐIỆN THOẠI) ---
+      // --- 4. HÀM KHỞI ĐỘNG MICRO ---
       function startMic(isLiveMode) {
         let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         try {
           if (isLiveMode) {
             ls.classList.add("show");
-            isLive = !0; // Bật trạng thái Live
+            isLive = !0;
             lt.innerText = isMobile
               ? "Mời bạn nhập hoặc dùng Mic bàn phím..."
               : "Đang kết nối...";
 
             if (isMobile) {
-              // =======================================================
-              // CHẾ ĐỘ ĐIỆN THOẠI: TẠO Ô NHẬP LIỆU BÀN PHÍM MIC
-              // =======================================================
               let mobileInput = document.getElementById("mobile-live-input");
               if (!mobileInput) {
                 mobileInput = document.createElement("input");
                 mobileInput.id = "mobile-live-input";
                 mobileInput.placeholder = "Bấm vào đây & dùng Mic bàn phím 🎤";
                 mobileInput.autocomplete = "off";
-
-                // CSS làm ô nhập liệu sang trọng, hợp với màn hình Live
                 mobileInput.style.cssText =
                   "width: 85%; padding: 15px 20px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.2); outline: none; text-align: center; font-size: 16px; margin: 20px auto 0 auto; background: rgba(0,0,0,0.5); color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 9999; display: block;";
-
-                // Chèn ngay dưới dòng chữ của AI
                 lt.parentNode.insertBefore(mobileInput, lt.nextSibling);
 
                 mobileInput.addEventListener("keypress", function (e) {
                   if (e.key === "Enter") {
                     let text = this.value.trim();
-                    this.value = ""; // Xóa chữ cũ
-                    this.blur(); // Cất bàn phím đi để ngắm AI trả lời
-
+                    this.value = "";
+                    this.blur();
                     if (text) {
                       lt.innerText = text;
-                      processLiveText(text); // Xử lý câu hỏi, lưu lịch sử và gọi AI
+                      processLiveText(text);
                     }
                   }
                 });
               }
               mobileInput.style.display = "block";
-
-              // Tắt triệt để mic ngầm của web để không báo lỗi trên điện thoại
               if (recog) {
                 try {
                   recog.stop();
                 } catch (e) {}
               }
-              return; // Dừng tại đây
+              return;
             } else {
-              // Khi dùng PC, giấu ô nhập liệu mobile đi (nếu có)
               let mobileInput = document.getElementById("mobile-live-input");
               if (mobileInput) mobileInput.style.display = "none";
             }
           }
 
-          // =======================================================
-          // CHẾ ĐỘ PC: GIỮ NGUYÊN BẢN GỐC TỰ ĐỘNG NGHE CỦA BẠN
-          // =======================================================
           let m = document.querySelector('meta[name="referrer"]');
           if (m) m.remove();
 
