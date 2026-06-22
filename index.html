@@ -8148,47 +8148,68 @@
 
       // --- HÀM GIỌNG ĐỌC AI (TÀNG HÌNH THẺ AUDIO NỘI TẠI) ---
       function speak(t, lang = "vi-VN") {
-        stopAudio(); 
-        if (window.globalVoicePlayer) window.globalVoicePlayer.pause(); 
-        
+        stopAudio();
+        if (window.globalVoicePlayer) window.globalVoicePlayer.pause();
+
         isAiSpeaking = !0;
-        let myToken = currentAudioToken; 
-        
-        let ct = t.replace(/<a\b[^>]*>(.*?)<\/a>/gi, "").replace(/<[^>]*>?/gm, "").replace(/Tìm kiếm trên/gi, "").replace(/[*_🌍✨🎬🎵📄🖼️🔍📖📝]/g, "").trim();
-        if (!ct) { finishSpeaking(); return; }
+        let myToken = currentAudioToken;
+
+        let ct = t
+          .replace(/<a\b[^>]*>(.*?)<\/a>/gi, "")
+          .replace(/<[^>]*>?/gm, "")
+          .replace(/Tìm kiếm trên/gi, "")
+          .replace(/[*_🌍✨🎬🎵📄🖼️🔍📖📝]/g, "")
+          .trim();
+        if (!ct) {
+          finishSpeaking();
+          return;
+        }
         window.currentSpeakingText = ct;
 
         let chunks = [];
         let rawChunks = ct.match(/[^.!?\n]+[.!?\n]*/g) || [ct];
         rawChunks.forEach((c) => {
           if (c.length > 200) {
-            let words = c.split(" "), temp = "";
+            let words = c.split(" "),
+              temp = "";
             words.forEach((w) => {
-              if (temp.length + w.length > 180) { chunks.push(temp.trim()); temp = w + " "; }
-              else { temp += w + " "; }
+              if (temp.length + w.length > 180) {
+                chunks.push(temp.trim());
+                temp = w + " ";
+              } else {
+                temp += w + " ";
+              }
             });
             if (temp) chunks.push(temp.trim());
-          } else if (c.trim()) { chunks.push(c.trim()); }
+          } else if (c.trim()) {
+            chunks.push(c.trim());
+          }
         });
 
         let i = 0;
-        
+
         // ĐÂY CHÍNH LÀ PHÉP MÀU: Cài tàng hình trực tiếp vào linh hồn cái Loa
         // Không thao tác vào HTML nên Điện thoại không bao giờ phát hiện và chặn Mic
         if (!window.globalVoicePlayer) {
-            window.globalVoicePlayer = new Audio();
-            window.globalVoicePlayer.referrerPolicy = "no-referrer"; 
+          window.globalVoicePlayer = new Audio();
+          window.globalVoicePlayer.referrerPolicy = "no-referrer";
         }
 
         function playNext() {
-          if (myToken !== currentAudioToken) { finishSpeaking(); return; }
-          if (i >= chunks.length) { finishSpeaking(); return; }
+          if (myToken !== currentAudioToken) {
+            finishSpeaking();
+            return;
+          }
+          if (i >= chunks.length) {
+            finishSpeaking();
+            return;
+          }
 
           let url = `https://translate.googleapis.com/translate_tts?ie=UTF-8&tl=${lang.split("-")[0]}&client=gtx&q=${encodeURIComponent(chunks[i])}`;
-          
+
           let a = window.globalVoicePlayer;
           a.src = url;
-          a.playbackRate = 1.25; 
+          a.playbackRate = 1.25;
           window.currentAudio = a;
 
           let bumpInterval;
@@ -8196,25 +8217,50 @@
             isAiSpeaking = !0;
             window.aiDoneSpeakingTime = Date.now();
             bumpInterval = setInterval(() => {
-              if (myToken !== currentAudioToken) { clearInterval(bumpInterval); a.pause(); return; }
+              if (myToken !== currentAudioToken) {
+                clearInterval(bumpInterval);
+                a.pause();
+                return;
+              }
               if (window.triggerSphereBump) window.triggerSphereBump(true);
               window.aiDoneSpeakingTime = Date.now();
             }, 250);
           };
 
-          a.onended = () => { clearInterval(bumpInterval); if(myToken !== currentAudioToken) return; i++; playNext(); };
-          a.onerror = () => { clearInterval(bumpInterval); if(myToken !== currentAudioToken) return; i++; playNext(); };
-          a.play().catch(() => { clearInterval(bumpInterval); if(myToken !== currentAudioToken) return; i++; playNext(); });
+          a.onended = () => {
+            clearInterval(bumpInterval);
+            if (myToken !== currentAudioToken) return;
+            i++;
+            playNext();
+          };
+          a.onerror = () => {
+            clearInterval(bumpInterval);
+            if (myToken !== currentAudioToken) return;
+            i++;
+            playNext();
+          };
+          a.play().catch(() => {
+            clearInterval(bumpInterval);
+            if (myToken !== currentAudioToken) return;
+            i++;
+            playNext();
+          });
         }
 
         function finishSpeaking() {
           isAiSpeaking = !1;
           window.currentAudio = null;
-          window.aiDoneSpeakingTime = Date.now(); 
-          
+          window.aiDoneSpeakingTime = Date.now();
+
           if (isLive && recog) {
-            try { recog.abort(); } catch(e){} 
-            setTimeout(() => { try { recog.start(); } catch(e){} }, 50); 
+            try {
+              recog.abort();
+            } catch (e) {}
+            setTimeout(() => {
+              try {
+                recog.start();
+              } catch (e) {}
+            }, 50);
           }
         }
 
