@@ -8216,11 +8216,14 @@
 
           let a = window.globalVoicePlayer;
           a.src = url;
+
+          // KHÓA CHẶT TỐC ĐỘ 1.25x
+          a.defaultPlaybackRate = 1.25;
           a.playbackRate = 1.25;
-          window.currentAudio = a;
 
           let bumpInterval;
           a.onplay = () => {
+            a.playbackRate = 1.25; // Ép lại một lần nữa khi bắt đầu phát
             isAiSpeaking = !0;
             window.aiDoneSpeakingTime = Date.now();
             bumpInterval = setInterval(() => {
@@ -8271,7 +8274,7 @@
           }
           let msg = new SpeechSynthesisUtterance(text);
           msg.lang = "vi-VN";
-          msg.rate = 1.25;
+          msg.rate = 1.25; // Tốc độ dự phòng cũng chuẩn 1.25
           let voices = window.speechSynthesis.getVoices();
           let viVoice =
             voices.find(
@@ -8300,7 +8303,7 @@
 
           if (isMobile) {
             let meta = document.querySelector('meta[name="referrer"]');
-            if (meta) meta.remove(); // Bỏ tàng hình để nhả Micro lại cho Điện thoại
+            if (meta) meta.remove();
           }
 
           if (isLive && recog) {
@@ -9656,6 +9659,11 @@
             ls.classList.add("show");
             isLive = !0;
             lt.innerText = "Đang kết nối...";
+
+            // --- BỘ MỞ KHÓA ÂM THANH (CỨU TRỄ AUDIO TRÊN ĐIỆN THOẠI) ---
+            if (!window.globalVoicePlayer)
+              window.globalVoicePlayer = new Audio();
+            window.globalVoicePlayer.play().catch((e) => {});
           }
 
           if (!isMobile) {
