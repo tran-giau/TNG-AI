@@ -8147,7 +8147,7 @@
         return { e: null, k: query };
       }
 
-      // --- HÀM GIỌNG ĐỌC AI (KẾT HỢP BẬT MICRO SIÊU TỐC ĐỘ) ---
+      // --- HÀM GIỌNG ĐỌC AI ---
       function speak(t, lang = "vi-VN") {
         stopAudio();
         if (window.globalVoicePlayer) window.globalVoicePlayer.pause();
@@ -8253,13 +8253,12 @@
         function finishSpeaking() {
           isAiSpeaking = !1;
           window.currentAudio = null;
-          window.aiDoneSpeakingTime = Date.now(); // Cắm cờ "Vừa dứt lời" để kích hoạt lớp bảo vệ 1 giây
+          window.aiDoneSpeakingTime = Date.now();
 
           let meta = document.querySelector('meta[name="referrer"]');
           if (meta) meta.remove();
 
           if (isLive && recog) {
-            // [TỐC ĐỘ BÀN THỜ]: Gỡ bộ đệm và bật lại Mic NGAY LẬP TỨC (Chỉ trễ 50ms = 0.05 giây)
             try {
               recog.abort();
             } catch (e) {}
@@ -8267,7 +8266,8 @@
               try {
                 recog.start();
               } catch (e) {}
-              lt.innerText = "Đang lắng nghe...";
+              // ĐÃ XÓA dòng lt.innerText = "Đang lắng nghe..."
+              // Giờ đây câu trả lời sẽ chễm chệ nằm nguyên trên màn hình chờ bạn!
             }, 50);
           }
         }
@@ -9547,7 +9547,6 @@
         };
 
         recog.onresult = async (e) => {
-          // Cắm mốc thời gian liên tục khi AI đang nói
           if (isAiSpeaking || window.currentAudio) {
             window.aiDoneSpeakingTime = Date.now();
           }
@@ -9577,17 +9576,17 @@
             return;
           }
 
-          // [CỨU CÁNH SỐ 2]: BỘ LỌC TẠP ÂM TỪ LOA VỌNG LẠI
-          // Nếu AI vừa dứt lời chưa được 1 giây, bỏ qua mọi chữ lọt vào mic!
+          // [NÂNG CẤP TỐC ĐỘ]: Giảm từ 1000ms xuống 300ms
+          // Vừa chống được tiếng vọng, vừa giúp AI nghe ngay lập tức khi bạn hỏi liền!
           if (
             window.aiDoneSpeakingTime &&
-            Date.now() - window.aiDoneSpeakingTime < 1000
+            Date.now() - window.aiDoneSpeakingTime < 300
           ) {
             return;
           }
 
           if (isLive && currentStr) {
-            lt.innerText = currentStr;
+            lt.innerText = currentStr; // Câu hỏi mới sẽ tự động đè lên câu trả lời cũ của AI
             if (currentStr.length > (window.lastStrLen || 0)) {
               if (window.triggerSphereBump) window.triggerSphereBump(false);
             }
