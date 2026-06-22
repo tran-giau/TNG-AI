@@ -8187,12 +8187,19 @@
         });
 
         let i = 0;
+        if (!window.globalVoicePlayer) window.globalVoicePlayer = new Audio();
 
-        // ĐÂY CHÍNH LÀ PHÉP MÀU: Cài tàng hình trực tiếp vào linh hồn cái Loa
-        // Không thao tác vào HTML nên Điện thoại không bao giờ phát hiện và chặn Mic
-        if (!window.globalVoicePlayer) {
-          window.globalVoicePlayer = new Audio();
-          window.globalVoicePlayer.referrerPolicy = "no-referrer";
+        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+        if (!isMobile) {
+          // PC BẮT BUỘC PHẢI TÀNG HÌNH ĐỂ KHÔNG BỊ CÂM
+          let m = document.querySelector('meta[name="referrer"]');
+          if (!m) {
+            m = document.createElement("meta");
+            m.name = "referrer";
+            m.content = "no-referrer";
+            document.head.appendChild(m);
+          } else m.content = "no-referrer";
         }
 
         function playNext() {
@@ -8205,7 +8212,7 @@
             return;
           }
 
-          let url = `https://translate.googleapis.com/translate_tts?ie=UTF-8&tl=${lang.split("-")[0]}&client=gtx&q=${encodeURIComponent(chunks[i])}`;
+          let url = `https://translate.googleapis.com/translate_tts?ie=UTF-8&tl=${lang.split("-")[0]}&client=tw-ob&q=${encodeURIComponent(chunks[i])}`;
 
           let a = window.globalVoicePlayer;
           a.src = url;
@@ -8233,24 +8240,68 @@
             i++;
             playNext();
           };
+
           a.onerror = () => {
             clearInterval(bumpInterval);
             if (myToken !== currentAudioToken) return;
-            i++;
-            playNext();
+            if (isMobile) {
+              fallbackNative(chunks.slice(i).join(" "));
+            } else {
+              i++;
+              playNext();
+            }
           };
+
           a.play().catch(() => {
             clearInterval(bumpInterval);
             if (myToken !== currentAudioToken) return;
-            i++;
-            playNext();
+            if (isMobile) {
+              fallbackNative(chunks.slice(i).join(" "));
+            } else {
+              i++;
+              playNext();
+            }
           });
+        }
+
+        function fallbackNative(text) {
+          if (!window.speechSynthesis) {
+            finishSpeaking();
+            return;
+          }
+          let msg = new SpeechSynthesisUtterance(text);
+          msg.lang = "vi-VN";
+          msg.rate = 1.25;
+          let voices = window.speechSynthesis.getVoices();
+          let viVoice =
+            voices.find(
+              (v) => v.lang.includes("vi") && v.name.includes("Google"),
+            ) || voices.find((v) => v.lang.includes("vi"));
+          if (viVoice) msg.voice = viVoice;
+
+          msg.onstart = () => {
+            isAiSpeaking = !0;
+            window.aiDoneSpeakingTime = Date.now();
+            if (window.triggerSphereBump) window.triggerSphereBump(true);
+          };
+          msg.onend = () => {
+            finishSpeaking();
+          };
+          msg.onerror = () => {
+            finishSpeaking();
+          };
+          window.speechSynthesis.speak(msg);
         }
 
         function finishSpeaking() {
           isAiSpeaking = !1;
           window.currentAudio = null;
           window.aiDoneSpeakingTime = Date.now();
+
+          if (isMobile) {
+            let meta = document.querySelector('meta[name="referrer"]');
+            if (meta) meta.remove(); // Bỏ tàng hình để nhả Micro lại cho Điện thoại
+          }
 
           if (isLive && recog) {
             try {
@@ -9493,6 +9544,7 @@
             chat.scrollTop = chat.scrollHeight;
             if (typeof safeSaveHist === "function") safeSaveHist();
 
+            // KHÔNG in dòng "Đang suy nghĩ...", giữ nguyên câu hỏi trên màn hình!
             let rO = await genAns(t, s.msgs, "", mR);
             if (mR !== currentReqId || !rO) return;
 
@@ -9519,7 +9571,6 @@
         }
       }
 
-      // --- 2. BỘ NHẬN DIỆN GIỌNG NÓI STT (RẢNH TAY CHO CẢ PC & ĐIỆN THOẠI) ---
       let stt = window.SpeechRecognition || window.webkitSpeechRecognition,
         recog = stt ? new stt() : null;
       if (recog) {
@@ -9528,7 +9579,6 @@
         recog.interimResults = !0;
 
         recog.onend = () => {
-          // Tự động bật lại Mic nếu AI đang im lặng
           if (isLive && !isAiSpeaking && !window.currentAudio) {
             try {
               recog.start();
@@ -9566,7 +9616,7 @@
             return;
           }
 
-          // Lọc tiếng vọng 0.3s
+          // Lọc tiếng vọng (Delay 0.3s) giúp nghe tức thì
           if (
             window.aiDoneSpeakingTime &&
             Date.now() - window.aiDoneSpeakingTime < 300
@@ -9581,13 +9631,10 @@
             window.lastStrLen = currentStr.length;
           }
 
-          if (finalT) {
-            processLiveText(finalT);
-          }
+          if (finalT) processLiveText(finalT);
         };
       }
 
-      // --- 3. VÒNG LẶP KIỂM TRA TAI NGHE DỰ PHÒNG ---
       setInterval(() => {
         if (
           isLive &&
@@ -9603,6 +9650,7 @@
 
       // --- 4. HÀM KHỞI ĐỘNG MICRO SIÊU TỐC ĐỘ ---
       function startMic(isLiveMode) {
+        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         try {
           if (isLiveMode) {
             ls.classList.add("show");
@@ -9610,20 +9658,18 @@
             lt.innerText = "Đang kết nối...";
           }
 
-          if (recog) {
-            try {
-              recog.abort();
-            } catch (e) {}
-            setTimeout(() => {
-              try {
-                recog.start();
-              } catch (e) {}
-              if (isLiveMode) lt.innerText = "Đang lắng nghe...";
-            }, 100);
-          }
-
-          let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
           if (!isMobile) {
+            // == MÁY TÍNH (PC): GIỮ NGUYÊN BẢN GỐC ==
+            let m = document.querySelector('meta[name="referrer"]');
+            if (!m) {
+              m = document.createElement("meta");
+              m.name = "referrer";
+              m.content = "no-referrer";
+              document.head.appendChild(m);
+            } else {
+              m.content = "no-referrer";
+            }
+
             navigator.mediaDevices
               .getUserMedia({ audio: true })
               .then((str) => {
@@ -9634,11 +9680,39 @@
                 }
               })
               .catch((e) => {
-                if (isLiveMode) lt.innerText = "Quyền Micro bị từ chối.";
+                if (isLiveMode) lt.innerText = "Quyền Micro PC bị từ chối.";
               });
+
+            if (recog) {
+              try {
+                recog.stop();
+              } catch (e) {}
+              setTimeout(() => {
+                try {
+                  recog.start();
+                } catch (e) {}
+                if (isLiveMode) lt.innerText = "Đang lắng nghe...";
+              }, 100);
+            }
+          } else {
+            // == ĐIỆN THOẠI: BỎ TÀNG HÌNH ĐỂ KHÔNG BỊ KHÓA MIC ==
+            let m = document.querySelector('meta[name="referrer"]');
+            if (m) m.remove();
+
+            if (recog) {
+              try {
+                recog.abort();
+              } catch (e) {}
+              setTimeout(() => {
+                try {
+                  recog.start();
+                } catch (e) {}
+                if (isLiveMode) lt.innerText = "Đang lắng nghe...";
+              }, 100);
+            }
           }
         } catch (err) {
-          if (isLiveMode) lt.innerText = "Quyền Micro bị từ chối.";
+          if (isLiveMode) lt.innerText = "Lỗi khởi động Micro.";
         }
       }
 
