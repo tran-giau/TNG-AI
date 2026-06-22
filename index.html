@@ -8146,7 +8146,7 @@
         return { e: null, k: query };
       }
 
-      // --- HÀM ĐỌC ĐỒNG BỘ (DÙNG CỔNG EXTENSION & CƠ CHẾ TRUYỀN GẬY MICRO) ---
+      // --- HÀM ĐỌC ĐỒNG BỘ MỌI THIẾT BỊ (TÀNG HÌNH ĐỘC LẬP LOA) ---
       function speak(t, lang = "vi-VN") {
         stopAudio(); 
         if (window.globalVoicePlayer) window.globalVoicePlayer.pause(); 
@@ -8164,8 +8164,6 @@
         if (!ct) {
           isAiSpeaking = !1;
           window.currentAudio = null;
-          // Nếu không có câu trả lời, trả lại Micro ngay lập tức
-          if (isLive) setTimeout(() => { try { recog.start(); } catch(e){} }, 500);
           return;
         }
         window.currentSpeakingText = ct;
@@ -8184,23 +8182,27 @@
         });
 
         let i = 0;
-        if (!window.globalVoicePlayer) window.globalVoicePlayer = new Audio();
+        
+        if (!window.globalVoicePlayer) {
+          window.globalVoicePlayer = new Audio();
+          // TUYỆT CHIÊU QUAN TRỌNG NHẤT: Bật tàng hình riêng cho Loa để vượt lỗi 403 Google
+          window.globalVoicePlayer.referrerPolicy = "no-referrer";
+        }
 
         function playNext() {
           if (myToken !== currentAudioToken) {
-              isAiSpeaking = !1; window.currentAudio = null;
-              if (isLive) setTimeout(() => { try{recog.start();}catch(e){} }, 500);
-              return;
+            isAiSpeaking = !1;
+            window.currentAudio = null;
+            return;
           }
           if (i >= chunks.length) {
-              isAiSpeaking = !1; window.currentAudio = null;
-              // TUYỆT CHIÊU TRUYỀN GẬY: AI vừa nói xong, nhường Mic lại ngay cho điện thoại!
-              if (isLive) setTimeout(() => { try{recog.start();}catch(e){} }, 500);
-              return;
+            isAiSpeaking = !1;
+            window.currentAudio = null; 
+            return;
           }
 
-          // CỔNG dict-chrome-ex: Vượt lỗi 403 Forbidden trên GitHub mà không cần thẻ Meta tàng hình
-          let url = `https://translate.googleapis.com/translate_tts?ie=UTF-8&tl=${lang.split("-")[0]}&client=dict-chrome-ex&q=${encodeURIComponent(chunks[i])}`;
+          // Dùng lại cổng tw-ob cực kỳ trâu bò của Google
+          let url = `https://translate.googleapis.com/translate_tts?ie=UTF-8&tl=${lang.split("-")[0]}&client=tw-ob&q=${encodeURIComponent(chunks[i])}`;
           
           let a = window.globalVoicePlayer;
           a.src = url;
@@ -8211,7 +8213,11 @@
           a.onplay = () => {
             isAiSpeaking = !0;
             bumpInterval = setInterval(() => {
-              if (myToken !== currentAudioToken) { clearInterval(bumpInterval); a.pause(); return; }
+              if (myToken !== currentAudioToken) {
+                clearInterval(bumpInterval);
+                a.pause();
+                return;
+              }
               if (window.triggerSphereBump) window.triggerSphereBump(true);
             }, 250);
           };
@@ -8219,19 +8225,22 @@
           a.onended = () => {
             clearInterval(bumpInterval);
             if (myToken !== currentAudioToken) return;
-            i++; playNext(); 
+            i++;
+            playNext(); 
           };
 
           a.onerror = () => {
             clearInterval(bumpInterval);
             if (myToken !== currentAudioToken) return;
-            i++; playNext();
+            i++;
+            playNext();
           };
 
           a.play().catch(() => {
             clearInterval(bumpInterval);
             if (myToken !== currentAudioToken) return;
-            i++; playNext();
+            i++;
+            playNext();
           });
         }
 
@@ -9479,9 +9488,21 @@
         };
       }
 
-      // ĐÃ XÓA BỎ VÒNG LẶP setInterval NGẦM ĐỂ KHÔNG BỊ ĐIỆN THOẠI CHẶN MICRO
+      // --- VÒNG LẶP KIỂM TRA MICRO (PHỤC HỒI ĐỂ CHỐNG ĐIẾC) ---
+      setInterval(() => {
+        if (
+          isLive &&
+          !isAiSpeaking &&
+          !window.currentAudio &&
+          !(window.speechSynthesis && window.speechSynthesis.speaking)
+        ) {
+          try {
+            recog.start();
+          } catch (e) {}
+        }
+      }, 2500);
 
-      // --- HÀM KHỞI ĐỘNG MICRO TỐI ƯU ---
+      // --- HÀM KHỞI ĐỘNG MICRO CHUẨN XÁC ---
       function startMic(isLiveMode) {
         try {
           if (isLiveMode) {
