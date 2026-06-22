@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="vi">
   <head>
-    <meta name="referrer" content="no-referrer" />
     <meta charset="UTF-8" />
     <meta
       name="viewport"
@@ -8147,72 +8146,49 @@
         return { e: null, k: query };
       }
 
-      // --- HÀM GIỌNG ĐỌC AI ---
+      // --- HÀM GIỌNG ĐỌC AI (TÀNG HÌNH THẺ AUDIO NỘI TẠI) ---
       function speak(t, lang = "vi-VN") {
-        stopAudio();
-        if (window.globalVoicePlayer) window.globalVoicePlayer.pause();
-
+        stopAudio(); 
+        if (window.globalVoicePlayer) window.globalVoicePlayer.pause(); 
+        
         isAiSpeaking = !0;
-        let myToken = currentAudioToken;
-
-        let ct = t
-          .replace(/<a\b[^>]*>(.*?)<\/a>/gi, "")
-          .replace(/<[^>]*>?/gm, "")
-          .replace(/Tìm kiếm trên/gi, "")
-          .replace(/[*_🌍✨🎬🎵📄🖼️🔍📖📝]/g, "")
-          .trim();
-        if (!ct) {
-          finishSpeaking();
-          return;
-        }
+        let myToken = currentAudioToken; 
+        
+        let ct = t.replace(/<a\b[^>]*>(.*?)<\/a>/gi, "").replace(/<[^>]*>?/gm, "").replace(/Tìm kiếm trên/gi, "").replace(/[*_🌍✨🎬🎵📄🖼️🔍📖📝]/g, "").trim();
+        if (!ct) { finishSpeaking(); return; }
         window.currentSpeakingText = ct;
 
         let chunks = [];
         let rawChunks = ct.match(/[^.!?\n]+[.!?\n]*/g) || [ct];
         rawChunks.forEach((c) => {
           if (c.length > 200) {
-            let words = c.split(" "),
-              temp = "";
+            let words = c.split(" "), temp = "";
             words.forEach((w) => {
-              if (temp.length + w.length > 180) {
-                chunks.push(temp.trim());
-                temp = w + " ";
-              } else {
-                temp += w + " ";
-              }
+              if (temp.length + w.length > 180) { chunks.push(temp.trim()); temp = w + " "; }
+              else { temp += w + " "; }
             });
             if (temp) chunks.push(temp.trim());
-          } else if (c.trim()) {
-            chunks.push(c.trim());
-          }
+          } else if (c.trim()) { chunks.push(c.trim()); }
         });
 
         let i = 0;
-        if (!window.globalVoicePlayer) window.globalVoicePlayer = new Audio();
-
-        let m = document.querySelector('meta[name="referrer"]');
-        if (!m) {
-          m = document.createElement("meta");
-          m.name = "referrer";
-          document.head.appendChild(m);
+        
+        // ĐÂY CHÍNH LÀ PHÉP MÀU: Cài tàng hình trực tiếp vào linh hồn cái Loa
+        // Không thao tác vào HTML nên Điện thoại không bao giờ phát hiện và chặn Mic
+        if (!window.globalVoicePlayer) {
+            window.globalVoicePlayer = new Audio();
+            window.globalVoicePlayer.referrerPolicy = "no-referrer"; 
         }
-        m.content = "no-referrer";
 
         function playNext() {
-          if (myToken !== currentAudioToken) {
-            finishSpeaking();
-            return;
-          }
-          if (i >= chunks.length) {
-            finishSpeaking();
-            return;
-          }
+          if (myToken !== currentAudioToken) { finishSpeaking(); return; }
+          if (i >= chunks.length) { finishSpeaking(); return; }
 
           let url = `https://translate.googleapis.com/translate_tts?ie=UTF-8&tl=${lang.split("-")[0]}&client=gtx&q=${encodeURIComponent(chunks[i])}`;
-
+          
           let a = window.globalVoicePlayer;
           a.src = url;
-          a.playbackRate = 1.25;
+          a.playbackRate = 1.25; 
           window.currentAudio = a;
 
           let bumpInterval;
@@ -8220,55 +8196,25 @@
             isAiSpeaking = !0;
             window.aiDoneSpeakingTime = Date.now();
             bumpInterval = setInterval(() => {
-              if (myToken !== currentAudioToken) {
-                clearInterval(bumpInterval);
-                a.pause();
-                return;
-              }
+              if (myToken !== currentAudioToken) { clearInterval(bumpInterval); a.pause(); return; }
               if (window.triggerSphereBump) window.triggerSphereBump(true);
               window.aiDoneSpeakingTime = Date.now();
             }, 250);
           };
 
-          a.onended = () => {
-            clearInterval(bumpInterval);
-            if (myToken !== currentAudioToken) return;
-            i++;
-            playNext();
-          };
-          a.onerror = () => {
-            clearInterval(bumpInterval);
-            if (myToken !== currentAudioToken) return;
-            i++;
-            playNext();
-          };
-          a.play().catch(() => {
-            clearInterval(bumpInterval);
-            if (myToken !== currentAudioToken) return;
-            i++;
-            playNext();
-          });
+          a.onended = () => { clearInterval(bumpInterval); if(myToken !== currentAudioToken) return; i++; playNext(); };
+          a.onerror = () => { clearInterval(bumpInterval); if(myToken !== currentAudioToken) return; i++; playNext(); };
+          a.play().catch(() => { clearInterval(bumpInterval); if(myToken !== currentAudioToken) return; i++; playNext(); });
         }
 
         function finishSpeaking() {
           isAiSpeaking = !1;
           window.currentAudio = null;
-          window.aiDoneSpeakingTime = Date.now();
-
-          let meta = document.querySelector('meta[name="referrer"]');
-          if (meta) meta.remove();
-
+          window.aiDoneSpeakingTime = Date.now(); 
+          
           if (isLive && recog) {
-            try {
-              recog.abort();
-            } catch (e) {}
-            setTimeout(() => {
-              try {
-                recog.start();
-              } catch (e) {}
-              // ĐÃ XÓA dòng lt.innerText = "Đang lắng nghe..."
-              // Giờ đây câu trả lời sẽ chễm chệ nằm nguyên trên màn hình chờ bạn!
-            }, 50);
+            try { recog.abort(); } catch(e){} 
+            setTimeout(() => { try { recog.start(); } catch(e){} }, 50); 
           }
         }
 
@@ -9461,13 +9407,11 @@
         }
 
         if (isLive) {
-          // [CỨU CÁNH SỐ 1]: Ép tắt Micro NGAY LẬP TỨC để 100% không thu âm nhầm tiếng AI
           if (recog) {
             try {
               recog.abort();
             } catch (e) {}
           }
-
           currentReqId++;
           let mR = currentReqId;
           try {
@@ -9529,7 +9473,7 @@
         }
       }
 
-      // --- 2. BỘ NHẬN DIỆN GIỌNG NÓI STT ---
+      // --- 2. BỘ NHẬN DIỆN GIỌNG NÓI STT (RẢNH TAY CHO CẢ PC & ĐIỆN THOẠI) ---
       let stt = window.SpeechRecognition || window.webkitSpeechRecognition,
         recog = stt ? new stt() : null;
       if (recog) {
@@ -9538,8 +9482,8 @@
         recog.interimResults = !0;
 
         recog.onend = () => {
-          let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-          if (!isMobile && isLive && !isAiSpeaking && !window.currentAudio) {
+          // Tự động bật lại Mic nếu AI đang im lặng
+          if (isLive && !isAiSpeaking && !window.currentAudio) {
             try {
               recog.start();
             } catch (e) {}
@@ -9576,17 +9520,15 @@
             return;
           }
 
-          // [NÂNG CẤP TỐC ĐỘ]: Giảm từ 1000ms xuống 300ms
-          // Vừa chống được tiếng vọng, vừa giúp AI nghe ngay lập tức khi bạn hỏi liền!
+          // Lọc tiếng vọng 0.3s
           if (
             window.aiDoneSpeakingTime &&
             Date.now() - window.aiDoneSpeakingTime < 300
-          ) {
+          )
             return;
-          }
 
           if (isLive && currentStr) {
-            lt.innerText = currentStr; // Câu hỏi mới sẽ tự động đè lên câu trả lời cũ của AI
+            lt.innerText = currentStr;
             if (currentStr.length > (window.lastStrLen || 0)) {
               if (window.triggerSphereBump) window.triggerSphereBump(false);
             }
@@ -9599,83 +9541,42 @@
         };
       }
 
-      // --- 3. VÒNG LẶP KIỂM TRA TAI NGHE ---
+      // --- 3. VÒNG LẶP KIỂM TRA TAI NGHE DỰ PHÒNG ---
       setInterval(() => {
-        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         if (
-          !isMobile &&
           isLive &&
           !isAiSpeaking &&
           !window.currentAudio &&
           !(window.speechSynthesis && window.speechSynthesis.speaking)
         ) {
           try {
-            let m = document.querySelector('meta[name="referrer"]');
-            if (m) m.remove();
             recog.start();
           } catch (e) {}
         }
       }, 2500);
 
-      // --- 4. HÀM KHỞI ĐỘNG MICRO ---
+      // --- 4. HÀM KHỞI ĐỘNG MICRO SIÊU TỐC ĐỘ ---
       function startMic(isLiveMode) {
-        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         try {
           if (isLiveMode) {
             ls.classList.add("show");
             isLive = !0;
-            lt.innerText = isMobile
-              ? "Mời bạn nhập hoặc dùng Mic bàn phím..."
-              : "Đang kết nối...";
-
-            if (isMobile) {
-              let mobileInput = document.getElementById("mobile-live-input");
-              if (!mobileInput) {
-                mobileInput = document.createElement("input");
-                mobileInput.id = "mobile-live-input";
-                mobileInput.placeholder = "Bấm vào đây & dùng Mic bàn phím 🎤";
-                mobileInput.autocomplete = "off";
-                mobileInput.style.cssText =
-                  "width: 85%; padding: 15px 20px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.2); outline: none; text-align: center; font-size: 16px; margin: 20px auto 0 auto; background: rgba(0,0,0,0.5); color: white; box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 9999; display: block;";
-                lt.parentNode.insertBefore(mobileInput, lt.nextSibling);
-
-                mobileInput.addEventListener("keypress", function (e) {
-                  if (e.key === "Enter") {
-                    let text = this.value.trim();
-                    this.value = "";
-                    this.blur();
-                    if (text) {
-                      lt.innerText = text;
-                      processLiveText(text);
-                    }
-                  }
-                });
-              }
-              mobileInput.style.display = "block";
-              if (recog) {
-                try {
-                  recog.stop();
-                } catch (e) {}
-              }
-              return;
-            } else {
-              let mobileInput = document.getElementById("mobile-live-input");
-              if (mobileInput) mobileInput.style.display = "none";
-            }
+            lt.innerText = "Đang kết nối...";
           }
-
-          let m = document.querySelector('meta[name="referrer"]');
-          if (m) m.remove();
 
           if (recog) {
             try {
-              recog.start();
+              recog.abort();
             } catch (e) {}
-            if (isLiveMode) {
-              lt.innerText = "Đang lắng nghe...";
-            }
+            setTimeout(() => {
+              try {
+                recog.start();
+              } catch (e) {}
+              if (isLiveMode) lt.innerText = "Đang lắng nghe...";
+            }, 100);
           }
 
+          let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
           if (!isMobile) {
             navigator.mediaDevices
               .getUserMedia({ audio: true })
@@ -9687,7 +9588,7 @@
                 }
               })
               .catch((e) => {
-                if (isLiveMode) lt.innerText = "Quyền Micro PC bị từ chối.";
+                if (isLiveMode) lt.innerText = "Quyền Micro bị từ chối.";
               });
           }
         } catch (err) {
