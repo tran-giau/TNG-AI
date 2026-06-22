@@ -8865,7 +8865,11 @@
 
           if (!cloudKnowledgeBase.length) await loadCloudKnowledge();
           // ĐOẠN QUÉT TÀI LIỆU SẼ NẰM SAU KHỐI NÀY NÊN KHÔNG BỊ CHẬM NỮA...
-          if (/(hôm nay là ngày mấy|hôm nay là thứ mấy|hôm nay là tháng mấy|hôm nay là năm mấy)/.test(t)) {
+          if (
+            /(hôm nay là ngày mấy|hôm nay là thứ mấy|hôm nay là tháng mấy|hôm nay là năm mấy)/.test(
+              t,
+            )
+          ) {
             let d = new Date();
             let days = [
               "Chủ nhật",
@@ -13338,7 +13342,7 @@
 
             let overlay = document.createElement("div");
             overlay.style.cssText =
-              "position: fixed; inset: 0; width: 100vw; height: 100dvh; background: rgba(0,0,0,0.4); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 9999999; display: flex; justify-content: center; align-items: center; opacity: 0; transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1); margin: 0; padding: 0; pointer-events: auto;";
+              "position: fixed; inset: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.4); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 9999999; display: flex; justify-content: center; align-items: center; opacity: 0; transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1); margin: 0; padding: 0; box-sizing: border-box; pointer-events: auto;";
 
             overlay.innerHTML = `
                 <div class="tng-del-hd-box" style="background: rgba(30, 31, 38, 0.98); border-radius: 20px; padding: 24px; width: 320px; max-width: 90%; text-align: center; color: #fff; font-family: 'Google Sans', sans-serif; box-shadow: 0 15px 40px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.08); transform: scale(0.02); opacity: 0; transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1);">
