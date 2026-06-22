@@ -8152,6 +8152,7 @@
         if (window.globalVoicePlayer) window.globalVoicePlayer.pause();
 
         isAiSpeaking = !0;
+        window.isAiThinking = false;
         let myToken = currentAudioToken;
 
         let ct = t
@@ -8192,7 +8193,6 @@
         let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
         if (!isMobile) {
-          // PC BẮT BUỘC PHẢI TÀNG HÌNH ĐỂ KHÔNG BỊ CÂM
           let m = document.querySelector('meta[name="referrer"]');
           if (!m) {
             m = document.createElement("meta");
@@ -8216,15 +8216,14 @@
 
           let a = window.globalVoicePlayer;
           a.src = url;
-
-          // KHÓA CHẶT TỐC ĐỘ 1.25x
           a.defaultPlaybackRate = 1.25;
           a.playbackRate = 1.25;
 
           let bumpInterval;
           a.onplay = () => {
-            a.playbackRate = 1.25; // Ép lại một lần nữa khi bắt đầu phát
+            a.playbackRate = 1.25;
             isAiSpeaking = !0;
+            window.isAiThinking = false;
             window.aiDoneSpeakingTime = Date.now();
             bumpInterval = setInterval(() => {
               if (myToken !== currentAudioToken) {
@@ -8268,13 +8267,14 @@
         }
 
         function fallbackNative(text) {
+          window.isAiThinking = false;
           if (!window.speechSynthesis) {
             finishSpeaking();
             return;
           }
           let msg = new SpeechSynthesisUtterance(text);
           msg.lang = "vi-VN";
-          msg.rate = 1.25; // Tốc độ dự phòng cũng chuẩn 1.25
+          msg.rate = 1.25;
           let voices = window.speechSynthesis.getVoices();
           let viVoice =
             voices.find(
@@ -8314,7 +8314,7 @@
               try {
                 recog.start();
               } catch (e) {}
-            }, 50);
+            }, 400);
           }
         }
 
@@ -9507,11 +9507,13 @@
         }
 
         if (isLive) {
+          window.isAiThinking = true;
           if (recog) {
             try {
               recog.abort();
             } catch (e) {}
           }
+
           currentReqId++;
           let mR = currentReqId;
           try {
@@ -9547,9 +9549,11 @@
             chat.scrollTop = chat.scrollHeight;
             if (typeof safeSaveHist === "function") safeSaveHist();
 
-            // KHÔNG in dòng "Đang suy nghĩ...", giữ nguyên câu hỏi trên màn hình!
             let rO = await genAns(t, s.msgs, "", mR);
-            if (mR !== currentReqId || !rO) return;
+            if (mR !== currentReqId || !rO) {
+              window.isAiThinking = false;
+              return;
+            }
 
             s.msgs.push({ r: "ai", t: rO.h });
             cb.insertAdjacentHTML(
@@ -9563,7 +9567,9 @@
             lt.innerText = rO.s;
             speak(rO.s, rO.l);
             if (rO.action) startEffect(rO.action);
-          } catch (err) {}
+          } catch (err) {
+            window.isAiThinking = false;
+          }
         } else {
           let f = home.style.display === "none" ? "chat" : "home";
           let inp = document.getElementById(
@@ -9582,7 +9588,12 @@
         recog.interimResults = !0;
 
         recog.onend = () => {
-          if (isLive && !isAiSpeaking && !window.currentAudio) {
+          if (
+            isLive &&
+            !isAiSpeaking &&
+            !window.isAiThinking &&
+            !window.currentAudio
+          ) {
             try {
               recog.start();
             } catch (e) {}
@@ -9590,7 +9601,7 @@
         };
 
         recog.onresult = async (e) => {
-          if (isAiSpeaking || window.currentAudio) {
+          if (isAiSpeaking || window.currentAudio || window.isAiThinking) {
             window.aiDoneSpeakingTime = Date.now();
           }
 
@@ -9605,6 +9616,7 @@
           if (
             isAiSpeaking ||
             window.currentAudio ||
+            window.isAiThinking ||
             (window.speechSynthesis && window.speechSynthesis.speaking)
           ) {
             let t = currentStr.toLowerCase();
@@ -9619,10 +9631,9 @@
             return;
           }
 
-          // Lọc tiếng vọng (Delay 0.3s) giúp nghe tức thì
           if (
             window.aiDoneSpeakingTime &&
-            Date.now() - window.aiDoneSpeakingTime < 300
+            Date.now() - window.aiDoneSpeakingTime < 400
           )
             return;
 
@@ -9642,6 +9653,7 @@
         if (
           isLive &&
           !isAiSpeaking &&
+          !window.isAiThinking &&
           !window.currentAudio &&
           !(window.speechSynthesis && window.speechSynthesis.speaking)
         ) {
@@ -9660,14 +9672,12 @@
             isLive = !0;
             lt.innerText = "Đang kết nối...";
 
-            // --- BỘ MỞ KHÓA ÂM THANH (CỨU TRỄ AUDIO TRÊN ĐIỆN THOẠI) ---
             if (!window.globalVoicePlayer)
               window.globalVoicePlayer = new Audio();
             window.globalVoicePlayer.play().catch((e) => {});
           }
 
           if (!isMobile) {
-            // == MÁY TÍNH (PC): GIỮ NGUYÊN BẢN GỐC ==
             let m = document.querySelector('meta[name="referrer"]');
             if (!m) {
               m = document.createElement("meta");
@@ -9686,24 +9696,22 @@
                   str.getTracks().forEach((tr) => tr.stop());
                   window.currentMicStream = null;
                 }
+                if (recog) {
+                  try {
+                    recog.stop();
+                  } catch (e) {}
+                  setTimeout(() => {
+                    try {
+                      recog.start();
+                    } catch (e) {}
+                    if (isLiveMode) lt.innerText = "Đang lắng nghe...";
+                  }, 100);
+                }
               })
               .catch((e) => {
-                if (isLiveMode) lt.innerText = "Quyền Micro PC bị từ chối.";
+                if (isLiveMode) lt.innerText = "Quyền Micro bị từ chối.";
               });
-
-            if (recog) {
-              try {
-                recog.stop();
-              } catch (e) {}
-              setTimeout(() => {
-                try {
-                  recog.start();
-                } catch (e) {}
-                if (isLiveMode) lt.innerText = "Đang lắng nghe...";
-              }, 100);
-            }
           } else {
-            // == ĐIỆN THOẠI: BỎ TÀNG HÌNH ĐỂ KHÔNG BỊ KHÓA MIC ==
             let m = document.querySelector('meta[name="referrer"]');
             if (m) m.remove();
 
