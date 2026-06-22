@@ -8147,12 +8147,13 @@
         return { e: null, k: query };
       }
 
-      // --- HÀM GIỌNG ĐỌC AI (CÔNG TẮC TÀNG HÌNH ĐỘNG) ---
+      // --- 5. HÀM GIỌNG ĐỌC AI ---
       function speak(t, lang = "vi-VN") {
         stopAudio();
         if (window.globalVoicePlayer) window.globalVoicePlayer.pause();
 
         isAiSpeaking = !0;
+        window.isAiThinking = false;
         let myToken = currentAudioToken;
 
         let ct = t
@@ -8190,14 +8191,17 @@
         let i = 0;
         if (!window.globalVoicePlayer) window.globalVoicePlayer = new Audio();
 
-        // BẬT TÀNG HÌNH: Lừa Google để lấy file âm thanh (Cứu Loa không bị câm)
-        let m = document.querySelector('meta[name="referrer"]');
-        if (!m) {
-          m = document.createElement("meta");
-          m.name = "referrer";
-          document.head.appendChild(m);
+        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+        if (!isMobile) {
+          let m = document.querySelector('meta[name="referrer"]');
+          if (!m) {
+            m = document.createElement("meta");
+            m.name = "referrer";
+            m.content = "no-referrer";
+            document.head.appendChild(m);
+          } else m.content = "no-referrer";
         }
-        m.content = "no-referrer";
 
         function playNext() {
           if (myToken !== currentAudioToken) {
@@ -8209,17 +8213,19 @@
             return;
           }
 
-          // Dùng cổng gtx bản gốc an toàn nhất
-          let url = `https://translate.googleapis.com/translate_tts?ie=UTF-8&tl=${lang.split("-")[0]}&client=gtx&q=${encodeURIComponent(chunks[i])}`;
+          let url = `https://translate.googleapis.com/translate_tts?ie=UTF-8&tl=${lang.split("-")[0]}&client=tw-ob&q=${encodeURIComponent(chunks[i])}`;
 
           let a = window.globalVoicePlayer;
           a.src = url;
+          a.defaultPlaybackRate = 1.25;
           a.playbackRate = 1.25;
-          window.currentAudio = a;
 
           let bumpInterval;
           a.onplay = () => {
+            a.playbackRate = 1.25;
             isAiSpeaking = !0;
+            window.isAiThinking = false;
+            window.aiDoneSpeakingTime = Date.now();
             bumpInterval = setInterval(() => {
               if (myToken !== currentAudioToken) {
                 clearInterval(bumpInterval);
@@ -8227,6 +8233,7 @@
                 return;
               }
               if (window.triggerSphereBump) window.triggerSphereBump(true);
+              window.aiDoneSpeakingTime = Date.now();
             }, 250);
           };
 
@@ -8236,34 +8243,80 @@
             i++;
             playNext();
           };
+
           a.onerror = () => {
             clearInterval(bumpInterval);
             if (myToken !== currentAudioToken) return;
-            i++;
-            playNext();
+            if (isMobile) {
+              fallbackNative(chunks.slice(i).join(" "));
+            } else {
+              i++;
+              playNext();
+            }
           };
+
           a.play().catch(() => {
             clearInterval(bumpInterval);
             if (myToken !== currentAudioToken) return;
-            i++;
-            playNext();
+            if (isMobile) {
+              fallbackNative(chunks.slice(i).join(" "));
+            } else {
+              i++;
+              playNext();
+            }
           });
+        }
+
+        function fallbackNative(text) {
+          window.isAiThinking = false;
+          if (!window.speechSynthesis) {
+            finishSpeaking();
+            return;
+          }
+          let msg = new SpeechSynthesisUtterance(text);
+          msg.lang = "vi-VN";
+          msg.rate = 1.25;
+          let voices = window.speechSynthesis.getVoices();
+          let viVoice =
+            voices.find(
+              (v) => v.lang.includes("vi") && v.name.includes("Google"),
+            ) || voices.find((v) => v.lang.includes("vi"));
+          if (viVoice) msg.voice = viVoice;
+
+          msg.onstart = () => {
+            isAiSpeaking = !0;
+            window.aiDoneSpeakingTime = Date.now();
+            if (window.triggerSphereBump) window.triggerSphereBump(true);
+          };
+          msg.onend = () => {
+            finishSpeaking();
+          };
+          msg.onerror = () => {
+            finishSpeaking();
+          };
+          window.speechSynthesis.speak(msg);
         }
 
         function finishSpeaking() {
           isAiSpeaking = !1;
           window.currentAudio = null;
+          window.aiDoneSpeakingTime = Date.now();
 
-          // TẮT TÀNG HÌNH TRẢ LẠI MICRO: Xóa ngay lập tức để điện thoại thu âm câu tiếp theo
-          let meta = document.querySelector('meta[name="referrer"]');
-          if (meta) meta.remove();
+          if (isMobile) {
+            let meta = document.querySelector('meta[name="referrer"]');
+            if (meta) meta.remove();
+          }
 
-          if (isLive) {
+          if (isLive && recog) {
+            try {
+              recog.abort();
+            } catch (e) {}
+            // === ĐÃ ĐỔI THÀNH 200ms THEO TỶ LỆ VÀNG CỦA BẠN ===
             setTimeout(() => {
               try {
                 recog.start();
               } catch (e) {}
-            }, 500);
+            }, 200);
           }
         }
 
