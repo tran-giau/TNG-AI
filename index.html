@@ -8865,7 +8865,7 @@
 
           if (!cloudKnowledgeBase.length) await loadCloudKnowledge();
           // ĐOẠN QUÉT TÀI LIỆU SẼ NẰM SAU KHỐI NÀY NÊN KHÔNG BỊ CHẬM NỮA...
-          if (/(hôm nay|ngày mấy|thứ mấy|tháng mấy|năm mấy)/.test(t)) {
+          if (/(hôm nay là ngày mấy|hôm nay là thứ mấy|hôm nay là tháng mấy|hôm nay là năm mấy)/.test(t)) {
             let d = new Date();
             let days = [
               "Chủ nhật",
