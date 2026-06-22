@@ -9491,6 +9491,7 @@
         };
       }
 
+      // --- VÒNG LẶP KIỂM TRA MICRO (ĐÃ TRẢ VỀ BẢN GỐC SẠCH SẼ CỦA BẠN) ---
       setInterval(() => {
         if (
           isLive &&
@@ -9498,22 +9499,12 @@
           !window.currentAudio &&
           !(window.speechSynthesis && window.speechSynthesis.speaking)
         ) {
-          try {
-            let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            if (!isMobile) {
-              let m = document.querySelector('meta[name="referrer"]');
-              if (!m) { m = document.createElement("meta"); m.name = "referrer"; document.head.appendChild(m); }
-              m.content = "strict-origin-when-cross-origin"; 
-            } else {
-              let m = document.querySelector('meta[name="referrer"]');
-              if (m) m.remove();
-            }
-            recog.start();
-          } catch (e) {}
+          try { recog.start(); } catch (e) {}
         }
       }, 2500);
 
-      function startMic(isLiveMode) {
+      // --- HÀM MICRO TÁCH BIỆT: PC ĐI ĐƯỜNG PC, ĐIỆN THOẠI ĐI ĐƯỜNG ĐIỆN THOẠI ---
+      async function startMic(isLiveMode) {
         let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         
         try {
@@ -9523,48 +9514,61 @@
           }
           
           if (isMobile) {
-            // === ĐIỆN THOẠI: Khởi động Micro trực tiếp (Giống hệt Google Search) ===
-            // Gỡ bỏ hoàn toàn getUserMedia và các lệnh trễ để tránh bị điện thoại chặn quyền
+            // ===================================================
+            // LUỒNG 1: ĐIỆN THOẠI (Chuẩn Google Search - Né lỗi kẹt Mic)
+            // ===================================================
+            // Xóa thẻ tàng hình đi thì điện thoại mới cho bật Micro
             let m = document.querySelector('meta[name="referrer"]');
             if (m) m.remove(); 
             
             if (recog) {
-              try { recog.start(); } catch (e) {}
-              if (isLiveMode) {
-                isLive = !0;
-                lt.innerText = "Đang lắng nghe...";
-              }
-            } else {
-              if (isLiveMode) lt.innerText = "Lỗi: Trình duyệt không hỗ trợ Mic.";
+              try { recog.stop(); } catch (e) {}
+              setTimeout(() => {
+                try { recog.start(); } catch (e) {}
+                if (isLiveMode) {
+                  isLive = !0;
+                  lt.innerText = "Đang lắng nghe...";
+                }
+              }, 100);
             }
-          } else {
-            // === MÁY TÍNH: Giữ nguyên code cũ 100% để PC chạy mượt ===
-            let m = document.querySelector('meta[name="referrer"]');
-            if (!m) { m = document.createElement("meta"); m.name = "referrer"; document.head.appendChild(m); }
-            m.content = "strict-origin-when-cross-origin"; 
             
-            navigator.mediaDevices.getUserMedia({ audio: !0 }).then((str) => {
-              window.currentMicStream = str;
-              if (!isLiveMode) {
-                str.getTracks().forEach((tr) => tr.stop());
-                window.currentMicStream = null;
-              }
-              if (recog) {
-                try { recog.stop(); } catch (e) {}
-                setTimeout(() => {
-                  try { recog.start(); } catch (e) {}
-                  if (isLiveMode) {
-                    isLive = !0;
-                    lt.innerText = "Đang lắng nghe...";
-                  }
-                }, 100);
-              }
-            }).catch((err) => {
-              if (isLiveMode) lt.innerText = "Quyền Micro bị từ chối.";
-            });
+          } else {
+            // ===================================================
+            // LUỒNG 2: MÁY TÍNH PC (GIỮ NGUYÊN 100% BẢN GỐC HOẠT ĐỘNG TỐT CỦA BẠN)
+            // ===================================================
+            // Trả lại thẻ tàng hình gốc để máy tính PC phát tiếng không bị câm
+            let m = document.querySelector('meta[name="referrer"]');
+            if (!m) { 
+              m = document.createElement("meta"); 
+              m.name = "referrer"; 
+              m.content = "no-referrer"; 
+              document.head.appendChild(m); 
+            } else {
+              m.content = "no-referrer";
+            }
+            
+            // Lệnh getUserMedia gốc của bạn (Chỉ chạy trên PC)
+            let str = await navigator.mediaDevices.getUserMedia({ audio: !0 });
+            window.currentMicStream = str;
+            
+            if (!isLiveMode) {
+              str.getTracks().forEach((tr) => tr.stop());
+              window.currentMicStream = null;
+            }
+            
+            if (recog) {
+              try { recog.stop(); } catch (e) {}
+              setTimeout(() => {
+                try { recog.start(); } catch (e) {}
+                if (isLiveMode) {
+                  isLive = !0;
+                  lt.innerText = "Đang lắng nghe...";
+                }
+              }, 100);
+            }
           }
         } catch (err) {
-          if (isLiveMode) lt.innerText = "Lỗi khởi động Micro.";
+          if (isLiveMode) lt.innerText = "Quyền Micro bị từ chối.";
         }
       }
 
