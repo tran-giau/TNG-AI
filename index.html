@@ -9505,7 +9505,6 @@
         }
       }, 2500);
 
-      // --- HÀM KHỞI ĐỘNG MICRO CHUẨN XÁC ---
       async function startMic(isLiveMode) {
         try {
           if (isLiveMode) {
@@ -9513,15 +9512,26 @@
             lt.innerText = "Đang kết nối...";
           }
 
-          // Tuyệt chiêu: Xin quyền Micro 1 lần duy nhất, lấy xong đóng liền để nhường phần cứng cho AI
-          if (!window.micPermissionGranted) {
-            let stream = await navigator.mediaDevices.getUserMedia({
-              audio: true,
-            });
-            stream.getTracks().forEach((track) => track.stop());
-            window.micPermissionGranted = true;
+          // 1. NHẬN DIỆN THIẾT BỊ: Kiểm tra xem người dùng đang xài Điện thoại hay PC
+          let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+          if (!isMobile) {
+            // === LUỒNG 1: CHẠY CODE CŨ TRÊN MÁY TÍNH (GIỮ NGUYÊN 100%) ===
+            let str = await navigator.mediaDevices.getUserMedia({ audio: !0 });
+            window.currentMicStream = str;
+            if (!isLiveMode) {
+              str.getTracks().forEach((tr) => tr.stop());
+              window.currentMicStream = null;
+            }
+          } else {
+            // === LUỒNG 2: XỬ LÝ RIÊNG CHO ĐIỆN THOẠI ===
+            // Tuyệt đối KHÔNG dùng getUserMedia để tránh bị điện thoại khóa phần cứng Micro
+            // Gỡ bỏ thẻ tàng hình (nếu có) vì Safari/Chrome Mobile rất ghét tàng hình khi bật Mic
+            let metaRef = document.querySelector('meta[name="referrer"]');
+            if (metaRef) metaRef.remove();
           }
 
+          // 2. KHỞI ĐỘNG TAI NGHE CỦA AI
           if (recog) {
             try {
               recog.stop();
@@ -9534,7 +9544,7 @@
                 isLive = !0;
                 lt.innerText = "Đang lắng nghe...";
               }
-            }, 300);
+            }, 100);
           }
         } catch (err) {
           if (isLiveMode) lt.innerText = "Quyền Micro bị từ chối.";
