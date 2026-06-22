@@ -9464,9 +9464,7 @@
           currentReqId++;
           let mR = currentReqId;
           try {
-            // ==============================================================
-            // TÍNH NĂNG MỚI: IN LỊCH SỬ CHAT TRONG LÚC ĐANG LIVE NHƯ GEMINI
-            // ==============================================================
+            // Đưa giao diện nền về màn hình Chat
             if (home.style.display !== "none") {
               home.style.display = "none";
               if (typeof mcView !== "undefined" && mcView)
@@ -9476,6 +9474,7 @@
               cc.style.display = "flex";
             }
 
+            // Khởi tạo cuộc hội thoại
             if (!curId) {
               curId = Date.now().toString();
               sessions.unshift({
@@ -9500,7 +9499,10 @@
             chat.scrollTop = chat.scrollHeight;
             if (typeof safeSaveHist === "function") safeSaveHist();
 
-            lt.innerText = "Đang suy nghĩ...";
+            // ĐÃ XÓA DÒNG "Đang suy nghĩ..." Ở ĐÂY.
+            // Lúc này câu hỏi của bạn (lt.innerText) sẽ vẫn được giữ nguyên trên màn hình Live
+
+            // Gọi AI trả lời
             let rO = await genAns(t, s.msgs, "", mR);
             if (mR !== currentReqId || !rO) return;
 
@@ -9514,6 +9516,7 @@
             if (typeof safeSaveHist === "function") safeSaveHist();
             if (typeof renderHist === "function") renderHist();
 
+            // Hiện câu trả lời của AI lên màn hình Live
             lt.innerText = rO.s;
             speak(rO.s, rO.l);
             if (rO.action) startEffect(rO.action);
