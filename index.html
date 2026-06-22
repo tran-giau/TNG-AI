@@ -9672,8 +9672,12 @@
             isLive = !0;
             lt.innerText = "Đang kết nối...";
 
+            // --- TUYỆT CHIÊU MỞ KHÓA LOA SIÊU TỐC 0ms ---
             if (!window.globalVoicePlayer)
               window.globalVoicePlayer = new Audio();
+            // Xóa sạch file âm thanh cũ để không bị nhại lại
+            window.globalVoicePlayer.src = "";
+            // Ép chạy để lừa điện thoại mở khóa loa (Bỏ qua lỗi vì src trống)
             window.globalVoicePlayer.play().catch((e) => {});
           }
 
