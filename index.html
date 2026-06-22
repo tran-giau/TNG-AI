@@ -8345,12 +8345,20 @@
             }
           });
         }
+
+        // --- TIÊM LỆNH HỆ THỐNG ÉP BUỘC TIẾNG VIỆT VÀO API GEMINI ---
         formattedContents.push({
           role: "user",
-          parts: [{ text: questionText }],
+          parts: [
+            {
+              text:
+                questionText +
+                "\n\n(Lệnh hệ thống: Bắt buộc phải trả lời hoàn toàn bằng Tiếng Việt. Trả lời trực tiếp, tự nhiên và tuyệt đối KHÔNG in lại câu hỏi.)",
+            },
+          ],
         });
 
-        // FIX LỖI IN KÉP: Ép AI Dự phòng không được lặp lại câu hỏi
+        // --- TIÊM LỆNH HỆ THỐNG ÉP BUỘC TIẾNG VIỆT VÀO API DỰ PHÒNG ---
         let fallbackPrompt = questionText;
         if (historyMsgs && historyMsgs.length > 0) {
           let contextStr = historyMsgs
@@ -8361,28 +8369,28 @@
                 m.t.replace(/<br\s*\/?>/gi, "\n").replace(/<[^>]*>?/gm, ""),
             )
             .join("\n");
+
           fallbackPrompt =
             "Lịch sử trò chuyện:\n" +
             contextStr +
             "\n\nBây giờ tôi nói: " +
             questionText +
-            "\n\n(Lệnh hệ thống: Hãy trả lời trực tiếp. Tuyệt đối KHÔNG ĐƯỢC in lại lịch sử trò chuyện hay câu hỏi của tôi)";
+            "\n\n(Lệnh hệ thống: Bắt buộc phải trả lời bằng Tiếng Việt. Hãy trả lời trực tiếp. Tuyệt đối KHÔNG ĐƯỢC in lại lịch sử trò chuyện hay câu hỏi của tôi)";
         } else {
           fallbackPrompt =
             questionText +
-            "\n\n(Lệnh hệ thống: Hãy trả lời trực tiếp. Tuyệt đối KHÔNG ĐƯỢC in lại câu hỏi của tôi)";
+            "\n\n(Lệnh hệ thống: Bắt buộc phải trả lời bằng Tiếng Việt. Hãy trả lời trực tiếp. Tuyệt đối KHÔNG ĐƯỢC in lại câu hỏi của tôi)";
         }
+
         let fallbackUrl =
           "https://text.pollinations.ai/prompt/" +
           encodeURIComponent(fallbackPrompt);
 
         let maxRetries = 3;
-
         for (let attempt = 1; attempt <= maxRetries; attempt++) {
           console.log(
             `🔄 Đang kết nối AI... (Lần thử ${attempt}/${maxRetries})`,
           );
-
           try {
             let response = await fetch(geminiUrl, {
               method: "POST",
@@ -8398,7 +8406,9 @@
           }
 
           try {
-            let fallbackResponse = await fetch(fallbackUrl, { method: "GET" });
+            let fallbackResponse = await fetch(fallbackUrl, {
+              method: "GET",
+            });
             if (fallbackResponse.ok) {
               let fallbackText = await fallbackResponse.text();
               if (fallbackText && fallbackText.trim() !== "") {
