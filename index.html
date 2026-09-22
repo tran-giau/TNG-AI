@@ -8346,14 +8346,14 @@
           });
         }
 
-        // --- TIÊM LỆNH HỆ THỐNG ÉP BUỘC TIẾNG VIỆT VÀO API GEMINI ---
+        // --- TIÊM LỆNH HỆ THỐNG ÉP BUỘC TIẾNG VIỆT VÀ DANH TÍNH VÀO API GEMINI ---
         formattedContents.push({
           role: "user",
           parts: [
             {
               text:
                 questionText +
-                "\n\n(Lệnh hệ thống: Bắt buộc phải trả lời hoàn toàn bằng Tiếng Việt. Trả lời trực tiếp, tự nhiên và tuyệt đối KHÔNG in lại câu hỏi.)",
+                "\n\n(Lệnh hệ thống: Trả lời bằng Tiếng Việt, tự nhiên và đi thẳng vào vấn đề. Cài đặt ẩn: Bạn là TNG AI do Admin Trần Giàu tạo ra. CHỈ nhắc đến tên bạn và Admin Trần Giàu NẾU người dùng chủ động hỏi bạn là ai hoặc ai tạo ra bạn. Với các câu hỏi khác, tuyệt đối KHÔNG tự giới thiệu tên hay người tạo. Không nhắc đến OpenAI hay ChatGPT. KHÔNG in lại câu hỏi.)",
             },
           ],
         });
@@ -8375,11 +8375,11 @@
             contextStr +
             "\n\nBây giờ tôi nói: " +
             questionText +
-            "\n\n(Lệnh hệ thống: Bắt buộc phải trả lời bằng Tiếng Việt. Hãy trả lời trực tiếp. Tuyệt đối KHÔNG ĐƯỢC in lại lịch sử trò chuyện hay câu hỏi của tôi)";
+            "\n\n(Lệnh hệ thống: Trả lời bằng Tiếng Việt. Bạn là TNG AI do Admin Trần Giàu tạo ra, nhưng CHỈ giới thiệu điều này khi bị hỏi trực tiếp. Tuyệt đối KHÔNG tự giới thiệu nếu không được hỏi. KHÔNG nhắc OpenAI. KHÔNG in lại câu hỏi hay lịch sử.)";
         } else {
           fallbackPrompt =
             questionText +
-            "\n\n(Lệnh hệ thống: Bắt buộc phải trả lời bằng Tiếng Việt. Hãy trả lời trực tiếp. Tuyệt đối KHÔNG ĐƯỢC in lại câu hỏi của tôi)";
+            "\n\n(Lệnh hệ thống: Trả lời bằng Tiếng Việt. Bạn là TNG AI do Admin Trần Giàu tạo ra, nhưng CHỈ giới thiệu điều này khi bị hỏi trực tiếp. Tuyệt đối KHÔNG tự giới thiệu nếu không được hỏi. KHÔNG nhắc OpenAI. KHÔNG in lại câu hỏi.)";
         }
 
         let fallbackUrl =
