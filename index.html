@@ -3072,6 +3072,112 @@
         margin-left: 20px;
         margin-bottom: 10px;
       }
+      /* ============================================================ */
+      /* HIỆU ỨNG LÚN MƯỢT MÀ CHUẨN IOS 27 (TỐI ƯU DANH SÁCH NGANG)    */
+      /* ============================================================ */
+
+      /* Kích hoạt GPU và khai báo chuyển động cho cả border-radius */
+      button,
+      .icon-btn,
+      .chip,
+      .mc-btn,
+      .upgrade-btn,
+      .tng-btn,
+      .tool-select-btn,
+      .sb-item,
+      .d-item,
+      .m-item,
+      .s-item,
+      .sv-item,
+      .qa-item,
+      .am-item,
+      .acc-wrap-box,
+      .mc-item-wrap,
+      .note-card {
+        will-change: transform, box-shadow, border-radius;
+        transition:
+          transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
+          background-color 0.2s ease,
+          border-radius 0.2s ease,
+          /* Bổ sung chuyển mượt góc bo */ box-shadow 0.4s
+            cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+      }
+
+      /* Khóa hover giả trên màn hình cảm ứng để chống kẹt hiệu ứng */
+      @media (hover: none) {
+        button:hover,
+        .icon-btn:hover,
+        .mc-btn:hover,
+        .tng-btn:hover {
+          filter: none !important;
+        }
+      }
+
+      /* Nhấn là lún ngay lập tức (0.05s) */
+      button:active,
+      .icon-btn:active,
+      .chip:active,
+      .mc-btn:active,
+      .upgrade-btn:active,
+      .tng-btn:active,
+      .tool-select-btn:active,
+      .sb-item:active,
+      .d-item:active,
+      .m-item:active,
+      .s-item:active,
+      .sv-item:active,
+      .qa-item:active,
+      .am-item:active,
+      .acc-wrap-box:active,
+      .mc-item-wrap:active:not(.select-mode),
+      .note-card:active:not(.select-mode) {
+        transition-duration: 0.05s !important;
+      }
+
+      /* MỨC 1: Lún sâu cho các nút bấm nhỏ */
+      button:active:not([disabled]),
+      .icon-btn:active,
+      .chip:active,
+      .mc-btn:active,
+      .upgrade-btn:active,
+      .tng-btn:active,
+      .tool-select-btn:active {
+        transform: scale(0.9) !important;
+        opacity: 0.7 !important;
+      }
+
+      /* MỨC 2: BÍ KÍP APPLE CHO DANH SÁCH NGANG - Vừa lún vừa bo góc */
+      .sb-item:active,
+      .d-item:active,
+      .m-item:active,
+      .s-item:active,
+      .sv-item:active,
+      .qa-item:active,
+      .am-item:active,
+      .acc-wrap-box:active {
+        transform: scale(0.96) !important;
+        background-color: rgba(255, 255, 255, 0.08) !important;
+        border-radius: 16px !important; /* Tạo góc bo tròn ngay khi lún để chống gãy mép 2 bên */
+      }
+
+      /* Đảo màu vệt nhấn cho Giao diện sáng */
+      [data-theme="light"] .sb-item:active,
+      [data-theme="light"] .d-item:active,
+      [data-theme="light"] .m-item:active,
+      [data-theme="light"] .s-item:active,
+      [data-theme="light"] .sv-item:active,
+      [data-theme="light"] .qa-item:active,
+      [data-theme="light"] .am-item:active,
+      [data-theme="light"] .acc-wrap-box:active {
+        background-color: rgba(0, 0, 0, 0.06) !important;
+      }
+
+      /* MỨC 3: Thẻ nội dung (File, Note) */
+      .mc-item-wrap:active:not(.select-mode),
+      .note-card:active:not(.select-mode) {
+        transform: scale(0.95) translateY(4px) !important;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4) !important;
+      }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
