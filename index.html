@@ -3073,124 +3073,118 @@
         margin-bottom: 10px;
       }
       /* ============================================================ */
-      /* HIỆU ỨNG TƯƠNG TÁC VẬT LÝ CHUẨN IOS 27 (PRO MAX EDITION V3)  */
+      /* HIỆU ỨNG TƯƠNG TÁC VẬT LÝ CHUẨN IOS 27 (ULTIMATE V2)         */
       /* ============================================================ */
 
-      /* Kích hoạt xử lý chuyển động phần cứng, chống rách hình */
-      button,
-      .icon-btn,
-      .chip,
-      .mc-btn,
-      .upgrade-btn,
-      .tng-btn,
-      .tool-select-btn,
-      .avatar, /* Bổ sung Avatar vào hệ thống phần cứng */
-      .sb-item,
-      .d-item,
-      .m-item,
-      .s-item,
-      .sv-item,
-      .qa-item,
-      .am-item,
-      .acc-wrap-box,
-      .mc-item-wrap,
-      .note-card {
-        will-change: transform, box-shadow, background-color;
-        transition:
-          transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.2),
-          background-color 0.2s ease,
-          border-radius 0.2s ease,
-          box-shadow 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.2),
-          filter 0.2s ease !important;
+      /* 1. XÓA BỎ CHỚP ĐEN/XANH TRÌNH DUYỆT & TỐI ƯU CẢM ỨNG */
+      * { -webkit-tap-highlight-color: transparent !important; }
+      button, .avatar, .chip, .sb-item, .d-item, .m-item, .s-item, .sv-item, .qa-item, .am-item, .acc-wrap-box, .mc-item-wrap, .note-card {
+        -webkit-user-select: none; user-select: none; touch-action: manipulation;
       }
 
-      /* Tắt hiệu ứng kẹt sáng trên điện thoại cảm ứng */
-      @media (hover: none) {
-        button:hover,
-        .icon-btn:hover,
-        .mc-btn:hover,
-        .tng-btn:hover,
-        .avatar:hover {
-          filter: none !important;
+      /* 2. CHUYỂN ĐỘNG NỀN TẢNG (GIA TỐC LÒ XO APPLE) */
+      /* Gắn thẳng vào TOÀN BỘ button và các khối có thể click */
+      button, .avatar, .chip, .mc-item-wrap, .note-card,
+      .sb-item > *:not(.sub-menu), .d-item > *:not(.sub-menu), .m-item > *:not(.sub-menu), 
+      .s-item > *:not(.sub-menu), .sv-item > *:not(.sub-menu), .qa-item > *, .am-item > *:not(.sub-menu), .acc-wrap-box > * {
+        will-change: transform, box-shadow, background-color;
+        /* Áp dụng công thức Spring của iOS */
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), 
+                    background-color 0.2s ease,
+                    box-shadow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                    filter 0.2s ease; 
+      }
+
+      /* Khóa nền danh sách ngang, chỉ mượt mà đổi màu (Cứu Menu JS) */
+      .sb-item, .d-item, .m-item, .s-item, .sv-item, .qa-item, .am-item, .acc-wrap-box {
+        transition: background-color 0.25s ease !important;
+        transform: scale(1) !important; 
+      }
+
+      /* 3. HOVER - CHẠM LỤA (TRÊN PC CÓ CHUỘT) */
+      @media (hover: hover) {
+        /* Mọi nút bấm, Avatar đều lún siêu nhẹ khi lướt qua */
+        button:hover:not([disabled]), .avatar:hover, .chip:hover {
+          transform: scale(0.98);
+        }
+        .mc-item-wrap:hover:not(.select-mode), .note-card:hover:not(.select-mode) {
+          transform: scale(0.98) translateY(1px);
+        }
+        .sb-item:hover, .d-item:hover, .m-item:hover, .s-item:hover, .sv-item:hover, .qa-item:hover, .am-item:hover, .acc-wrap-box:hover {
+          background-color: var(--glass-hover);
+        }
+        /* Lõi danh sách chìm nhẹ */
+        .sb-item:hover > *:not(.sub-menu), .d-item:hover > *:not(.sub-menu), .m-item:hover > *:not(.sub-menu), .s-item:hover > *:not(.sub-menu), .sv-item:hover > *:not(.sub-menu), .qa-item:hover > *, .am-item:hover > *:not(.sub-menu), .acc-wrap-box:hover > * {
+          transform: scale(0.985);
         }
       }
+      /* Tắt kẹt sáng hover trên màn hình điện thoại */
+      @media (hover: none) {
+        button:hover, .avatar:hover, .chip:hover { filter: none !important; }
+      }
 
-      /* Tăng tốc tối đa (0.05s) để phản hồi ngay khi ngón tay vừa chạm */
-      button:active,
-      .icon-btn:active,
-      .chip:active,
-      .mc-btn:active,
-      .upgrade-btn:active,
-      .tng-btn:active,
-      .tool-select-btn:active,
-      .avatar:active, /* Bổ sung Avatar vào độ trễ 0.05s */
-      .sb-item:active,
-      .d-item:active,
-      .m-item:active,
-      .s-item:active,
-      .sv-item:active,
-      .qa-item:active,
-      .am-item:active,
-      .acc-wrap-box:active,
-      .mc-item-wrap:active:not(.select-mode),
-      .note-card:active:not(.select-mode) {
+      /* 4. ACTIVE - CHẠM LÚN TỨC THÌ (0.05s) ĐỂ TẠO CẢM GIÁC THẬT */
+      button:active, .avatar:active, .chip:active,
+      .mc-item-wrap:active:not(.select-mode), .note-card:active:not(.select-mode),
+      .sb-item:active, .d-item:active, .m-item:active, .s-item:active, .sv-item:active, .qa-item:active, .am-item:active, .acc-wrap-box:active,
+      .sb-item:active > *:not(.sub-menu), .d-item:active > *:not(.sub-menu), .m-item:active > *:not(.sub-menu), .s-item:active > *:not(.sub-menu), .sv-item:active > *:not(.sub-menu), .qa-item:active > *, .am-item:active > *:not(.sub-menu), .acc-wrap-box:active > * {
         transition-duration: 0.05s !important;
       }
 
-      /* MỨC 1: Lún sâu (0.9) cho Nút bấm, Thẻ công cụ, AVATAR */
-      button:active:not([disabled]),
-      .icon-btn:active,
-      .chip:active,
-      .mc-btn:active,
-      .upgrade-btn:active,
-      .tng-btn:active,
-      .tool-select-btn:active,
-      .avatar:active {
-        /* Ép Avatar lún sâu như các nút khác */
-        transform: scale(0.9) !important;
-        opacity: 0.8 !important;
+      /* --- PHÂN LỚP ĐỘ LÚN KHI NHẤN GIỮ --- */
+
+      /* A. Nút bấm chung, Avatar, Chip (Trở lại, Quản lý TK, Cập nhật...) */
+      button:active:not([disabled]), .avatar:active, .chip:active {
+        transform: scale(0.92) !important;
+        opacity: 0.8;
       }
 
-      /* MỨC 2: CÁC KHỐI DANH SÁCH & NÚT DÀI (Tránh gãy mép 2 bên) */
-      .sb-item:active,
-      .d-item:active,
-      .m-item:active,
-      .s-item:active,
-      .sv-item:active,
-      .qa-item:active,
-      .am-item:active,
-      .acc-wrap-box:active,
-      button[style*="width: 100%"]:active:not([disabled]),
-      button[style*="width:100%"]:active:not([disabled]),
-      button[style*="flex: 1"]:active:not([disabled]),
-      button[style*="flex:1"]:active:not([disabled]) {
-        transform: scale(0.96) !important;
-        background-color: rgba(255, 255, 255, 0.08) !important;
-        border-radius: 14px !important;
-      }
-
-      /* Đảo màu vệt nhấn cho Giao diện sáng */
-      [data-theme="light"] .sb-item:active,
-      [data-theme="light"] .d-item:active,
-      [data-theme="light"] .m-item:active,
-      [data-theme="light"] .s-item:active,
-      [data-theme="light"] .sv-item:active,
-      [data-theme="light"] .qa-item:active,
-      [data-theme="light"] .am-item:active,
-      [data-theme="light"] .acc-wrap-box:active,
-      [data-theme="light"] button[style*="width: 100%"]:active:not([disabled]),
-      [data-theme="light"] button[style*="width:100%"]:active:not([disabled]),
-      [data-theme="light"] button[style*="flex: 1"]:active:not([disabled]),
-      [data-theme="light"] button[style*="flex:1"]:active:not([disabled]) {
-        background-color: rgba(0, 0, 0, 0.08) !important;
-      }
-
-      /* MỨC 3: Thẻ nội dung (File, Nhạc, Sổ) lún và tạo bóng */
-      .mc-item-wrap:active:not(.select-mode),
-      .note-card:active:not(.select-mode) {
+      /* B. Khối Card lớn (Lún + Đổ bóng sát mặt phẳng) */
+      .mc-item-wrap:active:not(.select-mode), .note-card:active:not(.select-mode) {
         transform: scale(0.96) translateY(2px) !important;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
       }
+
+      /* C. Danh sách ngang (Bọc ngoài chớp nền, lõi trong lún 3D) */
+      .sb-item:active, .d-item:active, .m-item:active, .s-item:active, .sv-item:active, .qa-item:active, .am-item:active, .acc-wrap-box:active {
+        background-color: rgba(255, 255, 255, 0.08) !important;
+      }
+      [data-theme="light"] .sb-item:active, [data-theme="light"] .d-item:active, [data-theme="light"] .m-item:active, [data-theme="light"] .s-item:active, [data-theme="light"] .sv-item:active, [data-theme="light"] .qa-item:active, [data-theme="light"] .am-item:active, [data-theme="light"] .acc-wrap-box:active {
+        background-color: rgba(0, 0, 0, 0.06) !important;
+      }
+      .sb-item:active > *:not(.sub-menu), .d-item:active > *:not(.sub-menu), .m-item:active > *:not(.sub-menu), .s-item:active > *:not(.sub-menu), .sv-item:active > *:not(.sub-menu), .qa-item:active > *, .am-item:active > *:not(.sub-menu), .acc-wrap-box:active > * {
+        transform: scale(0.95) !important;
+      }
+
+      /* D. CHỐT CHẶN BẢO VỆ NÚT DÀI (FIX HỞ LỀ ĐEN 100%) */
+      /* Hủy lệnh scale 0.92 của nút button đối với các nút full-width */
+      div[style*="position: fixed"] button[style*="width"]:active, 
+      div[style*="position: fixed"] button[style*="flex"]:active,
+      .anim-wrapper button[style*="width"]:active, 
+      .anim-wrapper button[style*="flex"]:active,
+      .am-group + button[style*="width"]:active { /* Khóa luôn nút Đăng xuất dưới cùng */
+        transform: scale(1) !important; /* Đứng im không lún */
+        filter: brightness(0.8) !important; /* Chỉ chớp tối màu nền để báo hiệu chạm */
+      }
+
+      /* ============================================================ */
+      /* FIX LỖI MẤT NỀN NÚT HỦY/LƯU BẢNG GIỚI TÍNH, NGÀY SINH          */
+      /* ============================================================ */
+      #custom-gender-modal button:active,
+      #custom-dob-modal button:active,
+      #custom-child-add-modal button:active,
+      #custom-child-manage-modal button:active {
+        background: rgba(255, 255, 255, 0.12) !important;
+      }
+      
+      /* Xử lý hiển thị rõ ràng trên Giao diện sáng */
+      [data-theme="light"] #custom-gender-modal button:active,
+      [data-theme="light"] #custom-dob-modal button:active,
+      [data-theme="light"] #custom-child-add-modal button:active,
+      [data-theme="light"] #custom-child-manage-modal button:active {
+        background: rgba(0, 0, 0, 0.1) !important;
+      }
+      
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
@@ -15235,6 +15229,31 @@
           subtree: true,
         });
       })();
+      // ============================================================
+      // VÁ LỖI NẢY CHỮ: Tự động bọc <span> cho chữ trần trụi
+      // Giúp toàn bộ danh sách đều lún mượt mà như "Giao diện"
+      // ============================================================
+      let uiObserver = new MutationObserver(() => {
+        document
+          .querySelectorAll(
+            ".sb-item, .d-item, .m-item, .s-item, .sv-item, .qa-item, .am-item",
+          )
+          .forEach((el) => {
+            Array.from(el.childNodes).forEach((node) => {
+              if (node.nodeType === 3 && node.nodeValue.trim().length > 0) {
+                let span = document.createElement("span");
+                span.textContent = node.nodeValue;
+                span.style.display = "inline-block";
+                span.style.transformOrigin = "left center"; // Lún mượt từ bên trái sang
+                el.replaceChild(span, node);
+              }
+            });
+          });
+      });
+      uiObserver.observe(document.body, { childList: true, subtree: true });
+
+
+    </script>
     </script>
   </body>
 </html>
