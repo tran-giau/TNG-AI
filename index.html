@@ -3073,10 +3073,10 @@
         margin-bottom: 10px;
       }
       /* ============================================================ */
-      /* HIỆU ỨNG LÚN MƯỢT MÀ CHUẨN IOS 27 (TỐI ƯU DANH SÁCH NGANG)    */
+      /* HIỆU ỨNG TƯƠNG TÁC VẬT LÝ CHUẨN IOS 27 (PRO MAX EDITION V3)  */
       /* ============================================================ */
 
-      /* Kích hoạt GPU và khai báo chuyển động cho cả border-radius */
+      /* Kích hoạt xử lý chuyển động phần cứng, chống rách hình */
       button,
       .icon-btn,
       .chip,
@@ -3084,6 +3084,7 @@
       .upgrade-btn,
       .tng-btn,
       .tool-select-btn,
+      .avatar, /* Bổ sung Avatar vào hệ thống phần cứng */
       .sb-item,
       .d-item,
       .m-item,
@@ -3094,26 +3095,27 @@
       .acc-wrap-box,
       .mc-item-wrap,
       .note-card {
-        will-change: transform, box-shadow, border-radius;
+        will-change: transform, box-shadow, background-color;
         transition:
-          transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
+          transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.2),
           background-color 0.2s ease,
           border-radius 0.2s ease,
-          /* Bổ sung chuyển mượt góc bo */ box-shadow 0.4s
-            cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+          box-shadow 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.2),
+          filter 0.2s ease !important;
       }
 
-      /* Khóa hover giả trên màn hình cảm ứng để chống kẹt hiệu ứng */
+      /* Tắt hiệu ứng kẹt sáng trên điện thoại cảm ứng */
       @media (hover: none) {
         button:hover,
         .icon-btn:hover,
         .mc-btn:hover,
-        .tng-btn:hover {
+        .tng-btn:hover,
+        .avatar:hover {
           filter: none !important;
         }
       }
 
-      /* Nhấn là lún ngay lập tức (0.05s) */
+      /* Tăng tốc tối đa (0.05s) để phản hồi ngay khi ngón tay vừa chạm */
       button:active,
       .icon-btn:active,
       .chip:active,
@@ -3121,6 +3123,7 @@
       .upgrade-btn:active,
       .tng-btn:active,
       .tool-select-btn:active,
+      .avatar:active, /* Bổ sung Avatar vào độ trễ 0.05s */
       .sb-item:active,
       .d-item:active,
       .m-item:active,
@@ -3134,19 +3137,21 @@
         transition-duration: 0.05s !important;
       }
 
-      /* MỨC 1: Lún sâu cho các nút bấm nhỏ */
+      /* MỨC 1: Lún sâu (0.9) cho Nút bấm, Thẻ công cụ, AVATAR */
       button:active:not([disabled]),
       .icon-btn:active,
       .chip:active,
       .mc-btn:active,
       .upgrade-btn:active,
       .tng-btn:active,
-      .tool-select-btn:active {
+      .tool-select-btn:active,
+      .avatar:active {
+        /* Ép Avatar lún sâu như các nút khác */
         transform: scale(0.9) !important;
-        opacity: 0.7 !important;
+        opacity: 0.8 !important;
       }
 
-      /* MỨC 2: BÍ KÍP APPLE CHO DANH SÁCH NGANG - Vừa lún vừa bo góc */
+      /* MỨC 2: CÁC KHỐI DANH SÁCH & NÚT DÀI (Tránh gãy mép 2 bên) */
       .sb-item:active,
       .d-item:active,
       .m-item:active,
@@ -3154,10 +3159,14 @@
       .sv-item:active,
       .qa-item:active,
       .am-item:active,
-      .acc-wrap-box:active {
+      .acc-wrap-box:active,
+      button[style*="width: 100%"]:active:not([disabled]),
+      button[style*="width:100%"]:active:not([disabled]),
+      button[style*="flex: 1"]:active:not([disabled]),
+      button[style*="flex:1"]:active:not([disabled]) {
         transform: scale(0.96) !important;
         background-color: rgba(255, 255, 255, 0.08) !important;
-        border-radius: 16px !important; /* Tạo góc bo tròn ngay khi lún để chống gãy mép 2 bên */
+        border-radius: 14px !important;
       }
 
       /* Đảo màu vệt nhấn cho Giao diện sáng */
@@ -3168,15 +3177,19 @@
       [data-theme="light"] .sv-item:active,
       [data-theme="light"] .qa-item:active,
       [data-theme="light"] .am-item:active,
-      [data-theme="light"] .acc-wrap-box:active {
-        background-color: rgba(0, 0, 0, 0.06) !important;
+      [data-theme="light"] .acc-wrap-box:active,
+      [data-theme="light"] button[style*="width: 100%"]:active:not([disabled]),
+      [data-theme="light"] button[style*="width:100%"]:active:not([disabled]),
+      [data-theme="light"] button[style*="flex: 1"]:active:not([disabled]),
+      [data-theme="light"] button[style*="flex:1"]:active:not([disabled]) {
+        background-color: rgba(0, 0, 0, 0.08) !important;
       }
 
-      /* MỨC 3: Thẻ nội dung (File, Note) */
+      /* MỨC 3: Thẻ nội dung (File, Nhạc, Sổ) lún và tạo bóng */
       .mc-item-wrap:active:not(.select-mode),
       .note-card:active:not(.select-mode) {
-        transform: scale(0.95) translateY(4px) !important;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4) !important;
+        transform: scale(0.96) translateY(2px) !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
       }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
