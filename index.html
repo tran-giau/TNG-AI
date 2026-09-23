@@ -8323,7 +8323,7 @@
         playNext();
       }
 
-      // --- HÀM KẾT NỐI AI ĐA TẦNG (FIX LỖI IN CHỮ KÉP, LẶP 3 LẦN) ---
+      // --- HÀM KẾT NỐI AI ĐA TẦNG (FIX LỖI IN CHỮ KÉP, LẶP 3 LẦN + DỰ PHÒNG MỞ RỘNG) ---
       async function askGemini(questionText, historyMsgs = []) {
         let apiKey = "AQ.Ab8RN6JEq1-bTZFAA2kLK27vXXkwfES8BFRMuuXSuvtTC0rmZQ";
         let geminiUrl =
@@ -8391,6 +8391,10 @@
           console.log(
             `🔄 Đang kết nối AI... (Lần thử ${attempt}/${maxRetries})`,
           );
+
+          // ===============================================
+          // TẦNG 1: GỌI GOOGLE GEMINI (CHÍNH)
+          // ===============================================
           try {
             let response = await fetch(geminiUrl, {
               method: "POST",
@@ -8405,6 +8409,9 @@
             console.warn(`⚠️ Gemini lỗi (Lần ${attempt}).`);
           }
 
+          // ===============================================
+          // TẦNG 2: GỌI DỰ PHÒNG CŨ (POLLINATIONS)
+          // ===============================================
           try {
             let fallbackResponse = await fetch(fallbackUrl, {
               method: "GET",
@@ -8416,7 +8423,43 @@
               }
             }
           } catch (e) {
-            console.warn(`⚠️ AI dự phòng lỗi (Lần ${attempt}).`);
+            console.warn(`⚠️ AI dự phòng Pollinations lỗi (Lần ${attempt}).`);
+          }
+
+          // ===============================================
+          // TẦNG 3: GỌI DỰ PHÒNG MỚI BỔ SUNG (OPENROUTER)
+          // ===============================================
+          try {
+            let openRouterKey =
+              "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";
+            if (
+              openRouterKey !==
+              "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"
+            ) {
+              let orUrl = "https://openrouter.ai/api/v1/chat/completions";
+              let orResponse = await fetch(orUrl, {
+                method: "POST",
+                headers: {
+                  Authorization: `Bearer ${openRouterKey}`,
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  model: "google/gemini-1.5-flash:free",
+                  messages: [{ role: "user", content: fallbackPrompt }],
+                }),
+              });
+
+              let orData = await orResponse.json();
+              if (
+                orResponse.ok &&
+                orData.choices &&
+                orData.choices.length > 0
+              ) {
+                return orData.choices[0].message.content;
+              }
+            }
+          } catch (e) {
+            console.warn(`⚠️ AI dự phòng OpenRouter lỗi (Lần ${attempt}).`);
           }
 
           if (attempt < maxRetries) {
