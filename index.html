@@ -3073,118 +3073,321 @@
         margin-bottom: 10px;
       }
       /* ============================================================ */
-      /* HIỆU ỨNG TƯƠNG TÁC VẬT LÝ CHUẨN IOS 27 (ULTIMATE V2)         */
+      /* HIỆU ỨNG TƯƠNG TÁC VẬT LÝ CHUẨN IOS 27 (BẢN TĂNG ĐỘ LÚN)      */
       /* ============================================================ */
 
-      /* 1. XÓA BỎ CHỚP ĐEN/XANH TRÌNH DUYỆT & TỐI ƯU CẢM ỨNG */
-      * { -webkit-tap-highlight-color: transparent !important; }
-      button, .avatar, .chip, .sb-item, .d-item, .m-item, .s-item, .sv-item, .qa-item, .am-item, .acc-wrap-box, .mc-item-wrap, .note-card {
-        -webkit-user-select: none; user-select: none; touch-action: manipulation;
+      * {
+        -webkit-tap-highlight-color: transparent !important;
+      }
+      button,
+      .avatar,
+      .chip,
+      .mc-item-wrap,
+      .note-card,
+      .sb-item,
+      .d-item,
+      .m-item,
+      .s-item,
+      .sv-item,
+      .qa-item,
+      .am-item,
+      .acc-wrap-box {
+        -webkit-user-select: none;
+        user-select: none;
+        touch-action: manipulation;
       }
 
-      /* 2. CHUYỂN ĐỘNG NỀN TẢNG (GIA TỐC LÒ XO APPLE) */
-      /* Gắn thẳng vào TOÀN BỘ button và các khối có thể click */
-      button, .avatar, .chip, .mc-item-wrap, .note-card,
-      .sb-item > *:not(.sub-menu), .d-item > *:not(.sub-menu), .m-item > *:not(.sub-menu), 
-      .s-item > *:not(.sub-menu), .sv-item > *:not(.sub-menu), .qa-item > *, .am-item > *:not(.sub-menu), .acc-wrap-box > * {
-        will-change: transform, box-shadow, background-color;
-        /* Áp dụng công thức Spring của iOS */
-        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), 
-                    background-color 0.2s ease,
-                    box-shadow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-                    filter 0.2s ease; 
+      /* 1. CHUYỂN ĐỘNG NỀN TẢNG (GIA TỐC LÒ XO APPLE) */
+      button,
+      .avatar,
+      .chip,
+      .mc-item-wrap,
+      .note-card,
+      .sb-item > *:not(.sub-menu),
+      .d-item > *:not(.sub-menu),
+      .m-item > *:not(.sub-menu),
+      .s-item > *:not(.sub-menu),
+      .sv-item > *:not(.sub-menu),
+      .qa-item > *:not(.sub-menu),
+      .am-item > *:not(.sub-menu),
+      .acc-wrap-box > *:not(.sub-menu),
+      button[style*="width"] > span,
+      button[style*="flex"] > span {
+        will-change: transform, background-color, box-shadow;
+        transition:
+          transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+          background-color 0.2s ease,
+          box-shadow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
       }
 
-      /* Khóa nền danh sách ngang, chỉ mượt mà đổi màu (Cứu Menu JS) */
-      .sb-item, .d-item, .m-item, .s-item, .sv-item, .qa-item, .am-item, .acc-wrap-box {
-        transition: background-color 0.25s ease !important;
-        transform: scale(1) !important; 
-      }
-
-      /* 3. HOVER - CHẠM LỤA (TRÊN PC CÓ CHUỘT) */
+      /* 2. CHẠM LỤA KHI LƯỚT CHUỘT (CHỈ TRÊN MÁY TÍNH) */
       @media (hover: hover) {
-        /* Mọi nút bấm, Avatar đều lún siêu nhẹ khi lướt qua */
-        button:hover:not([disabled]), .avatar:hover, .chip:hover {
-          transform: scale(0.98);
+        button:hover:not([disabled]),
+        .avatar:hover,
+        .chip:hover {
+          transform: scale(0.96) !important; /* Tăng lún nhẹ từ 0.98 -> 0.96 */
         }
-        .mc-item-wrap:hover:not(.select-mode), .note-card:hover:not(.select-mode) {
-          transform: scale(0.98) translateY(1px);
+        .mc-item-wrap:hover:not(.select-mode),
+        .note-card:hover:not(.select-mode) {
+          transform: scale(0.96) translateY(1px) !important; /* Tăng lún từ 0.98 -> 0.96 */
         }
-        .sb-item:hover, .d-item:hover, .m-item:hover, .s-item:hover, .sv-item:hover, .qa-item:hover, .am-item:hover, .acc-wrap-box:hover {
-          background-color: var(--glass-hover);
+        .sb-item:hover,
+        .d-item:hover,
+        .m-item:hover,
+        .s-item:hover,
+        .sv-item:hover,
+        .qa-item:hover,
+        .am-item:hover,
+        .acc-wrap-box:hover {
+          background-color: var(--glass-hover) !important;
         }
-        /* Lõi danh sách chìm nhẹ */
-        .sb-item:hover > *:not(.sub-menu), .d-item:hover > *:not(.sub-menu), .m-item:hover > *:not(.sub-menu), .s-item:hover > *:not(.sub-menu), .sv-item:hover > *:not(.sub-menu), .qa-item:hover > *, .am-item:hover > *:not(.sub-menu), .acc-wrap-box:hover > * {
-          transform: scale(0.985);
+        /* Lõi chữ lún mạnh hơn khi lướt qua */
+        .sb-item:hover > *:not(.sub-menu),
+        .d-item:hover > *:not(.sub-menu),
+        .m-item:hover > *:not(.sub-menu),
+        .s-item:hover > *:not(.sub-menu),
+        .sv-item:hover > *:not(.sub-menu),
+        .qa-item:hover > *:not(.sub-menu),
+        .am-item:hover > *:not(.sub-menu),
+        .acc-wrap-box:hover > *:not(.sub-menu),
+        button[style*="width: 100%"]:hover:not([disabled]) > span,
+        button[style*="width:100%"]:hover:not([disabled]) > span,
+        button[style*="flex: 1"]:hover:not([disabled]) > span,
+        button[style*="flex:1"]:hover:not([disabled]) > span {
+          transform: scale(0.965) !important; /* Tăng từ 0.985 -> 0.965 */
         }
       }
-      /* Tắt kẹt sáng hover trên màn hình điện thoại */
       @media (hover: none) {
-        button:hover, .avatar:hover, .chip:hover { filter: none !important; }
+        button:hover,
+        .avatar:hover,
+        .chip:hover {
+          filter: none !important;
+        }
       }
 
-      /* 4. ACTIVE - CHẠM LÚN TỨC THÌ (0.05s) ĐỂ TẠO CẢM GIÁC THẬT */
-      button:active, .avatar:active, .chip:active,
-      .mc-item-wrap:active:not(.select-mode), .note-card:active:not(.select-mode),
-      .sb-item:active, .d-item:active, .m-item:active, .s-item:active, .sv-item:active, .qa-item:active, .am-item:active, .acc-wrap-box:active,
-      .sb-item:active > *:not(.sub-menu), .d-item:active > *:not(.sub-menu), .m-item:active > *:not(.sub-menu), .s-item:active > *:not(.sub-menu), .sv-item:active > *:not(.sub-menu), .qa-item:active > *, .am-item:active > *:not(.sub-menu), .acc-wrap-box:active > * {
+      /* 3. TĂNG TỐC ĐỘ TRỄ KHI CHẠM (0.05s) */
+      button:active,
+      .avatar:active,
+      .chip:active,
+      .mc-item-wrap:active:not(.select-mode),
+      .note-card:active:not(.select-mode),
+      .sb-item:active,
+      .d-item:active,
+      .m-item:active,
+      .s-item:active,
+      .sv-item:active,
+      .qa-item:active,
+      .am-item:active,
+      .acc-wrap-box:active,
+      .sb-item:active > *:not(.sub-menu),
+      .d-item:active > *:not(.sub-menu),
+      .m-item:active > *:not(.sub-menu),
+      .s-item:active > *:not(.sub-menu),
+      .sv-item:active > *:not(.sub-menu),
+      .qa-item:active > *:not(.sub-menu),
+      .am-item:active > *:not(.sub-menu),
+      .acc-wrap-box:active > *:not(.sub-menu),
+      button[style*="width"] > span,
+      button[style*="flex"] > span {
         transition-duration: 0.05s !important;
       }
 
-      /* --- PHÂN LỚP ĐỘ LÚN KHI NHẤN GIỮ --- */
+      /* ============================================================ */
+      /* PHÂN LỚP HIỆU ỨNG NHẤN GIỮ KÉP (VỎ ĐỨNG IM - LÕI NẢY LÚN)    */
+      /* ============================================================ */
 
-      /* A. Nút bấm chung, Avatar, Chip (Trở lại, Quản lý TK, Cập nhật...) */
-      button:active:not([disabled]), .avatar:active, .chip:active {
-        transform: scale(0.92) !important;
-        opacity: 0.8;
+      /* MỨC 1: Nút độc lập, Avatar, Chip (Bóp lún toàn bộ khối sâu hơn) */
+      button:active:not([disabled]),
+      .avatar:active,
+      .chip:active {
+        transform: scale(0.88) !important; /* Lún sâu từ 0.92 -> 0.88 */
+        opacity: 0.8 !important;
       }
-
-      /* B. Khối Card lớn (Lún + Đổ bóng sát mặt phẳng) */
-      .mc-item-wrap:active:not(.select-mode), .note-card:active:not(.select-mode) {
-        transform: scale(0.96) translateY(2px) !important;
+      .mc-item-wrap:active:not(.select-mode),
+      .note-card:active:not(.select-mode) {
+        transform: scale(0.92) translateY(2px) !important; /* Từ 0.96 -> 0.92 */
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
       }
 
-      /* C. Danh sách ngang (Bọc ngoài chớp nền, lõi trong lún 3D) */
-      .sb-item:active, .d-item:active, .m-item:active, .s-item:active, .sv-item:active, .qa-item:active, .am-item:active, .acc-wrap-box:active {
+      /* MỨC 2: Danh sách ngang & NÚT ĐÁY BẢNG (Hủy, Lưu, Thêm mới) */
+
+      /* A. VỎ NGOÀI: KHÓA CỨNG KÍCH THƯỚC ĐỂ KHÔNG BỊ HỞ VIỀN, CHỈ ĐỔI MÀU NỀN */
+      .sb-item,
+      .d-item,
+      .m-item,
+      .s-item,
+      .sv-item,
+      .qa-item,
+      .am-item,
+      .acc-wrap-box,
+      button[style*="width: 100%"],
+      button[style*="width:100%"],
+      button[style*="flex: 1"],
+      button[style*="flex:1"] {
+        transition: background-color 0.2s ease !important;
+        transform: scale(1) !important;
+      }
+
+      /* Chớp nền xám nhạt (Dark Mode) */
+      .sb-item:active,
+      .d-item:active,
+      .m-item:active,
+      .s-item:active,
+      .sv-item:active,
+      .qa-item:active,
+      .am-item:active,
+      .acc-wrap-box:active,
+      button[style*="width: 100%"]:active:not([disabled]),
+      button[style*="width:100%"]:active:not([disabled]),
+      button[style*="flex: 1"]:active:not([disabled]),
+      button[style*="flex:1"]:active:not([disabled]) {
         background-color: rgba(255, 255, 255, 0.08) !important;
       }
-      [data-theme="light"] .sb-item:active, [data-theme="light"] .d-item:active, [data-theme="light"] .m-item:active, [data-theme="light"] .s-item:active, [data-theme="light"] .sv-item:active, [data-theme="light"] .qa-item:active, [data-theme="light"] .am-item:active, [data-theme="light"] .acc-wrap-box:active {
+      /* Chớp nền đen mờ (Light Mode) */
+      [data-theme="light"] .sb-item:active,
+      [data-theme="light"] .d-item:active,
+      [data-theme="light"] .m-item:active,
+      [data-theme="light"] .s-item:active,
+      [data-theme="light"] .sv-item:active,
+      [data-theme="light"] .qa-item:active,
+      [data-theme="light"] .am-item:active,
+      [data-theme="light"] .acc-wrap-box:active,
+      [data-theme="light"] button[style*="width: 100%"]:active:not([disabled]),
+      [data-theme="light"] button[style*="width:100%"]:active:not([disabled]),
+      [data-theme="light"] button[style*="flex: 1"]:active:not([disabled]),
+      [data-theme="light"] button[style*="flex:1"]:active:not([disabled]) {
         background-color: rgba(0, 0, 0, 0.06) !important;
       }
-      .sb-item:active > *:not(.sub-menu), .d-item:active > *:not(.sub-menu), .m-item:active > *:not(.sub-menu), .s-item:active > *:not(.sub-menu), .sv-item:active > *:not(.sub-menu), .qa-item:active > *, .am-item:active > *:not(.sub-menu), .acc-wrap-box:active > * {
-        transform: scale(0.95) !important;
-      }
 
-      /* D. CHỐT CHẶN BẢO VỆ NÚT DÀI (FIX HỞ LỀ ĐEN 100%) */
-      /* Hủy lệnh scale 0.92 của nút button đối với các nút full-width */
-      div[style*="position: fixed"] button[style*="width"]:active, 
-      div[style*="position: fixed"] button[style*="flex"]:active,
-      .anim-wrapper button[style*="width"]:active, 
-      .anim-wrapper button[style*="flex"]:active,
-      .am-group + button[style*="width"]:active { /* Khóa luôn nút Đăng xuất dưới cùng */
-        transform: scale(1) !important; /* Đứng im không lún */
-        filter: brightness(0.8) !important; /* Chỉ chớp tối màu nền để báo hiệu chạm */
+      /* B. LÕI CHỮ & ICON BÊN TRONG: Bóp lún xuống sâu hơn (Hiệu ứng 3D) */
+      .sb-item:active > *:not(.sub-menu),
+      .d-item:active > *:not(.sub-menu),
+      .m-item:active > *:not(.sub-menu),
+      .s-item:active > *:not(.sub-menu),
+      .sv-item:active > *:not(.sub-menu),
+      .qa-item:active > *:not(.sub-menu),
+      .am-item:active > *:not(.sub-menu),
+      .acc-wrap-box:active > *:not(.sub-menu),
+      button[style*="width: 100%"]:active:not([disabled]) > span,
+      button[style*="width:100%"]:active:not([disabled]) > span {
+        transform: scale(0.88) !important; /* Lún sâu từ 0.92 -> 0.88 */
       }
 
       /* ============================================================ */
-      /* FIX LỖI MẤT NỀN NÚT HỦY/LƯU BẢNG GIỚI TÍNH, NGÀY SINH          */
+      /* PATCH ĐỘC LẬP: CHỈ LÚN CHỮ CHO NÚT HỦY/LƯU/ĐÓNG (FIX LỀ ĐEN) */
+      /* Nút "+ Thêm mới" được giữ nguyên hiệu ứng lún cả khối cũ     */
       /* ============================================================ */
-      #custom-gender-modal button:active,
-      #custom-dob-modal button:active,
-      #custom-child-add-modal button:active,
-      #custom-child-manage-modal button:active {
-        background: rgba(255, 255, 255, 0.12) !important;
+
+      /* 1. KHÓA CỨNG LỚP NỀN: Chỉ nhắm vào các nút Đáy (Hủy/Lưu/Đóng) */
+      div[style*="position: fixed"] button[style*="flex"],
+      .custom-modal-overlay button[style*="flex"] {
+        transform: scale(1) !important;
+        transition: background-color 0.2s ease !important;
       }
-      
-      /* Xử lý hiển thị rõ ràng trên Giao diện sáng */
-      [data-theme="light"] #custom-gender-modal button:active,
-      [data-theme="light"] #custom-dob-modal button:active,
-      [data-theme="light"] #custom-child-add-modal button:active,
-      [data-theme="light"] #custom-child-manage-modal button:active {
-        background: rgba(0, 0, 0, 0.1) !important;
+
+      /* Chớp nền mượt mà khi nhấn (Dark Mode) */
+      div[style*="position: fixed"]
+        button[style*="flex"]:active:not([disabled]),
+      div[style*="position: fixed"]
+        button.tng-ios-active[style*="flex"]:not([disabled]),
+      .custom-modal-overlay button[style*="flex"]:active:not([disabled]) {
+        background-color: rgba(255, 255, 255, 0.12) !important;
+        transition-duration: 0.05s !important;
       }
-      
+
+      /* Chớp nền mượt mà khi nhấn (Light Mode) */
+      [data-theme="light"]
+        div[style*="position: fixed"]
+        button[style*="flex"]:active:not([disabled]),
+      [data-theme="light"]
+        div[style*="position: fixed"]
+        button.tng-ios-active[style*="flex"]:not([disabled]),
+      [data-theme="light"]
+        .custom-modal-overlay
+        button[style*="flex"]:active:not([disabled]) {
+        background-color: rgba(0, 0, 0, 0.1) !important;
+      }
+
+      /* 2. CHỈ LÚN LÕI CHỮ: Tạo hiệu ứng chiều sâu 3D chuẩn Apple */
+      div[style*="position: fixed"] button[style*="flex"] > span,
+      .custom-modal-overlay button[style*="flex"] > span {
+        display: inline-block;
+        will-change: transform;
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+        transform-origin: center center;
+      }
+
+      /* Bóp lún chữ khi nhấn sâu hơn hẳn */
+      div[style*="position: fixed"]
+        button[style*="flex"]:active:not([disabled])
+        > span,
+      div[style*="position: fixed"]
+        button.tng-ios-active[style*="flex"]:not([disabled])
+        > span,
+      .custom-modal-overlay
+        button[style*="flex"]:active:not([disabled])
+        > span {
+        transform: scale(0.82) !important; /* Lún mạnh từ 0.9 -> 0.82 */
+        transition-duration: 0.05s !important;
+      }
+
+      /* ============================================================ */
+      /* PATCH ĐỘC LẬP: CHỈ LÚN CHỮ CHO NÚT HỦY/LƯU/ĐÓNG (FIX LỀ ĐEN) */
+      /* Nút "+ Thêm mới" được giữ nguyên hiệu ứng lún cả khối cũ     */
+      /* ============================================================ */
+
+      /* 1. KHÓA CỨNG LỚP NỀN: Chỉ nhắm vào các nút Đáy (Hủy/Lưu/Đóng) */
+      div[style*="position: fixed"] button[style*="flex"],
+      .custom-modal-overlay button[style*="flex"] {
+        transform: scale(1) !important; /* Đóng đinh kích thước 100% */
+        transition: background-color 0.2s ease !important; /* Tắt transition của transform để khỏi vướng */
+      }
+
+      /* Chớp nền mượt mà khi nhấn (Dark Mode) */
+      div[style*="position: fixed"]
+        button[style*="flex"]:active:not([disabled]),
+      div[style*="position: fixed"]
+        button.tng-ios-active[style*="flex"]:not([disabled]),
+      .custom-modal-overlay button[style*="flex"]:active:not([disabled]) {
+        background-color: rgba(255, 255, 255, 0.12) !important;
+        transition-duration: 0.05s !important; /* Phản hồi chạm tức thì */
+      }
+
+      /* Chớp nền mượt mà khi nhấn (Light Mode) */
+      [data-theme="light"]
+        div[style*="position: fixed"]
+        button[style*="flex"]:active:not([disabled]),
+      [data-theme="light"]
+        div[style*="position: fixed"]
+        button.tng-ios-active[style*="flex"]:not([disabled]),
+      [data-theme="light"]
+        .custom-modal-overlay
+        button[style*="flex"]:active:not([disabled]) {
+        background-color: rgba(0, 0, 0, 0.1) !important;
+      }
+
+      /* 2. CHỈ LÚN LÕI CHỮ: Tạo hiệu ứng chiều sâu 3D chuẩn Apple */
+      div[style*="position: fixed"] button[style*="flex"] > span,
+      .custom-modal-overlay button[style*="flex"] > span {
+        display: inline-block;
+        will-change: transform;
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+        transform-origin: center center; /* Chữ lún đều vào giữa tâm */
+      }
+
+      /* Bóp lún chữ khi nhấn */
+      div[style*="position: fixed"]
+        button[style*="flex"]:active:not([disabled])
+        > span,
+      div[style*="position: fixed"]
+        button.tng-ios-active[style*="flex"]:not([disabled])
+        > span,
+      .custom-modal-overlay
+        button[style*="flex"]:active:not([disabled])
+        > span {
+        transform: scale(0.9) !important; /* Lún sâu chữ xuống */
+        transition-duration: 0.05s !important;
+      }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
@@ -15251,9 +15454,113 @@
           });
       });
       uiObserver.observe(document.body, { childList: true, subtree: true });
-
-
     </script>
+    <!-- BỘ NÃO XỬ LÝ VUỐT CHẠM CẢM ỨNG & TÁCH LÕI CHỮ (CHUẨN IOS 27) -->
+    <script>
+      // 1. TÁCH LÕI CHỮ THÔNG MINH (Không dùng <div> bọc ngoài để bảo toàn 100% bố cục gốc)
+      const fixBareTextNodes = () => {
+        const targets = document.querySelectorAll(
+          ".sb-item, .d-item, .m-item, .s-item, .sv-item, .qa-item, .am-item, .acc-wrap-box, button",
+        );
+        targets.forEach((el) => {
+          Array.from(el.childNodes).forEach((node) => {
+            // Nhận diện tự động chữ trần trụi và chỉ bọc <span> cho riêng chữ đó
+            if (node.nodeType === 3 && node.nodeValue.trim().length > 0) {
+              let span = document.createElement("span");
+              span.textContent = node.nodeValue;
+              span.style.display = "inline-block";
+              span.style.pointerEvents = "none"; // Cấm cản trở click
+              span.style.transformOrigin = "left center"; // Chữ lún từ trái sang phải, không bị giật lề
+              el.replaceChild(span, node);
+            }
+          });
+        });
+      };
+
+      fixBareTextNodes();
+      new MutationObserver(fixBareTextNodes).observe(document.body, {
+        childList: true,
+        subtree: true,
+      });
+
+      // 2. CẢM BIẾN THEO DÕI NGÓN TAY (SWIPE TO HIGHLIGHT NHƯ APP NATIVE IOS)
+      let activeTouchItem = null;
+      const touchSelectors =
+        "button, .sb-item, .d-item, .m-item, .s-item, .sv-item, .qa-item, .am-item, .chip, .avatar, .mc-item-wrap, .note-card";
+
+      // Chạm ngón tay xuống
+      document.addEventListener(
+        "touchstart",
+        (e) => {
+          let el = e.target.closest(touchSelectors);
+          if (el) {
+            el.classList.add("tng-ios-active");
+            activeTouchItem = el;
+          }
+        },
+        { passive: true },
+      );
+
+      // Trượt ngón tay trên màn hình (Hệ thống tính toán tọa độ tia X)
+      document.addEventListener(
+        "touchmove",
+        (e) => {
+          if (!activeTouchItem) return;
+          let touch = e.touches[0];
+          let elemUnderFinger = document.elementFromPoint(
+            touch.clientX,
+            touch.clientY,
+          );
+          let validTarget = elemUnderFinger
+            ? elemUnderFinger.closest(touchSelectors)
+            : null;
+
+          // Nếu ngón tay lướt sang phần tử mới -> Bật sáng phần tử mới, tắt cái cũ
+          if (activeTouchItem !== validTarget) {
+            if (activeTouchItem)
+              activeTouchItem.classList.remove("tng-ios-active");
+            if (validTarget) validTarget.classList.add("tng-ios-active");
+            activeTouchItem = validTarget;
+          }
+        },
+        { passive: true },
+      );
+
+      // Nhấc ngón tay lên -> Tắt hiệu ứng
+      const clearTouch = () => {
+        if (activeTouchItem) {
+          activeTouchItem.classList.remove("tng-ios-active");
+          activeTouchItem = null;
+        }
+      };
+      document.addEventListener("touchend", clearTouch);
+      document.addEventListener("touchcancel", clearTouch);
+    </script>
+    <!-- BỘ TỐI ƯU LÕI LÚN BẰNG JAVASCRIPT (Rep 1:1 iOS 27) -->
+    <script>
+      const wrapBareTextNodes = () => {
+        const targets = document.querySelectorAll(
+          '.sb-item, .d-item, .m-item, .s-item, .sv-item, .qa-item, .am-item, .acc-wrap-box, button[style*="width: 100%"], button[style*="width:100%"], button[style*="flex: 1"], button[style*="flex:1"]',
+        );
+        targets.forEach((el) => {
+          Array.from(el.childNodes).forEach((node) => {
+            // Tự động tìm các chữ trần trụi và mặc áo <span> cho nó để CSS bóp lún được
+            if (node.nodeType === 3 && node.nodeValue.trim().length > 0) {
+              let span = document.createElement("span");
+              span.textContent = node.nodeValue;
+              span.style.display = "inline-block";
+              span.style.pointerEvents = "none"; // Bảo vệ không bị lỗi click
+              el.replaceChild(span, node);
+            }
+          });
+        });
+      };
+      wrapBareTextNodes(); // Quét lần đầu
+      // Camera giám sát tự động chạy khi bạn mở các bảng Pop-up mới
+      new MutationObserver(wrapBareTextNodes).observe(document.body, {
+        childList: true,
+        subtree: true,
+      });
     </script>
   </body>
 </html>
