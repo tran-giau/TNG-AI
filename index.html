@@ -2402,7 +2402,8 @@
           display: flex !important;
         }
         .sidebar.open ~ .main .header .btn-out {
-          display: none !important;
+          opacity: 0 !important;
+          visibility: hidden !important;
         }
         .header-right {
           display: flex;
@@ -3524,6 +3525,77 @@
       .multi-action-bar:not(.show) {
         pointer-events: none !important;
       }
+
+      /* ============================================================ */
+      /* BẢN VÁ TỐI THƯỢNG: CHỐNG GIẬT DỌC & LƯỚT NGANG SIÊU MƯỢT     */
+      /* ============================================================ */
+
+      /* 1. KHÓA CHẾT CHIỀU CAO HEADER: Triệt tiêu 100% hiện tượng nảy lên xuống */
+      .header {
+        height: 70px !important;
+        box-sizing: border-box !important;
+      }
+
+      /* 2. Cài đặt lại gia tốc cho Sidebar và Main chuẩn iOS */
+      .sidebar,
+      .main {
+        transition:
+          margin 0.5s cubic-bezier(0.32, 0.72, 0, 1),
+          transform 0.5s cubic-bezier(0.32, 0.72, 0, 1) !important;
+      }
+
+      /* 3. Hoạt ảnh nút Menu (Lướt ngang mượt mà, không sập chiều cao) */
+      .btn-out {
+        display: flex !important;
+        overflow: hidden !important;
+        white-space: nowrap !important;
+        align-items: center !important;
+        justify-content: center !important;
+        /* Giữ nguyên đệm trên/dưới để không làm biến dạng chiều cao */
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+        transition: all 0.5s cubic-bezier(0.32, 0.72, 0, 1) !important;
+      }
+
+      /* TRẠNG THÁI ẨN (Khi Sidebar đang MỞ) */
+      .sidebar:not(.collapsed) + .main .header .btn-out {
+        width: 0 !important;
+        opacity: 0 !important;
+        margin-right: 0 !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        pointer-events: none !important;
+      }
+
+      /* TRẠNG THÁI HIỆN (Khi Sidebar ĐÓNG) */
+      .sidebar.collapsed + .main .header .btn-out {
+        width: 44px !important; /* Kích thước bung ra tương ứng với font 28px */
+        opacity: 1 !important;
+        margin-right: 12px !important;
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+        pointer-events: auto !important;
+      }
+
+      /* 4. Khắc phục riêng cho Điện thoại (Mobile) */
+      @media (max-width: 768px) {
+        .header {
+          height: 65px !important;
+        }
+        .btn-out {
+          width: 44px !important;
+          opacity: 1 !important;
+          margin-right: 10px !important;
+          padding-left: 8px !important;
+          padding-right: 8px !important;
+        }
+        /* Trên điện thoại chỉ làm mờ đi chứ không thu nhỏ để giữ bố cục */
+        .sidebar.open ~ .main .header .btn-out,
+        .sidebar.open + .main .header .btn-out {
+          opacity: 0 !important;
+          pointer-events: none !important;
+        }
+      }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
@@ -3608,7 +3680,7 @@
       <div class="sb-header">
         <button
           class="icon-btn btn-in"
-          style="font-size: 26px"
+          style="font-size: 28px"
           onclick="toggleMenu()"
         >
           ≡
@@ -3678,7 +3750,7 @@
         <div class="logo">
           <button
             class="icon-btn btn-out"
-            style="font-size: 26px"
+            style="font-size: 28px"
             onclick="toggleMenu()"
           >
             ≡
@@ -14483,7 +14555,7 @@
                             <div style="font-size: 16px; font-weight: 500; color: #fff;">${app.name}</div>
                         </div>
                         <div onclick="tngToggleApp('${app.id}', this, event)" style="cursor: pointer; margin-top: 8px; flex-shrink: 0;">
-                            <div class="tng-toggle-bg" style="width: 48px; height: 26px; background: ${app.active ? "#1a73e8" : "rgba(255,255,255,0.15)"}; border-radius: 13px; position: relative; transition: background 0.3s ease;">
+                            <div class="tng-toggle-bg" style="width: 48px; height: 26px; background: ${app.active ? "#a8c7fa" : "rgba(255,255,255,0.15)"}; border-radius: 13px; position: relative; transition: background 0.3s ease;">
                                 <div class="tng-toggle-dot" style="width: 22px; height: 22px; background: #fff; border-radius: 50%; position: absolute; top: 2px; left: 2px; transform: ${app.active ? "translateX(22px)" : "translateX(0)"}; transition: transform 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"></div>
                             </div>
                         </div>
@@ -14684,7 +14756,7 @@
                                     <div style="width: 44px; height: 44px; border-radius: 50%; background: rgba(168, 199, 250, 0.15); display: flex; align-items: center; justify-content: center; color: #a8c7fa;">
                                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                                     </div>
-                                    <div onclick="toggleTriThongMinh(this)" style="width: 50px; height: 28px; background: ${isActive ? "#1a73e8" : "rgba(255,255,255,0.15)"}; border-radius: 14px; position: relative; cursor: pointer; transition: background 0.3s ease; flex-shrink: 0; margin-top: 4px;">
+                                    <div onclick="toggleTriThongMinh(this)" style="width: 50px; height: 28px; background: ${isActive ? "#a8c7fa" : "rgba(255,255,255,0.15)"}; border-radius: 14px; position: relative; cursor: pointer; transition: background 0.3s ease; flex-shrink: 0; margin-top: 4px;">
                                         <div style="width: 24px; height: 24px; background: #fff; border-radius: 50%; position: absolute; top: 2px; left: 2px; transform: ${isActive ? "translateX(22px)" : "translateX(0)"}; transition: transform 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"></div>
                                     </div>
                                 </div>
