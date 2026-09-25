@@ -3400,7 +3400,7 @@
       .qa-item > span,
       .sv-item > span,
       .am-item > span,
-      .d-item > span:not(.switch) {
+      .d-item > span:not(.switch):not(.chk-light):not(.chk-dark) {
         display: inline-block !important; /* Mở khóa khả năng co giãn (scale) cho các thẻ inline */
       }
 
@@ -3475,6 +3475,54 @@
         .ai-option-item:hover > * {
           transform: scale(0.965) !important; /* Lõi lún nhẹ như lụa */
         }
+      }
+      /* ============================================================ */
+      /* FIX ĐỘC LẬP BẢNG CÂU HỎI THƯỜNG GẶP (CHỐNG LỆCH CHỮ)         */
+      /* ============================================================ */
+
+      /* 1. Mở khóa cho phép toàn bộ khung thẻ được lún nguyên khối */
+      div.qa-item {
+        transition:
+          transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+          background-color 0.2s ease !important;
+      }
+
+      @media (hover: hover) {
+        div.qa-item:hover {
+          transform: scale(0.98) !important; /* Lướt chuột lún nhẹ */
+        }
+      }
+
+      div.qa-item:active {
+        transform: scale(0.94) !important; /* Nhấn giữ lún sâu cả khung */
+      }
+
+      /* 2. Khóa cứng Tiêu đề và Mô tả bên trong, cấm lún lẻ tẻ gây lệch góc */
+      div.qa-item > b,
+      div.qa-item > span {
+        transform: scale(1) !important;
+        display: inline !important; /* Trả về hiển thị văn bản tự nhiên */
+      }
+
+      div.qa-item:active > b,
+      div.qa-item:active > span {
+        transform: scale(1) !important; /* Chặn đứng lệnh lún chữ cũ */
+      }
+
+      /* ============================================================ */
+      /* FIX CHỐNG KẸT CLICK: XUYÊN THẤU NGAY KHI ĐÓNG BẢNG           */
+      /* ============================================================ */
+      .custom-modal-overlay:not(.show),
+      .settings-page-overlay:not(.show),
+      .live-overlay:not(.show),
+      .sb-overlay:not(.show),
+      .drop-menu:not(.show),
+      .sub-menu:not(.show),
+      .set-menu:not(.show),
+      .hist-options-menu:not(.show),
+      .account-modal:not(.show),
+      .multi-action-bar:not(.show) {
+        pointer-events: none !important;
       }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -3558,8 +3606,14 @@
 
     <div class="sidebar collapsed" id="sidebar">
       <div class="sb-header">
-        <button class="icon-btn btn-in" onclick="toggleMenu()">≡</button
-        ><button
+        <button
+          class="icon-btn btn-in"
+          style="font-size: 22px"
+          onclick="toggleMenu()"
+        >
+          ≡
+        </button>
+        <button
           class="icon-btn"
           style="margin-left: auto"
           onclick="showSearch()"
@@ -3622,8 +3676,14 @@
     <div class="main">
       <div class="header">
         <div class="logo">
-          <button class="icon-btn btn-out" onclick="toggleMenu()">≡</button> TNG
-          AI 1.0
+          <button
+            class="icon-btn btn-out"
+            style="font-size: 22px"
+            onclick="toggleMenu()"
+          >
+            ≡
+          </button>
+          TNG AI 1.0
         </div>
         <div class="header-right">
           <button
@@ -5333,6 +5393,7 @@
       window.closeCustomPopup = function (id) {
         let el = document.getElementById(id);
         if (el) {
+          el.style.pointerEvents = "none"; /* FIX: XUYÊN THẤU NGAY LẬP TỨC */
           el.style.opacity = "0";
           let box = el.children[0];
           if (box) {
@@ -13292,9 +13353,9 @@
                 <div class="import-section">
                     <div class="import-title">Nhập cuộc trò chuyện</div>
                     <div class="desc-text" style="margin-bottom: 12px;">Xuất dữ liệu của bạn từ một <span class="link-text">nhà cung cấp dịch vụ AI được hỗ trợ</span> rồi tải trực tiếp tệp .zip (tối đa 5 GB) lên TNG AI. <span class="link-text">Tìm hiểu thêm</span></div>
-                    <button class="btn-add-zip" onclick="let fileInp = document.getElementById('file-inp'); if(fileInp) fileInp.click();">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Thêm
-                    </button>
+                    <button class="btn-add-zip" style="background: #a8c7fa !important; color: #1e1f26 !important; border: none !important; font-weight: 600 !important;" onclick="let fileInp = document.getElementById('file-inp'); if(fileInp) fileInp.click();">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Thêm
+</button>
                     <div class="import-footer-text">Các cuộc trò chuyện bạn đã nhập và tiếp tục sẽ được lưu trong mục Hoạt động của bạn. Những dữ liệu này được dùng để cải thiện các dịch vụ của chúng tôi (kể cả việc huấn luyện các mô hình AI tạo sinh), cũng như để bảo vệ TNG AI, người dùng của TNG AI và công chúng. Bạn có thể <span class="link-text" onclick="let modal = document.querySelector('.custom-modal-overlay.show'); if(modal) modal.classList.remove('show'); if(typeof openSetting === 'function') openSetting('Hoạt động của tôi', typeof getHoatDongContent === 'function' ? getHoatDongContent() : '');">quản lý hoặc xoá hoạt động của mình</span> bất cứ lúc nào.</div>
                 </div>
             </div>
@@ -13335,7 +13396,7 @@
                   footer.innerHTML = `
                             <div style="display: flex; gap: 12px; width: 100%;">
                                 <button onclick="if(typeof closeSettingPage === 'function') closeSettingPage();" style="flex: 1; padding: 14px; border: none; border-radius: 14px; font-family: 'Google Sans', sans-serif; font-weight: 600; font-size: 15px; cursor: pointer; transition: all 0.2s; background: rgba(255, 255, 255, 0.1); color: #ffffff;" onmouseover="this.style.background='rgba(255, 255, 255, 0.15)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.1)'">Hủy</button>
-                                <button onclick="tngSubmitMemV27(event)" style="flex: 1; padding: 14px; border: none; border-radius: 14px; font-family: 'Google Sans', sans-serif; font-weight: 600; font-size: 15px; cursor: pointer; transition: all 0.2s; background: #1a73e8; color: #ffffff;" onmouseover="this.style.filter='brightness(1.1)'" onmouseout="this.style.filter='brightness(1)'">Nhập</button>
+                                <button onclick="tngSubmitMemV27(event)" style="flex: 1; padding: 14px; border: none; border-radius: 14px; font-family: 'Google Sans', sans-serif; font-weight: 600; font-size: 15px; cursor: pointer; transition: all 0.2s; background: #a8c7fa; color: #1e1f26;" onmouseover="this.style.filter='brightness(1.1)'" onmouseout="this.style.filter='brightness(1)'">Nhập</button>
                             </div>
                         `;
                   footer.style.padding = "16px 20px";
@@ -13466,9 +13527,9 @@
             let htmlOpts = opts
               .map(
                 (o, idx) => `
-                <div class="tng-ultimate-btn" onclick="tngSelectRepeatDropdown('${o.val}', '${o.label}')" style="padding: 14px 16px; font-size: 15px; color: ${o.val === curVal ? "#1a73e8" : "#fff"}; font-weight: ${o.val === curVal ? "600" : "400"}; display: flex; justify-content: space-between; align-items: center; border-bottom: ${idx < opts.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none"}; cursor: pointer; transition: background 0.2s;" ontouchstart="this.style.background='rgba(255,255,255,0.08)'" ontouchend="this.style.background='transparent'">
+                <div class="tng-ultimate-btn" onclick="tngSelectRepeatDropdown('${o.val}', '${o.label}')" style="padding: 14px 16px; font-size: 15px; color: ${o.val === curVal ? "#a8c7fa" : "#fff"}; font-weight: ${o.val === curVal ? "600" : "400"}; display: flex; justify-content: space-between; align-items: center; border-bottom: ${idx < opts.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none"}; cursor: pointer; transition: background 0.2s;" ontouchstart="this.style.background='rgba(255,255,255,0.08)'" ontouchend="this.style.background='transparent'">
                     ${o.label}
-                    ${o.val === curVal ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a73e8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>' : ""}
+                    ${o.val === curVal ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a8c7fa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>' : ""}
                 </div>
             `,
               )
@@ -13568,13 +13629,13 @@
               return `
                     <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 50px 20px; text-align: center; min-height: 65vh;">
                         <div style="width: 80px; height: 80px; border-radius: 50%; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; margin-bottom: 24px;">
-                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#1a73e8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#a8c7fa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
                             </svg>
                         </div>
                         <h3 style="margin: 0 0 12px 0; font-size: 18px; font-weight: 500; color: #fff; font-family: 'Google Sans', sans-serif;">Chưa có quy trình nào</h3>
                         <p style="margin: 0 0 32px 0; font-size: 14px; color: #8e918f; line-height: 1.6; font-family: 'Google Sans', sans-serif;">Bạn có thể sử dụng các quy trình để tự động thực hiện nhiều thao tác bằng một lệnh duy nhất.</p>
-                        <button class="tng-ultimate-btn" onclick="openHanhDongForm(null, event)" style="background: #1a73e8; color: #ffffff; border: none; padding: 12px 24px; border-radius: 24px; font-weight: 600; font-size: 14px; font-family: 'Google Sans', sans-serif; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: filter 0.2s;" ontouchstart="this.style.filter='brightness(1.2)'" ontouchend="this.style.filter='brightness(1)'">
+                        <button class="tng-ultimate-btn" onclick="openHanhDongForm(null, event)" style="background: #a8c7fa; color: #1e1f26; border: none; padding: 12px 24px; border-radius: 24px; font-weight: 600; font-size: 14px; font-family: 'Google Sans', sans-serif; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: filter 0.2s;" ontouchstart="this.style.filter='brightness(1.2)'" ontouchend="this.style.filter='brightness(1)'">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                             Thêm một quy trình
                         </button>
@@ -13653,7 +13714,7 @@
                 <div style="display: flex; flex-direction: column; gap: 20px; font-family: 'Google Sans', sans-serif; text-align: left; padding: 24px; overflow-y: auto; flex: 1;">
                     <div>
                         <label style="font-size: 14px; font-weight: 500; color: #e3e3e3; margin-bottom: 8px; display: block;">Tên quy trình</label>
-                        <input id="hd-name" type="text" value="${item ? item.name : ""}" placeholder="Vd: Buổi sáng" style="width: 100%; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 14px 16px; color: #fff; font-size: 15px; outline: none; font-family: 'Google Sans', sans-serif; transition: border 0.2s;" onfocus="this.style.borderColor='#1a73e8'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
+                        <input id="hd-name" type="text" value="${item ? item.name : ""}" placeholder="Vd: Buổi sáng" style="width: 100%; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 14px 16px; color: #fff; font-size: 15px; outline: none; font-family: 'Google Sans', sans-serif; transition: border 0.2s;" onfocus="this.style.borderColor='#a8c7fa'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'">
                     </div>
                     
                     <div style="display: flex; gap: 12px;">
@@ -13708,7 +13769,7 @@
                     ${content}
                     <div style="padding: 16px 24px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 12px; background: rgba(30, 31, 38, 0.95);">
                         <button id="btn-cancel-routine" class="tng-ultimate-btn" style="flex: 1; padding: 14px; border: none; border-radius: 14px; background: rgba(255,255,255,0.1); color: #fff; font-weight: 600; font-size: 15px; font-family: 'Google Sans', sans-serif; cursor: pointer; transition: background 0.2s;" ontouchstart="this.style.background='rgba(255,255,255,0.15)'" ontouchend="this.style.background='rgba(255,255,255,0.1)'">Hủy</button>
-                        <button id="btn-save-routine" class="tng-ultimate-btn" style="flex: 1; padding: 14px; border: none; border-radius: 14px; background: #1a73e8; color: #ffffff; font-weight: 600; font-size: 15px; font-family: 'Google Sans', sans-serif; cursor: pointer; transition: filter 0.2s;" ontouchstart="this.style.filter='brightness(1.2)'" ontouchend="this.style.filter='brightness(1)'">${id ? "Lưu thay đổi" : "Tạo mới"}</button>
+                        <button id="btn-save-routine" class="tng-ultimate-btn" style="flex: 1; padding: 14px; border: none; border-radius: 14px; background: #a8c7fa; color: #1e1f26; font-weight: 600; font-size: 15px; font-family: 'Google Sans', sans-serif; cursor: pointer; transition: filter 0.2s;" ontouchstart="this.style.filter='brightness(1.2)'" ontouchend="this.style.filter='brightness(1)'">${id ? "Lưu thay đổi" : "Tạo mới"}</button>
                     </div>
                 </div>
             `;
@@ -13908,8 +13969,7 @@
                     
                     <div style="display: flex; gap: 12px; margin-top: 24px;">
                         <button class="tng-ultimate-btn tng-tp-cancel" style="flex: 1; padding: 12px; border-radius: 12px; border: none; background: rgba(255,255,255,0.1); color: #fff; font-size: 15px; font-weight: 500; cursor: pointer;">Hủy</button>
-                        <button class="tng-ultimate-btn tng-tp-ok" style="flex: 1; padding: 12px; border-radius: 12px; border: none; background: #1a73e8; color: #fff; font-size: 15px; font-weight: 500; cursor: pointer;">Xong</button>
-                    </div>
+                        <button class="tng-ultimate-btn tng-tp-ok" style="flex: 1; padding: 12px; border-radius: 12px; border: none; background: #a8c7fa; color: #1e1f26; font-size: 15px; font-weight: 600; cursor: pointer;">Xong</button>
                 </div>
             `;
             document.body.appendChild(overlay);
@@ -14095,7 +14155,7 @@
                           <textarea id="tng-report-other-input" placeholder="Vui lòng mô tả chi tiết vấn đề của bạn..." style="display: none; width: 100%; height: 80px; margin-top: 5px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 12px; color: #fff; font-family: inherit; font-size: 14px; box-sizing: border-box; resize: none; outline: none; transition: border 0.2s;"></textarea>
                           <div class="tng-modal-actions" style="margin-top: 24px;">
                               <button class="tng-btn tng-btn-cancel" id="btn-cancel-rep">Hủy</button>
-                              <button class="tng-btn" id="btn-submit-report" style="background: #1a73e8; color: #ffffff; border: none; font-weight: 500; font-size: 14px; padding: 10px 20px; border-radius: 10px; cursor: pointer; transition: filter 0.2s;" onmouseover="this.style.filter='brightness(1.1)'" onmouseout="this.style.filter='brightness(1)'">Gửi báo cáo</button>
+                              <button class="tng-btn" id="btn-submit-report" style="background: #a8c7fa; color: #1e1f26; border: none; font-weight: 600; font-size: 14px; padding: 10px 20px; border-radius: 10px; cursor: pointer; transition: filter 0.2s;" onmouseover="this.style.filter='brightness(1.1)'" onmouseout="this.style.filter='brightness(1)'">Gửi báo cáo</button>
                           </div>
                       </div>
                   `;
@@ -14151,10 +14211,14 @@
                 successOverlay.className = "tng-modal-overlay";
                 successOverlay.innerHTML = `
                               <div class="tng-modal-box" style="text-align: center; padding: 32px 24px;">
-                                  <div style="font-size: 48px; margin-bottom: 16px;">✅</div>
+                                  <div style="width: 68px; height: 68px; border-radius: 20px; background: linear-gradient(135deg, #4cd964, #34c759); box-shadow: 0 12px 24px rgba(52, 199, 89, 0.3), inset 0 2px 0 rgba(255, 255, 255, 0.4), inset 0 -3px 0 rgba(0, 0, 0, 0.1); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto;">
+    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
+</div>
                                   <div class="tng-modal-title">Gửi thành công</div>
                                   <div class="tng-modal-desc">Cảm ơn đã báo cáo vấn đề này! Chúng tôi sẽ xem xét và khắc phục trong thời gian sớm nhất.</div>
-                                  <button class="tng-btn" id="btn-close-success" style="background: #1a73e8; color: #ffffff; border: none; font-weight: 500; font-size: 14px; padding: 10px 20px; border-radius: 10px; cursor: pointer; width: 100%; margin-top: 10px;">Đóng</button>
+                                  <button class="tng-btn" id="btn-close-success" style="background: #a8c7fa; color: #1e1f26; border: none; font-weight: 600; font-size: 14px; padding: 10px 20px; border-radius: 10px; cursor: pointer; width: 100%; margin-top: 10px;">Đóng</button>
                               </div>
                           `;
 
@@ -14758,10 +14822,10 @@
                             </div>
                             <h3 style="margin: 0 0 12px 0; font-size: 18px; font-weight: 500; color: #fff;">Chưa có sổ ghi chú nào</h3>
                             <p style="margin: 0 0 32px 0; font-size: 14px; color: #8e918f; line-height: 1.6; max-width: 320px;">Sổ ghi chú giúp ghi lại các nội dung quan trọng của bạn để AI nhớ hoặc lưu trữ.</p>
-                            <button class="tng-ultimate-btn" onclick="createNewNote()" style="background: #1a73e8; color: #ffffff; border: none; padding: 12px 24px; border-radius: 24px; font-weight: 600; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: filter 0.2s; outline: none; -webkit-tap-highlight-color: transparent;" ontouchstart="this.style.filter='brightness(1.2)'" ontouchend="this.style.filter='brightness(1)'">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                                Tạo sổ mới
-                            </button>
+                            <button class="tng-ultimate-btn" onclick="createNewNote()" style="background: #a8c7fa; color: #1e1f26; border: none; padding: 12px 24px; border-radius: 24px; font-weight: 600; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: filter 0.2s; outline: none; -webkit-tap-highlight-color: transparent;" ontouchstart="this.style.filter='brightness(1.2)'" ontouchend="this.style.filter='brightness(1)'">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+    Tạo sổ mới
+</button>
                         </div>
                     `;
               } else {
