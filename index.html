@@ -3557,40 +3557,46 @@
         transition: all 0.5s cubic-bezier(0.32, 0.72, 0, 1) !important;
       }
 
-      /* TRẠNG THÁI ẨN (Khi Sidebar đang MỞ) */
-      .sidebar:not(.collapsed) + .main .header .btn-out {
-        width: 0 !important;
-        opacity: 0 !important;
-        margin-right: 0 !important;
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-        pointer-events: none !important;
+      /* =================== GIAO DIỆN MÁY TÍNH =================== */
+      @media (min-width: 769px) {
+        /* TRẠNG THÁI ẨN (Khi Sidebar đang MỞ) */
+        .sidebar:not(.collapsed) + .main .header .btn-out {
+          width: 0 !important;
+          opacity: 0 !important;
+          margin-right: 0 !important;
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+          pointer-events: none !important;
+        }
+
+        /* TRẠNG THÁI HIỆN (Khi Sidebar ĐÓNG) */
+        .sidebar.collapsed + .main .header .btn-out {
+          width: 44px !important; /* Kích thước bung ra tương ứng với font 28px */
+          opacity: 1 !important;
+          margin-right: 12px !important;
+          padding-left: 8px !important;
+          padding-right: 8px !important;
+          pointer-events: auto !important;
+        }
       }
 
-      /* TRẠNG THÁI HIỆN (Khi Sidebar ĐÓNG) */
-      .sidebar.collapsed + .main .header .btn-out {
-        width: 44px !important; /* Kích thước bung ra tương ứng với font 28px */
-        opacity: 1 !important;
-        margin-right: 12px !important;
-        padding-left: 8px !important;
-        padding-right: 8px !important;
-        pointer-events: auto !important;
-      }
-
-      /* 4. Khắc phục riêng cho Điện thoại (Mobile) */
+      /* =================== GIAO DIỆN ĐIỆN THOẠI =================== */
       @media (max-width: 768px) {
         .header {
           height: 65px !important;
         }
-        .btn-out {
+
+        /* TRẠNG THÁI HIỆN MẶC ĐỊNH (Khi Sidebar ĐÓNG) */
+        .sidebar + .main .header .btn-out {
           width: 44px !important;
           opacity: 1 !important;
           margin-right: 10px !important;
           padding-left: 8px !important;
           padding-right: 8px !important;
+          pointer-events: auto !important;
         }
-        /* Trên điện thoại chỉ làm mờ đi chứ không thu nhỏ để giữ bố cục */
-        .sidebar.open ~ .main .header .btn-out,
+
+        /* TRẠNG THÁI ẨN (Khi Sidebar MỞ - Chỉ mờ đi để chống giật) */
         .sidebar.open + .main .header .btn-out {
           opacity: 0 !important;
           pointer-events: none !important;
