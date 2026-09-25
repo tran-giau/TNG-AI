@@ -3388,6 +3388,94 @@
         transform: scale(0.9) !important; /* Lún sâu chữ xuống */
         transition-duration: 0.05s !important;
       }
+
+      /* ============================================================ */
+      /* FIX LỖI: BẬT HIỆU ỨNG LÚN CHO CẢ ICON VÀ CHỮ TRONG DANH SÁCH */
+      /* (Thanh bên Sidebar, Câu hỏi thường gặp, Cài đặt, Tài khoản)  */
+      /* ============================================================ */
+
+      .sb-item > span, /* Mở khóa cho Icon và Chữ ở Menu trái */
+      .s-item > span,  /* Mở khóa cho Icon ở bảng Cài đặt */
+      .qa-item > b,
+      .qa-item > span,
+      .sv-item > span,
+      .am-item > span,
+      .d-item > span:not(.switch) {
+        display: inline-block !important; /* Mở khóa khả năng co giãn (scale) cho các thẻ inline */
+      }
+
+      /* Tinh chỉnh tâm lún: Chữ lún từ mép trái để không bị giật lùi, Icon lún tại giữa tâm */
+      .sb-text,
+      .qa-item > b,
+      .sv-item > span:first-child,
+      .am-item > span:not(.am-arrow) {
+        transform-origin: left center !important;
+      }
+      .sb-icon,
+      .si-ic,
+      .am-arrow {
+        transform-origin: center center !important;
+      }
+
+      /* ============================================================ */
+      /* FIX ĐỘC LẬP: MENU TÙY CHỌN TIN NHẮN (CHỐNG LỌT LỀ ĐEN 100%)  */
+      /* ============================================================ */
+
+      /* 1. KHÓA VỎ NỀN: Dùng độ ưu tiên cực cao để chặn lệnh lún của button chung */
+      button.ai-option-item,
+      .ai-option-item {
+        transform: scale(1) !important;
+        transition: background-color 0.2s ease !important;
+        width: 100% !important; /* Đảm bảo luôn tràn viền */
+      }
+
+      /* Chớp nền khi nhấn (Khóa tuyệt đối không cho lún) */
+      button.ai-option-item:active:not([disabled]),
+      button.ai-option-item.tng-ios-active:not([disabled]),
+      .ai-option-item:active,
+      .ai-option-item.tng-ios-active {
+        transform: scale(1) !important; /* Vỏ đứng im */
+        background-color: rgba(255, 255, 255, 0.12) !important;
+        opacity: 1 !important; /* Chống bị mờ do lệnh cũ */
+      }
+      [data-theme="light"] button.ai-option-item:active:not([disabled]),
+      [data-theme="light"]
+        button.ai-option-item.tng-ios-active:not([disabled]) {
+        background-color: rgba(0, 0, 0, 0.08) !important;
+      }
+
+      /* 2. CHỈ LÚN LÕI BÊN TRONG (Icon & Chữ) */
+      .ai-option-item > * {
+        will-change: transform;
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+        display: inline-block;
+        transform-origin: left center; /* Neo bên trái để icon và chữ không bị trượt */
+      }
+
+      /* Khi nhấn, lõi thụt xuống 3D */
+      button.ai-option-item:active:not([disabled]) > *,
+      button.ai-option-item.tng-ios-active:not([disabled]) > *,
+      .ai-option-item:active > *,
+      .ai-option-item.tng-ios-active > * {
+        transform: scale(0.88) !important;
+        transition-duration: 0.05s !important;
+      }
+
+      /* 3. DI CHUỘT MÁY TÍNH (HOVER) */
+      @media (hover: hover) {
+        button.ai-option-item:hover:not([disabled]),
+        .ai-option-item:hover {
+          transform: scale(1) !important;
+          background-color: rgba(255, 255, 255, 0.06) !important;
+          opacity: 1 !important;
+        }
+        [data-theme="light"] button.ai-option-item:hover:not([disabled]) {
+          background-color: rgba(0, 0, 0, 0.04) !important;
+        }
+        .ai-option-item:hover > * {
+          transform: scale(0.965) !important; /* Lõi lún nhẹ như lụa */
+        }
+      }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
@@ -15539,17 +15627,17 @@
     <!-- BỘ TỐI ƯU LÕI LÚN BẰNG JAVASCRIPT (Rep 1:1 iOS 27) -->
     <script>
       const wrapBareTextNodes = () => {
+        // ĐÃ THÊM .ai-option-item VÀO ĐẦU DANH SÁCH ĐỂ BOT MẶC ÁO CHO CHỮ
         const targets = document.querySelectorAll(
-          '.sb-item, .d-item, .m-item, .s-item, .sv-item, .qa-item, .am-item, .acc-wrap-box, button[style*="width: 100%"], button[style*="width:100%"], button[style*="flex: 1"], button[style*="flex:1"]',
+          '.ai-option-item, .sb-item, .d-item, .m-item, .s-item, .sv-item, .qa-item, .am-item, .acc-wrap-box, button[style*="flex: 1"], button[style*="flex:1"]',
         );
         targets.forEach((el) => {
           Array.from(el.childNodes).forEach((node) => {
-            // Tự động tìm các chữ trần trụi và mặc áo <span> cho nó để CSS bóp lún được
             if (node.nodeType === 3 && node.nodeValue.trim().length > 0) {
               let span = document.createElement("span");
               span.textContent = node.nodeValue;
               span.style.display = "inline-block";
-              span.style.pointerEvents = "none"; // Bảo vệ không bị lỗi click
+              span.style.pointerEvents = "none";
               el.replaceChild(span, node);
             }
           });
