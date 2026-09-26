@@ -3769,18 +3769,18 @@
             <stop offset="100%" stop-color="#d96570" />
           </linearGradient>
 
-          <!-- Gradient Kính Lỏng Trắng (Cho dấu Cộng thanh mảnh) -->
+          <!-- Gradient Kính Trắng Xuyên Thấu (White Clear Glass) - Trắng sáng, thanh thoát -->
           <linearGradient
-            id="liquid-glass-white"
+            id="frosted-white-glass"
             x1="0%"
             y1="0%"
             x2="100%"
             y2="100%"
           >
-            <stop offset="0%" stop-color="rgba(255,255,255,0.95)" />
-            <stop offset="40%" stop-color="rgba(255,255,255,0.2)" />
-            <stop offset="60%" stop-color="rgba(255,255,255,0.1)" />
-            <stop offset="100%" stop-color="rgba(255,255,255,0.7)" />
+            <stop offset="0%" stop-color="rgba(255, 255, 255, 0.95)" />
+            <stop offset="30%" stop-color="rgba(255, 255, 255, 0.4)" />
+            <stop offset="70%" stop-color="rgba(255, 255, 255, 0.25)" />
+            <stop offset="100%" stop-color="rgba(255, 255, 255, 0.8)" />
           </linearGradient>
 
           <!-- 8 Gradient Cánh Hoa Chuẩn Apple Photos iOS -->
@@ -3819,13 +3819,13 @@
         </defs>
       </svg>
 
-      <!-- MỤC 1: CUỘC TRÒ CHUYỆN MỚI (Đầu bút và nét mực đã đổi sang màu đen) -->
+      <!-- MỤC 1: CUỘC TRÒ CHUYỆN MỚI -->
       <div class="sb-item" onclick="newChat()">
         <span
           class="sb-icon ios27-art"
           style="margin-right: 0; position: relative; top: -2px"
         >
-          <svg viewBox="0 0 100 100">
+          <svg viewBox="0 0 100 100" style="overflow: visible">
             <g filter="url(#ios-extreme-pop)">
               <rect
                 x="15"
@@ -3863,8 +3863,6 @@
                 stroke-width="4"
                 stroke-linecap="round"
               />
-
-              <!-- Nét mực 3D màu Đen than chì -->
               <path
                 d="M 30 50 Q 30 25, 68 32"
                 fill="none"
@@ -3879,29 +3877,23 @@
             >
               <rect
                 x="-10"
-                y="0"
+                y="-18"
                 width="20"
-                height="50"
+                height="68"
                 rx="5"
                 fill="url(#chat-pen-multi)"
               />
               <rect
                 x="-6"
-                y="2"
+                y="-16"
                 width="4"
-                height="46"
+                height="64"
                 rx="2"
                 fill="rgba(255,255,255,0.6)"
               />
-
-              <!-- Cổ bút kim loại đen -->
               <rect x="-10" y="50" width="20" height="3" fill="#1c1c1e" />
-
-              <!-- Đầu bút xám đen -->
               <polygon points="-10,53 10,53 0,71" fill="#2c2c2e" />
               <polygon points="0,53 7,53 0,66" fill="rgba(255,255,255,0.2)" />
-
-              <!-- Ngòi mực Đen tuyền -->
               <polygon points="-3.5,65 3.5,65 0,71" fill="#000000" />
             </g>
           </svg>
@@ -3915,7 +3907,11 @@
           class="sb-icon ios27-art"
           style="margin-right: 0; position: relative; top: -2px"
         >
-          <svg viewBox="0 0 100 100" filter="url(#ios-extreme-pop)">
+          <svg
+            viewBox="0 0 100 100"
+            filter="url(#ios-extreme-pop)"
+            style="overflow: visible"
+          >
             <g style="mix-blend-mode: screen">
               <g transform="rotate(0 50 50)">
                 <rect
@@ -4021,7 +4017,7 @@
 
       <div class="sb-title">Sổ ghi chú</div>
 
-      <!-- MỤC 3: SỔ GHI CHÚ MỚI -->
+      <!-- MỤC 3: SỔ GHI CHÚ MỚI (Dấu Cộng Kính Trắng, Thon gọn sắc nét) -->
       <div class="sb-item" onclick="createNewNote()">
         <span
           class="sb-icon ios27-art"
@@ -4029,22 +4025,31 @@
         >
           <svg viewBox="0 0 100 100">
             <g filter="url(#ios-extreme-pop)">
-              <g transform="translate(7.5, 7.5) scale(0.85)">
-                <path
-                  d="M 44 16 a 6 6 0 0 1 12 0 v 28 h 28 a 6 6 0 0 1 0 12 h -28 v 28 a 6 6 0 0 1 -12 0 v -28 h -28 a 6 6 0 0 1 0 -12 h 28 z"
-                  fill="url(#liquid-glass-white)"
-                  stroke="rgba(255,255,255,0.9)"
-                  stroke-width="1.5"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M 46 18 a 4 4 0 0 1 8 0 v 28 h 28 a 4 4 0 0 1 0 8 h -28 v 28 a 4 4 0 0 1 -8 0 v -28 h -28 a 4 4 0 0 1 0 -8 h 28 z"
-                  fill="none"
-                  stroke="#ffffff"
-                  stroke-width="1.5"
-                  opacity="0.7"
-                />
-              </g>
+              <!-- Khối Dấu Cộng Kính Trắng Xuyên Thấu (Độ dày giảm xuống 10px, dáng thon gọn) -->
+              <path
+                d="M 45 20 L 55 20 C 56.5 20 58 21.5 58 23 L 58 42 L 77 42 C 78.5 42 80 43.5 80 45 L 80 55 C 80 56.5 78.5 58 77 58 L 58 58 L 58 77 C 58 78.5 56.5 80 55 80 L 45 80 C 43.5 80 42 78.5 42 77 L 42 58 L 23 58 C 21.5 58 20 56.5 20 55 L 20 45 C 20 43.5 21.5 42 23 42 L 42 42 L 42 23 C 42 21.5 43.5 20 45 20 Z"
+                fill="url(#frosted-white-glass)"
+                stroke="rgba(255, 255, 255, 0.8)"
+                stroke-width="1.5"
+              />
+
+              <!-- Vệt hắt sáng siêu nét góc trên -->
+              <path
+                d="M 43.5 26 Q 43.5 21.5 48 21.5"
+                fill="none"
+                stroke="rgba(255,255,255,1)"
+                stroke-width="2.5"
+                stroke-linecap="round"
+              />
+
+              <!-- Vệt hắt sáng siêu nét góc trái -->
+              <path
+                d="M 21.5 48 Q 21.5 43.5 26 43.5"
+                fill="none"
+                stroke="rgba(255,255,255,1)"
+                stroke-width="2.5"
+                stroke-linecap="round"
+              />
             </g>
           </svg>
         </span>
