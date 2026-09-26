@@ -3602,6 +3602,25 @@
           pointer-events: none !important;
         }
       }
+
+      /* ============================================================ */
+      /* ĐỒNG BỘ CAO ĐỘ NÚT MENU (TRONG/NGOÀI) VÀ KÍNH LÚP CHUẨN XÁC  */
+      /* ============================================================ */
+
+      .sb-header {
+        height: 70px !important; /* Bằng đúng chiều cao thanh Header chính */
+        box-sizing: border-box !important;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        display: flex !important;
+        align-items: center !important; /* Căn giữa trục dọc hoàn hảo cho Menu và Kính lúp */
+      }
+
+      @media (max-width: 768px) {
+        .sb-header {
+          height: 65px !important; /* Đồng bộ với chiều cao Header trên điện thoại */
+        }
+      }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
@@ -3742,12 +3761,150 @@
       <div class="sb-title">Lịch sử trò chuyện</div>
       <div class="history-group" id="history-list"></div>
       <div
-        class="sb-item"
+        class="sb-item gear-item"
         style="margin-top: auto; border-top: 1px solid var(--glass-border)"
-        onclick="toggleSet(event)"
+        onclick="
+          toggleSet(event);
+          this.classList.toggle('menu-open');
+        "
       >
-        <span class="si-ic">⚙️</span
-        ><span class="sb-text">Cài đặt và trợ giúp</span>
+        <style>
+          .si-ic.gear-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px; /* Giữ nguyên khung để không xô lệch lề */
+            height: 24px;
+            flex-shrink: 0;
+          }
+
+          .gear-inner-svg {
+            width: 21px; /* Đã thu nhỏ để cân đối hoàn hảo với chữ */
+            height: 21px;
+            display: block;
+            transform-origin: 50% 50%;
+            /* Hiệu ứng xoay mượt mà khi click mở/đóng menu */
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+          }
+
+          /* 1. KHI MỞ MENU: Bánh răng quay 180 độ phản hồi thao tác click */
+          .gear-item.menu-open .gear-inner-svg {
+            transform: rotate(180deg);
+          }
+
+          /* 2. KHI NHẤN ĐÈ (Giữ chuột): Bánh răng quay liên tục */
+          @keyframes spin-gear-hold {
+            100% {
+              transform: rotate(360deg);
+            }
+          }
+          .gear-item:active .gear-inner-svg {
+            animation: spin-gear-hold 1s linear infinite;
+            transition: none; /* Tạm tắt transition để chạy animation quay đều */
+          }
+        </style>
+
+        <span class="si-ic gear-wrap">
+          <svg class="gear-inner-svg" viewBox="0 0 100 100">
+            <defs>
+              <!-- Chất liệu Thép Bạc Mịn mượt mà -->
+              <linearGradient
+                id="smooth-metal"
+                x1="0%"
+                y1="0%"
+                x2="0%"
+                y2="100%"
+              >
+                <stop offset="0%" stop-color="#f2f2f7" />
+                <stop offset="50%" stop-color="#c7c7cc" />
+                <stop offset="100%" stop-color="#8e8e93" />
+              </linearGradient>
+
+              <!-- Bóng viền khối 3D cho toàn bộ bánh răng -->
+              <filter
+                id="gear-smooth-shadow"
+                x="-20%"
+                y="-20%"
+                width="140%"
+                height="140%"
+              >
+                <feDropShadow
+                  dx="0"
+                  dy="2.5"
+                  stdDeviation="2"
+                  flood-color="#000"
+                  flood-opacity="0.5"
+                />
+                <feDropShadow
+                  dx="0"
+                  dy="1"
+                  stdDeviation="0.5"
+                  flood-color="#000"
+                  flood-opacity="0.3"
+                />
+              </filter>
+            </defs>
+
+            <g filter="url(#gear-smooth-shadow)">
+              <!-- RĂNG CƯA: Dùng nét đứt bo tròn để tạo ra 8 răng cưa hoàn hảo -->
+              <circle
+                cx="50"
+                cy="50"
+                r="38"
+                stroke="url(#smooth-metal)"
+                stroke-width="16"
+                stroke-dasharray="0 29.845"
+                stroke-linecap="round"
+                fill="none"
+              />
+              <!-- THÂN BÁNH RĂNG nguyên khối -->
+              <circle cx="50" cy="50" r="38" fill="url(#smooth-metal)" />
+            </g>
+
+            <!-- LỖ KHOÉT sâu ở giữa (Màu đen chìm tiệp với nền) -->
+            <circle cx="50" cy="50" r="16" fill="#1c1c1e" />
+
+            <!-- Đánh bóng 3D cho lỗ khoét -->
+            <circle
+              cx="50"
+              cy="50"
+              r="16"
+              fill="none"
+              stroke="rgba(0,0,0,0.8)"
+              stroke-width="2.5"
+              transform="translate(0, -0.5)"
+            />
+            <circle
+              cx="50"
+              cy="50"
+              r="16"
+              fill="none"
+              stroke="rgba(255,255,255,0.5)"
+              stroke-width="2"
+              transform="translate(0, 1.5)"
+            />
+
+            <!-- Vòng rãnh kim loại tinh tế trên mặt bánh răng -->
+            <circle
+              cx="50"
+              cy="50"
+              r="26"
+              fill="none"
+              stroke="rgba(0,0,0,0.15)"
+              stroke-width="1.5"
+            />
+            <circle
+              cx="50"
+              cy="50"
+              r="26"
+              fill="none"
+              stroke="rgba(255,255,255,0.5)"
+              stroke-width="1"
+              transform="translate(0, 1)"
+            />
+          </svg>
+        </span>
+        <span class="sb-text">Cài đặt và trợ giúp</span>
       </div>
     </div>
 
@@ -3766,11 +3923,42 @@
         <div class="header-right">
           <button
             class="upgrade-btn"
+            style="align-items: center; color: #ffffff"
             onclick="
               openSetting('Nâng cấp TNG AI Ultra', SETTINGS_CONTENT.quanLyGoi)
             "
           >
-            ✨ Nâng cấp lên TNG AI Ultra
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="url(#ultra-grad-btn)"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <defs>
+                <linearGradient
+                  id="ultra-grad-btn"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="100%"
+                >
+                  <stop offset="0%" stop-color="#4285f4" />
+                  <stop offset="50%" stop-color="#9b72cb" />
+                  <stop offset="100%" stop-color="#d96570" />
+                </linearGradient>
+              </defs>
+              <path
+                d="M12 3c.132 5.86 3.14 8.868 9 9-5.86.132-8.868 3.14-9 9-.132-5.86-3.14-8.868-9-9 5.86-.132 8.868-3.14 9-9Z"
+              ></path>
+              <path
+                d="M19 3c.046 2.05 1.1 3.104 3.15 3.15-2.05.046-3.104 1.1-3.15 3.15-.046-2.05-1.1-3.104-3.15-3.15C17.9 6.104 18.954 5.05 19 3Z"
+              ></path>
+            </svg>
+            Nâng cấp lên TNG AI Ultra
           </button>
           <div class="avatar" id="avt" onclick="toggleAcc()">K</div>
         </div>
@@ -4565,16 +4753,171 @@
                     <div class="m-upgrade">Nâng cấp</div>
                   </div>
                 </div>
-                <button class="icon-btn" onclick="startLive()">✨</button
-                ><button class="icon-btn" onclick="voice('home')">🎙</button
-                ><button class="icon-btn" onclick="sendMsg('home')">➤</button>
+                <!-- NÚT LIVE AI (Hiệu ứng Gradient Apple Intelligence 3D) -->
+                <button
+                  class="icon-btn"
+                  onclick="startLive()"
+                  style="
+                    width: 36px;
+                    height: 36px;
+                    padding: 0;
+                    border-radius: 50%;
+                    background: linear-gradient(
+                      135deg,
+                      #4285f4,
+                      #9b72cb,
+                      #d96570
+                    );
+                    color: #fff;
+                    box-shadow:
+                      0 4px 12px rgba(155, 114, 203, 0.4),
+                      inset 0 2px 1px rgba(255, 255, 255, 0.3),
+                      inset 0 -2px 1px rgba(0, 0, 0, 0.2);
+                    border: none;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: 0.3s;
+                  "
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M12 3c.132 5.86 3.14 8.868 9 9-5.86.132-8.868 3.14-9 9-.132-5.86-3.14-8.868-9-9 5.86-.132 8.868-3.14 9-9Z"
+                    ></path>
+                    <path
+                      d="M19 3c.046 2.05 1.1 3.104 3.15 3.15-2.05.046-3.104 1.1-3.15 3.15-.046-2.05-1.1-3.104-3.15-3.15C17.9 6.104 18.954 5.05 19 3Z"
+                    ></path>
+                  </svg>
+                </button>
+
+                <!-- NÚT MICRO (Hiệu ứng kính mờ dập nổi 3D) -->
+                <button
+                  class="icon-btn"
+                  onclick="voice('home')"
+                  style="
+                    width: 36px;
+                    height: 36px;
+                    padding: 0;
+                    border-radius: 50%;
+                    background: rgba(255, 255, 255, 0.08);
+                    color: #e3e3e3;
+                    border: 1px solid rgba(255, 255, 255, 0.12);
+                    box-shadow:
+                      0 4px 10px rgba(0, 0, 0, 0.3),
+                      inset 0 1px 1px rgba(255, 255, 255, 0.15);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: 0.3s;
+                  "
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <rect x="9" y="2" width="6" height="11" rx="3"></rect>
+                    <path d="M5 10v2a7 7 0 0 0 14 0v-2"></path>
+                    <line x1="12" y1="19" x2="12" y2="22"></line>
+                  </svg>
+                </button>
+
+                <!-- NÚT GỬI (Đồng bộ màu xanh pastel #a8c7fa, icon Mũi tên iOS, Lún 3D) -->
+                <button
+                  class="icon-btn"
+                  onclick="sendMsg('home')"
+                  style="
+                    width: 36px;
+                    height: 36px;
+                    padding: 0;
+                    border-radius: 50%;
+                    background: #a8c7fa;
+                    color: #1e1f26;
+                    border: none;
+                    box-shadow:
+                      0 4px 12px rgba(168, 199, 250, 0.4),
+                      inset 0 2px 1px rgba(255, 255, 255, 0.8),
+                      inset 0 -2px 1px rgba(0, 0, 0, 0.15);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: 0.3s;
+                  "
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <line x1="12" y1="19" x2="12" y2="5"></line>
+                    <polyline points="5 12 12 5 19 12"></polyline>
+                  </svg>
+                </button>
               </div>
             </div>
           </div>
         </div>
         <div class="chips">
           <div class="chip" onclick="startLive()">
-            <span class="si-ic">✨</span> TNG Live Mới
+            <span
+              class="si-ic"
+              style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              "
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="url(#live-grad-chip)"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <defs>
+                  <linearGradient
+                    id="live-grad-chip"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="100%"
+                  >
+                    <stop offset="0%" stop-color="#4285f4" />
+                    <stop offset="50%" stop-color="#9b72cb" />
+                    <stop offset="100%" stop-color="#d96570" />
+                  </linearGradient>
+                </defs>
+                <path
+                  d="M12 3c.132 5.86 3.14 8.868 9 9-5.86.132-8.868 3.14-9 9-.132-5.86-3.14-8.868-9-9 5.86-.132 8.868-3.14 9-9Z"
+                ></path>
+                <path
+                  d="M19 3c.046 2.05 1.1 3.104 3.15 3.15-2.05.046-3.104 1.1-3.15 3.15-.046-2.05-1.1-3.104-3.15-3.15C17.9 6.104 18.954 5.05 19 3Z"
+                ></path>
+              </svg>
+            </span>
+            TNG Live Mới
           </div>
           <div class="chip" onclick="fillInput('Dịch sang tiếng anh: ')">
             <span class="si-ic">🌍</span> Dịch văn bản
@@ -4773,9 +5116,125 @@
                     <div class="m-upgrade">Nâng cấp</div>
                   </div>
                 </div>
-                <button class="icon-btn" onclick="startLive()">✨</button
-                ><button class="icon-btn" onclick="voice('chat')">🎙</button
-                ><button class="icon-btn" onclick="sendMsg('chat')">➤</button>
+                <!-- NÚT LIVE AI (Hiệu ứng Gradient Apple Intelligence 3D) -->
+                <button
+                  class="icon-btn"
+                  onclick="startLive()"
+                  style="
+                    width: 36px;
+                    height: 36px;
+                    padding: 0;
+                    border-radius: 50%;
+                    background: linear-gradient(
+                      135deg,
+                      #4285f4,
+                      #9b72cb,
+                      #d96570
+                    );
+                    color: #fff;
+                    box-shadow:
+                      0 4px 12px rgba(155, 114, 203, 0.4),
+                      inset 0 2px 1px rgba(255, 255, 255, 0.3),
+                      inset 0 -2px 1px rgba(0, 0, 0, 0.2);
+                    border: none;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: 0.3s;
+                  "
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M12 3c.132 5.86 3.14 8.868 9 9-5.86.132-8.868 3.14-9 9-.132-5.86-3.14-8.868-9-9 5.86-.132 8.868-3.14 9-9Z"
+                    ></path>
+                    <path
+                      d="M19 3c.046 2.05 1.1 3.104 3.15 3.15-2.05.046-3.104 1.1-3.15 3.15-.046-2.05-1.1-3.104-3.15-3.15C17.9 6.104 18.954 5.05 19 3Z"
+                    ></path>
+                  </svg>
+                </button>
+
+                <!-- NÚT MICRO (Hiệu ứng kính mờ dập nổi 3D) -->
+                <button
+                  class="icon-btn"
+                  onclick="voice('chat')"
+                  style="
+                    width: 36px;
+                    height: 36px;
+                    padding: 0;
+                    border-radius: 50%;
+                    background: rgba(255, 255, 255, 0.08);
+                    color: #e3e3e3;
+                    border: 1px solid rgba(255, 255, 255, 0.12);
+                    box-shadow:
+                      0 4px 10px rgba(0, 0, 0, 0.3),
+                      inset 0 1px 1px rgba(255, 255, 255, 0.15);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: 0.3s;
+                  "
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <rect x="9" y="2" width="6" height="11" rx="3"></rect>
+                    <path d="M5 10v2a7 7 0 0 0 14 0v-2"></path>
+                    <line x1="12" y1="19" x2="12" y2="22"></line>
+                  </svg>
+                </button>
+
+                <!-- NÚT GỬI (Đồng bộ màu xanh pastel #a8c7fa, icon Mũi tên iOS, Lún 3D) -->
+                <button
+                  class="icon-btn"
+                  onclick="sendMsg('chat')"
+                  style="
+                    width: 36px;
+                    height: 36px;
+                    padding: 0;
+                    border-radius: 50%;
+                    background: #a8c7fa;
+                    color: #1e1f26;
+                    border: none;
+                    box-shadow:
+                      0 4px 12px rgba(168, 199, 250, 0.4),
+                      inset 0 2px 1px rgba(255, 255, 255, 0.8),
+                      inset 0 -2px 1px rgba(0, 0, 0, 0.15);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: 0.3s;
+                  "
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <line x1="12" y1="19" x2="12" y2="5"></line>
+                    <polyline points="5 12 12 5 19 12"></polyline>
+                  </svg>
+                </button>
               </div>
             </div>
           </div>
@@ -4784,50 +5243,499 @@
     </div>
 
     <div class="set-menu" id="set-menu">
+      <!-- BỘ MÁY RENDER CHẤT LIỆU 3D CHUẨN IOS 27 (NẰM ẨN) -->
+      <svg
+        width="0"
+        height="0"
+        style="position: absolute; pointer-events: none"
+      >
+        <defs>
+          <filter id="ios-drop-3d" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow
+              dx="0"
+              dy="4"
+              stdDeviation="3"
+              flood-color="#000"
+              flood-opacity="0.4"
+            />
+            <feDropShadow
+              dx="0"
+              dy="1.5"
+              stdDeviation="1"
+              flood-color="#000"
+              flood-opacity="0.2"
+            />
+          </filter>
+
+          <filter
+            id="ios-drop-light"
+            x="-20%"
+            y="-20%"
+            width="140%"
+            height="140%"
+          >
+            <feDropShadow
+              dx="0"
+              dy="2"
+              stdDeviation="1.5"
+              flood-color="#000"
+              flood-opacity="0.25"
+            />
+          </filter>
+
+          <linearGradient id="g-dark" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#3a3a3c" />
+            <stop offset="100%" stop-color="#111111" />
+          </linearGradient>
+          <linearGradient id="g-blue" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#55a5ff" />
+            <stop offset="100%" stop-color="#004be5" />
+          </linearGradient>
+          <linearGradient id="g-white" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#ffffff" />
+            <stop offset="100%" stop-color="#e5e5ea" />
+          </linearGradient>
+          <linearGradient id="g-teal" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#2dd4bf" />
+            <stop offset="100%" stop-color="#0d9488" />
+          </linearGradient>
+          <linearGradient id="g-green" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#4ade80" />
+            <stop offset="100%" stop-color="#15803d" />
+          </linearGradient>
+          <linearGradient id="g-purple" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#d8b4fe" />
+            <stop offset="100%" stop-color="#7e22ce" />
+          </linearGradient>
+          <linearGradient id="g-red" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#fca5a5" />
+            <stop offset="100%" stop-color="#b91c1c" />
+          </linearGradient>
+          <linearGradient id="g-yellow" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#fef08a" />
+            <stop offset="100%" stop-color="#a16207" />
+          </linearGradient>
+          <linearGradient id="g-ai" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#f472b6" />
+            <stop offset="50%" stop-color="#a855f7" />
+            <stop offset="100%" stop-color="#3b82f6" />
+          </linearGradient>
+          <linearGradient id="g-ultra" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#4285f4" />
+            <stop offset="50%" stop-color="#9b72cb" />
+            <stop offset="100%" stop-color="#d96570" />
+          </linearGradient>
+
+          <linearGradient id="g-glass" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="rgba(255,255,255,0.4)" />
+            <stop offset="45%" stop-color="rgba(255,255,255,0)" />
+            <stop offset="100%" stop-color="rgba(0,0,0,0.15)" />
+          </linearGradient>
+        </defs>
+      </svg>
+
+      <style>
+        /* TỈ LỆ VÀNG 26PX */
+        .ios27-art {
+          width: 26px;
+          height: 26px;
+          min-width: 26px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+          background: transparent !important;
+          border: none !important;
+          box-shadow: none !important;
+          pointer-events: none;
+        }
+
+        .ios27-art svg {
+          width: 100%;
+          height: 100%;
+          display: block;
+          filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.25));
+        }
+
+        .d-item:hover .ios27-art {
+          transform: scale(1.08);
+        }
+
+        /* TINH CHỈNH ĐỘ CAO CHỈ 1 CHÚT XÍU (padding giảm từ 10px xuống 9px) */
+        .d-item {
+          gap: 12px !important;
+          padding: 9px 15px !important;
+        }
+      </style>
+
+      <!-- 1. Hoạt động -->
       <div
         class="d-item"
         onclick="openSetting('Hoạt động của tôi', getHoatDongContent())"
       >
-        <span class="si-ic">⏱</span> Hoạt động
+        <div class="ios27-art">
+          <svg viewBox="0 0 120 120">
+            <rect
+              x="0"
+              y="0"
+              width="120"
+              height="120"
+              rx="28"
+              fill="url(#g-dark)"
+            />
+            <rect
+              x="0"
+              y="0"
+              width="120"
+              height="120"
+              rx="28"
+              fill="url(#g-glass)"
+            />
+            <rect
+              x="0"
+              y="0"
+              width="120"
+              height="120"
+              rx="28"
+              fill="none"
+              stroke="rgba(255,255,255,0.2)"
+              stroke-width="2"
+            />
+            <g filter="url(#ios-drop-3d)">
+              <circle
+                cx="60"
+                cy="60"
+                r="36"
+                fill="#111"
+                stroke="rgba(255,255,255,0.2)"
+                stroke-width="2"
+              />
+              <circle
+                cx="60"
+                cy="60"
+                r="30"
+                fill="none"
+                stroke="#fff"
+                stroke-width="2"
+                stroke-dasharray="2 7"
+              />
+              <path
+                d="M 60 60 L 60 32 M 60 60 L 78 60"
+                stroke="#fff"
+                stroke-width="4.5"
+                stroke-linecap="round"
+              />
+              <path
+                d="M 60 60 L 46 74"
+                stroke="#ff3b30"
+                stroke-width="2.5"
+                stroke-linecap="round"
+              />
+              <circle cx="60" cy="60" r="4.5" fill="#ff3b30" />
+            </g>
+          </svg>
+        </div>
+        <span>Hoạt động</span>
       </div>
+
+      <!-- 2. Trí thông minh cá nhân -->
       <div
         class="d-item"
         onclick="
           openSetting('Trí thông minh cá nhân', SETTINGS_CONTENT.triThongMinh)
         "
       >
-        <span class="si-ic">👤</span> Trí thông minh cá nhân
+        <div class="ios27-art">
+          <svg viewBox="0 0 120 120">
+            <rect
+              x="0"
+              y="0"
+              width="120"
+              height="120"
+              rx="28"
+              fill="url(#g-dark)"
+            />
+            <rect
+              x="0"
+              y="0"
+              width="120"
+              height="120"
+              rx="28"
+              fill="url(#g-glass)"
+            />
+            <rect
+              x="0"
+              y="0"
+              width="120"
+              height="120"
+              rx="28"
+              fill="none"
+              stroke="rgba(255,255,255,0.2)"
+              stroke-width="2"
+            />
+            <g filter="url(#ios-drop-3d)">
+              <path
+                d="M60 15 C 60 50, 50 60, 15 60 C 50 60, 60 70, 60 105 C 60 70, 70 60, 105 60 C 70 60, 60 50, 60 15 Z"
+                fill="url(#g-ai)"
+              />
+              <path
+                d="M60 25 C 60 55, 55 60, 25 60 C 55 60, 60 65, 60 95 C 60 65, 65 60, 95 60 C 65 60, 60 55, 60 25 Z"
+                fill="#ffffff"
+                opacity="0.9"
+              />
+              <path
+                d="M85 25 C 85 40, 80 45, 65 45 C 80 45, 85 50, 85 65 C 85 50, 90 45, 105 45 C 90 45, 85 40, 85 25 Z"
+                fill="url(#g-ai)"
+              />
+            </g>
+          </svg>
+        </div>
+        <span>Trí thông minh cá nhân</span>
       </div>
+
+      <!-- 3. Nhập bộ nhớ -->
       <div
         class="d-item"
         onclick="
           openSetting('Nhập bộ nhớ hệ thống', SETTINGS_CONTENT.nhapBoNho)
         "
       >
-        <span class="si-ic">⬆️</span> Nhập bộ nhớ vào TNG AI<span
-          class="s-badge"
-          >Mới</span
-        >
+        <div class="ios27-art">
+          <svg viewBox="0 0 120 120">
+            <rect
+              x="0"
+              y="0"
+              width="120"
+              height="120"
+              rx="28"
+              fill="url(#g-white)"
+            />
+            <rect
+              x="0"
+              y="0"
+              width="120"
+              height="120"
+              rx="28"
+              fill="url(#g-glass)"
+            />
+            <rect
+              x="0"
+              y="0"
+              width="120"
+              height="120"
+              rx="28"
+              fill="none"
+              stroke="rgba(255,255,255,0.7)"
+              stroke-width="2"
+            />
+            <g filter="url(#ios-drop-3d)">
+              <path
+                d="M 20 40 L 45 40 L 55 52 L 100 52 L 100 85 L 20 85 Z"
+                fill="#89c4f4"
+              />
+              <rect x="30" y="32" width="60" height="40" fill="#ffffff" />
+              <path d="M 15 52 L 105 52 L 95 90 L 25 90 Z" fill="#007aff" />
+            </g>
+          </svg>
+        </div>
+        <span>Nhập bộ nhớ vào TNG AI</span>
+        <span class="s-badge">Mới</span>
       </div>
+
+      <!-- 4. Hành động đã lên lịch -->
       <div
         class="d-item"
         onclick="
           openSetting('Hành động đã lên lịch', SETTINGS_CONTENT.hanhDong)
         "
       >
-        <span class="si-ic">🕒</span> Hành động đã lên lịch
+        <div class="ios27-art">
+          <svg viewBox="0 0 120 120">
+            <rect
+              x="0"
+              y="0"
+              width="120"
+              height="120"
+              rx="28"
+              fill="url(#g-white)"
+            />
+            <rect
+              x="0"
+              y="0"
+              width="120"
+              height="120"
+              rx="28"
+              fill="url(#g-glass)"
+            />
+            <rect
+              x="0"
+              y="0"
+              width="120"
+              height="120"
+              rx="28"
+              fill="none"
+              stroke="rgba(255,255,255,0.7)"
+              stroke-width="2"
+            />
+            <g filter="url(#ios-drop-light)">
+              <circle cx="32" cy="40" r="7" fill="#ff3b30" />
+              <rect x="52" y="36" width="46" height="8" rx="4" fill="#d1d5db" />
+              <circle cx="32" cy="60" r="7" fill="#ff9500" />
+              <rect x="52" y="56" width="36" height="8" rx="4" fill="#d1d5db" />
+              <circle cx="32" cy="80" r="7" fill="#ffcc00" />
+              <rect x="52" y="76" width="46" height="8" rx="4" fill="#d1d5db" />
+            </g>
+          </svg>
+        </div>
+        <span>Hành động đã lên lịch</span>
       </div>
+
+      <!-- 5. Đường liên kết công khai -->
       <div
         class="d-item"
         onclick="openSetting('Liên kết công khai', getPublicLinkContent())"
       >
-        <span class="si-ic">🔗</span> Đường liên kết công khai của bạn
-      </div>
-      <div class="d-item flex-between" onclick="toggleD('theme-menu', event)">
-        <div style="display: flex; align-items: center">
-          <span class="si-ic">☀️</span> Giao diện
+        <div class="ios27-art">
+          <svg viewBox="0 0 120 120">
+            <rect
+              x="0"
+              y="0"
+              width="120"
+              height="120"
+              rx="28"
+              fill="url(#g-green)"
+            />
+            <rect
+              x="0"
+              y="0"
+              width="120"
+              height="120"
+              rx="28"
+              fill="url(#g-glass)"
+            />
+            <rect
+              x="0"
+              y="0"
+              width="120"
+              height="120"
+              rx="28"
+              fill="none"
+              stroke="rgba(255,255,255,0.4)"
+              stroke-width="2"
+            />
+            <g transform="rotate(-45 60 60)" filter="url(#ios-drop-3d)">
+              <rect
+                x="32"
+                y="44"
+                width="36"
+                height="24"
+                rx="12"
+                fill="none"
+                stroke="#e2e8f0"
+                stroke-width="9"
+              />
+              <rect
+                x="52"
+                y="44"
+                width="36"
+                height="24"
+                rx="12"
+                fill="none"
+                stroke="#ffffff"
+                stroke-width="9"
+              />
+              <path
+                d="M 44 68 H 56 A 12 12 0 0 0 68 56 V 52"
+                fill="none"
+                stroke="#e2e8f0"
+                stroke-width="9"
+                stroke-linecap="round"
+              />
+            </g>
+          </svg>
         </div>
-        <span class="si-ic" style="font-size: 12px">▶</span>
+        <span>Đường liên kết công khai của bạn</span>
+      </div>
+
+      <!-- 6. Giao diện -->
+      <div class="d-item flex-between" onclick="toggleD('theme-menu', event)">
+        <div style="display: flex; align-items: center; gap: 12px">
+          <div class="ios27-art">
+            <svg viewBox="0 0 120 120">
+              <rect
+                x="0"
+                y="0"
+                width="120"
+                height="120"
+                rx="28"
+                fill="url(#g-white)"
+              />
+              <rect
+                x="0"
+                y="0"
+                width="120"
+                height="120"
+                rx="28"
+                fill="url(#g-glass)"
+              />
+              <rect
+                x="0"
+                y="0"
+                width="120"
+                height="120"
+                rx="28"
+                fill="none"
+                stroke="rgba(255,255,255,0.7)"
+                stroke-width="2"
+              />
+              <g filter="url(#ios-drop-3d)">
+                <path
+                  d="M 60 20 C 25 20, 20 50, 20 70 C 20 90, 40 100, 60 100 C 95 100, 100 80, 100 60 C 100 30, 85 20, 60 20 Z"
+                  fill="#f59e0b"
+                />
+                <circle
+                  cx="80"
+                  cy="75"
+                  r="8"
+                  fill="#ffffff"
+                  filter="url(#ios-drop-light)"
+                />
+                <circle
+                  cx="45"
+                  cy="40"
+                  r="7"
+                  fill="#ef4444"
+                  filter="url(#ios-drop-light)"
+                />
+                <circle
+                  cx="70"
+                  cy="40"
+                  r="7"
+                  fill="#3b82f6"
+                  filter="url(#ios-drop-light)"
+                />
+                <circle
+                  cx="40"
+                  cy="65"
+                  r="7"
+                  fill="#10b981"
+                  filter="url(#ios-drop-light)"
+                />
+                <circle
+                  cx="60"
+                  cy="80"
+                  r="7"
+                  fill="#f59e0b"
+                  stroke="#fff"
+                  stroke-width="2"
+                />
+              </g>
+            </svg>
+          </div>
+          <span>Giao diện</span>
+        </div>
+        <span style="font-size: 11px; color: var(--text-sub)">▶</span>
         <div id="theme-menu" class="sub-menu">
           <div
             class="d-item"
@@ -4847,31 +5755,281 @@
           </div>
         </div>
       </div>
+
+      <!-- 7. Quản lý gói thuê bao -->
       <div
         class="d-item"
         onclick="
           openSetting('Quản lý gói thuê bao', SETTINGS_CONTENT.quanLyGoi)
         "
       >
-        <span class="si-ic">💼</span> Quản lý gói thuê bao
+        <div class="ios27-art">
+          <svg viewBox="0 0 120 120">
+            <rect
+              x="0"
+              y="0"
+              width="120"
+              height="120"
+              rx="28"
+              fill="url(#g-dark)"
+            />
+            <rect
+              x="0"
+              y="0"
+              width="120"
+              height="120"
+              rx="28"
+              fill="url(#g-glass)"
+            />
+            <rect
+              x="0"
+              y="0"
+              width="120"
+              height="120"
+              rx="28"
+              fill="none"
+              stroke="rgba(255,255,255,0.2)"
+              stroke-width="2"
+            />
+            <g filter="url(#ios-drop-3d)">
+              <rect
+                x="24"
+                y="34"
+                width="72"
+                height="44"
+                rx="6"
+                fill="#4cd964"
+              />
+              <rect
+                x="24"
+                y="46"
+                width="72"
+                height="44"
+                rx="6"
+                fill="#ff9500"
+              />
+              <rect
+                x="24"
+                y="58"
+                width="72"
+                height="44"
+                rx="6"
+                fill="#007aff"
+              />
+              <rect
+                x="24"
+                y="70"
+                width="72"
+                height="24"
+                rx="6"
+                fill="#ffffff"
+              />
+            </g>
+          </svg>
+        </div>
+        <span>Quản lý gói thuê bao</span>
       </div>
+
+      <!-- 8. Nâng cấp lên TNG AI Ultra -->
       <div
         class="d-item"
         onclick="
           openSetting('Nâng cấp lên TNG AI Ultra', SETTINGS_CONTENT.quanLyGoi)
         "
       >
-        <span class="si-ic">✨</span> Nâng cấp lên TNG AI Ultra
+        <div class="ios27-art">
+          <svg viewBox="0 0 120 120">
+            <rect
+              x="0"
+              y="0"
+              width="120"
+              height="120"
+              rx="28"
+              fill="url(#g-ultra)"
+            />
+            <rect
+              x="0"
+              y="0"
+              width="120"
+              height="120"
+              rx="28"
+              fill="url(#g-glass)"
+            />
+            <rect
+              x="0"
+              y="0"
+              width="120"
+              height="120"
+              rx="28"
+              fill="none"
+              stroke="rgba(255,255,255,0.4)"
+              stroke-width="2"
+            />
+            <g
+              transform="translate(30, 30) scale(2.5)"
+              filter="url(#ios-drop-3d)"
+            >
+              <path
+                d="M12 3c.132 5.86 3.14 8.868 9 9-5.86.132-8.868 3.14-9 9-.132-5.86-3.14-8.868-9-9 5.86-.132 8.868-3.14 9-9Z"
+                fill="none"
+                stroke="#ffffff"
+                stroke-width="2.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M19 3c.046 2.05 1.1 3.104 3.15 3.15-2.05.046-3.104 1.1-3.15 3.15-.046-2.05-1.1-3.104-3.15-3.15C17.9 6.104 18.954 5.05 19 3Z"
+                fill="none"
+                stroke="#ffffff"
+                stroke-width="2.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </g>
+          </svg>
+        </div>
+        <span>Nâng cấp lên TNG AI Ultra</span>
       </div>
+
+      <!-- 9. NotebookLM -->
       <div
         class="d-item"
         onclick="openSetting('NotebookLM', SETTINGS_CONTENT.notebookLM)"
       >
-        <span class="si-ic">🌊</span> NotebookLM
+        <div class="ios27-art">
+          <svg viewBox="0 0 120 120">
+            <rect
+              x="0"
+              y="0"
+              width="120"
+              height="120"
+              rx="28"
+              fill="url(#g-yellow)"
+            />
+            <rect
+              x="0"
+              y="0"
+              width="120"
+              height="120"
+              rx="28"
+              fill="url(#g-glass)"
+            />
+            <rect
+              x="0"
+              y="0"
+              width="120"
+              height="120"
+              rx="28"
+              fill="none"
+              stroke="rgba(255,255,255,0.4)"
+              stroke-width="2"
+            />
+            <g filter="url(#ios-drop-3d)">
+              <rect
+                x="25"
+                y="25"
+                width="70"
+                height="70"
+                rx="6"
+                fill="#ffffff"
+              />
+              <line
+                x1="40"
+                y1="25"
+                x2="40"
+                y2="95"
+                stroke="#ef4444"
+                stroke-width="2"
+                opacity="0.6"
+              />
+              <line
+                x1="40"
+                y1="45"
+                x2="85"
+                y2="45"
+                stroke="#3b82f6"
+                stroke-width="2"
+                opacity="0.4"
+              />
+              <line
+                x1="40"
+                y1="60"
+                x2="85"
+                y2="60"
+                stroke="#3b82f6"
+                stroke-width="2"
+                opacity="0.4"
+              />
+              <line
+                x1="40"
+                y1="75"
+                x2="70"
+                y2="75"
+                stroke="#3b82f6"
+                stroke-width="2"
+                opacity="0.4"
+              />
+            </g>
+          </svg>
+        </div>
+        <span>NotebookLM</span>
       </div>
+
+      <!-- 10. Cập nhật ứng dụng -->
       <div class="d-item flex-between" onclick="openUpdateSetting()">
-        <div style="display: flex; align-items: center">
-          <span class="si-ic">📥</span> Cập nhật ứng dụng
+        <div style="display: flex; align-items: center; gap: 12px">
+          <div class="ios27-art">
+            <svg viewBox="0 0 120 120">
+              <rect
+                x="0"
+                y="0"
+                width="120"
+                height="120"
+                rx="28"
+                fill="url(#g-teal)"
+              />
+              <rect
+                x="0"
+                y="0"
+                width="120"
+                height="120"
+                rx="28"
+                fill="url(#g-glass)"
+              />
+              <rect
+                x="0"
+                y="0"
+                width="120"
+                height="120"
+                rx="28"
+                fill="none"
+                stroke="rgba(255,255,255,0.4)"
+                stroke-width="2"
+              />
+              <g filter="url(#ios-drop-3d)">
+                <rect
+                  x="30"
+                  y="80"
+                  width="60"
+                  height="8"
+                  rx="4"
+                  fill="#ffffff"
+                />
+                <path
+                  d="M 52 28 L 68 28 L 68 55 L 82 55 L 60 78 L 38 55 L 52 55 Z"
+                  fill="#ffffff"
+                  stroke="#ffffff"
+                  stroke-width="4"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M 52 28 L 68 28 L 68 55 L 82 55 L 60 78 L 38 55 L 52 55 Z"
+                  fill="url(#g-glass)"
+                />
+              </g>
+            </svg>
+          </div>
+          <span>Cập nhật ứng dụng</span>
         </div>
         <span
           class="s-badge"
@@ -4886,17 +6044,99 @@
           >0</span
         >
       </div>
+
+      <!-- 11. Gửi ý kiến phản hồi -->
       <div
         class="d-item"
         onclick="openSetting('Gửi ý kiến phản hồi', getPhanHoiContent(), true)"
       >
-        <span class="si-ic">💬</span> Gửi ý kiến phản hồi
-      </div>
-      <div class="d-item flex-between" onclick="toggleD('help-menu', event)">
-        <div style="display: flex; align-items: center">
-          <span class="si-ic">❓</span> Trợ giúp
+        <div class="ios27-art">
+          <svg viewBox="0 0 120 120">
+            <rect
+              x="0"
+              y="0"
+              width="120"
+              height="120"
+              rx="28"
+              fill="url(#g-purple)"
+            />
+            <rect
+              x="0"
+              y="0"
+              width="120"
+              height="120"
+              rx="28"
+              fill="url(#g-glass)"
+            />
+            <rect
+              x="0"
+              y="0"
+              width="120"
+              height="120"
+              rx="28"
+              fill="none"
+              stroke="rgba(255,255,255,0.3)"
+              stroke-width="2"
+            />
+            <g filter="url(#ios-drop-3d)">
+              <path
+                d="M 60 30 C 35 30, 22 45, 22 62 C 22 74, 30 82, 42 87 L 32 100 C 42 100, 52 93, 57 89 C 59 89.5, 61 90, 64 90 C 89 90, 102 75, 102 62 C 102 45, 85 30, 60 30 Z"
+                fill="#ffffff"
+              />
+              <rect x="56" y="46" width="8" height="20" rx="4" fill="#a855f7" />
+              <circle cx="60" cy="74" r="4.5" fill="#a855f7" />
+            </g>
+          </svg>
         </div>
-        <span class="si-ic" style="font-size: 12px">▶</span>
+        <span>Gửi ý kiến phản hồi</span>
+      </div>
+
+      <!-- 12. Trợ giúp -->
+      <div class="d-item flex-between" onclick="toggleD('help-menu', event)">
+        <div style="display: flex; align-items: center; gap: 12px">
+          <div class="ios27-art">
+            <svg viewBox="0 0 120 120">
+              <rect
+                x="0"
+                y="0"
+                width="120"
+                height="120"
+                rx="28"
+                fill="url(#g-blue)"
+              />
+              <rect
+                x="0"
+                y="0"
+                width="120"
+                height="120"
+                rx="28"
+                fill="url(#g-glass)"
+              />
+              <rect
+                x="0"
+                y="0"
+                width="120"
+                height="120"
+                rx="28"
+                fill="none"
+                stroke="rgba(255,255,255,0.3)"
+                stroke-width="2"
+              />
+              <g filter="url(#ios-drop-3d)">
+                <path
+                  d="M 46 48 C 46 32, 74 32, 74 48 C 74 60, 60 62, 60 74"
+                  fill="none"
+                  stroke="#ffffff"
+                  stroke-width="12"
+                  stroke-linecap="round"
+                />
+                <circle cx="60" cy="92" r="7" fill="#ffffff" />
+              </g>
+            </svg>
+          </div>
+          <span>Trợ giúp</span>
+        </div>
+        <span style="font-size: 11px; color: var(--text-sub)">▶</span>
         <div id="help-menu" class="sub-menu">
           <div
             class="d-item"
@@ -4919,6 +6159,7 @@
           </div>
         </div>
       </div>
+
       <div class="d-divider"></div>
       <div
         class="s-loc"
