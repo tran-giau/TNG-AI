@@ -3621,6 +3621,69 @@
           height: 65px !important; /* Đồng bộ với chiều cao Header trên điện thoại */
         }
       }
+
+      /* ============================================================ */
+      /* ĐỒNG BỘ TỌA ĐỘ 2 NÚT MENU VÀ ÉP SÁT GÓC (TRÙNG KHỚP 100%)    */
+      /* ============================================================ */
+
+      /* 1. Ép lề trái của Header chính bằng đúng lề trái của Sidebar (15px) để sát góc */
+      .header {
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+      }
+
+      /* 2. Đóng đinh kích thước và xóa mọi lề thừa của cả 2 nút (Mở và Đóng) */
+      .sb-header .btn-in,
+      .header .btn-out {
+        width: 40px !important;
+        height: 40px !important;
+        min-width: 40px !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 30px !important;
+        line-height: 1 !important; /* Dập tắt độ lệch tâm của font chữ */
+      }
+
+      /* 3. Khoảng cách cố định cực chuẩn giữa nút và chữ TNG AI 1.0 */
+      .logo {
+        gap: 10px !important;
+      }
+
+      /* 4. Định dạng lại hiệu ứng lướt ngang trên Máy tính (PC) */
+      @media (min-width: 769px) {
+        /* Khi Sidebar mở: Nút ngoài thu nhỏ về 0 */
+        .sidebar:not(.collapsed) + .main .header .btn-out {
+          width: 0 !important;
+          min-width: 0 !important;
+          opacity: 0 !important;
+          pointer-events: none !important;
+          overflow: hidden !important;
+        }
+        /* Khi Sidebar đóng: Nút ngoài bung ra đúng 40px */
+        .sidebar.collapsed + .main .header .btn-out {
+          width: 40px !important;
+          min-width: 40px !important;
+          opacity: 1 !important;
+          pointer-events: auto !important;
+        }
+      }
+
+      /* 5. Ghi đè lại chống xô lệch trên Điện thoại (Mobile) */
+      @media (max-width: 768px) {
+        .sidebar + .main .header .btn-out {
+          width: 40px !important;
+          min-width: 40px !important;
+          opacity: 1 !important;
+          pointer-events: auto !important;
+        }
+        .sidebar.open + .main .header .btn-out {
+          opacity: 0 !important;
+          pointer-events: none !important;
+        }
+      }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
@@ -3705,17 +3768,45 @@
       <div class="sb-header">
         <button
           class="icon-btn btn-in"
-          style="font-size: 28px"
+          style="font-size: 30px"
           onclick="toggleMenu()"
         >
           ≡
-        </button>
+        <!-- NÚT TÌM KIẾM 3D ĐÃ ĐƯỢC PHÓNG TO LÊN 30PX ĐỂ BẰNG NÚT MENU -->
         <button
           class="icon-btn"
-          style="margin-left: auto"
+          style="margin: 0 0 0 auto; width: 40px; height: 40px; min-width: 40px; padding: 0; display: flex; align-items: center; justify-content: center;"
           onclick="showSearch()"
         >
-          🔍
+          <div class="ios27-art" style="width: 30px; height: 30px;">
+            <svg viewBox="0 0 100 100" style="overflow: visible;">
+              <defs>
+                <linearGradient id="search-metal" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#e5e5ea" />
+                  <stop offset="50%" stop-color="#a1a1a6" />
+                  <stop offset="100%" stop-color="#636366" />
+                </linearGradient>
+                <linearGradient id="search-lens" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="rgba(255, 255, 255, 0.85)" />
+                  <stop offset="35%" stop-color="rgba(255, 255, 255, 0.1)" />
+                  <stop offset="60%" stop-color="rgba(255, 255, 255, 0.0)" />
+                  <stop offset="100%" stop-color="rgba(255, 255, 255, 0.5)" />
+                </linearGradient>
+              </defs>
+              <g filter="url(#ios-extreme-pop)" transform="rotate(45 50 50)">
+                <rect x="43" y="62" width="14" height="28" rx="7" fill="url(#search-metal)" />
+                <rect x="45" y="64" width="3" height="24" rx="1.5" fill="rgba(255,255,255,0.6)" /> 
+                <rect x="45" y="58" width="10" height="6" fill="#636366" />
+                <rect x="45" y="58" width="10" height="2" fill="#3a3a3c" />
+                <circle cx="50" cy="36" r="26" fill="url(#search-metal)" />
+                <circle cx="50" cy="36" r="21" fill="#48484a" />
+                <circle cx="50" cy="36" r="21" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" />
+                <circle cx="50" cy="36" r="20" fill="url(#search-lens)" />
+                <path d="M 36 26 A 15 15 0 0 1 50 18" fill="none" stroke="rgba(255,255,255,0.95)" stroke-width="2.5" stroke-linecap="round" />
+                <path d="M 62 44 A 15 15 0 0 1 55 52" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round" />
+              </g>
+            </svg>
+          </div>
         </button>
       </div>
 
@@ -4238,7 +4329,7 @@
         <div class="logo">
           <button
             class="icon-btn btn-out"
-            style="font-size: 28px"
+            style="font-size: 30px"
             onclick="toggleMenu()"
           >
             ≡
@@ -4295,14 +4386,37 @@
         <div class="sv-container">
           <h1 class="sv-title">Tìm kiếm</h1>
           <div class="sv-input-wrapper">
-            <span
-              style="
-                font-size: 20px;
-                color: var(--text-sub);
-                margin-right: 10px;
-              "
-              >🔍</span
-            ><input
+            <!-- Icon Kính lúp kim loại Xám Bạc đồng bộ (Đã tăng lên 30px) -->
+            <div class="ios27-art" style="width: 30px; height: 30px; margin-right: 10px;">
+              <svg viewBox="0 0 100 100" style="overflow: visible;">
+                <defs>
+                  <linearGradient id="search-metal-2" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#e5e5ea" />
+                    <stop offset="50%" stop-color="#a1a1a6" />
+                    <stop offset="100%" stop-color="#636366" />
+                  </linearGradient>
+                  <linearGradient id="search-lens-2" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="rgba(255, 255, 255, 0.85)" />
+                    <stop offset="35%" stop-color="rgba(255, 255, 255, 0.1)" />
+                    <stop offset="60%" stop-color="rgba(255, 255, 255, 0.0)" />
+                    <stop offset="100%" stop-color="rgba(255, 255, 255, 0.5)" />
+                  </linearGradient>
+                </defs>
+                <g filter="url(#ios-extreme-pop)" transform="rotate(45 50 50)">
+                  <rect x="43" y="62" width="14" height="28" rx="7" fill="url(#search-metal-2)" />
+                  <rect x="45" y="64" width="3" height="24" rx="1.5" fill="rgba(255,255,255,0.6)" /> 
+                  <rect x="45" y="58" width="10" height="6" fill="#636366" />
+                  <rect x="45" y="58" width="10" height="2" fill="#3a3a3c" />
+                  <circle cx="50" cy="36" r="26" fill="url(#search-metal-2)" />
+                  <circle cx="50" cy="36" r="21" fill="#48484a" />
+                  <circle cx="50" cy="36" r="21" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" />
+                  <circle cx="50" cy="36" r="20" fill="url(#search-lens-2)" />
+                  <path d="M 36 26 A 15 15 0 0 1 50 18" fill="none" stroke="rgba(255,255,255,0.95)" stroke-width="2.5" stroke-linecap="round" />
+                  <path d="M 62 44 A 15 15 0 0 1 55 52" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.5" stroke-linecap="round" />
+                </g>
+              </svg>
+            </div>
+            <input
               type="text"
               id="sv-input"
               placeholder="Tìm kiếm cuộc trò chuyện"
@@ -5654,6 +5768,29 @@
             />
           </filter>
 
+          <filter
+            id="ios-extreme-pop"
+            x="-30%"
+            y="-30%"
+            width="160%"
+            height="160%"
+          >
+            <feDropShadow
+              dx="0"
+              dy="3"
+              stdDeviation="2"
+              flood-color="#000"
+              flood-opacity="0.5"
+            />
+            <feDropShadow
+              dx="0"
+              dy="1"
+              stdDeviation="0.5"
+              flood-color="#000"
+              flood-opacity="0.3"
+            />
+          </filter>
+
           <linearGradient id="g-dark" x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stop-color="#3a3a3c" />
             <stop offset="100%" stop-color="#111111" />
@@ -5706,7 +5843,7 @@
       </svg>
 
       <style>
-        /* TỈ LỆ VÀNG 26PX */
+        /* TỈ LỆ VÀNG 26PX CHO ICON */
         .ios27-art {
           width: 26px;
           height: 26px;
@@ -5733,84 +5870,83 @@
           transform: scale(1.08);
         }
 
-        /* TINH CHỈNH ĐỘ CAO CHỈ 1 CHÚT XÍU (padding giảm từ 10px xuống 9px) */
         .d-item {
           gap: 12px !important;
           padding: 9px 15px !important;
         }
       </style>
 
-      <!-- 1. Hoạt động -->
+      <!-- 1. Hoạt động (Clock Y Chang Hình Mẫu) -->
       <div
         class="d-item"
         onclick="openSetting('Hoạt động của tôi', getHoatDongContent())"
       >
         <div class="ios27-art">
           <svg viewBox="0 0 120 120">
-            <rect
-              x="0"
-              y="0"
-              width="120"
-              height="120"
-              rx="28"
-              fill="url(#g-dark)"
-            />
-            <rect
-              x="0"
-              y="0"
-              width="120"
-              height="120"
-              rx="28"
-              fill="url(#g-glass)"
-            />
-            <rect
-              x="0"
-              y="0"
-              width="120"
-              height="120"
-              rx="28"
-              fill="none"
-              stroke="rgba(255,255,255,0.2)"
-              stroke-width="2"
-            />
-            <g filter="url(#ios-drop-3d)">
-              <circle
-                cx="60"
-                cy="60"
-                r="36"
-                fill="#111"
-                stroke="rgba(255,255,255,0.2)"
-                stroke-width="2"
+            <rect x="0" y="0" width="120" height="120" rx="28" fill="#1c1c1e" />
+            <g filter="url(#ios-extreme-pop)">
+              <circle cx="60" cy="60" r="48" fill="#fdfdfd" />
+              <!-- 12 Chữ Số Vòng Tròn -->
+              <g
+                font-family="-apple-system, system-ui, sans-serif"
+                font-weight="700"
+                font-size="14"
+                fill="#000"
+                text-anchor="middle"
+              >
+                <text x="60" y="24" dy=".35em">12</text>
+                <text x="78" y="28" dy=".35em">1</text>
+                <text x="92" y="42" dy=".35em">2</text>
+                <text x="96" y="60" dy=".35em">3</text>
+                <text x="92" y="78" dy=".35em">4</text>
+                <text x="78" y="92" dy=".35em">5</text>
+                <text x="60" y="96" dy=".35em">6</text>
+                <text x="42" y="92" dy=".35em">7</text>
+                <text x="28" y="78" dy=".35em">8</text>
+                <text x="24" y="60" dy=".35em">9</text>
+                <text x="28" y="42" dy=".35em">10</text>
+                <text x="42" y="28" dy=".35em">11</text>
+              </g>
+              <!-- Kim Giờ, Kim Phút, Kim Giây -->
+              <line
+                x1="60"
+                y1="60"
+                x2="40"
+                y2="45"
+                stroke="#222"
+                stroke-width="6"
+                stroke-linecap="round"
+                filter="drop-shadow(0 2px 2px rgba(0,0,0,0.4))"
               />
-              <circle
-                cx="60"
-                cy="60"
-                r="30"
-                fill="none"
-                stroke="#fff"
-                stroke-width="2"
-                stroke-dasharray="2 7"
-              />
-              <path
-                d="M 60 60 L 60 32 M 60 60 L 78 60"
-                stroke="#fff"
+              <line
+                x1="60"
+                y1="60"
+                x2="84"
+                y2="42"
+                stroke="#222"
                 stroke-width="4.5"
                 stroke-linecap="round"
+                filter="drop-shadow(0 2px 2px rgba(0,0,0,0.4))"
               />
-              <path
-                d="M 60 60 L 46 74"
-                stroke="#ff3b30"
-                stroke-width="2.5"
+              <line
+                x1="60"
+                y1="60"
+                x2="60"
+                y2="92"
+                stroke="#ff9500"
+                stroke-width="2"
                 stroke-linecap="round"
+                filter="drop-shadow(0 1px 1px rgba(0,0,0,0.2))"
               />
-              <circle cx="60" cy="60" r="4.5" fill="#ff3b30" />
+              <circle cx="60" cy="60" r="3.5" fill="#ff9500" />
+              <circle cx="60" cy="60" r="1.2" fill="#1c1c1e" />
             </g>
           </svg>
         </div>
         <span>Hoạt động</span>
       </div>
 
-      <!-- 2. Trí thông minh cá nhân -->
+      <!-- 2. Trí thông minh cá nhân (Siri Orb Có Chữ S Quang Phổ) -->
       <div
         class="d-item"
         onclick="
@@ -5819,53 +5955,53 @@
       >
         <div class="ios27-art">
           <svg viewBox="0 0 120 120">
-            <rect
-              x="0"
-              y="0"
-              width="120"
-              height="120"
-              rx="28"
-              fill="url(#g-dark)"
-            />
-            <rect
-              x="0"
-              y="0"
-              width="120"
-              height="120"
-              rx="28"
-              fill="url(#g-glass)"
-            />
-            <rect
-              x="0"
-              y="0"
-              width="120"
-              height="120"
-              rx="28"
+            <defs>
+              <radialGradient id="orb-base" cx="50%" cy="50%" r="50%">
+                <stop offset="60%" stop-color="#2c2c2e" />
+                <stop offset="100%" stop-color="#000000" />
+              </radialGradient>
+              <linearGradient
+                id="orb-spectrum"
+                x1="0%"
+                y1="50%"
+                x2="100%"
+                y2="50%"
+              >
+                <stop offset="0%" stop-color="#4ea2ff" />
+                <stop offset="50%" stop-color="#ffffff" />
+                <stop offset="100%" stop-color="#ffb88c" />
+              </linearGradient>
+            </defs>
+            <rect x="0" y="0" width="120" height="120" rx="28" fill="#1c1c1e" />
+            <circle cx="60" cy="60" r="44" fill="url(#orb-base)" />
+            <circle
+              cx="60"
+              cy="60"
+              r="44"
               fill="none"
-              stroke="rgba(255,255,255,0.2)"
+              stroke="rgba(255,255,255,0.4)"
+              stroke-width="1.5"
+            />
+            <path
+              d="M 22 55 C 30 40, 50 35, 65 50 C 80 65, 90 75, 98 60"
+              fill="none"
+              stroke="url(#orb-spectrum)"
+              stroke-width="10"
+              filter="blur(2.5px)"
+              opacity="0.85"
+            />
+            <path
+              d="M 22 55 C 30 40, 50 35, 65 50 C 80 65, 90 75, 98 60"
+              fill="none"
+              stroke="#ffffff"
               stroke-width="2"
             />
-            <g filter="url(#ios-drop-3d)">
-              <path
-                d="M60 15 C 60 50, 50 60, 15 60 C 50 60, 60 70, 60 105 C 60 70, 70 60, 105 60 C 70 60, 60 50, 60 15 Z"
-                fill="url(#g-ai)"
-              />
-              <path
-                d="M60 25 C 60 55, 55 60, 25 60 C 55 60, 60 65, 60 95 C 60 65, 65 60, 95 60 C 65 60, 60 55, 60 25 Z"
-                fill="#ffffff"
-                opacity="0.9"
-              />
-              <path
-                d="M85 25 C 85 40, 80 45, 65 45 C 80 45, 85 50, 85 65 C 85 50, 90 45, 105 45 C 90 45, 85 40, 85 25 Z"
-                fill="url(#g-ai)"
-              />
-            </g>
           </svg>
         </div>
         <span>Trí thông minh cá nhân</span>
       </div>
 
-      <!-- 3. Nhập bộ nhớ -->
+      <!-- 3. Nhập bộ nhớ (Apple Folder Chuẩn) -->
       <div
         class="d-item"
         onclick="
@@ -5874,39 +6010,26 @@
       >
         <div class="ios27-art">
           <svg viewBox="0 0 120 120">
-            <rect
-              x="0"
-              y="0"
-              width="120"
-              height="120"
-              rx="28"
-              fill="url(#g-white)"
-            />
-            <rect
-              x="0"
-              y="0"
-              width="120"
-              height="120"
-              rx="28"
-              fill="url(#g-glass)"
-            />
-            <rect
-              x="0"
-              y="0"
-              width="120"
-              height="120"
-              rx="28"
-              fill="none"
-              stroke="rgba(255,255,255,0.7)"
-              stroke-width="2"
-            />
-            <g filter="url(#ios-drop-3d)">
+            <rect x="0" y="0" width="120" height="120" rx="28" fill="#ffffff" />
+            <g filter="url(#ios-extreme-pop)">
+              <!-- Bìa Sau -->
               <path
-                d="M 20 40 L 45 40 L 55 52 L 100 52 L 100 85 L 20 85 Z"
-                fill="#89c4f4"
+                d="M 18 42 C 18 38, 20 36, 24 36 L 46 36 C 48 36, 50 38, 52 42 L 56 48 L 96 48 C 100 48, 102 50, 102 54 L 102 86 C 102 90, 100 92, 96 92 L 24 92 C 20 92, 18 90, 18 86 Z"
+                fill="#60a5fa"
               />
-              <rect x="30" y="32" width="60" height="40" fill="#ffffff" />
-              <path d="M 15 52 L 105 52 L 95 90 L 25 90 Z" fill="#007aff" />
+              <!-- Giấy Trắng -->
+              <rect x="24" y="44" width="72" height="40" fill="#ffffff" />
+              <!-- Bìa Trước -->
+              <path
+                d="M 18 56 C 18 52, 20 50, 24 50 L 96 50 C 100 50, 102 52, 102 56 L 102 86 C 102 90, 100 92, 96 92 L 24 92 C 20 92, 18 90, 18 86 Z"
+                fill="url(#g-blue)"
+              />
+              <path
+                d="M 19 54 L 101 54"
+                stroke="rgba(255,255,255,0.6)"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
             </g>
           </svg>
         </div>
@@ -5914,7 +6037,7 @@
         <span class="s-badge">Mới</span>
       </div>
 
-      <!-- 4. Hành động đã lên lịch -->
+      <!-- 4. Hành động đã lên lịch (Reminders Chuẩn 3 Chấm Có Hào Quang) -->
       <div
         class="d-item"
         onclick="
@@ -5923,59 +6046,75 @@
       >
         <div class="ios27-art">
           <svg viewBox="0 0 120 120">
-            <rect
-              x="0"
-              y="0"
-              width="120"
-              height="120"
-              rx="28"
-              fill="url(#g-white)"
-            />
-            <rect
-              x="0"
-              y="0"
-              width="120"
-              height="120"
-              rx="28"
-              fill="url(#g-glass)"
-            />
-            <rect
-              x="0"
-              y="0"
-              width="120"
-              height="120"
-              rx="28"
-              fill="none"
-              stroke="rgba(255,255,255,0.7)"
-              stroke-width="2"
-            />
-            <g filter="url(#ios-drop-light)">
-              <circle cx="32" cy="40" r="7" fill="#ff3b30" />
-              <rect x="52" y="36" width="46" height="8" rx="4" fill="#d1d5db" />
-              <circle cx="32" cy="60" r="7" fill="#ff9500" />
-              <rect x="52" y="56" width="36" height="8" rx="4" fill="#d1d5db" />
-              <circle cx="32" cy="80" r="7" fill="#ffcc00" />
-              <rect x="52" y="76" width="46" height="8" rx="4" fill="#d1d5db" />
+            <rect x="0" y="0" width="120" height="120" rx="28" fill="#ffffff" />
+            <g filter="drop-shadow(0 2px 4px rgba(0,0,0,0.15))">
+              <circle cx="34" cy="34" r="14" fill="rgba(0,122,255,0.15)" />
+              <circle cx="34" cy="34" r="7" fill="#007aff" />
+              <line
+                x1="58"
+                y1="34"
+                x2="98"
+                y2="34"
+                stroke="#c7c7cc"
+                stroke-width="6"
+                stroke-linecap="round"
+              />
+
+              <circle cx="34" cy="60" r="14" fill="rgba(255,59,48,0.15)" />
+              <circle cx="34" cy="60" r="7" fill="#ff3b30" />
+              <line
+                x1="58"
+                y1="60"
+                x2="98"
+                y2="60"
+                stroke="#c7c7cc"
+                stroke-width="6"
+                stroke-linecap="round"
+              />
+
+              <circle cx="34" cy="86" r="14" fill="rgba(255,149,0,0.15)" />
+              <circle cx="34" cy="86" r="7" fill="#ff9500" />
+              <line
+                x1="58"
+                y1="86"
+                x2="98"
+                y2="86"
+                stroke="#c7c7cc"
+                stroke-width="6"
+                stroke-linecap="round"
+              />
             </g>
           </svg>
         </div>
         <span>Hành động đã lên lịch</span>
       </div>
 
-      <!-- 5. Đường liên kết công khai -->
+      <!-- 5. Đường liên kết công khai (Links Nền Xanh Tươi Đan Vào Nhau) -->
       <div
         class="d-item"
         onclick="openSetting('Liên kết công khai', getPublicLinkContent())"
       >
         <div class="ios27-art">
           <svg viewBox="0 0 120 120">
+            <defs>
+              <linearGradient
+                id="g-link-blue-2"
+                x1="0%"
+                y1="0%"
+                x2="0%"
+                y2="100%"
+              >
+                <stop offset="0%" stop-color="#4ea2ff" />
+                <stop offset="100%" stop-color="#0066ff" />
+              </linearGradient>
+            </defs>
             <rect
               x="0"
               y="0"
               width="120"
               height="120"
               rx="28"
-              fill="url(#g-green)"
+              fill="url(#g-link-blue-2)"
             />
             <rect
               x="0"
@@ -5995,32 +6134,19 @@
               stroke="rgba(255,255,255,0.4)"
               stroke-width="2"
             />
-            <g transform="rotate(-45 60 60)" filter="url(#ios-drop-3d)">
-              <rect
-                x="32"
-                y="44"
-                width="36"
-                height="24"
-                rx="12"
-                fill="none"
-                stroke="#e2e8f0"
-                stroke-width="9"
-              />
-              <rect
-                x="52"
-                y="44"
-                width="36"
-                height="24"
-                rx="12"
+            <g filter="url(#ios-extreme-pop)">
+              <path
+                d="M 46 44 H 38 A 16 16 0 0 0 38 76 H 52 A 16 16 0 0 0 66 64"
                 fill="none"
                 stroke="#ffffff"
-                stroke-width="9"
+                stroke-width="12"
+                stroke-linecap="round"
               />
               <path
-                d="M 44 68 H 56 A 12 12 0 0 0 68 56 V 52"
+                d="M 74 76 H 82 A 16 16 0 0 0 82 44 H 68 A 16 16 0 0 0 54 56"
                 fill="none"
-                stroke="#e2e8f0"
-                stroke-width="9"
+                stroke="#ffffff"
+                stroke-width="12"
                 stroke-linecap="round"
               />
             </g>
@@ -6029,26 +6155,35 @@
         <span>Đường liên kết công khai của bạn</span>
       </div>
 
-      <!-- 6. Giao diện -->
+      <!-- 6. Giao diện (Paint Roller Sứ Khắc Lỗ Rỗng) -->
       <div class="d-item flex-between" onclick="toggleD('theme-menu', event)">
         <div style="display: flex; align-items: center; gap: 12px">
           <div class="ios27-art">
             <svg viewBox="0 0 120 120">
+              <defs>
+                <linearGradient
+                  id="g-theme-bg"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="100%"
+                >
+                  <stop offset="0%" stop-color="#3b82f6" />
+                  <stop offset="50%" stop-color="#d946ef" />
+                  <stop offset="100%" stop-color="#f97316" />
+                </linearGradient>
+                <mask id="paint-mask">
+                  <rect width="120" height="120" fill="#ffffff" />
+                  <circle cx="60" cy="94" r="5" fill="#000000" />
+                </mask>
+              </defs>
               <rect
                 x="0"
                 y="0"
                 width="120"
                 height="120"
                 rx="28"
-                fill="url(#g-white)"
-              />
-              <rect
-                x="0"
-                y="0"
-                width="120"
-                height="120"
-                rx="28"
-                fill="url(#g-glass)"
+                fill="url(#g-theme-bg)"
               />
               <rect
                 x="0"
@@ -6057,49 +6192,23 @@
                 height="120"
                 rx="28"
                 fill="none"
-                stroke="rgba(255,255,255,0.7)"
+                stroke="rgba(255,255,255,0.4)"
                 stroke-width="2"
               />
-              <g filter="url(#ios-drop-3d)">
+              <g filter="url(#ios-extreme-pop)">
+                <rect
+                  x="28"
+                  y="26"
+                  width="64"
+                  height="30"
+                  rx="8"
+                  fill="#fbcfe8"
+                  opacity="0.95"
+                />
                 <path
-                  d="M 60 20 C 25 20, 20 50, 20 70 C 20 90, 40 100, 60 100 C 95 100, 100 80, 100 60 C 100 30, 85 20, 60 20 Z"
-                  fill="#f59e0b"
-                />
-                <circle
-                  cx="80"
-                  cy="75"
-                  r="8"
+                  d="M 28 56 H 92 V 62 C 92 72, 70 74, 68 84 V 96 C 68 102, 52 102, 52 96 V 84 C 50 74, 28 72, 28 62 Z"
                   fill="#ffffff"
-                  filter="url(#ios-drop-light)"
-                />
-                <circle
-                  cx="45"
-                  cy="40"
-                  r="7"
-                  fill="#ef4444"
-                  filter="url(#ios-drop-light)"
-                />
-                <circle
-                  cx="70"
-                  cy="40"
-                  r="7"
-                  fill="#3b82f6"
-                  filter="url(#ios-drop-light)"
-                />
-                <circle
-                  cx="40"
-                  cy="65"
-                  r="7"
-                  fill="#10b981"
-                  filter="url(#ios-drop-light)"
-                />
-                <circle
-                  cx="60"
-                  cy="80"
-                  r="7"
-                  fill="#f59e0b"
-                  stroke="#fff"
-                  stroke-width="2"
+                  mask="url(#paint-mask)"
                 />
               </g>
             </svg>
@@ -6127,7 +6236,7 @@
         </div>
       </div>
 
-      <!-- 7. Quản lý gói thuê bao -->
+      <!-- 7. Quản lý gói thuê bao (Ví Wallet 4 Thẻ) -->
       <div
         class="d-item"
         onclick="
@@ -6136,14 +6245,7 @@
       >
         <div class="ios27-art">
           <svg viewBox="0 0 120 120">
-            <rect
-              x="0"
-              y="0"
-              width="120"
-              height="120"
-              rx="28"
-              fill="url(#g-dark)"
-            />
+            <rect x="0" y="0" width="120" height="120" rx="28" fill="#1c1c1e" />
             <rect
               x="0"
               y="0"
@@ -6159,41 +6261,47 @@
               height="120"
               rx="28"
               fill="none"
-              stroke="rgba(255,255,255,0.2)"
+              stroke="rgba(255,255,255,0.15)"
               stroke-width="2"
             />
-            <g filter="url(#ios-drop-3d)">
+            <g filter="url(#ios-drop-light)">
               <rect
                 x="24"
-                y="34"
+                y="32"
                 width="72"
-                height="44"
-                rx="6"
-                fill="#4cd964"
-              />
-              <rect
-                x="24"
-                y="46"
-                width="72"
-                height="44"
-                rx="6"
-                fill="#ff9500"
-              />
-              <rect
-                x="24"
-                y="58"
-                width="72"
-                height="44"
-                rx="6"
+                height="20"
+                rx="4"
                 fill="#007aff"
               />
               <rect
                 x="24"
-                y="70"
+                y="42"
                 width="72"
-                height="24"
-                rx="6"
-                fill="#ffffff"
+                height="20"
+                rx="4"
+                fill="#ffcc00"
+              />
+              <rect
+                x="24"
+                y="52"
+                width="72"
+                height="20"
+                rx="4"
+                fill="#34c759"
+              />
+              <rect
+                x="24"
+                y="62"
+                width="72"
+                height="20"
+                rx="4"
+                fill="#ff3b30"
+              />
+            </g>
+            <g filter="url(#ios-extreme-pop)">
+              <path
+                d="M 20 72 C 20 66, 24 64, 28 64 H 44 C 48 64, 52 74, 60 74 C 68 74, 72 64, 76 64 H 92 C 96 64, 100 66, 100 72 V 94 C 100 100, 96 102, 90 102 H 30 C 24 102, 20 100, 20 94 Z"
+                fill="#f2f2f7"
               />
             </g>
           </svg>
@@ -6201,7 +6309,7 @@
         <span>Quản lý gói thuê bao</span>
       </div>
 
-      <!-- 8. Nâng cấp lên TNG AI Ultra -->
+      <!-- 8. Nâng cấp lên TNG AI Ultra (Tăng kích thước Scale(3.5) Và Căn Giữa) -->
       <div
         class="d-item"
         onclick="
@@ -6236,15 +6344,16 @@
               stroke="rgba(255,255,255,0.4)"
               stroke-width="2"
             />
+            <!-- Vòng lặp AI bên trong đã được tăng kích thước scale(3.5) và căn giữa chuẩn xác -->
             <g
-              transform="translate(30, 30) scale(2.5)"
+              transform="translate(18, 18) scale(3.5)"
               filter="url(#ios-drop-3d)"
             >
               <path
                 d="M12 3c.132 5.86 3.14 8.868 9 9-5.86.132-8.868 3.14-9 9-.132-5.86-3.14-8.868-9-9 5.86-.132 8.868-3.14 9-9Z"
                 fill="none"
                 stroke="#ffffff"
-                stroke-width="2.2"
+                stroke-width="1.6"
                 stroke-linecap="round"
                 stroke-linejoin="round"
               />
@@ -6252,7 +6361,7 @@
                 d="M19 3c.046 2.05 1.1 3.104 3.15 3.15-2.05.046-3.104 1.1-3.15 3.15-.046-2.05-1.1-3.104-3.15-3.15C17.9 6.104 18.954 5.05 19 3Z"
                 fill="none"
                 stroke="#ffffff"
-                stroke-width="2.2"
+                stroke-width="1.6"
                 stroke-linecap="round"
                 stroke-linejoin="round"
               />
@@ -6262,29 +6371,53 @@
         <span>Nâng cấp lên TNG AI Ultra</span>
       </div>
 
-      <!-- 9. NotebookLM -->
+      <!-- 9. NotebookLM (Sổ vàng Notes Răng Cưa Đứt Đoạn) -->
       <div
         class="d-item"
         onclick="openSetting('NotebookLM', SETTINGS_CONTENT.notebookLM)"
       >
         <div class="ios27-art">
           <svg viewBox="0 0 120 120">
-            <rect
-              x="0"
-              y="0"
-              width="120"
-              height="120"
-              rx="28"
-              fill="url(#g-yellow)"
-            />
-            <rect
-              x="0"
-              y="0"
-              width="120"
-              height="120"
-              rx="28"
-              fill="url(#g-glass)"
-            />
+            <g filter="url(#ios-drop-3d)">
+              <rect
+                x="0"
+                y="0"
+                width="120"
+                height="120"
+                rx="28"
+                fill="#fdfdfd"
+              />
+              <path
+                d="M 0 42 L 120 42 L 120 28 A 28 28 0 0 0 92 0 L 28 0 A 28 28 0 0 0 0 28 Z"
+                fill="#ffcc00"
+              />
+              <line
+                x1="8"
+                y1="50"
+                x2="112"
+                y2="50"
+                stroke="#c7c7cc"
+                stroke-width="2.5"
+                stroke-dasharray="0 8"
+                stroke-linecap="round"
+              />
+              <line
+                x1="0"
+                y1="70"
+                x2="120"
+                y2="70"
+                stroke="#d1d1d6"
+                stroke-width="1.5"
+              />
+              <line
+                x1="0"
+                y1="90"
+                x2="120"
+                y2="90"
+                stroke="#d1d1d6"
+                stroke-width="1.5"
+              />
+            </g>
             <rect
               x="0"
               y="0"
@@ -6292,80 +6425,38 @@
               height="120"
               rx="28"
               fill="none"
-              stroke="rgba(255,255,255,0.4)"
-              stroke-width="2"
+              stroke="rgba(0,0,0,0.1)"
+              stroke-width="1.5"
             />
-            <g filter="url(#ios-drop-3d)">
-              <rect
-                x="25"
-                y="25"
-                width="70"
-                height="70"
-                rx="6"
-                fill="#ffffff"
-              />
-              <line
-                x1="40"
-                y1="25"
-                x2="40"
-                y2="95"
-                stroke="#ef4444"
-                stroke-width="2"
-                opacity="0.6"
-              />
-              <line
-                x1="40"
-                y1="45"
-                x2="85"
-                y2="45"
-                stroke="#3b82f6"
-                stroke-width="2"
-                opacity="0.4"
-              />
-              <line
-                x1="40"
-                y1="60"
-                x2="85"
-                y2="60"
-                stroke="#3b82f6"
-                stroke-width="2"
-                opacity="0.4"
-              />
-              <line
-                x1="40"
-                y1="75"
-                x2="70"
-                y2="75"
-                stroke="#3b82f6"
-                stroke-width="2"
-                opacity="0.4"
-              />
-            </g>
           </svg>
         </div>
         <span>NotebookLM</span>
       </div>
 
-      <!-- 10. Cập nhật ứng dụng -->
+      <!-- 10. Cập nhật ứng dụng (Mũi Tên Download Neon Sắc Nét) -->
       <div class="d-item flex-between" onclick="openUpdateSetting()">
         <div style="display: flex; align-items: center; gap: 12px">
           <div class="ios27-art">
             <svg viewBox="0 0 120 120">
+              <defs>
+                <linearGradient
+                  id="g-update-neon"
+                  x1="0%"
+                  y1="0%"
+                  x2="0%"
+                  y2="100%"
+                >
+                  <stop offset="0%" stop-color="#4ade80" />
+                  <stop offset="100%" stop-color="#15803d" />
+                </linearGradient>
+              </defs>
               <rect
                 x="0"
                 y="0"
                 width="120"
                 height="120"
                 rx="28"
-                fill="url(#g-teal)"
-              />
-              <rect
-                x="0"
-                y="0"
-                width="120"
-                height="120"
-                rx="28"
-                fill="url(#g-glass)"
+                fill="url(#g-update-neon)"
               />
               <rect
                 x="0"
@@ -6374,28 +6465,17 @@
                 height="120"
                 rx="28"
                 fill="none"
-                stroke="rgba(255,255,255,0.4)"
+                stroke="rgba(255,255,255,0.3)"
                 stroke-width="2"
               />
-              <g filter="url(#ios-drop-3d)">
-                <rect
-                  x="30"
-                  y="80"
-                  width="60"
-                  height="8"
-                  rx="4"
-                  fill="#ffffff"
-                />
+              <g filter="url(#ios-drop-light)">
                 <path
-                  d="M 52 28 L 68 28 L 68 55 L 82 55 L 60 78 L 38 55 L 52 55 Z"
-                  fill="#ffffff"
+                  d="M 60 25 V 85 M 35 60 L 60 85 L 85 60"
+                  fill="none"
                   stroke="#ffffff"
-                  stroke-width="4"
+                  stroke-width="12"
+                  stroke-linecap="round"
                   stroke-linejoin="round"
-                />
-                <path
-                  d="M 52 28 L 68 28 L 68 55 L 82 55 L 60 78 L 38 55 L 52 55 Z"
-                  fill="url(#g-glass)"
                 />
               </g>
             </svg>
@@ -6416,7 +6496,7 @@
         >
       </div>
 
-      <!-- 11. Gửi ý kiến phản hồi -->
+      <!-- 11. Gửi ý kiến phản hồi (Kính Trắng Mờ Nền Tím Căn Giữa Hoàn Hảo) -->
       <div
         class="d-item"
         onclick="openSetting('Gửi ý kiến phản hồi', getPhanHoiContent(), true)"
@@ -6431,77 +6511,71 @@
               rx="28"
               fill="url(#g-purple)"
             />
-            <rect
-              x="0"
-              y="0"
-              width="120"
-              height="120"
-              rx="28"
-              fill="url(#g-glass)"
-            />
-            <rect
-              x="0"
-              y="0"
-              width="120"
-              height="120"
-              rx="28"
-              fill="none"
-              stroke="rgba(255,255,255,0.3)"
-              stroke-width="2"
-            />
             <g filter="url(#ios-drop-3d)">
               <path
-                d="M 60 30 C 35 30, 22 45, 22 62 C 22 74, 30 82, 42 87 L 32 100 C 42 100, 52 93, 57 89 C 59 89.5, 61 90, 64 90 C 89 90, 102 75, 102 62 C 102 45, 85 30, 60 30 Z"
-                fill="#ffffff"
+                d="M 20 58 C 20 36, 36 28, 60 28 C 84 28, 100 36, 100 58 C 100 80, 84 88, 60 88 C 48 88, 40 86, 34 86 L 22 96 V 78 C 20 73, 20 66, 20 58 Z"
+                fill="rgba(255,255,255,0.85)"
+                stroke="rgba(255,255,255,0.6)"
+                stroke-width="1.5"
               />
-              <rect x="56" y="46" width="8" height="20" rx="4" fill="#a855f7" />
-              <circle cx="60" cy="74" r="4.5" fill="#a855f7" />
+              <line
+                x1="60"
+                y1="42"
+                x2="60"
+                y2="64"
+                stroke="#7e22ce"
+                stroke-width="8"
+                stroke-linecap="round"
+                filter="drop-shadow(inset 0 2px 2px rgba(0,0,0,0.5))"
+              />
+              <circle cx="60" cy="76" r="4.5" fill="#7e22ce" />
             </g>
           </svg>
         </div>
         <span>Gửi ý kiến phản hồi</span>
       </div>
 
-      <!-- 12. Trợ giúp -->
+      <!-- 12. Trợ giúp (iMessage Bong Bóng Xanh Căn Giữa Hoàn Hảo) -->
       <div class="d-item flex-between" onclick="toggleD('help-menu', event)">
         <div style="display: flex; align-items: center; gap: 12px">
           <div class="ios27-art">
             <svg viewBox="0 0 120 120">
+              <defs>
+                <linearGradient
+                  id="g-help-blue"
+                  x1="0%"
+                  y1="0%"
+                  x2="0%"
+                  y2="100%"
+                >
+                  <stop offset="0%" stop-color="#4ea2ff" />
+                  <stop offset="100%" stop-color="#0066ff" />
+                </linearGradient>
+              </defs>
               <rect
                 x="0"
                 y="0"
                 width="120"
                 height="120"
                 rx="28"
-                fill="url(#g-blue)"
-              />
-              <rect
-                x="0"
-                y="0"
-                width="120"
-                height="120"
-                rx="28"
-                fill="url(#g-glass)"
-              />
-              <rect
-                x="0"
-                y="0"
-                width="120"
-                height="120"
-                rx="28"
-                fill="none"
-                stroke="rgba(255,255,255,0.3)"
-                stroke-width="2"
+                fill="url(#g-help-blue)"
               />
               <g filter="url(#ios-drop-3d)">
                 <path
-                  d="M 46 48 C 46 32, 74 32, 74 48 C 74 60, 60 62, 60 74"
-                  fill="none"
-                  stroke="#ffffff"
-                  stroke-width="12"
-                  stroke-linecap="round"
+                  d="M 20 58 C 20 36, 36 28, 60 28 C 84 28, 100 36, 100 58 C 100 80, 84 88, 60 88 C 48 88, 40 86, 34 86 L 22 96 V 78 C 20 73, 20 66, 20 58 Z"
+                  fill="#ffffff"
                 />
-                <circle cx="60" cy="92" r="7" fill="#ffffff" />
+                <text
+                  x="60"
+                  y="75"
+                  font-family="-apple-system, system-ui, sans-serif"
+                  font-weight="900"
+                  font-size="44"
+                  text-anchor="middle"
+                  fill="#0066ff"
+                >
+                  ?
+                </text>
               </g>
             </svg>
           </div>
