@@ -3623,38 +3623,35 @@
       }
 
       /* ============================================================ */
-      /* ĐỒNG BỘ TỌA ĐỘ 2 NÚT MENU VÀ ÉP SÁT GÓC (TRÙNG KHỚP 100%)    */
+      /* CĂN CHỈNH THỊ GIÁC (OPTICAL ALIGNMENT) MENU & HEADER         */
       /* ============================================================ */
 
-      /* 1. Ép lề trái của Header chính bằng đúng lề trái của Sidebar (15px) để sát góc */
+      /* 1. Ép lề trái để sát góc */
       .header {
         padding-left: 15px !important;
         padding-right: 15px !important;
       }
+      .logo {
+        gap: 10px !important;
+      }
 
-      /* 2. Đóng đinh kích thước và xóa mọi lề thừa của cả 2 nút (Mở và Đóng) */
+      /* 2. Menu 33px và Vùng chạm 40px tạo không gian thở cân đối */
       .sb-header .btn-in,
       .header .btn-out {
-        width: 40px !important;
-        height: 40px !important;
-        min-width: 40px !important;
         padding: 0 !important;
         margin: 0 !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        font-size: 30px !important;
-        line-height: 1 !important; /* Dập tắt độ lệch tâm của font chữ */
+        font-size: 33px !important; /* Chốt hạ 33px cho độ lớn hoàn hảo nhất */
+        line-height: 1 !important;
+        width: 40px !important; /* Vẫn giữ vùng nền 40px để khi hover có vòng tròn đẹp mắt */
+        height: 40px !important;
+        min-width: 40px !important;
       }
 
-      /* 3. Khoảng cách cố định cực chuẩn giữa nút và chữ TNG AI 1.0 */
-      .logo {
-        gap: 10px !important;
-      }
-
-      /* 4. Định dạng lại hiệu ứng lướt ngang trên Máy tính (PC) */
+      /* 3. Logic đóng mở trên PC */
       @media (min-width: 769px) {
-        /* Khi Sidebar mở: Nút ngoài thu nhỏ về 0 */
         .sidebar:not(.collapsed) + .main .header .btn-out {
           width: 0 !important;
           min-width: 0 !important;
@@ -3662,7 +3659,6 @@
           pointer-events: none !important;
           overflow: hidden !important;
         }
-        /* Khi Sidebar đóng: Nút ngoài bung ra đúng 40px */
         .sidebar.collapsed + .main .header .btn-out {
           width: 40px !important;
           min-width: 40px !important;
@@ -3671,7 +3667,7 @@
         }
       }
 
-      /* 5. Ghi đè lại chống xô lệch trên Điện thoại (Mobile) */
+      /* 4. Logic đóng mở trên Mobile */
       @media (max-width: 768px) {
         .sidebar + .main .header .btn-out {
           width: 40px !important;
@@ -3683,6 +3679,59 @@
           opacity: 0 !important;
           pointer-events: none !important;
         }
+      }
+
+      /* ============================================================ */
+      /* ÁNH SÁNG AI (NHỊP THỞ CHẬM MƯỢT MÀ & BÚT SÁNG TĨNH)          */
+      /* ============================================================ */
+
+      /* --- 1. HOẠT ẢNH NHỊP THỞ NHẸ NHÀNG (Kéo dài 4s, không tắt hẳn) --- */
+      
+      /* Nhịp thở cho nút Nâng cấp Ultra (Vỏ ngoài) */
+      @keyframes ai-breathe-upgrade {
+          0% { box-shadow: 0 0 5px rgba(155, 114, 203, 0.3), 0 0 10px rgba(66, 133, 244, 0.2); border-color: rgba(155, 114, 203, 0.4); }
+          50% { box-shadow: 0 0 15px rgba(155, 114, 203, 0.7), 0 0 25px rgba(66, 133, 244, 0.5); border-color: rgba(155, 114, 203, 0.8); }
+          100% { box-shadow: 0 0 5px rgba(155, 114, 203, 0.3), 0 0 10px rgba(66, 133, 244, 0.2); border-color: rgba(155, 114, 203, 0.4); }
+      }
+
+      /* Nhịp thở cho Logo Ngôi sao (Nút Ultra + Chip Live Mới) */
+      @keyframes ai-breathe-svg {
+          0% { filter: drop-shadow(0 0 4px rgba(155, 114, 203, 0.5)) drop-shadow(0 0 8px rgba(66, 133, 244, 0.3)); }
+          50% { filter: drop-shadow(0 0 12px rgba(155, 114, 203, 1)) drop-shadow(0 0 20px rgba(66, 133, 244, 0.9)); }
+          100% { filter: drop-shadow(0 0 4px rgba(155, 114, 203, 0.5)) drop-shadow(0 0 8px rgba(66, 133, 244, 0.3)); }
+      }
+
+      /* Nhịp thở cho Nút tròn LIVE AI (Dưới thanh Chat) */
+      @keyframes ai-breathe-btn {
+          0% { box-shadow: 0 0 10px rgba(155, 114, 203, 0.5), 0 0 15px rgba(66, 133, 244, 0.4), inset 0 2px 1px rgba(255, 255, 255, 0.3), inset 0 -2px 1px rgba(0, 0, 0, 0.2); }
+          50% { box-shadow: 0 0 20px rgba(155, 114, 203, 0.9), 0 0 35px rgba(66, 133, 244, 0.7), inset 0 2px 1px rgba(255, 255, 255, 0.3), inset 0 -2px 1px rgba(0, 0, 0, 0.2); }
+          100% { box-shadow: 0 0 10px rgba(155, 114, 203, 0.5), 0 0 15px rgba(66, 133, 244, 0.4), inset 0 2px 1px rgba(255, 255, 255, 0.3), inset 0 -2px 1px rgba(0, 0, 0, 0.2); }
+      }
+
+      /* --- 2. GẮN HIỆU ỨNG VÀO CÁC NÚT TƯƠNG ỨNG --- */
+
+      /* Nút Nâng cấp Ultra (Vỏ ngoài) */
+      .header-right .upgrade-btn { 
+          animation: ai-breathe-upgrade 4s infinite ease-in-out !important; 
+      }
+      
+      /* Logo Ngôi sao (Nút Ultra + Chip Live Mới) */
+      .header-right .upgrade-btn svg,
+      .chips .chip:first-child .si-ic svg { 
+          animation: ai-breathe-svg 4s infinite ease-in-out !important;
+          overflow: visible !important; 
+      }
+
+      /* Nút tròn LIVE AI (Dưới thanh Chat) */
+      #live-btn-home,
+      #live-btn-chat {
+          animation: ai-breathe-btn 4s infinite ease-in-out !important;
+      }
+
+      /* --- 3. CÂY BÚT ĐA SẮC (SÁNG LIÊN TỤC KHÔNG ĐỔI) --- */
+      .sb-item[onclick="newChat()"] .ios27-art svg > g:nth-child(2) {
+          /* Chỉ phủ filter tĩnh, hoàn toàn không gắn animation */
+          filter: url(#ios-extreme-pop) drop-shadow(0 0 10px rgba(155, 114, 203, 0.9)) drop-shadow(0 0 18px rgba(66, 133, 244, 0.7)) !important;
       }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -3772,7 +3821,7 @@
           onclick="toggleMenu()"
         >
           ≡
-        <!-- NÚT TÌM KIẾM 3D ĐÃ HẠ XUỐNG 28PX ĐỂ THANH THOÁT HƠN -->
+        <!-- NÚT TÌM KIẾM: Kích thước kính lúp 28px, nút bấm 40px cân đối với Menu 30px -->
         <button
           class="icon-btn"
           style="margin: 0 0 0 auto; width: 40px; height: 40px; min-width: 40px; padding: 0; display: flex; align-items: center; justify-content: center;"
