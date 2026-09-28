@@ -1091,12 +1091,33 @@
         max-width: 800px;
         margin-bottom: 30px;
       }
+      /* ============================================================ */
+      /* HIỆU ỨNG CHỮ XIN CHÀO: DÒNG CHẢY QUANG PHỔ & HÀO QUANG TINH TẾ */
+      /* ============================================================ */
       .greeting h1 {
         font-size: 45px;
-        background: -webkit-linear-gradient(74deg, #4285f4, #9b72cb, #d96570);
+        background: linear-gradient(74deg, #4285f4, #9b72cb, #d96570, #9b72cb, #4285f4);
+        background-size: 300% 300%;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin-bottom: 10px;
+        /* Kéo dài nhịp thở lên 8 giây */
+        animation: text-flow-glow 8s ease-in-out infinite;
+      }
+
+      @keyframes text-flow-glow {
+          0% {
+              background-position: 0% 50%;
+              filter: drop-shadow(0 0 3px rgba(155, 114, 203, 0.15));
+          }
+          50% {
+              background-position: 100% 50%;
+              filter: drop-shadow(0 0 10px rgba(155, 114, 203, 0.6)) drop-shadow(0 0 18px rgba(66, 133, 244, 0.4));
+          }
+          100% {
+              background-position: 0% 50%;
+              filter: drop-shadow(0 0 3px rgba(155, 114, 203, 0.15));
+          }
       }
       .greeting h2 {
         font-size: 45px;
@@ -1115,23 +1136,27 @@
       }
       .chips {
         display: flex;
-        gap: 12px;
-        justify-content: center;
-        margin-top: 25px;
-        flex-wrap: wrap;
+        gap: 14px; /* Trả lại khoảng cách giữa các nút giống bản cũ */
+        justify-content: center; /* QUAN TRỌNG: Căn giữa cụm nút, không ép sát mép nữa */
+        margin: 25px auto 0 auto;
+        width: 100%;
+        max-width: 800px;
+        flex-wrap: nowrap; /* Khóa cứng để luôn nằm trên 1 dòng */
       }
+
       .chip {
         background: var(--glass-bg);
         border: 1px solid var(--glass-border);
         color: var(--text-sub);
-        padding: 12px 22px;
+        padding: 12px 22px; /* TRẢ LẠI kích thước bầu bĩnh, rộng rãi nguyên bản */
         border-radius: 20px;
         font-size: 14px;
         cursor: pointer;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 0; /* Triệt tiêu khoảng trống thừa để icon và chữ vừa vặn hoàn hảo */
         transition: 0.3s;
+        white-space: nowrap; /* Ép chữ không bị xuống hàng */
       }
       .chip:hover {
         background: var(--glass-hover);
@@ -3682,56 +3707,181 @@
       }
 
       /* ============================================================ */
-      /* ÁNH SÁNG AI (NHỊP THỞ CHẬM MƯỢT MÀ & BÚT SÁNG TĨNH)          */
+      /* ÁNH SÁNG AI ĐỒNG BỘ 8 GIÂY (ĐỘ CHÓI TINH TẾ 0.4 - 0.6)       */
       /* ============================================================ */
 
-      /* --- 1. HOẠT ẢNH NHỊP THỞ NHẸ NHÀNG (Kéo dài 4s, không tắt hẳn) --- */
+      /* --- 1. HOẠT ẢNH NHỊP THỞ ĐỒNG BỘ 8S --- */
       
       /* Nhịp thở cho nút Nâng cấp Ultra (Vỏ ngoài) */
       @keyframes ai-breathe-upgrade {
-          0% { box-shadow: 0 0 5px rgba(155, 114, 203, 0.3), 0 0 10px rgba(66, 133, 244, 0.2); border-color: rgba(155, 114, 203, 0.4); }
-          50% { box-shadow: 0 0 15px rgba(155, 114, 203, 0.7), 0 0 25px rgba(66, 133, 244, 0.5); border-color: rgba(155, 114, 203, 0.8); }
-          100% { box-shadow: 0 0 5px rgba(155, 114, 203, 0.3), 0 0 10px rgba(66, 133, 244, 0.2); border-color: rgba(155, 114, 203, 0.4); }
+          0% { box-shadow: 0 0 4px rgba(155, 114, 203, 0.15), 0 0 8px rgba(66, 133, 244, 0.1); border-color: rgba(155, 114, 203, 0.3); }
+          50% { box-shadow: 0 0 10px rgba(155, 114, 203, 0.6), 0 0 18px rgba(66, 133, 244, 0.4); border-color: rgba(155, 114, 203, 0.6); }
+          100% { box-shadow: 0 0 4px rgba(155, 114, 203, 0.15), 0 0 8px rgba(66, 133, 244, 0.1); border-color: rgba(155, 114, 203, 0.3); }
       }
 
       /* Nhịp thở cho Logo Ngôi sao (Nút Ultra + Chip Live Mới) */
       @keyframes ai-breathe-svg {
-          0% { filter: drop-shadow(0 0 4px rgba(155, 114, 203, 0.5)) drop-shadow(0 0 8px rgba(66, 133, 244, 0.3)); }
-          50% { filter: drop-shadow(0 0 12px rgba(155, 114, 203, 1)) drop-shadow(0 0 20px rgba(66, 133, 244, 0.9)); }
-          100% { filter: drop-shadow(0 0 4px rgba(155, 114, 203, 0.5)) drop-shadow(0 0 8px rgba(66, 133, 244, 0.3)); }
+          0% { filter: drop-shadow(0 0 2px rgba(155, 114, 203, 0.15)) drop-shadow(0 0 4px rgba(66, 133, 244, 0.1)); }
+          50% { filter: drop-shadow(0 0 8px rgba(155, 114, 203, 0.6)) drop-shadow(0 0 14px rgba(66, 133, 244, 0.4)); }
+          100% { filter: drop-shadow(0 0 2px rgba(155, 114, 203, 0.15)) drop-shadow(0 0 4px rgba(66, 133, 244, 0.1)); }
       }
 
       /* Nhịp thở cho Nút tròn LIVE AI (Dưới thanh Chat) */
       @keyframes ai-breathe-btn {
-          0% { box-shadow: 0 0 10px rgba(155, 114, 203, 0.5), 0 0 15px rgba(66, 133, 244, 0.4), inset 0 2px 1px rgba(255, 255, 255, 0.3), inset 0 -2px 1px rgba(0, 0, 0, 0.2); }
-          50% { box-shadow: 0 0 20px rgba(155, 114, 203, 0.9), 0 0 35px rgba(66, 133, 244, 0.7), inset 0 2px 1px rgba(255, 255, 255, 0.3), inset 0 -2px 1px rgba(0, 0, 0, 0.2); }
-          100% { box-shadow: 0 0 10px rgba(155, 114, 203, 0.5), 0 0 15px rgba(66, 133, 244, 0.4), inset 0 2px 1px rgba(255, 255, 255, 0.3), inset 0 -2px 1px rgba(0, 0, 0, 0.2); }
+          0% { box-shadow: 0 0 4px rgba(155, 114, 203, 0.2), 0 0 8px rgba(66, 133, 244, 0.1), inset 0 2px 1px rgba(255, 255, 255, 0.3), inset 0 -2px 1px rgba(0, 0, 0, 0.2); }
+          50% { box-shadow: 0 0 14px rgba(155, 114, 203, 0.6), 0 0 22px rgba(66, 133, 244, 0.45), inset 0 2px 1px rgba(255, 255, 255, 0.3), inset 0 -2px 1px rgba(0, 0, 0, 0.2); }
+          100% { box-shadow: 0 0 4px rgba(155, 114, 203, 0.2), 0 0 8px rgba(66, 133, 244, 0.1), inset 0 2px 1px rgba(255, 255, 255, 0.3), inset 0 -2px 1px rgba(0, 0, 0, 0.2); }
       }
 
-      /* --- 2. GẮN HIỆU ỨNG VÀO CÁC NÚT TƯƠNG ỨNG --- */
+      /* --- 2. GẮN HIỆU ỨNG VÀO CÁC NÚT TƯƠNG ỨNG (Chu kỳ 8s) --- */
 
-      /* Nút Nâng cấp Ultra (Vỏ ngoài) */
       .header-right .upgrade-btn { 
-          animation: ai-breathe-upgrade 4s infinite ease-in-out !important; 
+          animation: ai-breathe-upgrade 8s ease-in-out infinite !important; 
       }
       
-      /* Logo Ngôi sao (Nút Ultra + Chip Live Mới) */
-      .header-right .upgrade-btn svg,
-      .chips .chip:first-child .si-ic svg { 
-          animation: ai-breathe-svg 4s infinite ease-in-out !important;
+      /* CHỈ áp dụng cho Logo Ngôi sao của Nút Ultra (Giữ nguyên độ sáng mờ dịu) */
+      .header-right .upgrade-btn svg { 
+          animation: ai-breathe-svg 8s ease-in-out infinite !important;
           overflow: visible !important; 
       }
 
-      /* Nút tròn LIVE AI (Dưới thanh Chat) */
-      #live-btn-home,
-      #live-btn-chat {
-          animation: ai-breathe-btn 4s infinite ease-in-out !important;
+      /* Hoạt ảnh chói sáng cực đại RIÊNG BIỆT cho Chip TNG Live Mới */
+      @keyframes ai-breathe-live-chip {
+          0% { filter: drop-shadow(0 0 4px rgba(155, 114, 203, 0.4)) drop-shadow(0 0 6px rgba(66, 133, 244, 0.3)); }
+          50% { filter: drop-shadow(0 0 16px rgba(155, 114, 203, 1)) drop-shadow(0 0 28px rgba(66, 133, 244, 0.8)); }
+          100% { filter: drop-shadow(0 0 4px rgba(155, 114, 203, 0.4)) drop-shadow(0 0 6px rgba(66, 133, 244, 0.3)); }
       }
 
-      /* --- 3. CÂY BÚT ĐA SẮC (SÁNG LIÊN TỤC KHÔNG ĐỔI) --- */
+      #live-btn-home,
+      #live-btn-chat {
+          animation: ai-breathe-btn 8s ease-in-out infinite !important;
+      }
+
+      /* --- 3. CÂY BÚT ĐA SẮC (SÁNG TĨNH, ĐỘ CHÓI LÀM DỊU XUỐNG 0.6) --- */
       .sb-item[onclick="newChat()"] .ios27-art svg > g:nth-child(2) {
-          /* Chỉ phủ filter tĩnh, hoàn toàn không gắn animation */
-          filter: url(#ios-extreme-pop) drop-shadow(0 0 10px rgba(155, 114, 203, 0.9)) drop-shadow(0 0 18px rgba(66, 133, 244, 0.7)) !important;
+          filter: url(#ios-extreme-pop) drop-shadow(0 0 6px rgba(155, 114, 203, 0.6)) drop-shadow(0 0 12px rgba(66, 133, 244, 0.4)) !important;
+      }
+
+      /* ============================================================ */
+      /* ÁNH SÁNG AI ĐỒNG BỘ 8 GIÂY (ĐỘ CHÓI TINH TẾ 0.4 - 0.6)       */
+      /* ============================================================ */
+
+      /* --- 1. HOẠT ẢNH NHỊP THỞ ĐỒNG BỘ 8S --- */
+      
+      /* Nhịp thở cho nút Nâng cấp Ultra (Vỏ ngoài) */
+      @keyframes ai-breathe-upgrade {
+          0% { box-shadow: 0 0 4px rgba(155, 114, 203, 0.15), 0 0 8px rgba(66, 133, 244, 0.1); border-color: rgba(155, 114, 203, 0.3); }
+          50% { box-shadow: 0 0 10px rgba(155, 114, 203, 0.6), 0 0 18px rgba(66, 133, 244, 0.4); border-color: rgba(155, 114, 203, 0.6); }
+          100% { box-shadow: 0 0 4px rgba(155, 114, 203, 0.15), 0 0 8px rgba(66, 133, 244, 0.1); border-color: rgba(155, 114, 203, 0.3); }
+      }
+
+      /* Nhịp thở cho Logo Ngôi sao (Nút Ultra + Chip Live Mới) */
+      @keyframes ai-breathe-svg {
+          0% { filter: drop-shadow(0 0 2px rgba(155, 114, 203, 0.15)) drop-shadow(0 0 4px rgba(66, 133, 244, 0.1)); }
+          50% { filter: drop-shadow(0 0 8px rgba(155, 114, 203, 0.6)) drop-shadow(0 0 14px rgba(66, 133, 244, 0.4)); }
+          100% { filter: drop-shadow(0 0 2px rgba(155, 114, 203, 0.15)) drop-shadow(0 0 4px rgba(66, 133, 244, 0.1)); }
+      }
+
+      /* Nhịp thở cho Nút tròn LIVE AI (Màu Xanh Tím) */
+      @keyframes ai-breathe-btn {
+          0% { box-shadow: 0 0 4px rgba(155, 114, 203, 0.2), 0 0 8px rgba(66, 133, 244, 0.1), inset 0 2px 1px rgba(255, 255, 255, 0.3), inset 0 -2px 1px rgba(0, 0, 0, 0.2); }
+          50% { box-shadow: 0 0 14px rgba(155, 114, 203, 0.6), 0 0 22px rgba(66, 133, 244, 0.45), inset 0 2px 1px rgba(255, 255, 255, 0.3), inset 0 -2px 1px rgba(0, 0, 0, 0.2); }
+          100% { box-shadow: 0 0 4px rgba(155, 114, 203, 0.2), 0 0 8px rgba(66, 133, 244, 0.1), inset 0 2px 1px rgba(255, 255, 255, 0.3), inset 0 -2px 1px rgba(0, 0, 0, 0.2); }
+      }
+
+      /* Nhịp thở cho Nút Gửi Mũi Tên (Màu Xanh Dương Nhạt) */
+      @keyframes ai-breathe-send {
+          0% { box-shadow: 0 0 4px rgba(168, 199, 250, 0.2), 0 0 8px rgba(168, 199, 250, 0.1), inset 0 2px 1px rgba(255, 255, 255, 0.8), inset 0 -2px 1px rgba(0, 0, 0, 0.15); }
+          50% { box-shadow: 0 0 14px rgba(168, 199, 250, 0.6), 0 0 22px rgba(168, 199, 250, 0.45), inset 0 2px 1px rgba(255, 255, 255, 0.8), inset 0 -2px 1px rgba(0, 0, 0, 0.15); }
+          100% { box-shadow: 0 0 4px rgba(168, 199, 250, 0.2), 0 0 8px rgba(168, 199, 250, 0.1), inset 0 2px 1px rgba(255, 255, 255, 0.8), inset 0 -2px 1px rgba(0, 0, 0, 0.15); }
+      }
+
+      /* --- 2. GẮN HIỆU ỨNG VÀO CÁC NÚT TƯƠNG ỨNG (Chu kỳ 8s) --- */
+
+      .header-right .upgrade-btn { 
+          animation: ai-breathe-upgrade 8s ease-in-out infinite !important; 
+      }
+      
+      .header-right .upgrade-btn svg,
+      .chips .chip:first-child .si-ic svg { 
+          animation: ai-breathe-svg 8s ease-in-out infinite !important;
+          overflow: visible !important; 
+      }
+
+      /* Gắn hiệu ứng cho nút LIVE AI */
+      #live-btn-home,
+      #live-btn-chat {
+          animation: ai-breathe-btn 8s ease-in-out infinite !important;
+      }
+
+      /* Gắn hiệu ứng cho nút Gửi Mũi Tên */
+      #send-btn-home,
+      #send-btn-chat {
+          animation: ai-breathe-send 8s ease-in-out infinite !important;
+      }
+
+      /* --- 3. CÂY BÚT ĐA SẮC (SÁNG TĨNH, ĐỘ CHÓI LÀM DỊU XUỐNG 0.6) --- */
+      .sb-item[onclick="newChat()"] .ios27-art svg > g:nth-child(2) {
+          filter: url(#ios-extreme-pop) drop-shadow(0 0 6px rgba(155, 114, 203, 0.6)) drop-shadow(0 0 12px rgba(66, 133, 244, 0.4)) !important;
+      }
+
+      /* ============================================================ */
+      /* HIỆU ỨNG VIỀN KHUNG CHAT ĐA SẮC (DÒNG CHẢY QUANG PHỔ)        */
+      /* ============================================================ */
+      
+      /* 1. Đặt mốc tọa độ cho khung nhập liệu */
+      .input-box {
+          position: relative !important;
+      }
+
+      /* 2. Tắt màu viền xanh đơn điệu cũ khi người dùng nhấn vào */
+      .input-box:focus-within {
+          border-color: transparent !important;
+      }
+
+      /* 3. Tạo một lớp dải lụa quang phổ đè lên đúng vị trí viền */
+      .input-box::after {
+          content: "";
+          position: absolute;
+          top: -1px; left: -1px; right: -1px; bottom: -1px; /* Đè khít lên viền ngoài */
+          border-radius: 28px; /* Bo góc khớp 100% với khung chat */
+          background: linear-gradient(74deg, #4285f4, #9b72cb, #d96570, #9b72cb, #4285f4);
+          background-size: 300% 300%;
+          z-index: 10;
+          pointer-events: none; /* Xuyên thấu click chuột để không cản trở việc gõ chữ */
+          
+          /* KỸ THUẬT ĐỤC LỖ: Chỉ giữ lại đúng 1.5px ở rìa làm viền, phần ruột trong suốt để thấy nền kính mờ */
+          padding: 1.5px; 
+          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor;
+          mask-composite: exclude;
+          
+          /* Mặc định ẩn đi khi chưa nhấn vào */
+          opacity: 0;
+          transition: opacity 0.4s ease;
+      }
+
+      /* 4. Khi nhấn vào (focus), bật hiển thị và kích hoạt dòng chảy ánh sáng 8s */
+      .input-box:focus-within::after {
+          opacity: 1;
+          animation: chat-border-flow 8s ease-in-out infinite;
+      }
+
+      /* 5. Cấu hình nhịp thở và dòng chảy (Đồng bộ chu kỳ 8s, độ chói dịu nhẹ) */
+      @keyframes chat-border-flow {
+          0% {
+              background-position: 0% 50%;
+              filter: drop-shadow(0 0 2px rgba(155, 114, 203, 0.2));
+          }
+          50% {
+              background-position: 100% 50%;
+              /* Hắt sáng mờ ảo ra ngoài (Độ chói 0.4 - 0.6) */
+              filter: drop-shadow(0 0 8px rgba(155, 114, 203, 0.6)) drop-shadow(0 0 12px rgba(66, 133, 244, 0.4));
+          }
+          100% {
+              background-position: 0% 50%;
+              filter: drop-shadow(0 0 2px rgba(155, 114, 203, 0.2));
+          }
       }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -5319,63 +5469,214 @@
             </div>
           </div>
         </div>
+        
+        <!-- BẠN CHỈ CẦN GÕ THÊM DÒNG NÀY VÀO ĐÂY LÀ XONG: -->
         <div class="chips">
+        <!-- Nút TNG Live Mới (Đã khôi phục nét vẽ thanh mảnh nguyên bản + Giữ hiệu ứng phát quang mạnh 8s) -->
           <div class="chip" onclick="startLive()">
-            <span
-              class="si-ic"
-              style="
-                display: flex;
-                align-items: center;
-                justify-content: center;
-              "
-            >
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="url(#live-grad-chip)"
-                stroke-width="2.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <defs>
-                  <linearGradient
-                    id="live-grad-chip"
-                    x1="0%"
-                    y1="0%"
-                    x2="100%"
-                    y2="100%"
-                  >
-                    <stop offset="0%" stop-color="#4285f4" />
-                    <stop offset="50%" stop-color="#9b72cb" />
-                    <stop offset="100%" stop-color="#d96570" />
-                  </linearGradient>
-                </defs>
-                <path
-                  d="M12 3c.132 5.86 3.14 8.868 9 9-5.86.132-8.868 3.14-9 9-.132-5.86-3.14-8.868-9-9 5.86-.132 8.868-3.14 9-9Z"
-                ></path>
-                <path
-                  d="M19 3c.046 2.05 1.1 3.104 3.15 3.15-2.05.046-3.104 1.1-3.15 3.15-.046-2.05-1.1-3.104-3.15-3.15C17.9 6.104 18.954 5.05 19 3Z"
-                ></path>
-              </svg>
+            <span class="si-ic" style="display: flex; align-items: center; justify-content: center; margin-right: 8px;">
+              <div class="ios27-art" style="width: 22px; height: 22px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="url(#live-grad-chip-new)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="overflow: visible; animation: ai-breathe-live-chip 8s ease-in-out infinite !important;">
+                  <defs>
+                    <linearGradient id="live-grad-chip-new" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#4285f4" />
+                      <stop offset="50%" stop-color="#9b72cb" />
+                      <stop offset="100%" stop-color="#d96570" />
+                    </linearGradient>
+                  </defs>
+                  <path d="M12 3c.132 5.86 3.14 8.868 9 9-5.86.132-8.868 3.14-9 9-.132-5.86-3.14-8.868-9-9 5.86-.132 8.868-3.14 9-9Z"></path>
+                  <path d="M19 3c.046 2.05 1.1 3.104 3.15 3.15-2.05.046-3.104 1.1-3.15 3.15-.046-2.05-1.1-3.104-3.15-3.15C17.9 6.104 18.954 5.05 19 3Z"></path>
+                </svg>
+              </div>
             </span>
             TNG Live Mới
           </div>
+          <!-- 1. Viết code (Hào quang SVG nội lực, đã căn tâm chính xác và làm trong trẻo) -->
+          <div class="chip" onclick="fillInput('Viết cho tôi một đoạn code html/css tạo: ')">
+            <span class="si-ic" style="display: flex; align-items: center; justify-content: center; margin-right: 8px;">
+              <div class="ios27-art" style="width: 24px; height: 24px;">
+                <svg viewBox="0 0 100 100" style="overflow: visible;">
+                  <defs>
+                    <linearGradient id="stylus-metal-pro" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#374151"/><stop offset="25%" stop-color="#9ca3af"/><stop offset="50%" stop-color="#d1d5db"/><stop offset="80%" stop-color="#4b5563"/><stop offset="100%" stop-color="#111827"/>
+                    </linearGradient>
+                    <linearGradient id="stylus-multi-glow" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#4285f4"/><stop offset="50%" stop-color="#9b72cb"/><stop offset="100%" stop-color="#d96570"/>
+                    </linearGradient>
+                    
+                    <!-- SỬA LỖI: Trả tâm gradient về 50% 50% và hạ độ đặc (opacity) xuống 0.65 để biểu tượng nhìn xuyên thấu được -->
+                    <radialGradient id="stylus-halo" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stop-color="rgba(155, 114, 203, 0.65)"/>
+                      <stop offset="50%" stop-color="rgba(66, 133, 244, 0.25)"/>
+                      <stop offset="100%" stop-color="rgba(66, 133, 244, 0)"/>
+                    </radialGradient>
+                  </defs>
+                  
+                  <!-- SỬA LỖI: Kéo tâm phát sáng cx=31 cy=75 (Chính giữa biểu tượng </>) -->
+                  <circle cx="31" cy="75" r="50" fill="url(#stylus-halo)" style="animation: ai-breathe-balanced-halo 8s ease-in-out infinite; pointer-events: none; transform-origin: 31% 75%;" />
+
+                  <g filter="url(#ios-extreme-pop)">
+                    <path d="M 20 60 L 4 75 L 20 90 M 42 60 L 58 75 L 42 90 M 26 95 L 36 55" fill="none" stroke="url(#stylus-multi-glow)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" style="animation: ai-breathe-stylus 8s ease-in-out infinite;" />
+                    <g transform="translate(18, -18) rotate(45 50 50)">
+                      <rect x="38" y="15" width="24" height="50" rx="4" fill="url(#stylus-metal-pro)" />
+                      <rect x="42" y="15" width="2.5" height="50" fill="#ffffff" opacity="0.8" />
+                      <rect x="56" y="15" width="2" height="50" fill="#000000" opacity="0.4" />
+                      <rect x="38" y="55" width="24" height="5" fill="url(#stylus-multi-glow)" style="animation: ai-breathe-stylus 8s ease-in-out infinite;" />
+                      <path d="M 38 65 L 62 65 L 53 88 L 47 88 Z" fill="#1f2937" />
+                      <path d="M 43 65 L 45 88" stroke="#4b5563" stroke-width="2" />
+                      <polygon points="47,88 53,88 50,98" fill="url(#stylus-multi-glow)" style="animation: ai-breathe-stylus 8s ease-in-out infinite;" />
+                      <path d="M 38 15 C 38 5, 62 5, 62 15 Z" fill="#111827" />
+                      <path d="M 43 14 C 43 7, 57 7, 57 14 Z" fill="#9ca3af" />
+                    </g>
+                  </g>
+                </svg>
+              </div>
+            </span>
+            Viết code
+          </div>
+
+          <!-- 2. Dịch văn bản (Đảo ra sau - Quả địa cầu Hologram phát sáng 8s) -->
           <div class="chip" onclick="fillInput('Dịch sang tiếng anh: ')">
-            <span class="si-ic">🌍</span> Dịch văn bản
+            <span class="si-ic" style="display: flex; align-items: center; justify-content: center; margin-right: 8px;">
+              <div class="ios27-art" style="width: 22px; height: 22px;">
+                <!-- Nhúng hiệu ứng phát sáng mượt mà vào toàn bộ quả địa cầu -->
+                <svg viewBox="0 0 100 100" style="overflow: visible; animation: ai-breathe-globe 8s ease-in-out infinite !important;">
+                  <defs>
+                    <radialGradient id="globe-ocean" cx="35%" cy="35%" r="65%">
+                      <stop offset="0%" stop-color="#38bdf8"/><stop offset="40%" stop-color="#0284c7"/><stop offset="100%" stop-color="#082f49"/>
+                    </radialGradient>
+                    <linearGradient id="globe-land-new" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#4ade80"/><stop offset="50%" stop-color="#10b981"/><stop offset="100%" stop-color="#047857"/>
+                    </linearGradient>
+                    <linearGradient id="globe-glass-cover" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="rgba(255,255,255,0.9)"/><stop offset="35%" stop-color="rgba(255,255,255,0)"/><stop offset="100%" stop-color="rgba(255,255,255,0.3)"/>
+                    </linearGradient>
+                  </defs>
+                  <g filter="url(#ios-extreme-pop)">
+                    <circle cx="50" cy="50" r="46" fill="url(#globe-ocean)" />
+                    <ellipse cx="50" cy="50" rx="46" ry="14" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+                    <ellipse cx="50" cy="50" rx="46" ry="32" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+                    <ellipse cx="50" cy="50" rx="16" ry="46" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+                    <ellipse cx="50" cy="50" rx="34" ry="46" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+                    <line x1="4" y1="50" x2="96" y2="50" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" />
+                    <line x1="50" y1="4" x2="50" y2="96" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" />
+                    <path d="M 12 35 C 20 15, 50 8, 62 25 C 70 35, 80 30, 88 50 C 92 65, 75 75, 55 70 C 35 65, 10 55, 12 35 Z" fill="url(#globe-land-new)" filter="drop-shadow(0 2px 3px rgba(0,0,0,0.4))" />
+                    <path d="M 60 80 C 75 70, 90 75, 82 90 C 75 96, 55 90, 60 80 Z" fill="url(#globe-land-new)" filter="drop-shadow(0 2px 3px rgba(0,0,0,0.4))" />
+                    <circle cx="50" cy="50" r="46" fill="none" stroke="rgba(0,0,0,0.5)" stroke-width="4" />
+                    <path d="M 10 45 A 40 40 0 0 1 55 10 A 46 46 0 0 0 10 45 Z" fill="rgba(255,255,255,0.5)" />
+                    <circle cx="50" cy="50" r="46" fill="url(#globe-glass-cover)" />
+                  </g>
+                </svg>
+              </div>
+            </span>
+            Dịch văn bản
           </div>
-          <div
-            class="chip"
-            onclick="fillInput('Viết cho tôi một đoạn code html/css tạo: ')"
-          >
-            <span class="si-ic">✏️</span> Viết code
-          </div>
+
+          <!-- 3. Mẹo đời sống (Khắc phục viền vuông bằng lớp Glow DIV độc lập) -->
           <div class="chip" onclick="fillInput('Mẹo đời sống về: ')">
-            <span class="si-ic">💡</span> Mẹo đời sống
+            <span class="si-ic" style="display: flex; align-items: center; justify-content: center; margin-right: 8px; position: relative;">
+              
+              <!-- LỚP HÀO QUANG TOẢ RỘNG BÊN TRONG HTML ĐỂ TRÁNH LỖI CẮT VIỀN CỦA SVG -->
+              <div style="position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle at 50% 40%, rgba(250, 204, 21, 0.7) 0%, rgba(253, 224, 71, 0.25) 35%, transparent 65%); animation: ai-breathe-bulb-glow 8s ease-in-out infinite; pointer-events: none; z-index: 1;"></div>
+              
+              <div class="ios27-art" style="width: 22px; height: 22px; position: relative; z-index: 2;">
+                <svg viewBox="0 0 100 100" style="overflow: visible;">
+                  <defs>
+                    <radialGradient id="bulb-glass" cx="40%" cy="30%" r="60%">
+                      <stop offset="0%" stop-color="rgba(255,255,255,0.95)"/>
+                      <stop offset="30%" stop-color="rgba(255,255,255,0.3)"/>
+                      <stop offset="80%" stop-color="rgba(250,204,21,0.4)"/>
+                      <stop offset="100%" stop-color="rgba(255,255,255,0.7)"/>
+                    </radialGradient>
+                    <linearGradient id="bulb-base" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#4b5563"/><stop offset="30%" stop-color="#d1d5db"/><stop offset="70%" stop-color="#9ca3af"/><stop offset="100%" stop-color="#374151"/>
+                    </linearGradient>
+                  </defs>
+                  
+                  <g>
+                    <!-- Chân kẹp dây tóc -->
+                    <path d="M 44 65 L 44 45 L 40 35 M 56 65 L 56 45 L 60 35" fill="none" stroke="#9ca3af" stroke-width="2.5" stroke-linecap="round" />
+                    <!-- Dây tóc rực cháy -->
+                    <path d="M 40 35 C 45 20, 55 20, 60 35" fill="none" stroke="#fef08a" stroke-width="3" stroke-linecap="round" filter="drop-shadow(0 0 2px #eab308)" />
+                    <!-- Lõi dây tóc sáng ảo -->
+                    <path d="M 40 35 C 45 20, 55 20, 60 35" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="1.5" stroke-linecap="round" />
+                    <!-- Vỏ bóng đèn thủy tinh -->
+                    <path d="M 50 8 C 25 8, 18 35, 32 55 C 38 62, 38 68, 38 68 L 62 68 C 62 68, 62 62, 68 55 C 82 35, 75 8, 50 8 Z" fill="url(#bulb-glass)" stroke="rgba(255,255,255,0.8)" stroke-width="1.5" />
+                    <!-- Vệt hắt sáng lóa trên mép kính -->
+                    <path d="M 22 40 A 28 28 0 0 1 45 12" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" filter="blur(0.5px)"/>
+                  </g>
+
+                  <!-- Đui đèn kim loại tĩnh (Nằm gọn trong bóng nổi 3D) -->
+                  <g filter="url(#ios-extreme-pop)">
+                    <rect x="38" y="68" width="24" height="18" fill="url(#bulb-base)" />
+                    <line x1="38" y1="71" x2="62" y2="74" stroke="#374151" stroke-width="2" stroke-linecap="round" />
+                    <line x1="38" y1="76" x2="62" y2="79" stroke="#374151" stroke-width="2" stroke-linecap="round" />
+                    <line x1="38" y1="81" x2="62" y2="84" stroke="#374151" stroke-width="2" stroke-linecap="round" />
+                    <!-- Chóp tiếp điện cách điện đen -->
+                    <path d="M 42 86 L 58 86 C 58 92, 42 92, 42 86 Z" fill="#1f2937" />
+                  </g>
+                </svg>
+              </div>
+            </span>
+            Mẹo đời sống
           </div>
+
+          <!-- 4. Học tập (Hào quang Tím ma thuật mở rộng) -->
           <div class="chip" onclick="fillInput('Giúp tôi giải bài tập môn: ')">
-            <span class="si-ic">📖</span> Học tập
+            <span class="si-ic" style="display: flex; align-items: center; justify-content: center; margin-right: 8px;">
+              <div class="ios27-art" style="width: 22px; height: 22px;">
+                <svg viewBox="0 0 100 100" style="overflow: visible;">
+                  <defs>
+                    <linearGradient id="book-cover-left" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#4c1d95"/><stop offset="100%" stop-color="#7c3aed"/>
+                    </linearGradient>
+                    <linearGradient id="book-cover-right" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#5b21b6"/>
+                    </linearGradient>
+                    <linearGradient id="book-page-left" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#e5e7eb"/><stop offset="100%" stop-color="#ffffff"/>
+                    </linearGradient>
+                    <linearGradient id="book-page-right" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#d1d5db"/>
+                    </linearGradient>
+                    <linearGradient id="magic-glow" x1="0%" y1="100%" x2="0%" y2="0%">
+                      <stop offset="0%" stop-color="rgba(167,139,250,1)"/><stop offset="100%" stop-color="rgba(167,139,250,0)"/>
+                    </linearGradient>
+                    <!-- Tích hợp Hào quang tím trực tiếp vào SVG, bán kính 60% -->
+                    <radialGradient id="book-halo" cx="50%" cy="25%" r="60%">
+                      <stop offset="0%" stop-color="rgba(167, 139, 250, 1)"/>
+                      <stop offset="40%" stop-color="rgba(124, 58, 237, 0.6)"/>
+                      <stop offset="100%" stop-color="rgba(124, 58, 237, 0)"/>
+                    </radialGradient>
+                  </defs>
+                  
+                  <!-- Tăng bán kính r=55 để ánh sáng bung rộng ra ngoài sách -->
+                  <circle cx="50" cy="25" r="55" fill="url(#book-halo)" style="animation: ai-breathe-balanced-halo 8s ease-in-out infinite; pointer-events: none; transform-origin: 50% 25%;" />
+
+                  <g filter="url(#ios-extreme-pop)">
+                    <g style="animation: ai-breathe-book 8s ease-in-out infinite; transform-origin: 50% 60%;">
+                      <path d="M 50 60 L 20 20 Q 50 0 80 20 Z" fill="url(#magic-glow)" filter="blur(3px)" />
+                      <circle cx="50" cy="25" r="3.5" fill="#ffffff" filter="drop-shadow(0 0 3px #fff)" />
+                      <circle cx="35" cy="15" r="2" fill="#fde047" filter="drop-shadow(0 0 3px #fff)" />
+                      <circle cx="65" cy="18" r="2.5" fill="#a78bfa" filter="drop-shadow(0 0 3px #fff)" />
+                    </g>
+                    <path d="M 4 35 L 50 45 L 50 95 L 4 85 Z" fill="url(#book-cover-left)" />
+                    <path d="M 96 35 L 50 45 L 50 95 L 96 85 Z" fill="url(#book-cover-right)" />
+                    <path d="M 8 36 L 48 44 L 48 88 L 8 80 Z" fill="#9ca3af" />
+                    <path d="M 10 34 L 49 42 L 49 87 L 10 79 Z" fill="#d1d5db" />
+                    <path d="M 12 32 L 50 40 L 50 86 L 12 78 Z" fill="url(#book-page-left)" />
+                    <path d="M 92 36 L 52 44 L 52 88 L 92 80 Z" fill="#9ca3af" />
+                    <path d="M 90 34 L 51 42 L 51 87 L 90 79 Z" fill="#d1d5db" />
+                    <path d="M 88 32 L 50 40 L 50 86 L 88 78 Z" fill="url(#book-page-right)" />
+                    <path d="M 30 36 L 36 37 L 36 65 L 33 60 L 30 65 Z" fill="#ef4444" filter="drop-shadow(2px 2px 2px rgba(0,0,0,0.2))" />
+                    <line x1="50" y1="40" x2="50" y2="86" stroke="#9ca3af" stroke-width="2" />
+                    <path d="M 4 85 L 50 95 L 96 85" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" />
+                    <path d="M 4 35 L 50 45 L 96 35" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" />
+                  </g>
+                </svg>
+              </div>
+            </span>
+            Học tập
           </div>
         </div>
       </div>
@@ -5787,6 +6088,44 @@
           gap: 12px !important;
           padding: 9px 15px !important;
         }
+
+        /* --- 4. HIỆU ỨNG ÁNH SÁNG ĐỘC LẬP CHO CÁC ICON CHỨC NĂNG (Chu kỳ 8s - Đã tăng độ chói) --- */
+      
+      /* Quả địa cầu: Tăng mạnh hào quang xanh biển rực rỡ */
+      @keyframes ai-breathe-globe {
+          0% { filter: drop-shadow(0 0 4px rgba(2, 132, 199, 0.4)); }
+          50% { filter: drop-shadow(0 0 15px rgba(2, 132, 199, 0.9)) drop-shadow(0 0 25px rgba(56, 189, 248, 0.7)); }
+          100% { filter: drop-shadow(0 0 4px rgba(2, 132, 199, 0.4)); }
+      }
+
+      /* Bóng đèn: Hào quang DIV phập phồng (Khắc phục triệt để viền vuông SVG) */
+      @keyframes ai-breathe-bulb-glow {
+          0% { opacity: 0.3; transform: scale(0.85); }
+          50% { opacity: 1; transform: scale(1.25); }
+          100% { opacity: 0.3; transform: scale(0.85); }
+      }
+
+      /* Sách phép: Đẩy độ chói tím ma thuật và làm rõ nhịp phập phồng */
+      @keyframes ai-breathe-book {
+          0% { filter: drop-shadow(0 0 4px rgba(167, 139, 250, 0.4)); opacity: 0.7; transform: scale(0.95) translateY(2px); }
+          50% { filter: drop-shadow(0 0 16px rgba(167, 139, 250, 1)) drop-shadow(0 0 28px rgba(196, 181, 253, 0.8)); opacity: 1; transform: scale(1.05) translateY(-2px); }
+          100% { filter: drop-shadow(0 0 4px rgba(167, 139, 250, 0.4)); opacity: 0.7; transform: scale(0.95) translateY(2px); }
+      }
+
+      /* Bút Stylus: Tăng mạnh độ chói đa sắc cho chữ </>, viền LED và ngòi bút */
+      @keyframes ai-breathe-stylus {
+          0% { filter: drop-shadow(0 0 4px rgba(155, 114, 203, 0.5)); opacity: 0.8; }
+          50% { filter: drop-shadow(0 0 14px rgba(155, 114, 203, 1)) drop-shadow(0 0 24px rgba(66, 133, 244, 0.8)); opacity: 1; }
+          100% { filter: drop-shadow(0 0 4px rgba(155, 114, 203, 0.5)); opacity: 0.8; }
+      }
+      
+      /* Hào quang SVG Cân bằng cho Bút và Sách (Khớp cường độ với Địa cầu) */
+      @keyframes ai-breathe-balanced-halo {
+          0% { opacity: 0.3; transform: scale(0.9); }
+          50% { opacity: 0.85; transform: scale(1.2); }
+          100% { opacity: 0.3; transform: scale(0.9); }
+      }
+
       </style>
 
       <!-- 1. Hoạt động (Clock Y Chang Hình Mẫu) -->
