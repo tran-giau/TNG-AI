@@ -5528,38 +5528,47 @@
             Dịch văn bản
           </div>
 
-          <!-- 2. Viết code (Đã nâng cấp kích thước cửa sổ lên 92x80 để cân bằng chiều cao với các icon khác) -->
+          <!-- 2. Viết code (Màu nền lấy chuẩn 100% từ ảnh gốc, biểu tượng </ > màu xám) -->
           <div class="chip" onclick="fillInput('Viết cho tôi một đoạn code html/css tạo: ')">
             <span class="si-ic" style="display: flex; align-items: center; justify-content: center; margin-right: 8px;">
               <div class="ios27-art" style="width: 24px; height: 24px;">
                 <svg viewBox="0 0 100 100" style="overflow: visible;">
+                  <defs>
+                    <!-- Tông Xám trung tính cho biểu tượng </ > -->
+                    <linearGradient id="silver-code" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#9ca3af"/>
+                      <stop offset="100%" stop-color="#6b7280"/>
+                    </linearGradient>
+                  </defs>
+
                   <g filter="url(#ios-extreme-pop)">
-                    
-                    <!-- Nền cửa sổ chính (Mở rộng lên 92x80) -->
-                    <rect x="4" y="10" width="92" height="80" rx="14" fill="#28283e" />
-                    
-                    <!-- Thanh Tiêu đề (Header) điều chỉnh khớp với góc bo 14px -->
-                    <path d="M 4 24 C 4 16.268 10.268 10 18 10 L 82 10 C 89.732 10 96 16.268 96 24 L 96 32 L 4 32 Z" fill="#3b3a55" />
-                    
-                    <!-- 3 Dấu chấm điều khiển cửa sổ (Căn lề trái tinh tế hơn) -->
-                    <circle cx="15" cy="21" r="3.5" fill="#f95e59" />
-                    <circle cx="25" cy="21" r="3.5" fill="#fcbc40" />
-                    <circle cx="35" cy="21" r="3.5" fill="#33c748" />
-                    
-                    <!-- Thanh nắm kéo ở giữa thanh tiêu đề -->
-                    <rect x="42" y="19.5" width="16" height="3" rx="1.5" fill="#28283e" opacity="0.8" />
-                    
-                    <!-- Viền bóng kính siêu mỏng bao quanh toàn bộ cửa sổ -->
-                    <rect x="4" y="10" width="92" height="80" rx="14" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1.5" />
-                    
-                    <!-- Biểu tượng </ > màu Xanh Lục Neon rực rỡ, căn giữa lại theo kích thước mới -->
-                    <g>
+                    <g filter="drop-shadow(0 4px 5px rgba(0,0,0,0.5))">
+                      <!-- Nền cửa sổ: Màu xanh tím than (Mã màu trích xuất chuẩn xác từ ảnh gốc) -->
+                      <rect x="4" y="10" width="92" height="80" rx="14" fill="#28283e" />
+                      
+                      <!-- Thanh Tiêu đề (Header): Màu xanh tím sáng hơn (Chuẩn ảnh gốc) -->
+                      <path d="M 4 24 C 4 16.268 10.268 10 18 10 L 82 10 C 89.732 10 96 16.268 96 24 L 96 32 L 4 32 Z" fill="#3b3a55" />
+                      
+                      <!-- 3 Dấu chấm điều khiển macOS -->
+                      <circle cx="15" cy="21" r="3.5" fill="#f95e59" />
+                      <circle cx="25" cy="21" r="3.5" fill="#fcbc40" />
+                      <circle cx="35" cy="21" r="3.5" fill="#33c748" />
+                      
+                      <!-- Thanh nắm kéo ở giữa thanh tiêu đề -->
+                      <rect x="42" y="19.5" width="16" height="3" rx="1.5" fill="#1b1a28" opacity="0.8" />
+                      
+                      <!-- Viền mép kính siêu mỏng giúp khối mượt mà hơn -->
+                      <rect x="4" y="10" width="92" height="80" rx="14" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1.5" />
+                    </g>
+
+                    <!-- Biểu tượng </ > màu Xám bạc, đổ bóng đen nhẹ để không bị chìm -->
+                    <g filter="drop-shadow(0 2px 3px rgba(0,0,0,0.6))">
                       <!-- Dấu < -->
-                      <path d="M 38 49 L 18 61 L 38 73" fill="none" stroke="#2ce573" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" />
+                      <path d="M 40 51 L 24 61 L 40 71" fill="none" stroke="url(#silver-code)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
                       <!-- Dấu > -->
-                      <path d="M 62 49 L 82 61 L 62 73" fill="none" stroke="#2ce573" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round" />
+                      <path d="M 60 51 L 76 61 L 60 71" fill="none" stroke="url(#silver-code)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
                       <!-- Dấu gạch chéo / -->
-                      <line x1="55" y1="41" x2="45" y2="81" stroke="#2ce573" stroke-width="6.5" stroke-linecap="round" />
+                      <line x1="53" y1="44" x2="47" y2="78" stroke="url(#silver-code)" stroke-width="5" stroke-linecap="round" />
                     </g>
                     
                   </g>
