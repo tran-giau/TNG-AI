@@ -5238,26 +5238,105 @@
                   <span style="font-size: 16px">⎘</span> Công cụ
                 </div>
                 <div id="m-att-h" class="drop-menu">
+                  
+                  <!-- 1. Tải tệp lên (Kích thước lớn cân đối, 4 góc bo tròn 12px siêu mịn màng) -->
                   <div class="d-item" onclick="trigFile()">
-                    <span class="si-ic">📎</span> Tải tệp lên
+                    <span class="si-ic" style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px;">
+                      <svg viewBox="0 0 120 120" style="width: 100%; height: 100%;">
+                        <g filter="url(#ios-extreme-pop)">
+                          <!-- Bìa Sau (Bo tròn góc trên và dưới) -->
+                          <path d="M 10 42 C 10 35.4, 15.4 30, 22 30 L 42 30 C 45 30, 47 31, 49 34 L 54 41.5 C 55.5 43.5, 58 44.5, 60 44.5 L 98 44.5 C 104.6 44.5, 110 49.9, 110 56.5 L 110 86 C 110 92.6, 104.6 98, 98 98 L 22 98 C 15.4 98, 10 92.6, 10 86 Z" fill="#60a5fa" />
+                          <!-- Giấy Trắng -->
+                          <rect x="18" y="38" width="84" height="50" rx="6" fill="#ffffff" />
+                          <!-- Bìa Trước (Bo tròn 12px chuẩn thiết kế squircle) -->
+                          <path d="M 10 60 C 10 53.4, 15.4 48, 22 48 L 98 48 C 104.6 48, 110 53.4, 110 60 L 110 86 C 110 92.6, 104.6 98, 98 98 L 22 98 C 15.4 98, 10 92.6, 10 86 Z" fill="url(#g-blue)" />
+                          <!-- Nét Highlight mỏng -->
+                          <path d="M 14 50 L 106 50" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round" />
+                        </g>
+                      </svg>
+                    </span> 
+                    Tải tệp lên
                   </div>
+
+                  <!-- 2. Thêm từ Drive (Giữ nguyên chuẩn xác) -->
                   <div class="d-item" onclick="trigFile()">
-                    <span class="si-ic">◬</span> Thêm từ Drive
+                    <span class="si-ic" style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px;">
+                      <svg viewBox="0 0 100 100" style="width: 100%; height: 100%; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3)); overflow: visible;">
+                        <g transform="translate(6.35, 12.2)">
+                          <path d="M29.1,0 L0,50.4 L14.6,75.6 L43.6,25.2 Z" fill="#0F9D58" stroke="#0F9D58" stroke-width="3" stroke-linejoin="round" />
+                          <path d="M29.1,0 L58.2,0 L87.3,50.4 L58.2,50.4 Z" fill="#FFC107" stroke="#FFC107" stroke-width="3" stroke-linejoin="round" />
+                          <path d="M14.6,75.6 L72.7,75.6 L58.2,50.4 L0,50.4 Z" fill="#4285F4" stroke="#4285F4" stroke-width="3" stroke-linejoin="round" />
+                          <path d="M58.2,50.4 L87.3,50.4 L72.7,75.6 Z" fill="#EA4335" stroke="#EA4335" stroke-width="3" stroke-linejoin="round" />
+                        </g>
+                      </svg>
+                    </span> 
+                    Thêm từ Drive
                   </div>
+
+                  <!-- 3. Ảnh (Giữ nguyên) -->
                   <div class="d-item" onclick="trigFile()">
-                    <span class="si-ic">❀</span> Ảnh
+                    <span class="si-ic" style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px;">
+                      <svg viewBox="0 0 100 100" filter="url(#ios-extreme-pop)" style="width: 100%; height: 100%; overflow: visible">
+                        <g style="mix-blend-mode: screen">
+                          <g transform="rotate(0 50 50)"><rect x="38" y="10" width="24" height="42" rx="12" fill="url(#fl-top)" opacity="0.85" /></g>
+                          <g transform="rotate(45 50 50)"><rect x="38" y="10" width="24" height="42" rx="12" fill="url(#fl-tr)" opacity="0.85" /></g>
+                          <g transform="rotate(90 50 50)"><rect x="38" y="10" width="24" height="42" rx="12" fill="url(#fl-right)" opacity="0.85" /></g>
+                          <g transform="rotate(135 50 50)"><rect x="38" y="10" width="24" height="42" rx="12" fill="url(#fl-br)" opacity="0.85" /></g>
+                          <g transform="rotate(180 50 50)"><rect x="38" y="10" width="24" height="42" rx="12" fill="url(#fl-bottom)" opacity="0.85" /></g>
+                          <g transform="rotate(225 50 50)"><rect x="38" y="10" width="24" height="42" rx="12" fill="url(#fl-bl)" opacity="0.85" /></g>
+                          <g transform="rotate(270 50 50)"><rect x="38" y="10" width="24" height="42" rx="12" fill="url(#fl-left)" opacity="0.85" /></g>
+                          <g transform="rotate(315 50 50)"><rect x="38" y="10" width="24" height="42" rx="12" fill="url(#fl-tl)" opacity="0.85" /></g>
+                        </g>
+                        <circle cx="50" cy="50" r="3" fill="#ffffff" opacity="0.9" filter="blur(1px)" />
+                      </svg>
+                    </span> 
+                    Ảnh
                   </div>
+
+                  <!-- 4. Nhập mã (Giữ nguyên) -->
                   <div class="d-item" onclick="trigFile()">
-                    <span class="si-ic">&lt;&gt;</span> Nhập mã
+                    <span class="si-ic" style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px;">
+                      <svg viewBox="0 0 100 100" style="width: 100%; height: 100%; overflow: visible;">
+                        <g filter="url(#ios-extreme-pop)">
+                          <g filter="drop-shadow(0 4px 5px rgba(0,0,0,0.5))">
+                            <rect x="4" y="10" width="92" height="80" rx="14" fill="#050505" />
+                            <path d="M 4 24 C 4 16.268 10.268 10 18 10 L 82 10 C 89.732 10 96 16.268 96 24 L 96 32 L 4 32 Z" fill="#121212" />
+                            <circle cx="15" cy="21" r="3.5" fill="#f95e59" />
+                            <circle cx="25" cy="21" r="3.5" fill="#fcbc40" />
+                            <circle cx="35" cy="21" r="3.5" fill="#33c748" />
+                            <rect x="42" y="19.5" width="16" height="3" rx="1.5" fill="#000000" opacity="0.8" />
+                            <rect x="4" y="10" width="92" height="80" rx="14" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1.5" />
+                          </g>
+                          <g filter="drop-shadow(0 2px 3px rgba(0,0,0,0.7))">
+                            <path d="M 40 51 L 24 61 L 40 71" fill="none" stroke="url(#silver-code)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M 60 51 L 76 61 L 60 71" fill="none" stroke="url(#silver-code)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+                            <line x1="53" y1="44" x2="47" y2="78" stroke="url(#silver-code)" stroke-width="5" stroke-linecap="round" />
+                          </g>
+                        </g>
+                      </svg>
+                    </span> 
+                    Nhập mã
                   </div>
-                  <div
-                    class="d-item"
-                    onclick="
-                      openSetting('NotebookLM', SETTINGS_CONTENT.notebookLM)
-                    "
-                  >
-                    <span class="si-ic">⋒</span> NotebookLM
+
+                  <!-- 5. NotebookLM (Giữ nguyên) -->
+                  <div class="d-item" onclick="openSetting('NotebookLM', SETTINGS_CONTENT.notebookLM)">
+                    <span class="si-ic" style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px;">
+                      <svg viewBox="0 0 100 100" style="width: 100%; height: 100%;">
+                        <g filter="url(#ios-extreme-pop)">
+                          <rect x="25" y="15" width="55" height="70" rx="6" fill="#ffcc00" />
+                          <rect x="25" y="15" width="8" height="70" rx="2" fill="#e6b800" />
+                          <line x1="33" y1="15" x2="33" y2="85" stroke="#cc9900" stroke-width="1" />
+                          <path d="M 28 85 L 80 85 V 20 H 75 V 80 H 28 Z" fill="#ffffff" />
+                          <rect x="25" y="15" width="55" height="70" rx="6" fill="none" stroke="rgba(0,0,0,0.15)" stroke-width="1.5" />
+                          <line x1="45" y1="35" x2="68" y2="35" stroke="#cc9900" stroke-width="3" stroke-linecap="round" />
+                          <line x1="45" y1="50" x2="68" y2="50" stroke="#cc9900" stroke-width="3" stroke-linecap="round" />
+                          <line x1="45" y1="65" x2="55" y2="65" stroke="#cc9900" stroke-width="3" stroke-linecap="round" />
+                        </g>
+                      </svg>
+                    </span> 
+                    NotebookLM
                   </div>
+
                 </div>
                 <div id="m-tool-h" class="drop-menu">
                   <div
@@ -5692,26 +5771,105 @@
                   <span style="font-size: 16px">⎘</span> Công cụ
                 </div>
                 <div id="m-att-c" class="drop-menu">
+                  
+                  <!-- 1. Tải tệp lên (Kích thước lớn cân đối, 4 góc bo tròn 12px siêu mịn màng) -->
                   <div class="d-item" onclick="trigFile()">
-                    <span class="si-ic">📎</span> Tải tệp lên
+                    <span class="si-ic" style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px;">
+                      <svg viewBox="0 0 120 120" style="width: 100%; height: 100%;">
+                        <g filter="url(#ios-extreme-pop)">
+                          <!-- Bìa Sau (Bo tròn góc trên và dưới) -->
+                          <path d="M 10 42 C 10 35.4, 15.4 30, 22 30 L 42 30 C 45 30, 47 31, 49 34 L 54 41.5 C 55.5 43.5, 58 44.5, 60 44.5 L 98 44.5 C 104.6 44.5, 110 49.9, 110 56.5 L 110 86 C 110 92.6, 104.6 98, 98 98 L 22 98 C 15.4 98, 10 92.6, 10 86 Z" fill="#60a5fa" />
+                          <!-- Giấy Trắng -->
+                          <rect x="18" y="38" width="84" height="50" rx="6" fill="#ffffff" />
+                          <!-- Bìa Trước (Bo tròn 12px chuẩn thiết kế squircle) -->
+                          <path d="M 10 60 C 10 53.4, 15.4 48, 22 48 L 98 48 C 104.6 48, 110 53.4, 110 60 L 110 86 C 110 92.6, 104.6 98, 98 98 L 22 98 C 15.4 98, 10 92.6, 10 86 Z" fill="url(#g-blue)" />
+                          <!-- Nét Highlight mỏng -->
+                          <path d="M 14 50 L 106 50" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round" />
+                        </g>
+                      </svg>
+                    </span> 
+                    Tải tệp lên
                   </div>
+
+                  <!-- 2. Thêm từ Drive (Giữ nguyên chuẩn xác) -->
                   <div class="d-item" onclick="trigFile()">
-                    <span class="si-ic">◬</span> Thêm từ Drive
+                    <span class="si-ic" style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px;">
+                      <svg viewBox="0 0 100 100" style="width: 100%; height: 100%; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3)); overflow: visible;">
+                        <g transform="translate(6.35, 12.2)">
+                          <path d="M29.1,0 L0,50.4 L14.6,75.6 L43.6,25.2 Z" fill="#0F9D58" stroke="#0F9D58" stroke-width="3" stroke-linejoin="round" />
+                          <path d="M29.1,0 L58.2,0 L87.3,50.4 L58.2,50.4 Z" fill="#FFC107" stroke="#FFC107" stroke-width="3" stroke-linejoin="round" />
+                          <path d="M14.6,75.6 L72.7,75.6 L58.2,50.4 L0,50.4 Z" fill="#4285F4" stroke="#4285F4" stroke-width="3" stroke-linejoin="round" />
+                          <path d="M58.2,50.4 L87.3,50.4 L72.7,75.6 Z" fill="#EA4335" stroke="#EA4335" stroke-width="3" stroke-linejoin="round" />
+                        </g>
+                      </svg>
+                    </span> 
+                    Thêm từ Drive
                   </div>
+
+                  <!-- 3. Ảnh (Giữ nguyên) -->
                   <div class="d-item" onclick="trigFile()">
-                    <span class="si-ic">❀</span> Ảnh
+                    <span class="si-ic" style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px;">
+                      <svg viewBox="0 0 100 100" filter="url(#ios-extreme-pop)" style="width: 100%; height: 100%; overflow: visible">
+                        <g style="mix-blend-mode: screen">
+                          <g transform="rotate(0 50 50)"><rect x="38" y="10" width="24" height="42" rx="12" fill="url(#fl-top)" opacity="0.85" /></g>
+                          <g transform="rotate(45 50 50)"><rect x="38" y="10" width="24" height="42" rx="12" fill="url(#fl-tr)" opacity="0.85" /></g>
+                          <g transform="rotate(90 50 50)"><rect x="38" y="10" width="24" height="42" rx="12" fill="url(#fl-right)" opacity="0.85" /></g>
+                          <g transform="rotate(135 50 50)"><rect x="38" y="10" width="24" height="42" rx="12" fill="url(#fl-br)" opacity="0.85" /></g>
+                          <g transform="rotate(180 50 50)"><rect x="38" y="10" width="24" height="42" rx="12" fill="url(#fl-bottom)" opacity="0.85" /></g>
+                          <g transform="rotate(225 50 50)"><rect x="38" y="10" width="24" height="42" rx="12" fill="url(#fl-bl)" opacity="0.85" /></g>
+                          <g transform="rotate(270 50 50)"><rect x="38" y="10" width="24" height="42" rx="12" fill="url(#fl-left)" opacity="0.85" /></g>
+                          <g transform="rotate(315 50 50)"><rect x="38" y="10" width="24" height="42" rx="12" fill="url(#fl-tl)" opacity="0.85" /></g>
+                        </g>
+                        <circle cx="50" cy="50" r="3" fill="#ffffff" opacity="0.9" filter="blur(1px)" />
+                      </svg>
+                    </span> 
+                    Ảnh
                   </div>
+
+                  <!-- 4. Nhập mã (Giữ nguyên) -->
                   <div class="d-item" onclick="trigFile()">
-                    <span class="si-ic">&lt;&gt;</span> Nhập mã
+                    <span class="si-ic" style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px;">
+                      <svg viewBox="0 0 100 100" style="width: 100%; height: 100%; overflow: visible;">
+                        <g filter="url(#ios-extreme-pop)">
+                          <g filter="drop-shadow(0 4px 5px rgba(0,0,0,0.5))">
+                            <rect x="4" y="10" width="92" height="80" rx="14" fill="#050505" />
+                            <path d="M 4 24 C 4 16.268 10.268 10 18 10 L 82 10 C 89.732 10 96 16.268 96 24 L 96 32 L 4 32 Z" fill="#121212" />
+                            <circle cx="15" cy="21" r="3.5" fill="#f95e59" />
+                            <circle cx="25" cy="21" r="3.5" fill="#fcbc40" />
+                            <circle cx="35" cy="21" r="3.5" fill="#33c748" />
+                            <rect x="42" y="19.5" width="16" height="3" rx="1.5" fill="#000000" opacity="0.8" />
+                            <rect x="4" y="10" width="92" height="80" rx="14" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1.5" />
+                          </g>
+                          <g filter="drop-shadow(0 2px 3px rgba(0,0,0,0.7))">
+                            <path d="M 40 51 L 24 61 L 40 71" fill="none" stroke="url(#silver-code)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M 60 51 L 76 61 L 60 71" fill="none" stroke="url(#silver-code)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+                            <line x1="53" y1="44" x2="47" y2="78" stroke="url(#silver-code)" stroke-width="5" stroke-linecap="round" />
+                          </g>
+                        </g>
+                      </svg>
+                    </span> 
+                    Nhập mã
                   </div>
-                  <div
-                    class="d-item"
-                    onclick="
-                      openSetting('NotebookLM', SETTINGS_CONTENT.notebookLM)
-                    "
-                  >
-                    <span class="si-ic">⋒</span> NotebookLM
+
+                  <!-- 5. NotebookLM (Giữ nguyên) -->
+                  <div class="d-item" onclick="openSetting('NotebookLM', SETTINGS_CONTENT.notebookLM)">
+                    <span class="si-ic" style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px;">
+                      <svg viewBox="0 0 100 100" style="width: 100%; height: 100%;">
+                        <g filter="url(#ios-extreme-pop)">
+                          <rect x="25" y="15" width="55" height="70" rx="6" fill="#ffcc00" />
+                          <rect x="25" y="15" width="8" height="70" rx="2" fill="#e6b800" />
+                          <line x1="33" y1="15" x2="33" y2="85" stroke="#cc9900" stroke-width="1" />
+                          <path d="M 28 85 L 80 85 V 20 H 75 V 80 H 28 Z" fill="#ffffff" />
+                          <rect x="25" y="15" width="55" height="70" rx="6" fill="none" stroke="rgba(0,0,0,0.15)" stroke-width="1.5" />
+                          <line x1="45" y1="35" x2="68" y2="35" stroke="#cc9900" stroke-width="3" stroke-linecap="round" />
+                          <line x1="45" y1="50" x2="68" y2="50" stroke="#cc9900" stroke-width="3" stroke-linecap="round" />
+                          <line x1="45" y1="65" x2="55" y2="65" stroke="#cc9900" stroke-width="3" stroke-linecap="round" />
+                        </g>
+                      </svg>
+                    </span> 
+                    NotebookLM
                   </div>
+
                 </div>
                 <div id="m-tool-c" class="drop-menu">
                   <div
