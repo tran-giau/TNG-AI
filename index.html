@@ -5339,96 +5339,236 @@
 
                 </div>
                 <div id="m-tool-h" class="drop-menu">
-                  <div
-                    class="d-item"
-                    onclick="selectTool('Tạo hình ảnh', '🖼️', event)"
-                  >
-                    <span class="si-ic">🖼️</span> Tạo hình ảnh
+                  
+                  <!-- 1. Tạo hình ảnh (Home) -->
+                  <div class="d-item" onclick="selectTool('Tạo hình ảnh', this.querySelector('svg').outerHTML, event)">
+                    <span class="si-ic" style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px;">
+                      <svg viewBox="0 0 100 100" style="width: 100%; height: 100%; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2)); overflow: visible;">
+                        <defs>
+                          <!-- Màu nền Xanh sang Tím -->
+                          <linearGradient id="photo-bg-h" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#5C88FF" />
+                            <stop offset="100%" stop-color="#A760FF" />
+                          </linearGradient>
+                          <!-- Màu mặt trời (Trắng sáng Tím nhạt) -->
+                          <linearGradient id="sun-grad-h" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#FFFFFF" />
+                            <stop offset="100%" stop-color="#EADDFF" />
+                          </linearGradient>
+                          <!-- Hiệu ứng bóng đổ ở sườn đồi bên trái -->
+                          <linearGradient id="dune-front-h" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#DCE8FF" />
+                            <stop offset="35%" stop-color="#FFFFFF" />
+                            <stop offset="100%" stop-color="#FFFFFF" />
+                          </linearGradient>
+                          <clipPath id="photo-clip-h"><rect width="100" height="100" rx="22.5" /></clipPath>
+                        </defs>
+
+                        <g clip-path="url(#photo-clip-h)">
+                          <!-- Nền -->
+                          <rect width="100" height="100" fill="url(#photo-bg-h)" />
+                          <!-- Mặt trời -->
+                          <circle cx="76" cy="24" r="12" fill="url(#sun-grad-h)" filter="drop-shadow(0 2px 5px rgba(0,0,0,0.15))" />
+                          <!-- Đồi cát phía sau -->
+                          <path d="M 45 60 C 65 55, 85 60, 105 75 L 105 105 L 45 105 Z" fill="#ffffff" opacity="0.35" />
+                          <!-- Đồi cát phía trước (Có bóng mờ sườn trái) -->
+                          <path d="M -5 60 C 15 40, 35 42, 55 58 C 75 74, 90 82, 105 82 L 105 105 L -5 105 Z" fill="url(#dune-front-h)" />
+                        </g>
+                      </svg>
+                    </span> 
+                    Tạo hình ảnh
                   </div>
-                  <div
-                    class="d-item"
-                    onclick="selectTool('Canvas', '📝', event)"
-                  >
-                    <span class="si-ic">📝</span> Canvas
+
+                  <!-- 2. Canvas -->
+                  <div class="d-item" onclick="selectTool('Canvas', this.querySelector('svg').outerHTML, event)">
+                    <span class="si-ic" style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px;">
+                      <svg viewBox="0 0 100 100" style="width: 100%; height: 100%; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.25)); overflow: visible;">
+                        <defs>
+                          <!-- Giữ nguyên màu Gradient chuẩn Canva của bước mới -->
+                          <linearGradient id="canvas-grad-h" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#00C4CC" />
+                            <stop offset="45%" stop-color="#335CFF" />
+                            <stop offset="100%" stop-color="#8B3DFF" />
+                          </linearGradient>
+                        </defs>
+                        <rect width="100" height="100" rx="22.5" fill="url(#canvas-grad-h)" />
+                        <!-- Nâng chữ C lên 3px để căn giữa hoàn hảo, kết hợp đường nét chữ C nguyên bản -->
+                        <g transform="translate(2, -3)">
+                          <path d="M 69 29 C 62 18 48 16 38 23 C 25 32 18 51 23 66 C 28 80 42 86 56 83 C 66 81 74 72 76 62 C 77 58 70 55 68 59 C 65 65 59 71 49 71 C 38 72 31 62 31 51 C 31 38 41 28 52 28 C 59 28 64 32 67 37 C 69 40 73 35 69 29 Z" fill="#ffffff" />
+                        </g>
+                      </svg>
+                    </span> 
+                    Canvas
                   </div>
-                  <div
-                    class="d-item"
-                    onclick="selectTool('Deep Research', '🔍', event)"
-                  >
-                    <span class="si-ic">🔍</span> Deep Research
+
+                  <!-- 3. Deep Research (Sửa chuẩn 100%: Đồng tâm, có ánh sáng nền, sao 4 cánh) -->
+                  <div class="d-item" onclick="selectTool('Deep Research', this.querySelector('svg').outerHTML, event)">
+                    <span class="si-ic" style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px;">
+                      <svg viewBox="0 0 100 100" style="width: 100%; height: 100%; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3)); overflow: visible;">
+                        <defs>
+                          <!-- Hiệu ứng ánh sáng nhẹ hắt từ góc trên bên trái -->
+                          <radialGradient id="dr-bg-glow-h" cx="15%" cy="15%" r="100%">
+                            <stop offset="0%" stop-color="#343c39" />
+                            <stop offset="55%" stop-color="#080808" />
+                            <stop offset="100%" stop-color="#000000" />
+                          </radialGradient>
+                          <!-- Màu gradient của vòng bạc -->
+                          <linearGradient id="dr-silver-h" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#ffffff" />
+                            <stop offset="100%" stop-color="#b0b0b0" />
+                          </linearGradient>
+                          <!-- Mặt nạ cắt lủng vòng bạc -->
+                          <mask id="dr-mask-perfect-h">
+                            <rect width="100" height="100" fill="white" />
+                            <!-- Tròng đen: Đặt đồng tâm 50x50 với vòng bạc để viền đều đặn 100% -->
+                            <circle cx="50" cy="50" r="19" fill="black" />
+                            <!-- Cán kính lúp -->
+                            <line x1="60" y1="60" x2="90" y2="90" stroke="black" stroke-width="7.5" stroke-linecap="butt" />
+                            <!-- Sao 4 cánh -->
+                            <path d="M 69 26 Q 69 31 74 31 Q 69 31 69 36 Q 69 31 64 31 Q 69 31 69 26 Z" fill="black" />
+                          </mask>
+                        </defs>
+                        
+                        <!-- Nền vuông bo tròn với ánh sáng Glow -->
+                        <rect width="100" height="100" rx="22.5" fill="url(#dr-bg-glow-h)" />
+                        
+                        <!-- Vòng tròn bạc được cắt bằng mặt nạ -->
+                        <circle cx="50" cy="50" r="35" fill="url(#dr-silver-h)" mask="url(#dr-mask-perfect-h)" />
+                        
+                        <!-- Vệt sáng phản chiếu bên trong tròng kính -->
+                        <path d="M 38 52 A 12 12 0 0 1 48 38" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                      </svg>
+                    </span> 
+                    Deep Research
                   </div>
-                  <div
-                    class="d-item"
-                    onclick="selectTool('Tạo video', '🎬', event)"
-                  >
-                    <span class="si-ic">🎬</span> Tạo video
+
+                  <!-- 4. Tạo video (Chat) -->
+                  <div class="d-item" onclick="selectTool('Tạo video', this.querySelector('svg').outerHTML, event)">
+                    <span class="si-ic" style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px;">
+                      <svg viewBox="0 0 100 100" style="width: 100%; height: 100%; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.25)); overflow: visible;">
+                        <defs>
+                          <linearGradient id="vid-grad-perfect-c" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#3EE0C5" />
+                            <stop offset="100%" stop-color="#34A4FF" />
+                          </linearGradient>
+                          <clipPath id="sq-vid-perfect-c"><rect width="100" height="100" rx="22.5" /></clipPath>
+                        </defs>
+                        <g clip-path="url(#sq-vid-perfect-c)">
+                          <rect x="0" y="34" width="100" height="66" fill="url(#vid-grad-perfect-c)" />
+                          <rect x="0" y="0" width="100" height="34" fill="#ffffff" />
+                          
+                          <g fill="#000000">
+                            <polygon points="-12,0 4,0 20,16 4,32 -12,32 4,16" />
+                            <polygon points="16,0 32,0 48,16 32,32 16,32 32,16" />
+                            <polygon points="44,0 60,0 76,16 60,32 44,32 60,16" />
+                            <polygon points="72,0 88,0 104,16 88,32 72,32 88,16" />
+                            <polygon points="100,0 116,0 132,16 116,32 100,32 116,16" />
+                          </g>
+                          
+                          <rect x="0" y="15" width="100" height="2" fill="#000000" />
+                          <rect x="0" y="32" width="100" height="2" fill="#000000" />
+                        </g>
+                      </svg>
+                    </span> 
+                    Tạo video
                   </div>
-                  <div
-                    class="d-item"
-                    onclick="selectTool('Tạo nhạc', '🎵', event)"
-                  >
-                    <span class="si-ic">🎵</span> Tạo nhạc<span class="s-badge"
-                      >Mới</span
-                    >
+
+                  <!-- 5. Tạo nhạc (Chỉnh Gradient: Đỏ hồng chiếm 80%, cam chỉ phớt nhẹ ở đáy) -->
+                  <div class="d-item" onclick="selectTool('Tạo nhạc', this.querySelector('svg').outerHTML, event)">
+                    <span class="si-ic" style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px;">
+                      <svg viewBox="0 0 100 100" style="width: 100%; height: 100%; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.25)); overflow: visible;">
+                        <defs>
+                          <linearGradient id="music-grad-h" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <!-- Đỏ hồng chủ đạo kéo dài đến 80% -->
+                            <stop offset="0%" stop-color="#FF245B" />
+                            <stop offset="80%" stop-color="#F10034" />
+                            <!-- Chút cam ấm chỉ lướt nhẹ ở viền đáy -->
+                            <stop offset="100%" stop-color="#FF3D24" />
+                          </linearGradient>
+                          <linearGradient id="note-gloss-h" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#FFFFFF" />
+                            <stop offset="100%" stop-color="#FFD8E3" />
+                          </linearGradient>
+                        </defs>
+                        <rect width="100" height="100" rx="22.5" fill="url(#music-grad-h)" />
+                        <!-- transform="translate(-2, 0)": Giữ nguyên dời trái 2px để cân bằng thị giác -->
+                        <g transform="translate(-2, 0)">
+                          <path d="M 80 18 C 80 16 78 14.5 76 15 L 43 24 C 40.5 24.5 39 26 39 28 L 39 68 C 37 66 33 65 28 66 C 22 68 20 74 22 80 C 24 86 31 87 37 85 C 43 83 45 77 45 71 L 45 39 L 74 31 L 74 58 C 72 56 68 55 63 56 C 57 58 55 64 57 70 C 59 76 66 77 72 75 C 78 73 80 67 80 61 L 80 18 Z" fill="url(#note-gloss-h)" filter="drop-shadow(0 3px 5px rgba(0,0,0,0.25))" />
+                        </g>
+                      </svg>
+                    </span> 
+                    Tạo nhạc<span class="s-badge">Mới</span>
                   </div>
-                  <div
-                    class="d-item"
-                    onclick="selectTool('Học có hướng dẫn', '📖', event)"
-                  >
-                    <span class="si-ic">📖</span> Học có hướng dẫn
+
+                  <!-- 6. Học có hướng dẫn (Mẫu sách Isometric màu Cam CÓ NỀN CAM - Đã phóng to và căn giữa) -->
+                  <div class="d-item" onclick="selectTool('Học có hướng dẫn', this.querySelector('svg').outerHTML, event)">
+                    <span class="si-ic" style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px;">
+                      <svg viewBox="0 0 100 100" style="width: 100%; height: 100%; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.25)); overflow: visible;">
+                        <defs>
+                          <linearGradient id="edu-bg-new-h" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#FFBA33" />
+                            <stop offset="100%" stop-color="#E85504" />
+                          </linearGradient>
+                          <linearGradient id="book-cover-left-h" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#ea580c"/>
+                            <stop offset="100%" stop-color="#f97316"/>
+                          </linearGradient>
+                          <linearGradient id="book-cover-right-h" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#f97316"/>
+                            <stop offset="100%" stop-color="#c2410c"/>
+                          </linearGradient>
+                          <linearGradient id="book-page-left-h" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#e5e7eb"/>
+                            <stop offset="100%" stop-color="#ffffff"/>
+                          </linearGradient>
+                          <linearGradient id="book-page-right-h" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#ffffff"/>
+                            <stop offset="100%" stop-color="#d1d5db"/>
+                          </linearGradient>
+                          <linearGradient id="magic-glow-h" x1="0%" y1="100%" x2="0%" y2="0%">
+                            <stop offset="0%" stop-color="rgba(255,255,255,0.7)"/>
+                            <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+                          </linearGradient>
+                        </defs>
+                        
+                        <rect width="100" height="100" rx="22.5" fill="url(#edu-bg-new-h)" />
+                        
+                        <!-- Đã sửa tọa độ Tịnh tiến (translate) và Tỷ lệ (scale) để phóng to & căn giữa -->
+                        <g transform="translate(7.5, 2.5) scale(0.85)" filter="drop-shadow(0 4px 6px rgba(0,0,0,0.3))">
+                          <g>
+                            <path d="M 50 60 L 20 20 Q 50 0 80 20 Z" fill="url(#magic-glow-h)" filter="blur(3px)" />
+                            <circle cx="50" cy="25" r="3.5" fill="#ffffff" />
+                            <circle cx="35" cy="15" r="2.5" fill="#fde047" />
+                            <circle cx="65" cy="18" r="2.5" fill="#ffffff" />
+                          </g>
+                          <path d="M 4 35 L 50 45 L 50 95 L 4 85 Z" fill="url(#book-cover-left-h)" />
+                          <path d="M 96 35 L 50 45 L 50 95 L 96 85 Z" fill="url(#book-cover-right-h)" />
+                          <path d="M 8 36 L 48 44 L 48 88 L 8 80 Z" fill="#9ca3af" />
+                          <path d="M 10 34 L 49 42 L 49 87 L 10 79 Z" fill="#d1d5db" />
+                          <path d="M 12 32 L 50 40 L 50 86 L 12 78 Z" fill="url(#book-page-left-h)" />
+                          <path d="M 92 36 L 52 44 L 52 88 L 92 80 Z" fill="#9ca3af" />
+                          <path d="M 90 34 L 51 42 L 51 87 L 90 79 Z" fill="#d1d5db" />
+                          <path d="M 88 32 L 50 40 L 50 86 L 88 78 Z" fill="url(#book-page-right-h)" />
+                          <path d="M 30 36 L 36 37 L 36 65 L 33 60 L 30 65 Z" fill="#ef4444" />
+                          <line x1="50" y1="40" x2="50" y2="86" stroke="#9ca3af" stroke-width="2.5" />
+                          <path d="M 4 85 L 50 95 L 96 85" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" />
+                          <path d="M 4 35 L 50 45 L 96 35" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" />
+                        </g>
+                      </svg>
+                    </span> 
+                    Học có hướng dẫn
                   </div>
+
                   <div class="d-divider"></div>
-                  <div
-                    style="
-                      padding: 10px 15px;
-                      font-size: 13px;
-                      color: var(--text-sub);
-                      font-weight: 600;
-                      display: flex;
-                      align-items: center;
-                      gap: 10px;
-                    "
-                  >
-                    Các tính năng thử nghiệm<span
-                      style="
-                        background: rgba(168, 199, 250, 0.2);
-                        color: var(--btn-blue);
-                        padding: 2px 8px;
-                        border-radius: 10px;
-                        font-size: 11px;
-                      "
-                      >🔬 Labs</span
-                    >
+                  <div style="padding: 10px 15px; font-size: 13px; color: var(--text-sub); font-weight: 600; display: flex; align-items: center; gap: 10px;">
+                    Các tính năng thử nghiệm<span style="background: rgba(168, 199, 250, 0.2); color: var(--btn-blue); padding: 2px 8px; border-radius: 10px; font-size: 11px;">🔬 Labs</span>
                   </div>
-                  <div
-                    class="d-item flex-between"
-                    style="align-items: flex-start; cursor: default"
-                    onclick="event.stopPropagation()"
-                  >
-                    <div
-                      style="
-                        display: flex;
-                        flex-direction: column;
-                        gap: 3px;
-                        max-width: 80%;
-                      "
-                    >
-                      <span style="font-weight: 500"
-                        >Trí thông minh cá nhân</span
-                      ><span
-                        style="
-                          font-size: 12px;
-                          color: var(--text-sub);
-                          white-space: normal;
-                        "
-                        >Cá nhân hoá cuộc trò chuyện khi cần thiết</span
-                      >
+                  <div class="d-item flex-between" style="align-items: flex-start; cursor: default" onclick="event.stopPropagation()">
+                    <div style="display: flex; flex-direction: column; gap: 3px; max-width: 80%;">
+                      <span style="font-weight: 500">Trí thông minh cá nhân</span>
+                      <span style="font-size: 12px; color: var(--text-sub); white-space: normal;">Cá nhân hoá cuộc trò chuyện khi cần thiết</span>
                     </div>
-                    <label class="switch"
-                      ><input type="checkbox" checked /><span
-                        class="slider"
-                      ></span
-                    ></label>
+                    <label class="switch"><input type="checkbox" checked /><span class="slider"></span></label>
                   </div>
                 </div>
               </div>
@@ -5571,43 +5711,7 @@
             TNG Live Mới
           </div>
 
-          <!-- 1. Dịch văn bản (Đảo lên trước - Hologram 3D, không nháy sáng) -->
-          <div class="chip" onclick="fillInput('Dịch sang tiếng anh: ')">
-            <span class="si-ic" style="display: flex; align-items: center; justify-content: center; margin-right: 8px;">
-              <div class="ios27-art" style="width: 22px; height: 22px;">
-                <svg viewBox="0 0 100 100" style="overflow: visible;">
-                  <defs>
-                    <radialGradient id="globe-ocean" cx="35%" cy="35%" r="65%">
-                      <stop offset="0%" stop-color="#38bdf8"/><stop offset="40%" stop-color="#0284c7"/><stop offset="100%" stop-color="#082f49"/>
-                    </radialGradient>
-                    <linearGradient id="globe-land-new" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stop-color="#4ade80"/><stop offset="50%" stop-color="#10b981"/><stop offset="100%" stop-color="#047857"/>
-                    </linearGradient>
-                    <linearGradient id="globe-glass-cover" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stop-color="rgba(255,255,255,0.9)"/><stop offset="35%" stop-color="rgba(255,255,255,0)"/><stop offset="100%" stop-color="rgba(255,255,255,0.3)"/>
-                    </linearGradient>
-                  </defs>
-                  <g filter="url(#ios-extreme-pop)">
-                    <circle cx="50" cy="50" r="46" fill="url(#globe-ocean)" />
-                    <ellipse cx="50" cy="50" rx="46" ry="14" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
-                    <ellipse cx="50" cy="50" rx="46" ry="32" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
-                    <ellipse cx="50" cy="50" rx="16" ry="46" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
-                    <ellipse cx="50" cy="50" rx="34" ry="46" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
-                    <line x1="4" y1="50" x2="96" y2="50" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" />
-                    <line x1="50" y1="4" x2="50" y2="96" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" />
-                    <path d="M 12 35 C 20 15, 50 8, 62 25 C 70 35, 80 30, 88 50 C 92 65, 75 75, 55 70 C 35 65, 10 55, 12 35 Z" fill="url(#globe-land-new)" filter="drop-shadow(0 2px 3px rgba(0,0,0,0.4))" />
-                    <path d="M 60 80 C 75 70, 90 75, 82 90 C 75 96, 55 90, 60 80 Z" fill="url(#globe-land-new)" filter="drop-shadow(0 2px 3px rgba(0,0,0,0.4))" />
-                    <circle cx="50" cy="50" r="46" fill="none" stroke="rgba(0,0,0,0.5)" stroke-width="4" />
-                    <path d="M 10 45 A 40 40 0 0 1 55 10 A 46 46 0 0 0 10 45 Z" fill="rgba(255,255,255,0.5)" />
-                    <circle cx="50" cy="50" r="46" fill="url(#globe-glass-cover)" />
-                  </g>
-                </svg>
-              </div>
-            </span>
-            Dịch văn bản
-          </div>
-
-          <!-- 2. Viết code (Màu nền lấy chuẩn 100% từ ảnh gốc, biểu tượng </ > màu xám) -->
+          <!-- 1. Viết code (Đã đổi lên vị trí số 2) -->
           <div class="chip" onclick="fillInput('Viết cho tôi một đoạn code html/css tạo: ')">
             <span class="si-ic" style="display: flex; align-items: center; justify-content: center; margin-right: 8px;">
               <div class="ios27-art" style="width: 24px; height: 24px;">
@@ -5655,6 +5759,42 @@
               </div>
             </span>
             Viết code
+          </div>
+
+          <!-- 2. Dịch văn bản (Đã đổi xuống vị trí số 3) -->
+          <div class="chip" onclick="fillInput('Dịch sang tiếng anh: ')">
+            <span class="si-ic" style="display: flex; align-items: center; justify-content: center; margin-right: 8px;">
+              <div class="ios27-art" style="width: 22px; height: 22px;">
+                <svg viewBox="0 0 100 100" style="overflow: visible;">
+                  <defs>
+                    <radialGradient id="globe-ocean" cx="35%" cy="35%" r="65%">
+                      <stop offset="0%" stop-color="#38bdf8"/><stop offset="40%" stop-color="#0284c7"/><stop offset="100%" stop-color="#082f49"/>
+                    </radialGradient>
+                    <linearGradient id="globe-land-new" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#4ade80"/><stop offset="50%" stop-color="#10b981"/><stop offset="100%" stop-color="#047857"/>
+                    </linearGradient>
+                    <linearGradient id="globe-glass-cover" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="rgba(255,255,255,0.9)"/><stop offset="35%" stop-color="rgba(255,255,255,0)"/><stop offset="100%" stop-color="rgba(255,255,255,0.3)"/>
+                    </linearGradient>
+                  </defs>
+                  <g filter="url(#ios-extreme-pop)">
+                    <circle cx="50" cy="50" r="46" fill="url(#globe-ocean)" />
+                    <ellipse cx="50" cy="50" rx="46" ry="14" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+                    <ellipse cx="50" cy="50" rx="46" ry="32" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+                    <ellipse cx="50" cy="50" rx="16" ry="46" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+                    <ellipse cx="50" cy="50" rx="34" ry="46" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+                    <line x1="4" y1="50" x2="96" y2="50" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" />
+                    <line x1="50" y1="4" x2="50" y2="96" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" />
+                    <path d="M 12 35 C 20 15, 50 8, 62 25 C 70 35, 80 30, 88 50 C 92 65, 75 75, 55 70 C 35 65, 10 55, 12 35 Z" fill="url(#globe-land-new)" filter="drop-shadow(0 2px 3px rgba(0,0,0,0.4))" />
+                    <path d="M 60 80 C 75 70, 90 75, 82 90 C 75 96, 55 90, 60 80 Z" fill="url(#globe-land-new)" filter="drop-shadow(0 2px 3px rgba(0,0,0,0.4))" />
+                    <circle cx="50" cy="50" r="46" fill="none" stroke="rgba(0,0,0,0.5)" stroke-width="4" />
+                    <path d="M 10 45 A 40 40 0 0 1 55 10 A 46 46 0 0 0 10 45 Z" fill="rgba(255,255,255,0.5)" />
+                    <circle cx="50" cy="50" r="46" fill="url(#globe-glass-cover)" />
+                  </g>
+                </svg>
+              </div>
+            </span>
+            Dịch văn bản
           </div>
 
           <!-- 4. Mẹo đời sống (Bóng đèn thủy tinh sạch sẽ, không có vầng hào quang vuông) -->
@@ -5872,96 +6012,215 @@
 
                 </div>
                 <div id="m-tool-c" class="drop-menu">
-                  <div
-                    class="d-item"
-                    onclick="selectTool('Tạo hình ảnh', '🖼️', event)"
-                  >
-                    <span class="si-ic">🖼️</span> Tạo hình ảnh
+                  
+                  <!-- 1. Tạo hình ảnh (Chat) -->
+                  <div class="d-item" onclick="selectTool('Tạo hình ảnh', this.querySelector('svg').outerHTML, event)">
+                    <span class="si-ic" style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px;">
+                      <svg viewBox="0 0 100 100" style="width: 100%; height: 100%; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2)); overflow: visible;">
+                        <defs>
+                          <linearGradient id="photo-bg-c" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#5C88FF" />
+                            <stop offset="100%" stop-color="#A760FF" />
+                          </linearGradient>
+                          <linearGradient id="sun-grad-c" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#FFFFFF" />
+                            <stop offset="100%" stop-color="#EADDFF" />
+                          </linearGradient>
+                          <linearGradient id="dune-front-c" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#DCE8FF" />
+                            <stop offset="35%" stop-color="#FFFFFF" />
+                            <stop offset="100%" stop-color="#FFFFFF" />
+                          </linearGradient>
+                          <clipPath id="photo-clip-c"><rect width="100" height="100" rx="22.5" /></clipPath>
+                        </defs>
+
+                        <g clip-path="url(#photo-clip-c)">
+                          <rect width="100" height="100" fill="url(#photo-bg-c)" />
+                          <circle cx="76" cy="24" r="12" fill="url(#sun-grad-c)" filter="drop-shadow(0 2px 5px rgba(0,0,0,0.15))" />
+                          <path d="M 45 60 C 65 55, 85 60, 105 75 L 105 105 L 45 105 Z" fill="#ffffff" opacity="0.35" />
+                          <path d="M -5 60 C 15 40, 35 42, 55 58 C 75 74, 90 82, 105 82 L 105 105 L -5 105 Z" fill="url(#dune-front-c)" />
+                        </g>
+                      </svg>
+                    </span> 
+                    Tạo hình ảnh
                   </div>
-                  <div
-                    class="d-item"
-                    onclick="selectTool('Canvas', '📝', event)"
-                  >
-                    <span class="si-ic">📝</span> Canvas
+
+                  <!-- 2. Canvas -->
+                  <div class="d-item" onclick="selectTool('Canvas', this.querySelector('svg').outerHTML, event)">
+                    <span class="si-ic" style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px;">
+                      <svg viewBox="0 0 100 100" style="width: 100%; height: 100%; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.25)); overflow: visible;">
+                        <defs>
+                          <linearGradient id="canvas-grad-c" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#00C4CC" />
+                            <stop offset="45%" stop-color="#335CFF" />
+                            <stop offset="100%" stop-color="#8B3DFF" />
+                          </linearGradient>
+                        </defs>
+                        <rect width="100" height="100" rx="22.5" fill="url(#canvas-grad-c)" />
+                        <g transform="translate(2, -3)">
+                          <path d="M 69 29 C 62 18 48 16 38 23 C 25 32 18 51 23 66 C 28 80 42 86 56 83 C 66 81 74 72 76 62 C 77 58 70 55 68 59 C 65 65 59 71 49 71 C 38 72 31 62 31 51 C 31 38 41 28 52 28 C 59 28 64 32 67 37 C 69 40 73 35 69 29 Z" fill="#ffffff" />
+                        </g>
+                      </svg>
+                    </span> 
+                    Canvas
                   </div>
-                  <div
-                    class="d-item"
-                    onclick="selectTool('Deep Research', '🔍', event)"
-                  >
-                    <span class="si-ic">🔍</span> Deep Research
+
+                  <!-- 3. Deep Research (Chat) -->
+                  <div class="d-item" onclick="selectTool('Deep Research', this.querySelector('svg').outerHTML, event)">
+                    <span class="si-ic" style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px;">
+                      <svg viewBox="0 0 100 100" style="width: 100%; height: 100%; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3)); overflow: visible;">
+                        <defs>
+                          <radialGradient id="dr-bg-glow-c" cx="15%" cy="15%" r="100%">
+                            <stop offset="0%" stop-color="#343c39" />
+                            <stop offset="55%" stop-color="#080808" />
+                            <stop offset="100%" stop-color="#000000" />
+                          </radialGradient>
+                          <linearGradient id="dr-silver-c" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#ffffff" />
+                            <stop offset="100%" stop-color="#b0b0b0" />
+                          </linearGradient>
+                          <mask id="dr-mask-perfect-c">
+                            <rect width="100" height="100" fill="white" />
+                            <circle cx="50" cy="50" r="19" fill="black" />
+                            <line x1="60" y1="60" x2="90" y2="90" stroke="black" stroke-width="7.5" stroke-linecap="butt" />
+                            <path d="M 69 26 Q 69 31 74 31 Q 69 31 69 36 Q 69 31 64 31 Q 69 31 69 26 Z" fill="black" />
+                          </mask>
+                        </defs>
+                        <rect width="100" height="100" rx="22.5" fill="url(#dr-bg-glow-c)" />
+                        <circle cx="50" cy="50" r="35" fill="url(#dr-silver-c)" mask="url(#dr-mask-perfect-c)" />
+                        <path d="M 38 52 A 12 12 0 0 1 48 38" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                      </svg>
+                    </span> 
+                    Deep Research
                   </div>
-                  <div
-                    class="d-item"
-                    onclick="selectTool('Tạo video', '🎬', event)"
-                  >
-                    <span class="si-ic">🎬</span> Tạo video
+
+                  <!-- 4. Tạo video (Bản thiết kế mới chuẩn 100% theo ảnh) -->
+                  <div class="d-item" onclick="selectTool('Tạo video', this.querySelector('svg').outerHTML, event)">
+                    <span class="si-ic" style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px;">
+                      <svg viewBox="0 0 100 100" style="width: 100%; height: 100%; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.25)); overflow: visible;">
+                        <defs>
+                          <linearGradient id="vid-grad-perfect-h" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#3EE0C5" />
+                            <stop offset="100%" stop-color="#34A4FF" />
+                          </linearGradient>
+                          <clipPath id="sq-vid-perfect-h"><rect width="100" height="100" rx="22.5" /></clipPath>
+                        </defs>
+                        <g clip-path="url(#sq-vid-perfect-h)">
+                          <!-- Nền gradient xanh -->
+                          <rect x="0" y="34" width="100" height="66" fill="url(#vid-grad-perfect-h)" />
+                          <!-- Nền trắng cho clapperboard -->
+                          <rect x="0" y="0" width="100" height="34" fill="#ffffff" />
+                          
+                          <!-- Các mũi tên Chevron màu đen nghiêng 45 độ -->
+                          <g fill="#000000">
+                            <polygon points="-12,0 4,0 20,16 4,32 -12,32 4,16" />
+                            <polygon points="16,0 32,0 48,16 32,32 16,32 32,16" />
+                            <polygon points="44,0 60,0 76,16 60,32 44,32 60,16" />
+                            <polygon points="72,0 88,0 104,16 88,32 72,32 88,16" />
+                            <polygon points="100,0 116,0 132,16 116,32 100,32 116,16" />
+                          </g>
+                          
+                          <!-- 2 đường kẻ ngang phân tách chuẩn xác -->
+                          <rect x="0" y="15" width="100" height="2" fill="#000000" />
+                          <rect x="0" y="32" width="100" height="2" fill="#000000" />
+                        </g>
+                      </svg>
+                    </span> 
+                    Tạo video
                   </div>
-                  <div
-                    class="d-item"
-                    onclick="selectTool('Tạo nhạc', '🎵', event)"
-                  >
-                    <span class="si-ic">🎵</span> Tạo nhạc<span class="s-badge"
-                      >Mới</span
-                    >
+
+                  <!-- 5. Tạo nhạc (Chat - Chỉnh Gradient) -->
+                  <div class="d-item" onclick="selectTool('Tạo nhạc', this.querySelector('svg').outerHTML, event)">
+                    <span class="si-ic" style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px;">
+                      <svg viewBox="0 0 100 100" style="width: 100%; height: 100%; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.25)); overflow: visible;">
+                        <defs>
+                          <linearGradient id="music-grad-c" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#FF245B" />
+                            <stop offset="80%" stop-color="#F10034" />
+                            <stop offset="100%" stop-color="#FF3D24" />
+                          </linearGradient>
+                          <linearGradient id="note-gloss-c" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#FFFFFF" />
+                            <stop offset="100%" stop-color="#FFD8E3" />
+                          </linearGradient>
+                        </defs>
+                        <rect width="100" height="100" rx="22.5" fill="url(#music-grad-c)" />
+                        <g transform="translate(-2, 0)">
+                          <path d="M 80 18 C 80 16 78 14.5 76 15 L 43 24 C 40.5 24.5 39 26 39 28 L 39 68 C 37 66 33 65 28 66 C 22 68 20 74 22 80 C 24 86 31 87 37 85 C 43 83 45 77 45 71 L 45 39 L 74 31 L 74 58 C 72 56 68 55 63 56 C 57 58 55 64 57 70 C 59 76 66 77 72 75 C 78 73 80 67 80 61 L 80 18 Z" fill="url(#note-gloss-c)" filter="drop-shadow(0 3px 5px rgba(0,0,0,0.25))" />
+                        </g>
+                      </svg>
+                    </span> 
+                    Tạo nhạc<span class="s-badge">Mới</span>
                   </div>
-                  <div
-                    class="d-item"
-                    onclick="selectTool('Học có hướng dẫn', '📖', event)"
-                  >
-                    <span class="si-ic">📖</span> Học có hướng dẫn
+
+                  <!-- 6. Học có hướng dẫn (Chat - Mẫu sách Isometric màu Cam CÓ NỀN CAM - Đã phóng to) -->
+                  <div class="d-item" onclick="selectTool('Học có hướng dẫn', this.querySelector('svg').outerHTML, event)">
+                    <span class="si-ic" style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px;">
+                      <svg viewBox="0 0 100 100" style="width: 100%; height: 100%; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.25)); overflow: visible;">
+                        <defs>
+                          <linearGradient id="edu-bg-new-c" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#FFBA33" />
+                            <stop offset="100%" stop-color="#E85504" />
+                          </linearGradient>
+                          <linearGradient id="book-cover-left-c" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#ea580c"/>
+                            <stop offset="100%" stop-color="#f97316"/>
+                          </linearGradient>
+                          <linearGradient id="book-cover-right-c" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#f97316"/>
+                            <stop offset="100%" stop-color="#c2410c"/>
+                          </linearGradient>
+                          <linearGradient id="book-page-left-c" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#e5e7eb"/>
+                            <stop offset="100%" stop-color="#ffffff"/>
+                          </linearGradient>
+                          <linearGradient id="book-page-right-c" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#ffffff"/>
+                            <stop offset="100%" stop-color="#d1d5db"/>
+                          </linearGradient>
+                          <linearGradient id="magic-glow-c" x1="0%" y1="100%" x2="0%" y2="0%">
+                            <stop offset="0%" stop-color="rgba(255,255,255,0.7)"/>
+                            <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+                          </linearGradient>
+                        </defs>
+                        
+                        <rect width="100" height="100" rx="22.5" fill="url(#edu-bg-new-c)" />
+                        
+                        <g transform="translate(7.5, 2.5) scale(0.85)" filter="drop-shadow(0 4px 6px rgba(0,0,0,0.3))">
+                          <g>
+                            <path d="M 50 60 L 20 20 Q 50 0 80 20 Z" fill="url(#magic-glow-c)" filter="blur(3px)" />
+                            <circle cx="50" cy="25" r="3.5" fill="#ffffff" />
+                            <circle cx="35" cy="15" r="2.5" fill="#fde047" />
+                            <circle cx="65" cy="18" r="2.5" fill="#ffffff" />
+                          </g>
+                          <path d="M 4 35 L 50 45 L 50 95 L 4 85 Z" fill="url(#book-cover-left-c)" />
+                          <path d="M 96 35 L 50 45 L 50 95 L 96 85 Z" fill="url(#book-cover-right-c)" />
+                          <path d="M 8 36 L 48 44 L 48 88 L 8 80 Z" fill="#9ca3af" />
+                          <path d="M 10 34 L 49 42 L 49 87 L 10 79 Z" fill="#d1d5db" />
+                          <path d="M 12 32 L 50 40 L 50 86 L 12 78 Z" fill="url(#book-page-left-c)" />
+                          <path d="M 92 36 L 52 44 L 52 88 L 92 80 Z" fill="#9ca3af" />
+                          <path d="M 90 34 L 51 42 L 51 87 L 90 79 Z" fill="#d1d5db" />
+                          <path d="M 88 32 L 50 40 L 50 86 L 88 78 Z" fill="url(#book-page-right-c)" />
+                          <path d="M 30 36 L 36 37 L 36 65 L 33 60 L 30 65 Z" fill="#ef4444" />
+                          <line x1="50" y1="40" x2="50" y2="86" stroke="#9ca3af" stroke-width="2.5" />
+                          <path d="M 4 85 L 50 95 L 96 85" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" />
+                          <path d="M 4 35 L 50 45 L 96 35" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" />
+                        </g>
+                      </svg>
+                    </span> 
+                    Học có hướng dẫn
                   </div>
+
                   <div class="d-divider"></div>
-                  <div
-                    style="
-                      padding: 10px 15px;
-                      font-size: 13px;
-                      color: var(--text-sub);
-                      font-weight: 600;
-                      display: flex;
-                      align-items: center;
-                      gap: 10px;
-                    "
-                  >
-                    Các tính năng thử nghiệm<span
-                      style="
-                        background: rgba(168, 199, 250, 0.2);
-                        color: var(--btn-blue);
-                        padding: 2px 8px;
-                        border-radius: 10px;
-                        font-size: 11px;
-                      "
-                      >🔬 Labs</span
-                    >
+                  <div style="padding: 10px 15px; font-size: 13px; color: var(--text-sub); font-weight: 600; display: flex; align-items: center; gap: 10px;">
+                    Các tính năng thử nghiệm<span style="background: rgba(168, 199, 250, 0.2); color: var(--btn-blue); padding: 2px 8px; border-radius: 10px; font-size: 11px;">🔬 Labs</span>
                   </div>
-                  <div
-                    class="d-item flex-between"
-                    style="align-items: flex-start; cursor: default"
-                    onclick="event.stopPropagation()"
-                  >
-                    <div
-                      style="
-                        display: flex;
-                        flex-direction: column;
-                        gap: 3px;
-                        max-width: 80%;
-                      "
-                    >
-                      <span style="font-weight: 500"
-                        >Trí thông minh cá nhân</span
-                      ><span
-                        style="
-                          font-size: 12px;
-                          color: var(--text-sub);
-                          white-space: normal;
-                        "
-                        >Cá nhân hoá cuộc trò chuyện khi cần thiết</span
-                      >
+                  <div class="d-item flex-between" style="align-items: flex-start; cursor: default" onclick="event.stopPropagation()">
+                    <div style="display: flex; flex-direction: column; gap: 3px; max-width: 80%;">
+                      <span style="font-weight: 500">Trí thông minh cá nhân</span>
+                      <span style="font-size: 12px; color: var(--text-sub); white-space: normal;">Cá nhân hoá cuộc trò chuyện khi cần thiết</span>
                     </div>
-                    <label class="switch"
-                      ><input type="checkbox" checked /><span
-                        class="slider"
-                      ></span
-                    ></label>
+                    <label class="switch"><input type="checkbox" checked /><span class="slider"></span></label>
                   </div>
                 </div>
               </div>
@@ -8740,40 +8999,60 @@
         }
       }
 
-      function selectTool(name, icon, e) {
+      function selectTool(name, iconHtml, e) {
         if (e) e.stopPropagation();
-        currentActiveTool = { name: name, icon: icon };
-        document.getElementById("active-tool-text-home").innerText =
-          icon + " " + name;
-        document.getElementById("active-tool-home").classList.add("show");
-        document.getElementById("active-tool-text-chat").innerText =
-          icon + " " + name;
-        document.getElementById("active-tool-chat").classList.add("show");
-        document
-          .querySelectorAll(".drop-menu, .sub-menu")
-          .forEach((x) => x.classList.remove("show"));
+        
+        // 1. Lưu Object thông minh của bạn
+        currentActiveTool = { name: name, icon: iconHtml };
+        
+        // 2. BẮT BUỘC tạo 2 bộ ID riêng biệt cho Home và Chat để trình duyệt không bị "mù màu"
+        let idHome = "h_" + Date.now() + "_";
+        let idChat = "c_" + Date.now() + "_";
 
+        // Xử lý chống trùng lặp ID cho bản hiển thị ở Home
+        let safeIconHome = iconHtml.replace(/id=(["'])([^"']+)["']/g, 'id=$1' + idHome + '$2$1')
+                                   .replace(/url\(['"]?#([^'")]+)['"]?\)/g, 'url(#' + idHome + '$1)');
+        
+        // Xử lý chống trùng lặp ID cho bản hiển thị ở Chat
+        let safeIconChat = iconHtml.replace(/id=(["'])([^"']+)["']/g, 'id=$1' + idChat + '$2$1')
+                                   .replace(/url\(['"]?#([^'")]+)['"]?\)/g, 'url(#' + idChat + '$1)');
+
+        // 3. Gom Icon và Tên riêng cho từng giao diện (Kích thước 20x20px siêu gọn)
+        let displayHome = `<span style="display:inline-block; width:20px; height:20px; vertical-align:-4px; margin-right:6px;">${safeIconHome}</span><span style="vertical-align: middle;">${name}</span>`;
+        let displayChat = `<span style="display:inline-block; width:20px; height:20px; vertical-align:-4px; margin-right:6px;">${safeIconChat}</span><span style="vertical-align: middle;">${name}</span>`;
+
+        // 4. In ra màn hình bằng innerHTML
+        let textHome = document.getElementById("active-tool-text-home");
+        if(textHome) textHome.innerHTML = displayHome;
+        document.getElementById("active-tool-home").classList.add("show");
+        
+        let textChat = document.getElementById("active-tool-text-chat");
+        if(textChat) textChat.innerHTML = displayChat;
+        document.getElementById("active-tool-chat").classList.add("show");
+        
+        // Đóng menu thả xuống
+        document.querySelectorAll(".drop-menu, .sub-menu").forEach((x) => x.classList.remove("show"));
+
+        // 5. Đổi Placeholder tự động
         let placeholderText = "Hỏi TNG AI";
         if (name === "Tạo hình ảnh") placeholderText = "Mô tả ảnh của bạn...";
-        else if (name === "Tạo video")
-          placeholderText = "Mô tả video của bạn...";
-        else if (name === "Tạo nhạc")
-          placeholderText = "Mô tả bản nhạc của bạn...";
-        else if (name === "Canvas")
-          placeholderText = "Hãy cùng nhau viết hoặc sáng tạo...";
-        else if (name === "Học có hướng dẫn")
-          placeholderText = "Bạn muốn tìm hiểu về chủ đề gì?";
-        else if (name === "Deep Research")
-          placeholderText = "Bạn muốn nghiên cứu về nội dung gì?";
+        else if (name === "Tạo video") placeholderText = "Mô tả video của bạn...";
+        else if (name === "Tạo nhạc") placeholderText = "Mô tả bản nhạc của bạn...";
+        else if (name === "Canvas") placeholderText = "Hãy cùng nhau viết hoặc sáng tạo...";
+        else if (name === "Học có hướng dẫn") placeholderText = "Bạn muốn tìm hiểu về chủ đề gì?";
+        else if (name === "Deep Research") placeholderText = "Bạn muốn nghiên cứu về nội dung gì?";
 
         document.getElementById("ui-home").placeholder = placeholderText;
         document.getElementById("ui-chat").placeholder = placeholderText;
       }
 
       function clearTool() {
-        currentActiveTool = null;
         document.getElementById("active-tool-home").classList.remove("show");
         document.getElementById("active-tool-chat").classList.remove("show");
+        
+        // Hủy Object
+        currentActiveTool = null;
+        
         document.getElementById("ui-home").placeholder = "Hỏi TNG AI";
         document.getElementById("ui-chat").placeholder = "Hỏi TNG AI";
       }
