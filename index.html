@@ -9017,9 +9017,17 @@
         let safeIconChat = iconHtml.replace(/id=(["'])([^"']+)["']/g, 'id=$1' + idChat + '$2$1')
                                    .replace(/url\(['"]?#([^'")]+)['"]?\)/g, 'url(#' + idChat + '$1)');
 
-        // 3. Gom Icon và Tên riêng cho từng giao diện (Kích thước 20x20px siêu gọn)
-        let displayHome = `<span style="display:inline-block; width:20px; height:20px; vertical-align:-4px; margin-right:6px;">${safeIconHome}</span><span style="vertical-align: middle;">${name}</span>`;
-        let displayChat = `<span style="display:inline-block; width:20px; height:20px; vertical-align:-4px; margin-right:6px;">${safeIconChat}</span><span style="vertical-align: middle;">${name}</span>`;
+        // 3. SỬ DỤNG FLEXBOX ĐỂ CĂN GIỮA HOÀN HẢO THEO CHIỀU DỌC
+        // Sử dụng align-items: center để mọi thứ (icon, text, nút X) cùng nằm trên 1 đường ngang
+        let displayHome = `<div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;">
+                             <div style="display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; margin-right: 6px;">${safeIconHome}</div>
+                             <span style="line-height: 1; margin-top: 1px;">${name}</span>
+                           </div>`;
+                           
+        let displayChat = `<div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;">
+                             <div style="display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; margin-right: 6px;">${safeIconChat}</div>
+                             <span style="line-height: 1; margin-top: 1px;">${name}</span>
+                           </div>`;
 
         // 4. In ra màn hình bằng innerHTML
         let textHome = document.getElementById("active-tool-text-home");
@@ -10791,29 +10799,39 @@
         if (docs.length > 0) {
           h += `<div class="mc-section-title">Tài liệu & Ghi chú</div><div style="display:flex; flex-direction:column; gap:15px; margin-bottom:30px;">`;
           docs.forEach((d) => {
-            let icon = "📄";
-            if (d.f.tool === "Canvas") icon = "📝";
-            else if (d.f.tool === "Deep Research") icon = "🔍";
-            else if (d.f.tool === "Học có hướng dẫn") icon = "📖";
+            let uid = "lib_doc_" + Math.random().toString(36).substr(2, 9);
+            
+            let svgCanvas = `<svg viewBox="0 0 100 100" style="width: 100%; height: 100%; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3)); overflow: visible;"><defs><linearGradient id="canvas-grad-${uid}" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00C4CC" /><stop offset="45%" stop-color="#335CFF" /><stop offset="100%" stop-color="#8B3DFF" /></linearGradient></defs><rect width="100" height="100" rx="22.5" fill="url(#canvas-grad-${uid})" /><g transform="translate(2, -3)"><path d="M 69 29 C 62 18 48 16 38 23 C 25 32 18 51 23 66 C 28 80 42 86 56 83 C 66 81 74 72 76 62 C 77 58 70 55 68 59 C 65 65 59 71 49 71 C 38 72 31 62 31 51 C 31 38 41 28 52 28 C 59 28 64 32 67 37 C 69 40 73 35 69 29 Z" fill="#ffffff" /></g></svg>`;
+            let svgDeepResearch = `<svg viewBox="0 0 100 100" style="width: 100%; height: 100%; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.4)); overflow: visible;"><defs><radialGradient id="dr-glow-${uid}" cx="15%" cy="15%" r="100%"><stop offset="0%" stop-color="#343c39" /><stop offset="55%" stop-color="#080808" /><stop offset="100%" stop-color="#000000" /></radialGradient><linearGradient id="dr-silver-${uid}" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ffffff" /><stop offset="100%" stop-color="#b0b0b0" /></linearGradient><mask id="dr-mask-${uid}"><rect width="100" height="100" fill="white" /><circle cx="50" cy="50" r="19" fill="black" /><line x1="60" y1="60" x2="90" y2="90" stroke="black" stroke-width="7.5" stroke-linecap="butt" /><path d="M 69 26 Q 69 31 74 31 Q 69 31 69 36 Q 69 31 64 31 Q 69 31 69 26 Z" fill="black" /></mask></defs><rect width="100" height="100" rx="22.5" fill="url(#dr-glow-${uid})" /><circle cx="50" cy="50" r="35" fill="url(#dr-silver-${uid})" mask="url(#dr-mask-${uid})" /><path d="M 38 52 A 12 12 0 0 1 48 38" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" fill="none" /></svg>`;
+            let svgEdu = `<svg viewBox="0 0 100 100" style="width: 100%; height: 100%; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3)); overflow: visible;"><defs><linearGradient id="edu-bg-${uid}" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#FFBA33" /><stop offset="100%" stop-color="#E85504" /></linearGradient><linearGradient id="book-l-${uid}" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#ea580c"/><stop offset="100%" stop-color="#f97316"/></linearGradient><linearGradient id="book-r-${uid}" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#f97316"/><stop offset="100%" stop-color="#c2410c"/></linearGradient><linearGradient id="page-l-${uid}" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#e5e7eb"/><stop offset="100%" stop-color="#ffffff"/></linearGradient><linearGradient id="page-r-${uid}" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#d1d5db"/></linearGradient><linearGradient id="magic-${uid}" x1="0%" y1="100%" x2="0%" y2="0%"><stop offset="0%" stop-color="rgba(255,255,255,0.7)"/><stop offset="100%" stop-color="rgba(255,255,255,0)"/></linearGradient></defs><rect width="100" height="100" rx="22.5" fill="url(#edu-bg-${uid})" /><g transform="translate(7.5, 2.5) scale(0.85)"><g><path d="M 50 60 L 20 20 Q 50 0 80 20 Z" fill="url(#magic-${uid})" filter="blur(3px)" /><circle cx="50" cy="25" r="3.5" fill="#ffffff" /><circle cx="35" cy="15" r="2.5" fill="#fde047" /><circle cx="65" cy="18" r="2.5" fill="#ffffff" /></g><path d="M 4 35 L 50 45 L 50 95 L 4 85 Z" fill="url(#book-l-${uid})" /><path d="M 96 35 L 50 45 L 50 95 L 96 85 Z" fill="url(#book-r-${uid})" /><path d="M 8 36 L 48 44 L 48 88 L 8 80 Z" fill="#9ca3af" /><path d="M 10 34 L 49 42 L 49 87 L 10 79 Z" fill="#d1d5db" /><path d="M 12 32 L 50 40 L 50 86 L 12 78 Z" fill="url(#page-l-${uid})" /><path d="M 92 36 L 52 44 L 52 88 L 92 80 Z" fill="#9ca3af" /><path d="M 90 34 L 51 42 L 51 87 L 90 79 Z" fill="#d1d5db" /><path d="M 88 32 L 50 40 L 50 86 L 88 78 Z" fill="url(#page-r-${uid})" /><path d="M 30 36 L 36 37 L 36 65 L 33 60 L 30 65 Z" fill="#ef4444" /><line x1="50" y1="40" x2="50" y2="86" stroke="#9ca3af" stroke-width="2.5" /><path d="M 4 85 L 50 95 L 96 85" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" /><path d="M 4 35 L 50 45 L 96 35" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" /></g></svg>`;
+            let svgDoc = `<svg viewBox="0 0 100 100" style="width: 100%; height: 100%; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3)); overflow: visible;"><defs><linearGradient id="doc-bg-${uid}" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#4ea2ff" /><stop offset="100%" stop-color="#0066ff" /></linearGradient></defs><rect width="100" height="100" rx="22.5" fill="url(#doc-bg-${uid})" /><path d="M 30 25 C 30 22, 32 20, 35 20 L 55 20 L 70 35 L 70 75 C 70 78, 68 80, 65 80 L 35 80 C 32 80, 30 78, 30 75 Z" fill="#ffffff" filter="drop-shadow(0 4px 6px rgba(0,0,0,0.3))" /><path d="M 55 20 L 55 35 L 70 35 Z" fill="#d1d5db" /><line x1="40" y1="45" x2="60" y2="45" stroke="#9ca3af" stroke-width="3" stroke-linecap="round" /><line x1="40" y1="55" x2="60" y2="55" stroke="#9ca3af" stroke-width="3" stroke-linecap="round" /><line x1="40" y1="65" x2="50" y2="65" stroke="#9ca3af" stroke-width="3" stroke-linecap="round" /></svg>`;
+
+            let chosenSvg = svgDoc;
+            if (d.f.tool === "Canvas" || (d.f.name && d.f.name.includes("Canvas"))) chosenSvg = svgCanvas;
+            else if (d.f.tool === "Deep Research" || (d.f.name && d.f.name.includes("Báo cáo"))) chosenSvg = svgDeepResearch;
+            else if (d.f.tool === "Học có hướng dẫn" || (d.f.name && d.f.name.includes("Lộ trình học"))) chosenSvg = svgEdu;
+
             let date = new Date(parseInt(d.f.id) || Date.now());
             let min = date.getMinutes().toString().padStart(2, "0");
             let hr = date.getHours().toString().padStart(2, "0");
             let dateStr = `${hr}:${min} ${date.getDate()} thg ${date.getMonth() + 1}, ${date.getFullYear()}`;
 
-            // NGẮT ANIMATION nếu đang Refresh để chống giật nháy
+            // --- LỖI ĐÃ ĐƯỢC SỬA Ở ĐÂY ---
             let animStyle = isRefreshing
               ? `animation: none !important;`
               : `animation: iosLiquidPopFull 0.85s cubic-bezier(0.16, 1, 0.3, 1) both; animation-delay: ${itemIndex * 0.05}s;`;
 
             h += `<div class="mc-item-wrap" style="background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:15px; padding:15px; display:flex; align-items:center; gap:15px; cursor:pointer; ${animStyle}" data-id="${d.f.id}" onmousedown="startPress(event, '${d.f.id}')" onmouseup="cancelPress()" onmouseleave="cancelPress()" ontouchstart="startPress(event, '${d.f.id}')" ontouchend="cancelPress()" ontouchmove="cancelPress()" onclick="handleClick(event, '${d.f.id}')">
-                                                      <div class="mc-checkbox"></div>
-                                                      <div style="width:48px; height:48px; border-radius:12px; background:var(--inner-card-bg); display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0;">${icon}</div>
-                                                      <div style="display:flex; flex-direction:column; gap:5px; overflow:hidden; flex:1;">
-                                                          <div style="font-weight:600; font-size:15px; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${d.f.pinned ? "📌 " : ""}${d.f.name}</div>
-                                                          <div style="font-size:12px; color:var(--text-sub);">${dateStr}</div>
-                                                      </div>
-                                                      <div class="icon-btn" style="width:30px; height:30px; z-index:5;" onclick="openFileMenu(event, '${d.f.id}', false)">⋮</div>
-                                                    </div>`;
+                    <div class="mc-checkbox"></div>
+                    <div class="ios27-art" style="width: 46px; height: 46px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+                        ${chosenSvg}
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:5px; overflow:hidden; flex:1;">
+                        <div style="font-weight:600; font-size:15px; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${d.f.pinned ? "📌 " : ""}${d.f.name}</div>
+                        <div style="font-size:12px; color:var(--text-sub);">${dateStr}</div>
+                    </div>
+                    <div class="icon-btn" style="width:30px; height:30px; z-index:5;" onclick="openFileMenu(event, '${d.f.id}', false)">⋮</div>
+                  </div>`;
             itemIndex++;
           });
           h += `</div>`;
@@ -10822,24 +10840,30 @@
         if (audios.length > 0) {
           h += `<div class="mc-section-title">Nội dung âm thanh</div><div style="display:flex; flex-direction:column; gap:15px; margin-bottom:30px;">`;
           audios.forEach((a) => {
+            let uid = "lib_aud_" + Math.random().toString(36).substr(2, 9);
+            let svgMusic = `<svg viewBox="0 0 100 100" style="width: 100%; height: 100%; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)); overflow: visible;"><defs><linearGradient id="music-grad-${uid}" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#FF245B" /><stop offset="80%" stop-color="#F10034" /><stop offset="100%" stop-color="#FF3D24" /></linearGradient><linearGradient id="note-gloss-${uid}" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#FFFFFF" /><stop offset="100%" stop-color="#FFD8E3" /></linearGradient></defs><rect width="100" height="100" rx="22.5" fill="url(#music-grad-${uid})" /><g transform="translate(-2, 0)"><path d="M 80 18 C 80 16 78 14.5 76 15 L 43 24 C 40.5 24.5 39 26 39 28 L 39 68 C 37 66 33 65 28 66 C 22 68 20 74 22 80 C 24 86 31 87 37 85 C 43 83 45 77 45 71 L 45 39 L 74 31 L 74 58 C 72 56 68 55 63 56 C 57 58 55 64 57 70 C 59 76 66 77 72 75 C 78 73 80 67 80 61 L 80 18 Z" fill="url(#note-gloss-${uid})" filter="drop-shadow(0 3px 5px rgba(0,0,0,0.25))" /></g></svg>`;
+
             let date = new Date(parseInt(a.f.id) || Date.now());
             let min = date.getMinutes().toString().padStart(2, "0");
             let hr = date.getHours().toString().padStart(2, "0");
             let dateStr = `${hr}:${min} ${date.getDate()} thg ${date.getMonth() + 1}, ${date.getFullYear()}`;
 
+            // --- LỖI ĐÃ ĐƯỢC SỬA Ở ĐÂY ---
             let animStyle = isRefreshing
               ? `animation: none !important;`
               : `animation: iosLiquidPopFull 0.85s cubic-bezier(0.16, 1, 0.3, 1) both; animation-delay: ${itemIndex * 0.05}s;`;
 
             h += `<div class="mc-item-wrap" style="background:var(--glass-bg); border:1px solid var(--glass-border); border-radius:15px; padding:15px; display:flex; align-items:center; gap:15px; cursor:pointer; ${animStyle}" data-id="${a.f.id}" onmousedown="startPress(event, '${a.f.id}')" onmouseup="cancelPress()" onmouseleave="cancelPress()" ontouchstart="startPress(event, '${a.f.id}')" ontouchend="cancelPress()" ontouchmove="cancelPress()" onclick="handleClick(event, '${a.f.id}')">
-                                                      <div class="mc-checkbox"></div>
-                                                      <div style="width:48px; height:48px; border-radius:12px; background:var(--inner-card-bg); display:flex; align-items:center; justify-content:center; font-size:24px; flex-shrink:0;">🎵</div>
-                                                      <div style="display:flex; flex-direction:column; gap:5px; overflow:hidden; flex:1;">
-                                                          <div style="font-weight:600; font-size:15px; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${a.f.pinned ? "📌 " : ""}${a.f.name}</div>
-                                                          <div style="font-size:12px; color:var(--text-sub);">${dateStr}</div>
-                                                      </div>
-                                                      <div class="icon-btn" style="width:30px; height:30px; z-index:5;" onclick="openFileMenu(event, '${a.f.id}', false)">⋮</div>
-                                                    </div>`;
+                    <div class="mc-checkbox"></div>
+                    <div class="ios27-art" style="width: 46px; height: 46px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+                        ${svgMusic}
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:5px; overflow:hidden; flex:1;">
+                        <div style="font-weight:600; font-size:15px; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${a.f.pinned ? "📌 " : ""}${a.f.name}</div>
+                        <div style="font-size:12px; color:var(--text-sub);">${dateStr}</div>
+                    </div>
+                    <div class="icon-btn" style="width:30px; height:30px; z-index:5;" onclick="openFileMenu(event, '${a.f.id}', false)">⋮</div>
+                  </div>`;
             itemIndex++;
           });
           h += `</div>`;
@@ -10848,24 +10872,26 @@
         if (imgs.length > 0 || videos.length > 0) {
           h += `<div class="mc-section-title">Nội dung nghe nhìn</div><div class="mc-grid">`;
           imgs.forEach((img) => {
+            // --- LỖI ĐÃ ĐƯỢC SỬA Ở ĐÂY ---
             let animStyle = isRefreshing
               ? `animation: none !important;`
               : `animation: iosLiquidPopFull 0.85s cubic-bezier(0.16, 1, 0.3, 1) both; animation-delay: ${itemIndex * 0.05}s;`;
             h += `<div class="mc-item-wrap mc-img-card" style="${animStyle}" data-id="${img.f.id}" onmousedown="startPress(event, '${img.f.id}')" onmouseup="cancelPress()" onmouseleave="cancelPress()" ontouchstart="startPress(event, '${img.f.id}')" ontouchend="cancelPress()" ontouchmove="cancelPress()" onclick="handleClick(event, '${img.f.id}')">
-                                                      <div class="mc-checkbox"></div>
-                                                      <img src="${img.f.data}" style="width:100%;height:100%;object-fit:cover;">
-                                                    </div>`;
+                    <div class="mc-checkbox"></div>
+                    <img src="${img.f.data}" style="width:100%;height:100%;object-fit:cover;">
+                  </div>`;
             itemIndex++;
           });
           videos.forEach((vid) => {
+            // --- LỖI ĐÃ ĐƯỢC SỬA Ở ĐÂY ---
             let animStyle = isRefreshing
               ? `animation: none !important;`
               : `animation: iosLiquidPopFull 0.85s cubic-bezier(0.16, 1, 0.3, 1) both; animation-delay: ${itemIndex * 0.05}s;`;
             h += `<div class="mc-item-wrap mc-img-card" style="${animStyle}" data-id="${vid.f.id}" onmousedown="startPress(event, '${vid.f.id}')" onmouseup="cancelPress()" onmouseleave="cancelPress()" ontouchstart="startPress(event, '${vid.f.id}')" ontouchend="cancelPress()" ontouchmove="cancelPress()" onclick="handleClick(event, '${vid.f.id}')">
-                                                      <div class="mc-checkbox"></div>
-                                                      <div style="position:absolute;z-index:2;font-size:30px;text-shadow:0 2px 5px rgba(0,0,0,0.8);color:#fff;">▶</div>
-                                                      <video src="${vid.f.data}" style="width:100%;height:100%;object-fit:cover;opacity:0.6; pointer-events:none;"></video>
-                                                    </div>`;
+                    <div class="mc-checkbox"></div>
+                    <div style="position:absolute;z-index:2;font-size:30px;text-shadow:0 2px 5px rgba(0,0,0,0.8);color:#fff;">▶</div>
+                    <video src="${vid.f.data}" style="width:100%;height:100%;object-fit:cover;opacity:0.6; pointer-events:none;"></video>
+                  </div>`;
             itemIndex++;
           });
           h += `</div>`;
@@ -11924,7 +11950,26 @@
             localStorage.setItem("tng_f_" + curA.id, JSON.stringify(files));
             enforceStorageLimit();
 
-            let finalHtml = `🖼️ Hình ảnh của bạn đã sẵn sàng!<br><br><img src="${imgData}" class="chat-img" onclick="viewMediaById(${fileId})">`;
+            // --- CHỈNH SỬA KÍCH THƯỚC ICON 3D (18px) TỈ LỆ VÀNG ---
+            let safeIcon = "";
+            if (typeof toolIcon !== "undefined" && toolIcon && toolIcon.includes("<svg")) {
+                let uid = "res_img_" + Date.now() + "_";
+                let processedSvg = toolIcon.replace(/id=(["'])([^"']+)["']/g, 'id=$1' + uid + '$2$1')
+                                           .replace(/url\(['"]?#([^'")]+)['"]?\)/g, 'url(#' + uid + '$1)');
+                // Đổi thành 18x18px, thêm flex-shrink: 0 để icon không bao giờ bị méo
+                safeIcon = `<span style="display:inline-flex; width:18px; height:18px; align-items:center; justify-content:center; margin-right:8px; flex-shrink: 0;">${processedSvg}</span>`;
+            } else {
+                safeIcon = `<span style="margin-right:8px; font-size: 18px;">🖼️</span>`; // Backup
+            }
+
+            // --- CẬP NHẬT GIAO DIỆN HIỂN THỊ CHUẨN XÁC ---
+            let finalHtml = `
+                <div style="display:flex; align-items:center; font-weight:600; color:var(--text-main); margin-bottom:8px; font-size: 15.5px;">
+                    ${safeIcon} <span style="line-height: 1;">Hình ảnh của bạn đã sẵn sàng!</span>
+                </div>
+                <img src="${imgData}" class="chat-img" style="border: 1px solid var(--glass-border); margin-top: 5px;" onclick="viewMediaById(${fileId})">
+            `;
+            
             uiMsgBox.innerHTML = finalHtml;
             uiMsgBox.style.opacity = "1";
             speak("Hình ảnh của bạn đã sẵn sàng!");
@@ -12086,18 +12131,42 @@
               name: promptText.substring(0, 20),
               data: dummyVideo,
             };
-            let files =
-              JSON.parse(localStorage.getItem("tng_f_" + curA.id)) || [];
+            let files = JSON.parse(localStorage.getItem("tng_f_" + curA.id)) || [];
             files.unshift(fileObj);
             localStorage.setItem("tng_f_" + curA.id, JSON.stringify(files));
             enforceStorageLimit();
-            let finalHtml = `🎬 Video của bạn đã sẵn sàng!<br><br><video src="${dummyVideo}" class="chat-img" controls></video>`;
+
+            // --- LẤY BIỂU TƯỢNG 3D (18px) TỪ OBJECT ĐỂ CHỐNG LỖI MÀU SẮC ---
+            let safeIcon = "";
+            let rawIcon = (typeof currentActiveTool !== "undefined" && currentActiveTool && currentActiveTool.icon) ? currentActiveTool.icon : (typeof toolIcon !== "undefined" ? toolIcon : "");
+            
+            if (rawIcon && rawIcon.includes("<svg")) {
+                let uid = "res_vid_" + Date.now() + "_";
+                let processedSvg = rawIcon.replace(/id=(["'])([^"']+)["']/g, 'id=$1' + uid + '$2$1')
+                                          .replace(/url\(['"]?#([^'")]+)['"]?\)/g, 'url(#' + uid + '$1)');
+                // Bọc khung 18px, căn giữa, chống méo bằng flex-shrink: 0
+                safeIcon = `<span style="display:inline-flex; width:18px; height:18px; align-items:center; justify-content:center; margin-right:8px; flex-shrink: 0;">${processedSvg}</span>`;
+            } else {
+                safeIcon = `<span style="margin-right:8px; font-size: 18px;">🎬</span>`; // Backup
+            }
+
+            // --- CẬP NHẬT GIAO DIỆN HIỂN THỊ: ÉP KÍCH THƯỚC VIDEO 400px ---
+            let finalHtml = `
+                <div style="display:flex; align-items:center; font-weight:600; color:var(--text-main); margin-bottom:8px; font-size: 15.5px;">
+                    ${safeIcon} <span style="line-height: 1;">Video của bạn đã sẵn sàng!</span>
+                </div>
+                <video src="${dummyVideo}" class="chat-img" controls style="max-width: 400px; width: 100%; border-radius: 15px; border: 1px solid var(--glass-border); margin-top: 5px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);"></video>
+            `;
+
             uiMsgBox.innerHTML = finalHtml;
             uiMsgBox.style.opacity = "1";
             speak("Video của bạn đã sẵn sàng!");
+            
             let s = sessions.find((x) => x.id === curId);
-            s.msgs.push({ r: "ai", t: finalHtml });
-            safeSaveHist();
+            if (s) {
+                s.msgs.push({ r: "ai", t: finalHtml });
+                safeSaveHist();
+            }
             chat.scrollTop = chat.scrollHeight;
             let rowContainer = document.getElementById(msgId);
             if (rowContainer) rowContainer.removeAttribute("id");
@@ -12218,19 +12287,42 @@
               data: nscSong.url,
             };
 
-            let files =
-              JSON.parse(localStorage.getItem("tng_f_" + curA.id)) || [];
+            let files = JSON.parse(localStorage.getItem("tng_f_" + curA.id)) || [];
             files.unshift(fileObj);
             localStorage.setItem("tng_f_" + curA.id, JSON.stringify(files));
             enforceStorageLimit();
 
-            let finalHtml = `🎵 Bản nhạc của bạn đã sẵn sàng!<br><audio src="${nscSong.url}" controls style="width: 100%; outline: none; border-radius: 12px; margin-top: 10px;"></audio>`;
+            // --- LẤY BIỂU TƯỢNG 3D (18px) TỪ OBJECT ĐỂ CHỐNG LỖI MÀU SẮC ---
+            let safeIcon = "";
+            let rawIcon = (typeof currentActiveTool !== "undefined" && currentActiveTool && currentActiveTool.icon) ? currentActiveTool.icon : (typeof toolIcon !== "undefined" ? toolIcon : "");
+            
+            if (rawIcon && rawIcon.includes("<svg")) {
+                let uid = "res_aud_" + Date.now() + "_";
+                let processedSvg = rawIcon.replace(/id=(["'])([^"']+)["']/g, 'id=$1' + uid + '$2$1')
+                                          .replace(/url\(['"]?#([^'")]+)['"]?\)/g, 'url(#' + uid + '$1)');
+                // Bọc khung 18px, căn giữa, chống méo bằng flex-shrink: 0
+                safeIcon = `<span style="display:inline-flex; width:18px; height:18px; align-items:center; justify-content:center; margin-right:8px; flex-shrink: 0;">${processedSvg}</span>`;
+            } else {
+                safeIcon = `<span style="margin-right:8px; font-size: 18px;">🎵</span>`; // Backup
+            }
+
+            // --- CẬP NHẬT GIAO DIỆN HIỂN THỊ CHUẨN XÁC VỚI FLEXBOX ---
+            let finalHtml = `
+                <div style="display:flex; align-items:center; font-weight:600; color:var(--text-main); margin-bottom:8px; font-size: 15.5px;">
+                    ${safeIcon} <span style="line-height: 1;">Bản nhạc của bạn đã sẵn sàng!</span>
+                </div>
+                <audio src="${nscSong.url}" controls style="width: 100%; outline: none; border-radius: 12px; margin-top: 5px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);"></audio>
+            `;
+
             uiMsgBox.innerHTML = finalHtml;
             uiMsgBox.style.opacity = "1";
             speak("Bản nhạc của bạn đã sẵn sàng!");
+            
             let s = sessions.find((x) => x.id === curId);
-            s.msgs.push({ r: "ai", t: finalHtml });
-            safeSaveHist();
+            if (s) {
+                s.msgs.push({ r: "ai", t: finalHtml });
+                safeSaveHist();
+            }
             chat.scrollTop = chat.scrollHeight;
             let rowContainer = document.getElementById(msgId);
             if (rowContainer) rowContainer.removeAttribute("id");
@@ -12239,44 +12331,109 @@
           setTimeout(() => {
             let docName = promptText.substring(0, 30);
             let fileId = Date.now();
-            let titlePrefix = "",
+            let titlePrefix = "", 
+              displayTitle = "",  
               chatDisplay = "",
               readyMessage = "",
               btnActionName = "",
               docContent = "";
-            if (tool === "Deep Research") {
+
+            // --- TẠO 2 BẢN SAO SVG VỚI ID ĐỘC LẬP TƯƠNG ĐỐI ĐỂ CHỐNG LỖI MASK CLIP ---
+            let activeToolName = (typeof currentActiveTool !== "undefined" && currentActiveTool && currentActiveTool.name) ? currentActiveTool.name : tool;
+            let safeIcon = ""; // 24px cho ngoài Chat
+            let bigIcon = "";  // 40px cho bên trong Modal Bài học
+            let rawIcon = (typeof currentActiveTool !== "undefined" && currentActiveTool && currentActiveTool.icon) ? currentActiveTool.icon : (typeof toolIcon !== "undefined" ? toolIcon : "");
+            
+            if (rawIcon && rawIcon.includes("<svg")) {
+                // 1. Cấp ID Độc lập cho biểu tượng Nhỏ (Ngoài Chat)
+                let uidSmall = "icon_sm_" + Date.now() + "_" + Math.floor(Math.random()*1000) + "_";
+                let svgSmall = rawIcon.replace(/id=(["'])([^"']+)["']/g, 'id=$1' + uidSmall + '$2$1')
+                                      .replace(/url\(['"]?#([^'")]+)['"]?\)/g, 'url(#' + uidSmall + '$1)');
+                safeIcon = `<div class="ios27-art" style="width:24px; height:24px; min-width:24px; display:flex; align-items:center; justify-content:center; margin-right:10px; flex-shrink: 0;">${svgSmall}</div>`;
+                
+                // 2. Cấp ID Độc lập cho biểu tượng Lớn (Trong Thư viện) -> FIX LỖI CẮT XÉN SVG
+                let uidBig = "icon_bg_" + Date.now() + "_" + Math.floor(Math.random()*1000) + "_";
+                let svgBig = rawIcon.replace(/id=(["'])([^"']+)["']/g, 'id=$1' + uidBig + '$2$1')
+                                    .replace(/url\(['"]?#([^'")]+)['"]?\)/g, 'url(#' + uidBig + '$1)');
+                bigIcon = `<div class="ios27-art" style="width:40px; height:40px; min-width:40px; display:flex; align-items:center; justify-content:center; flex-shrink: 0;">${svgBig}</div>`;
+            } else {
+                safeIcon = `<span style="margin-right:10px; font-size: 24px;">✨</span>`; 
+                bigIcon = `<span style="font-size: 40px;">✨</span>`; 
+            }
+
+            // --- PHÂN LOẠI CÔNG CỤ VÀ XÂY DỰNG GIAO DIỆN ---
+            if (activeToolName === "Deep Research" || activeToolName.includes("Deep Research")) {
               titlePrefix = "Báo cáo: ";
-              readyMessage = "🔍 Báo cáo nghiên cứu của bạn đã sẵn sàng!";
+              displayTitle = `<div style="display:flex; align-items:center; color:var(--text-main); font-size:24px; font-weight:bold; margin-bottom:15px;">${safeIcon}<span style="line-height:1;">Báo cáo: ${promptText}</span></div>`;
+              readyMessage = "Báo cáo nghiên cứu của bạn đã sẵn sàng!";
               btnActionName = "Bắt đầu nghiên cứu";
-              chatDisplay = `<div style="font-weight:700; font-size:17px; margin-bottom:12px; color:var(--btn-blue);">📄 Báo cáo: ${promptText}</div><ul style="padding-left: 20px; line-height: 1.8; font-size:15px; color:var(--text-main); font-weight:500;"><li>(1) Thu thập số liệu thống kê mới nhất về chủ đề này.</li><li>(2) Phân tích các phương thức hoạt động và xu hướng thị trường.</li><li>(3) Đề xuất giải pháp và định hướng tương lai.</li></ul>`;
-              docContent = `<div style="padding:40px; background:var(--modal-bg); min-height:100%;"><h2 style="margin-bottom:15px; color:var(--btn-blue); font-size:28px;">${titlePrefix}${promptText}</h2><hr style="margin:20px 0; border:none; border-top:1px solid var(--glass-border);"><div style="line-height:1.8; font-size:18px; color:var(--text-main);">${chatDisplay}</div></div>`;
-            } else if (tool === "Học có hướng dẫn") {
+              
+              chatDisplay = `
+                    <ul style="padding-left: 20px; line-height: 1.8; font-size:15px; color:var(--text-main); font-weight:500; margin-bottom: 0;">
+                        <li>(1) Thu thập số liệu thống kê mới nhất về chủ đề này.</li>
+                        <li>(2) Phân tích các phương thức hoạt động và xu hướng thị trường.</li>
+                        <li>(3) Đề xuất giải pháp và định hướng tương lai.</li>
+                    </ul>`;
+              
+              docContent = `<div style="padding:40px; background:var(--modal-bg); min-height:100%;">
+                                <div style="display:flex; align-items:center; gap: 15px; margin-bottom:15px;">
+                                    ${bigIcon}
+                                    <h2 style="margin:0; color:var(--btn-blue); font-size:32px; line-height:1.2;">Báo cáo: ${promptText}</h2>
+                                </div>
+                                <hr style="margin:20px 0; border:none; border-top:1px solid var(--glass-border);">
+                                <div style="line-height:1.8; font-size:18px; color:var(--text-main);">${chatDisplay}</div>
+                            </div>`;
+            
+            } else if (activeToolName === "Học có hướng dẫn" || activeToolName.includes("Học có hướng dẫn")) {
               titlePrefix = "Lộ trình học: ";
-              readyMessage = "📖 Tài liệu học tập của bạn đã sẵn sàng!";
+              displayTitle = `<div style="display:flex; align-items:center; color:var(--text-main); font-size:24px; font-weight:bold; margin-bottom:15px;">${safeIcon}<span style="line-height:1;">Lộ trình: ${promptText}</span></div>`;
+              readyMessage = "Tài liệu học tập của bạn đã sẵn sàng!";
               btnActionName = "Mở bài học";
-              chatDisplay = `<div style="line-height: 1.7; font-size:15px; color:var(--text-main); font-weight:500;">Rất vui được cùng bạn tìm hiểu về <b style="color:var(--btn-blue); font-size:16px;">${promptText}</b>. Đây là lộ trình tôi gợi ý:<br><br><b style="color:#fff;">1. Giai đoạn Nhập môn:</b> Khái niệm cốt lõi, bối cảnh lịch sử và lý thuyết nền tảng.<br><b style="color:#fff;">2. Giai đoạn Thực hành:</b> Áp dụng kiến thức vào thực tế, giải quyết bài toán.<br><b style="color:#fff;">3. Giai đoạn Nâng cao:</b> Nghiên cứu chuyên sâu, mở rộng vấn đề và tổng kết.<br><br>Bạn muốn bắt đầu khám phá từ giai đoạn nào?</div>`;
-              docContent = `<div style="padding:40px; background:var(--modal-bg); min-height:100%;"><h2 style="margin-bottom:15px; color:var(--btn-blue); font-size:28px;">${titlePrefix}${promptText}</h2><hr style="margin:20px 0; border:none; border-top:1px solid var(--glass-border);"><div style="line-height:1.8; font-size:18px; color:var(--text-main);">${chatDisplay}</div></div>`;
+              
+              chatDisplay = `
+                    <div style="line-height: 1.7; font-size:15px; color:var(--text-main); font-weight:500;">Rất vui được cùng bạn tìm hiểu về <b style="color:var(--btn-blue); font-size:16px;">${promptText}</b>. Đây là lộ trình tôi gợi ý:<br><br><b style="color:#fff;">1. Giai đoạn Nhập môn:</b> Khái niệm cốt lõi, bối cảnh lịch sử và lý thuyết nền tảng.<br><b style="color:#fff;">2. Giai đoạn Thực hành:</b> Áp dụng kiến thức vào thực tế, giải quyết bài toán.<br><b style="color:#fff;">3. Giai đoạn Nâng cao:</b> Nghiên cứu chuyên sâu, mở rộng vấn đề và tổng kết.<br><br>Bạn muốn bắt đầu khám phá từ giai đoạn nào?</div>`;
+              
+              docContent = `<div style="padding:40px; background:var(--modal-bg); min-height:100%;">
+                                <div style="display:flex; align-items:center; gap: 15px; margin-bottom:15px;">
+                                    ${bigIcon}
+                                    <h2 style="margin:0; color:var(--btn-blue); font-size:32px; line-height:1.2;">Lộ trình học: ${promptText}</h2>
+                                </div>
+                                <hr style="margin:20px 0; border:none; border-top:1px solid var(--glass-border);">
+                                <div style="line-height:1.8; font-size:18px; color:var(--text-main);">${chatDisplay}</div>
+                            </div>`;
+            
             } else {
               titlePrefix = "Canvas: ";
-              readyMessage = "📝 Canvas của bạn đã sẵn sàng!";
+              displayTitle = `<div style="display:flex; align-items:center; color:var(--text-main); font-size:24px; font-weight:bold; margin-bottom:15px;">${safeIcon}<span style="line-height:1;">Canvas: ${promptText}</span></div>`;
+              readyMessage = "Canvas của bạn đã sẵn sàng!";
               btnActionName = "Mở Slide / Canvas";
-              chatDisplay = `<div style="font-weight:700; font-size:17px; margin-bottom:10px; display:flex; align-items:center; gap:8px; color:var(--btn-blue);"><span style="font-size:22px;">🍃</span> Thuyết trình: ${promptText}</div><div style="font-size:15px; color:var(--text-main); margin-bottom:20px; font-weight:500; line-height:1.6;">Bài thuyết trình/nội dung đã được tạo tự động dựa trên yêu cầu: "${promptText}". Có thể xem qua và chỉnh sửa trực tiếp.</div>`;
+              
+              chatDisplay = `
+                    <div style="font-size:15px; color:var(--text-main); font-weight:500; line-height:1.6;">Bài thuyết trình/nội dung đã được tạo tự động dựa trên yêu cầu: "${promptText}". Có thể xem qua và chỉnh sửa trực tiếp.</div>`;
               docContent = `<div id="slide-container" style="position:relative; width:100%; height:100%; background:#f8f9fa; overflow:hidden; display:flex; flex-direction:column; border-radius:12px;"><div class="slide-page" style="background:#ffffff; color:#202124; flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:40px; box-sizing:border-box;"><h1 style="color:#1a73e8; font-size:3.5rem; margin-bottom:20px; line-height:1.3;">${promptText}</h1><p style="color:#5f6368; font-size:1.5rem;">Bản trình bày tự động bởi TNG AI 1.0</p></div><div class="slide-page" style="background:#ffffff; color:#202124; flex:1; display:none; flex-direction:column; justify-content:center; padding:10% 15%; box-sizing:border-box;"><h2 style="color:#202124; margin-bottom:30px; font-size:2.5rem; border-bottom: 3px solid #1a73e8; padding-bottom:10px; display:inline-block;">Nội dung chính</h2><ul style="font-size:1.5rem; line-height:2.2; color:#3c4043; padding-left:40px; font-weight:500;"><li style="margin-bottom: 15px;">Khái quát và giới thiệu chung về chủ đề "${promptText}".</li><li style="margin-bottom: 15px;">Phân tích chi tiết các khía cạnh và đặc điểm nổi bật.</li><li style="margin-bottom: 15px;">Đánh giá thực tiễn, số liệu và các ví dụ minh họa cụ thể.</li><li style="margin-bottom: 15px;">Tổng kết, đưa ra kết luận và ứng dụng trong thực tế.</li></ul></div><div class="slide-page" style="background:#1a73e8; color:#ffffff; flex:1; display:none; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:40px; box-sizing:border-box;"><h1 style="font-size:4rem; margin-bottom: 20px;">Cảm ơn bạn đã theo dõi!</h1><p style="font-size: 1.5rem; opacity: 0.8;">Kết thúc bản trình bày</p></div><button onclick="nextSlide(-1)" style="position:absolute; top:50%; left:20px; transform:translateY(-50%); background:rgba(0,0,0,0.5); color:#fff; border:none; width:50px; height:50px; border-radius:50%; cursor:pointer; font-size:24px; z-index:10; display:flex; align-items:center; justify-content:center; transition: 0.2s;">❮</button><button onclick="nextSlide(1)" style="position:absolute; top:50%; right:20px; transform:translateY(-50%); background:rgba(0,0,0,0.5); color:#fff; border:none; width:50px; height:50px; border-radius:50%; cursor:pointer; font-size:24px; z-index:10; display:flex; align-items:center; justify-content:center; transition: 0.2s;">❯</button><div id="slide-counter" style="position:absolute; bottom:20px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.6); color:#fff; padding:8px 20px; border-radius:20px; font-size:15px; font-weight:600; z-index:10; letter-spacing: 1px;">1 / 3</div></div>`;
             }
 
             let fileObj = {
               id: fileId,
               type: "doc",
-              name: titlePrefix + docName,
+              name: titlePrefix + docName, 
               data: docContent,
               tool: tool,
             };
-            let files =
-              JSON.parse(localStorage.getItem("tng_f_" + curA.id)) || [];
+            let files = JSON.parse(localStorage.getItem("tng_f_" + curA.id)) || [];
             files.unshift(fileObj);
             localStorage.setItem("tng_f_" + curA.id, JSON.stringify(files));
             enforceStorageLimit();
-            let finalHtml = `<div style="font-weight:700; font-size:16px; margin-bottom:10px; color:var(--text-main);">${readyMessage}</div><div style="background: var(--glass-bg); border: 1px solid var(--border-focus); border-radius:18px; padding:20px; box-shadow: 0 5px 20px rgba(0,0,0,0.2);">${chatDisplay}<div style="text-align:center; margin-top:20px;"><button class="mc-btn" onclick="viewMediaById(${fileId})" style="background:var(--btn-blue); color:#000; font-weight:700; font-size:14px; border-radius:25px; padding:10px 24px; border:none; box-shadow:0 4px 15px rgba(168,199,250,0.3); cursor:pointer; transition:0.3s;">${btnActionName}</button></div></div>`;
+            
+            // XUẤT HTML: BỌC CẢ VĂN BẢN LẪN NÚT VÀO CHUNG MỘT KHUNG XÁM
+            let finalHtml = `${displayTitle}
+                             <div style="font-weight:600; font-size:15.5px; margin-bottom:12px; color:var(--text-sub);">${readyMessage}</div>
+                             <div style="border: 1px solid var(--glass-border); border-radius: 16px; padding: 20px; background: var(--inner-card-bg);">
+                                 ${chatDisplay}
+                                 <div style="margin-top:20px; display:flex; justify-content:center;">
+                                    <button class="mc-btn" onclick="viewMediaById(${fileId})" style="background:var(--btn-blue); color:#000; font-weight:700; font-size:14px; border-radius:20px; padding:10px 24px; border:none; box-shadow:0 4px 15px rgba(168,199,250,0.3); cursor:pointer; transition:0.3s;">${btnActionName}</button>
+                                 </div>
+                             </div>`;
 
             uiMsgBox.innerHTML = finalHtml;
             uiMsgBox.style.opacity = "1";
