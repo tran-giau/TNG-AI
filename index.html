@@ -20742,7 +20742,7 @@
     </script>
 
     <!-- ======================================================= -->
-    <!-- HÒM THƯ TNG AI (THÊM THƯ KỶ NIỆM & SINH NHẬT V56)       -->
+    <!-- HÒM THƯ TNG AI (ICON NGÔI SAO VÀNG CĂN GIỮA V60)        -->
     <!-- ======================================================= -->
     <style>
       .tng-mailbox-overlay {
@@ -21385,8 +21385,9 @@
 
     <script>
       try {
-        if (!window.curA) window.curA = { id: "guest", name: "Khách" };
+        if (!window.curA) window.curA = { id: "guest", name: "bạn" };
 
+        // ĐÃ ĐỔI "🇻🇳" THÀNH "⭐" CĂN GIỮA TUYỆT ĐỐI
         const HOLIDAYS = [
           {
             day: 1,
@@ -21399,7 +21400,7 @@
             day: 3,
             month: 2,
             name: "Kỷ niệm thành lập Đảng CSVN",
-            icon: "🇻🇳",
+            icon: "⭐",
             color: "linear-gradient(135deg, #D92015, #ff4b2b)",
           },
           {
@@ -21497,7 +21498,7 @@
             day: 2,
             month: 9,
             name: "Quốc khánh nước CHXHCN Việt Nam",
-            icon: "🇻🇳",
+            icon: "⭐",
             color: "linear-gradient(135deg, #FF3B30, #FFCC00)",
           },
           {
@@ -21597,7 +21598,7 @@
           let wish = wishes[(year + 1) % wishes.length];
           let thank = thanks[(year + 2) % thanks.length];
 
-          let letterBody = `<b>Thân gửi ${accName},</b><br><br>${intro} ${wish}<br><br>${thank}<br><br>Chúng tôi vô cùng tự hào và biết ơn khi có bạn đồng hành như một người tri kỷ. Chúc bạn có một kỳ nghỉ lễ thật viên mãn, rực rỡ và đong đầy ý nghĩa!`;
+          let letterBody = `<b>Thân gửi bạn,</b><br><br>${intro} ${wish}<br><br>${thank}<br><br>Chúng tôi vô cùng tự hào và biết ơn khi có bạn đồng hành như một người tri kỷ. Chúc bạn có một kỳ nghỉ lễ thật viên mãn, rực rỡ và đong đầy ý nghĩa!`;
           let letterFooter = `Trân trọng,<br><span style="font-size: 19px; display: inline-block; margin-top: 5px;">Đội ngũ TNG AI</span>`;
 
           return { body: letterBody, footer: letterFooter };
@@ -21627,10 +21628,16 @@
           if (currentId !== window.currentMailboxUserId) {
             window.currentMailboxUserId = currentId;
 
-            // Lấy hoặc tạo mốc thời gian v51 cũ để giữ lịch sử người dùng test
-            let timeKey = "tng_first_login_time_v51_" + currentId;
-            if (!localStorage.getItem(timeKey)) {
+            let timeKey = "tng_first_login_master_" + currentId;
+            let savedTime =
+              localStorage.getItem(timeKey) ||
+              localStorage.getItem("tng_first_login_time_v51_" + currentId) ||
+              localStorage.getItem("tng_first_login_time_v49_" + currentId);
+
+            if (!savedTime) {
               localStorage.setItem(timeKey, Date.now().toString());
+            } else {
+              localStorage.setItem(timeKey, savedTime);
             }
 
             let list = document.getElementById("tng-mailbox-list");
@@ -21649,7 +21656,7 @@
         window.checkAndDeliverMailbox = function () {
           if (!window.curA || !window.curA.id) return [];
 
-          let key = "tng_mailbox_v56_" + window.curA.id; // NÂNG CẤP V56 (BẢN KỶ NIỆM & SINH NHẬT)
+          let key = "tng_mailbox_v60_" + window.curA.id; // NÂNG CẤP LÊN V60 ĐỂ UPDATE NGÔI SAO
           let letters = JSON.parse(localStorage.getItem(key)) || [];
           let isNewLetterAdded = false;
 
@@ -21659,7 +21666,7 @@
           let curYear = today.getFullYear();
           let todayMs = today.getTime();
 
-          let timeKey = "tng_first_login_time_v51_" + window.curA.id;
+          let timeKey = "tng_first_login_master_" + window.curA.id;
           let exactFirstLoginMsStr = localStorage.getItem(timeKey);
           if (!exactFirstLoginMsStr) {
             exactFirstLoginMsStr = Date.now().toString();
@@ -21675,11 +21682,11 @@
           }
           let lastActiveMs = parseInt(lastActiveMsStr);
 
-          let currentName = window.curA.name || "bạn";
+          let flDateObj = new Date(exactFirstLoginMs);
+          let startYear = flDateObj.getFullYear();
+          let flMonth = flDateObj.getMonth();
+          let flDay = flDateObj.getDate();
 
-          // =========================================================
-          // 1. THƯ CẢM ƠN LẦN ĐẦU
-          // =========================================================
           let firstLoginLetter = letters.find(
             (l) => l.id === "first_login_thank_you",
           );
@@ -21690,7 +21697,7 @@
               title: "Cảm ơn bạn đã đồng hành cùng TNG AI",
               icon: "💌",
               color: "linear-gradient(135deg, #10b981, #047857)",
-              body: `<b>Chào mừng ${currentName} đã chính thức gia nhập hệ sinh thái TNG AI.</b><br><br>Sự hiện diện của bạn là một niềm vinh hạnh to lớn đối với đội ngũ phát triển. Chúng tôi luôn không ngừng nỗ lực để xây dựng một không gian công nghệ thông minh, tinh tế, thấu hiểu và mang đậm dấu ấn cá nhân của riêng bạn.<br><br>Cảm ơn bạn đã tin tưởng và trao cơ hội để TNG AI trở thành người trợ lý đồng hành đáng tin cậy. Chúc bạn sẽ có những trải nghiệm thật mượt mà, nhiều niềm vui và những khám phá đầy cảm hứng trong tương lai!`,
+              body: `<b>Chào mừng bạn đã chính thức gia nhập hệ sinh thái TNG AI.</b><br><br>Sự hiện diện của bạn là một niềm vinh hạnh to lớn đối với đội ngũ phát triển. Chúng tôi luôn không ngừng nỗ lực để xây dựng một không gian công nghệ thông minh, tinh tế, thấu hiểu và mang đậm dấu ấn cá nhân của riêng bạn.<br><br>Cảm ơn bạn đã tin tưởng và trao cơ hội để TNG AI trở thành người trợ lý đồng hành đáng tin cậy. Chúc bạn sẽ có những trải nghiệm thật mượt mà, nhiều niềm vui và những khám phá đầy cảm hứng trong tương lai!`,
               footer: `Trân quý và biết ơn,<br><span style='font-size: 19px; display: inline-block; margin-top: 5px;'>Đội ngũ TNG AI</span>`,
               time: `${curDay} THG ${curMonth}, ${curYear}`,
               timestamp: exactFirstLoginMs,
@@ -21701,66 +21708,62 @@
             isNewLetterAdded = true;
           }
 
-          // =========================================================
-          // 2. MÁY QUÉT THƯ LỄ HỘI VÀ HÀNG THÁNG
-          // =========================================================
-          for (let m = 1; m <= 12; m++) {
-            let monthDate = new Date(curYear, m - 1, 1, 8, 0, 0);
-            let monthMs = monthDate.getTime();
-            if (monthMs >= exactFirstLoginMs && monthMs <= todayMs) {
-              let letterId = `monthly_letter_${m}_${curYear}`;
-              if (!letters.some((l) => l.id === letterId)) {
-                let iconTheoThang = MONTHLY_ICONS[m - 1];
-                letters.push({
-                  id: letterId,
-                  year: curYear,
-                  title: `Thư hỏi thăm Tháng ${m}`,
-                  icon: iconTheoThang,
-                  color: "linear-gradient(135deg, #6366f1, #4338ca)",
-                  body: `<b>Thân gửi ${currentName},</b><br><br>Tháng ${m} đã chạm ngõ! TNG AI xin gửi lời chào trân trọng và chúc bạn một tháng mới tràn đầy năng lượng, dồi dào sức khỏe và gặt hái được nhiều thành tựu rực rỡ.<br><br>Cảm ơn bạn vì đã tiếp tục tin tưởng và đồng hành cùng hệ sinh thái của chúng tôi trong thời gian qua. Hãy luôn giữ nụ cười và tinh thần lạc quan để đón nhận những thử thách mới nhé!`,
-                  footer: `Trân trọng,<br><span style='font-size: 19px; display: inline-block; margin-top: 5px;'>Đội ngũ TNG AI</span>`,
-                  time: `1 THG ${m}, ${curYear}`,
-                  timestamp: monthMs,
-                  isRead: false,
-                  isDeleted: false,
-                });
-                isNewLetterAdded = true;
+          for (let y = startYear; y <= curYear; y++) {
+            for (let m = 1; m <= 12; m++) {
+              let monthDate = new Date(y, m - 1, 1, 8, 0, 0);
+              let monthMs = monthDate.getTime();
+              if (monthMs >= exactFirstLoginMs && monthMs <= todayMs) {
+                let letterId = `monthly_letter_${m}_${y}`;
+                if (!letters.some((l) => l.id === letterId)) {
+                  let iconTheoThang = MONTHLY_ICONS[m - 1];
+                  letters.push({
+                    id: letterId,
+                    year: y,
+                    title: `Thư hỏi thăm Tháng ${m}`,
+                    icon: iconTheoThang,
+                    color: "linear-gradient(135deg, #6366f1, #4338ca)",
+                    body: `<b>Thân gửi bạn,</b><br><br>Tháng ${m} đã chạm ngõ! TNG AI xin gửi lời chào trân trọng và chúc bạn một tháng mới tràn đầy năng lượng, dồi dào sức khỏe và gặt hái được nhiều thành tựu rực rỡ.<br><br>Cảm ơn bạn vì đã tiếp tục tin tưởng và đồng hành cùng hệ sinh thái của chúng tôi trong thời gian qua. Hãy luôn giữ nụ cười và tinh thần lạc quan để đón nhận những thử thách mới nhé!`,
+                    footer: `Trân trọng,<br><span style='font-size: 19px; display: inline-block; margin-top: 5px;'>Đội ngũ TNG AI</span>`,
+                    time: `1 THG ${m}, ${y}`,
+                    timestamp: monthMs,
+                    isRead: false,
+                    isDeleted: false,
+                  });
+                  isNewLetterAdded = true;
+                }
               }
             }
+
+            HOLIDAYS.forEach((hol) => {
+              let holDate = new Date(y, hol.month - 1, hol.day, 8, 0, 0);
+              let holMs = holDate.getTime();
+              if (holMs >= exactFirstLoginMs && holMs <= todayMs) {
+                let letterId = `letter_${hol.day}-${hol.month}_${y}`;
+                if (!letters.some((l) => l.id === letterId)) {
+                  let content = window.generateEmotionalMailboxLetter(
+                    hol,
+                    y,
+                    "bạn",
+                  );
+                  letters.push({
+                    id: letterId,
+                    year: y,
+                    title: `Chúc mừng ${hol.name}`,
+                    icon: hol.icon,
+                    color: hol.color,
+                    body: content.body,
+                    footer: content.footer,
+                    time: `${hol.day} THG ${hol.month}, ${y}`,
+                    timestamp: holMs,
+                    isRead: false,
+                    isDeleted: false,
+                  });
+                  isNewLetterAdded = true;
+                }
+              }
+            });
           }
 
-          HOLIDAYS.forEach((hol) => {
-            let holDate = new Date(curYear, hol.month - 1, hol.day, 8, 0, 0);
-            let holMs = holDate.getTime();
-            if (holMs >= exactFirstLoginMs && holMs <= todayMs) {
-              let letterId = `letter_${hol.day}-${hol.month}_${curYear}`;
-              if (!letters.some((l) => l.id === letterId)) {
-                let content = window.generateEmotionalMailboxLetter(
-                  hol,
-                  curYear,
-                  currentName,
-                );
-                letters.push({
-                  id: letterId,
-                  year: curYear,
-                  title: `Chúc mừng ${hol.name}`,
-                  icon: hol.icon,
-                  color: hol.color,
-                  body: content.body,
-                  footer: content.footer,
-                  time: `${hol.day} THG ${hol.month}, ${curYear}`,
-                  timestamp: holMs,
-                  isRead: false,
-                  isDeleted: false,
-                });
-                isNewLetterAdded = true;
-              }
-            }
-          });
-
-          // =========================================================
-          // 3. MÁY QUÉT THƯ CUỐI TUẦN (SÁNG THỨ 7 HÀNG TUẦN)
-          // =========================================================
           let d = new Date(exactFirstLoginMs);
           d.setHours(8, 0, 0, 0);
           while (d.getDay() !== 6) {
@@ -21779,7 +21782,7 @@
                 title: `Chúc bạn cuối tuần thư giãn`,
                 icon: "🌿",
                 color: "linear-gradient(135deg, #10b981, #059669)",
-                body: `<b>Thân gửi ${currentName},</b><br><br>Một tuần bận rộn lại vừa trôi qua! Đây là khoảnh khắc tuyệt vời để bạn tạm gác lại những âu lo, thả lỏng tâm hồn và nạp lại năng lượng tích cực cho bản thân.<br><br>Dù bạn chọn cách nghỉ ngơi thư giãn tại nhà hay dạo phố cùng những người thân yêu, TNG AI đều mong bạn sẽ có những phút giây thật bình yên, ấm áp và trọn vẹn. Hãy nhớ chăm sóc sức khỏe và tận hưởng ngày nghỉ thật ý nghĩa nhé!`,
+                body: `<b>Thân gửi bạn,</b><br><br>Một tuần bận rộn lại vừa trôi qua! Đây là khoảnh khắc tuyệt vời để bạn tạm gác lại những âu lo, thả lỏng tâm hồn và nạp lại năng lượng tích cực cho bản thân.<br><br>Dù bạn chọn cách nghỉ ngơi thư giãn tại nhà hay dạo phố cùng những người thân yêu, TNG AI đều mong bạn sẽ có những phút giây thật bình yên, ấm áp và trọn vẹn. Hãy nhớ chăm sóc sức khỏe và tận hưởng ngày nghỉ thật ý nghĩa nhé!`,
                 footer: `Trân trọng,<br><span style='font-size: 19px; display: inline-block; margin-top: 5px;'>Đội ngũ TNG AI</span>`,
                 time: wDateStr,
                 timestamp: satMs,
@@ -21791,9 +21794,6 @@
             satMs += 7 * 24 * 60 * 60 * 1000;
           }
 
-          // =========================================================
-          // 4. MÁY QUÉT CẢM BIẾN VẮNG MẶT (MISS YOU LETTERS)
-          // =========================================================
           let gapMs = todayMs - lastActiveMs;
           const inactivityThresholds = [
             { days: 7, label: "1 tuần", title: "TNG AI nhớ bạn!" },
@@ -21817,7 +21817,7 @@
                   title: th.title,
                   icon: "🥺",
                   color: "linear-gradient(135deg, #f59e0b, #d97706)",
-                  body: `<b>Thân gửi ${currentName},</b><br><br>Thoắt cái mà đã <b>${th.label}</b> trôi qua kể từ lần cuối cùng bạn ghé thăm hệ sinh thái TNG AI. Hệ thống và đội ngũ phát triển thực sự rất nhớ bạn!<br><br>Không biết dạo này công việc và cuộc sống của bạn có bận rộn quá không? Nếu có bất kỳ khó khăn hay cần một trợ lý đắc lực để san sẻ bớt gánh nặng, đừng quên TNG AI vẫn luôn ở đây, sẵn sàng hoạt động 24/7 để hỗ trợ bạn hết mình. Rất mong sớm được đồng hành cùng bạn trong những trải nghiệm mới!`,
+                  body: `<b>Thân gửi bạn,</b><br><br>Thoắt cái mà đã <b>${th.label}</b> trôi qua kể từ lần cuối cùng bạn ghé thăm hệ sinh thái TNG AI. Hệ thống và đội ngũ phát triển thực sự rất nhớ bạn!<br><br>Không biết dạo này công việc và cuộc sống của bạn có bận rộn quá không? Nếu có bất kỳ khó khăn hay cần một trợ lý đắc lực để san sẻ bớt gánh nặng, đừng quên TNG AI vẫn luôn ở đây, sẵn sàng hoạt động 24/7 để hỗ trợ bạn hết mình. Rất mong sớm được đồng hành cùng bạn trong những trải nghiệm mới!`,
                   footer: `Trân trọng,<br><span style='font-size: 19px; display: inline-block; margin-top: 5px;'>Đội ngũ TNG AI</span>`,
                   time: timeStr,
                   timestamp: triggerTime,
@@ -21844,7 +21844,7 @@
                   title: `Đã ${y} năm rồi TNG AI chưa gặp bạn`,
                   icon: "⏳",
                   color: "linear-gradient(135deg, #8b5cf6, #6d28d9)",
-                  body: `<b>Thân gửi ${currentName},</b><br><br>Thời gian trôi qua thật nhanh, đã <b>${y} năm</b> kể từ ngày cuối cùng chúng ta tương tác. TNG AI vẫn luôn âm thầm lưu giữ những thiết lập của bạn và mong ngóng ngày bạn quay trở lại.<br><br>Trong suốt thời gian qua, hệ thống đã không ngừng được nâng cấp, thông minh hơn và thấu hiểu hơn. Dù bạn đang ở đâu hay làm gì, chúng tôi chúc bạn luôn thật nhiều sức khỏe và thành công. Khi nào cần, hãy nhớ rằng TNG AI luôn mở cửa chào đón bạn nhé!`,
+                  body: `<b>Thân gửi bạn,</b><br><br>Thời gian trôi qua thật nhanh, đã <b>${y} năm</b> kể từ ngày cuối cùng chúng ta tương tác. TNG AI vẫn luôn âm thầm lưu giữ những thiết lập của bạn và mong ngóng ngày bạn quay trở lại.<br><br>Trong suốt thời gian qua, hệ thống đã không ngừng được nâng cấp, thông minh hơn và thấu hiểu hơn. Dù bạn đang ở đâu hay làm gì, chúng tôi chúc bạn luôn thật nhiều sức khỏe và thành công. Khi nào cần, hãy nhớ rằng TNG AI luôn mở cửa chào đón bạn nhé!`,
                   footer: `Trân trọng,<br><span style='font-size: 19px; display: inline-block; margin-top: 5px;'>Đội ngũ TNG AI</span>`,
                   time: timeStr,
                   timestamp: triggerTime,
@@ -21856,20 +21856,12 @@
             }
           }
 
-          // =========================================================
-          // 5. MÁY QUÉT KỶ NIỆM ĐỒNG HÀNH (USER ANNIVERSARY)
-          // =========================================================
-          let flDateObj = new Date(exactFirstLoginMs);
-          let flDay = flDateObj.getDate();
-          let flMonth = flDateObj.getMonth();
-          let flYear = flDateObj.getFullYear();
-
-          for (let y = flYear + 1; y <= curYear; y++) {
+          for (let y = startYear + 1; y <= curYear; y++) {
             let anniDate = new Date(y, flMonth, flDay, 8, 0, 0);
             let anniMs = anniDate.getTime();
 
             if (anniMs <= todayMs) {
-              let yearsTogether = y - flYear;
+              let yearsTogether = y - startYear;
               let letterId = `anniversary_${yearsTogether}y_${window.curA.id}`;
               if (!letters.some((l) => l.id === letterId)) {
                 let timeStr = `${flDay} THG ${flMonth + 1}, ${y}`;
@@ -21878,8 +21870,8 @@
                   year: y,
                   title: `Kỷ niệm ${yearsTogether} năm đồng hành`,
                   icon: "🥂",
-                  color: "linear-gradient(135deg, #fbbf24, #b45309)", // Vàng kim rực rỡ
-                  body: `<b>Thân gửi ${currentName},</b><br><br>Hôm nay là một ngày vô cùng đặc biệt! Tròn <b>${yearsTogether} năm</b> kể từ khoảnh khắc đầu tiên bạn bước vào hệ sinh thái TNG AI.<br><br>Thời gian trôi qua thật nhanh, và sự đồng hành bền bỉ của bạn chính là động lực to lớn nhất để chúng tôi không ngừng hoàn thiện và phát triển. Cảm ơn bạn vì đã luôn tin tưởng, lựa chọn và cho phép TNG AI được làm người trợ lý tận tâm bên cạnh bạn. Chúc bạn luôn gặt hái được nhiều thành công và hạnh phúc trong chặng đường sắp tới!`,
+                  color: "linear-gradient(135deg, #fbbf24, #b45309)",
+                  body: `<b>Thân gửi bạn,</b><br><br>Hôm nay là một ngày vô cùng đặc biệt! Tròn <b>${yearsTogether} năm</b> kể từ khoảnh khắc đầu tiên bạn bước vào hệ sinh thái TNG AI.<br><br>Thời gian trôi qua thật nhanh, và sự đồng hành bền bỉ của bạn chính là động lực to lớn nhất để chúng tôi không ngừng hoàn thiện và phát triển. Cảm ơn bạn vì đã luôn tin tưởng, lựa chọn và cho phép TNG AI được làm người trợ lý tận tâm bên cạnh bạn. Chúc bạn luôn gặt hái được nhiều thành công và hạnh phúc trong chặng đường sắp tới!`,
                   footer: `Trân trọng,<br><span style='font-size: 19px; display: inline-block; margin-top: 5px;'>Đội ngũ TNG AI</span>`,
                   time: timeStr,
                   timestamp: anniMs,
@@ -21891,18 +21883,14 @@
             }
           }
 
-          // =========================================================
-          // 6. MÁY QUÉT SINH NHẬT TNG AI (8/5/2026)
-          // =========================================================
           const TNG_BIRTH_YEAR = 2026;
-          const TNG_BIRTH_MONTH = 4; // Tháng 5 (index 4 trong Javascript)
+          const TNG_BIRTH_MONTH = 4; // Tháng 5
           const TNG_BIRTH_DAY = 8;
 
           for (let y = TNG_BIRTH_YEAR + 1; y <= curYear; y++) {
             let bdayDate = new Date(y, TNG_BIRTH_MONTH, TNG_BIRTH_DAY, 8, 0, 0);
             let bdayMs = bdayDate.getTime();
 
-            // Chỉ gửi thư Sinh nhật nếu sự kiện <= Hôm nay VÀ User đã tạo tài khoản trước/trong lúc sinh nhật đó diễn ra.
             if (bdayMs <= todayMs && bdayMs >= exactFirstLoginMs) {
               let age = y - TNG_BIRTH_YEAR;
               let letterId = `tng_birthday_${age}yo_${y}`;
@@ -21913,8 +21901,8 @@
                   year: y,
                   title: `Sinh nhật TNG AI tròn ${age} tuổi!`,
                   icon: "🎂",
-                  color: "linear-gradient(135deg, #f472b6, #db2777)", // Hồng ngọt ngào
-                  body: `<b>Thân gửi ${currentName},</b><br><br>Hôm nay là mùng 8 tháng 5 - ngày TNG AI chính thức bước sang tuổi thứ <b>${age}</b>!<br><br>Nhìn lại chặng đường từ lúc mới ra mắt đến nay, hệ thống đã học hỏi và trưởng thành hơn rất nhiều. Nhưng điều tuyệt vời nhất chính là có bạn ở đây, cùng chia sẻ cột mốc đáng nhớ này. TNG AI xin hứa sẽ tiếp tục nâng cấp mạnh mẽ hơn nữa để mang lại những trải nghiệm đỉnh cao nhất. Cùng nhau nâng ly chúc mừng sinh nhật nào! 🎉`,
+                  color: "linear-gradient(135deg, #f472b6, #db2777)",
+                  body: `<b>Thân gửi bạn,</b><br><br>Hôm nay là mùng 8 tháng 5 - ngày TNG AI chính thức bước sang tuổi thứ <b>${age}</b>!<br><br>Nhìn lại chặng đường từ lúc mới ra mắt đến nay, hệ thống đã học hỏi và trưởng thành hơn rất nhiều. Nhưng điều tuyệt vời nhất chính là có bạn ở đây, cùng chia sẻ cột mốc đáng nhớ này. TNG AI xin hứa sẽ tiếp tục nâng cấp mạnh mẽ hơn nữa để mang lại những trải nghiệm đỉnh cao nhất. Cùng nhau nâng ly chúc mừng sinh nhật nào! 🎉`,
                   footer: `Trân trọng,<br><span style='font-size: 19px; display: inline-block; margin-top: 5px;'>Đội ngũ TNG AI</span>`,
                   time: timeStr,
                   timestamp: bdayMs,
@@ -21926,37 +21914,6 @@
             }
           }
 
-          // =========================================================
-          // THUẬT TOÁN ĐỔI TÊN ĐỘNG CHO TẤT CẢ CÁC LOẠI THƯ
-          // =========================================================
-          let nameChanged = false;
-          letters.forEach((letter) => {
-            if (letter.id === "first_login_thank_you") {
-              let newBody = letter.body.replace(
-                /<b>Chào mừng .*? đã chính thức/g,
-                `<b>Chào mừng ${currentName} đã chính thức`,
-              );
-              if (letter.body !== newBody) {
-                letter.body = newBody;
-                nameChanged = true;
-              }
-            } else {
-              let newBody = letter.body.replace(
-                /<b>Thân gửi .*?,<\/b>/g,
-                `<b>Thân gửi ${currentName},</b>`,
-              );
-              if (letter.body !== newBody) {
-                letter.body = newBody;
-                nameChanged = true;
-              }
-            }
-          });
-
-          if (nameChanged) {
-            isNewLetterAdded = true;
-          }
-
-          // Sắp xếp
           letters.sort((a, b) => {
             let timeA = a.timestamp || parseDateStringForMailbox(a.time);
             let timeB = b.timestamp || parseDateStringForMailbox(b.time);
@@ -21974,7 +21931,7 @@
 
         window.updateMailboxBadgeOnly = function () {
           if (!window.curA || !window.curA.id) return;
-          let key = "tng_mailbox_v56_" + window.curA.id;
+          let key = "tng_mailbox_v60_" + window.curA.id;
           let letters = JSON.parse(localStorage.getItem(key)) || [];
           let unreadCount = letters.filter(
             (l) => !l.isRead && !l.isDeleted,
@@ -22020,6 +21977,7 @@
               location,
               device,
             );
+
           if (window.curA && uid && window.curA.id !== uid) {
             window.curA.id = uid;
           }
@@ -22183,7 +22141,7 @@
         window.initiateMailboxDelete = function (id, e) {
           if (e) e.stopPropagation();
           let key =
-            "tng_mailbox_v56_" + (window.curA ? window.curA.id : "guest");
+            "tng_mailbox_v60_" + (window.curA ? window.curA.id : "guest");
           let letters = JSON.parse(localStorage.getItem(key)) || [];
           let letter = letters.find((l) => l.id === id);
 
@@ -22250,7 +22208,7 @@
 
           setTimeout(() => {
             let key =
-              "tng_mailbox_v56_" + (window.curA ? window.curA.id : "guest");
+              "tng_mailbox_v60_" + (window.curA ? window.curA.id : "guest");
             let letters = JSON.parse(localStorage.getItem(key)) || [];
             let letter = letters.find((l) => l.id === id);
             if (letter) letter.isDeleted = true;
@@ -22275,7 +22233,7 @@
         window.openMailboxReader = function (id, e) {
           if (e) e.stopPropagation();
           let key =
-            "tng_mailbox_v56_" + (window.curA ? window.curA.id : "guest");
+            "tng_mailbox_v60_" + (window.curA ? window.curA.id : "guest");
           let letters = JSON.parse(localStorage.getItem(key)) || [];
           let letterIndex = letters.findIndex((l) => l.id === id);
           if (letterIndex === -1) return;
