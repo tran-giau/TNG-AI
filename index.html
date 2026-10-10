@@ -10678,7 +10678,7 @@
         } else alert("Vui lòng nhập địa chỉ!");
       };
 
-      // 4. Giao diện Modal Xem Chi Tiết Thông Tin (Dành cho name, email, phone, realName)
+      // 4. Giao diện Modal Xem Chi Tiết Thông Tin (Dành cho name, email, phone, realName, avatar)
       window.viewAccountDetail = function (
         fieldKey,
         fieldTitle,
@@ -10690,28 +10690,111 @@
         let el = document.getElementById("custom-detail-modal");
         if (el) el.remove();
         let displayHtml = "";
+
         if (fieldKey === "avatar") {
+          // XỬ LÝ RIÊNG CHO BẢNG "CHI TIẾT HÌNH ẢNH HỒ SƠ"
           let avtSrc = curA.avatar ? curA.avatar : "";
-          let fallback = curA.name ? curA.name.charAt(0).toUpperCase() : "K";
-          let bg = curA.color || "#4285f4";
-          let glowColor = avtSrc ? "rgba(168, 199, 250, 0.4)" : bg + "60";
+
+          // Đồng bộ logic màu nền và chữ cái
+          let initial = "K";
+          let currentName = curA.name || "Khách";
+          if (currentName !== "Chưa đặt" && currentName !== "Khách") {
+            initial = currentName.charAt(0).toUpperCase();
+          }
+          let colors = ["#ff3b30", "#ff9500", "#34c759", "#007aff", "#af52de"];
+          let bg = colors[initial.charCodeAt(0) % colors.length] || "#ff3b30";
+
           if (avtSrc) {
-            displayHtml = `<div style="position: relative; width: 160px; height: 160px; margin: 10px auto 30px; display: flex; justify-content: center; align-items: center;"><div style="position: absolute; inset: 0; border-radius: 50%; background: ${glowColor}; filter: blur(25px); transform: scale(0.9); z-index: 1;"></div><div style="position: relative; z-index: 2; border-radius: 50%; padding: 4px; background: var(--inner-card-bg); border: 1px solid var(--glass-border); box-shadow: 0 10px 30px rgba(0,0,0,0.5);"><img src="${avtSrc}" style="width: 140px; height: 140px; border-radius: 50%; object-fit: cover; display: block;"></div></div>`;
+            // Đã xóa dải hào quang (glow) phía sau
+            displayHtml =
+              '<div style="position: relative; width: 160px; height: 160px; margin: 10px auto 30px; display: flex; justify-content: center; align-items: center;"><div style="position: relative; z-index: 2; border-radius: 50%; padding: 4px; background: var(--inner-card-bg); border: 1px solid var(--glass-border);"><img src="' +
+              avtSrc +
+              '" style="width: 140px; height: 140px; border-radius: 50%; object-fit: cover; display: block;"></div></div>';
           } else {
-            displayHtml = `<div style="position: relative; width: 160px; height: 160px; margin: 10px auto 30px; display: flex; justify-content: center; align-items: center;"><div style="position: absolute; inset: 0; border-radius: 50%; background: ${glowColor}; filter: blur(25px); transform: scale(0.9); z-index: 1;"></div><div style="position: relative; z-index: 2; border-radius: 50%; padding: 4px; background: var(--inner-card-bg); border: 1px solid var(--glass-border); box-shadow: 0 10px 30px rgba(0,0,0,0.5);"><div style="width: 140px; height: 140px; border-radius: 50%; background: linear-gradient(135deg, ${bg}, #2a2d3e); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 65px; font-weight: 600; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">${fallback}</div></div></div>`;
+            // Đã xóa dải hào quang (glow) và đồng bộ màu nền
+            displayHtml =
+              '<div style="position: relative; width: 160px; height: 160px; margin: 10px auto 30px; display: flex; justify-content: center; align-items: center;"><div style="position: relative; z-index: 2; border-radius: 50%; padding: 4px; background: var(--inner-card-bg); border: 1px solid var(--glass-border);"><div style="width: 140px; height: 140px; border-radius: 50%; background: ' +
+              bg +
+              '; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 65px; font-weight: 600;">' +
+              initial +
+              "</div></div></div>";
           }
         } else {
-          // Bổ sung thêm Icon Thẻ định danh cho phần CCCD
-          let iconMap = {
-            name: "👤",
-            email: "✉️",
-            phone: "📞",
-            realName: "🪪",
-          };
-          let icon = iconMap[fieldKey] || "✨";
-          displayHtml = `<div style="display: flex; flex-direction: column; align-items: center; background: var(--inner-card-bg); padding: 30px 20px; border-radius: 20px; border: 1px solid var(--glass-border); box-shadow: inset 0 2px 15px rgba(0,0,0,0.1); margin: 15px 0 25px;"><div style="font-size: 40px; margin-bottom: 15px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));">${icon}</div><div style="font-size: 24px; font-weight: 500; color: var(--text-main); text-align: center; word-break: break-word; line-height: 1.4; letter-spacing: -0.5px;">${currentValue}</div></div>`;
+          // Bổ sung thêm Icon Thẻ định danh cho phần CCCD và Tên
+          let iconHtml = "";
+
+          if (fieldKey === "name") {
+            let hasRealAvatar = curA && curA.avatar && curA.avatar.length > 10;
+
+            if (hasRealAvatar) {
+              let avtContent =
+                '<img src="' +
+                curA.avatar +
+                '" style="width: 100%; height: 100%; object-fit: cover;" />';
+              iconHtml =
+                '<div style="width: 74px; height: 74px; border-radius: 50%; background: var(--glass-bg); margin-bottom: 15px; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 16px rgba(0,0,0,0.25); overflow: hidden;">' +
+                avtContent +
+                "</div>";
+            } else {
+              let initial = "K";
+              if (
+                currentValue &&
+                currentValue !== "Chưa đặt" &&
+                currentValue !== "Khách"
+              ) {
+                initial = currentValue.charAt(0).toUpperCase();
+              }
+
+              let colors = [
+                "#ff3b30",
+                "#ff9500",
+                "#34c759",
+                "#007aff",
+                "#af52de",
+              ];
+              let bgColor =
+                colors[initial.charCodeAt(0) % colors.length] || "#ff3b30";
+
+              let avtContent =
+                '<span style="font-size: 32px; font-weight: 600; color: #fff;">' +
+                initial +
+                "</span>";
+              iconHtml =
+                '<div style="width: 74px; height: 74px; border-radius: 50%; background: ' +
+                bgColor +
+                '; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 16px rgba(0,0,0,0.25); overflow: hidden;">' +
+                avtContent +
+                "</div>";
+            }
+          } else {
+            let iconMap = {
+              email: "✉️",
+              phone: "📞",
+              realName: "🪪",
+            };
+            let icon = iconMap[fieldKey] || "✨";
+            iconHtml =
+              '<div style="font-size: 40px; margin-bottom: 15px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));">' +
+              icon +
+              "</div>";
+          }
+
+          displayHtml =
+            '<div style="display: flex; flex-direction: column; align-items: center; background: var(--inner-card-bg); padding: 30px 20px; border-radius: 20px; border: 1px solid var(--glass-border); box-shadow: inset 0 2px 15px rgba(0,0,0,0.1); margin: 15px 0 25px;">' +
+            iconHtml +
+            '<div style="font-size: 24px; font-weight: 500; color: var(--text-main); text-align: center; word-break: break-word; line-height: 1.4; letter-spacing: -0.5px;">' +
+            currentValue +
+            "</div></div>";
         }
-        let html = `<div id="custom-detail-modal" style="position: fixed; inset: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); z-index: 9999999; display: flex; justify-content: center; align-items: center; opacity: 0; transition: all 0.85s ease; margin: 0; padding: 0; pointer-events: auto;"><div style="width: 360px; background: var(--glass-bg); border: 1px solid var(--glass-border); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); border-radius: 24px; display: flex; flex-direction: column; transform: scale(0.02); opacity: 0; visibility: visible; pointer-events: auto; transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 20px 60px rgba(0,0,0,0.6); overflow: hidden;"><div style="padding: 30px 25px 20px;"><div style="font-size: 13px; font-weight: 600; color: var(--text-sub); text-align: center; text-transform: uppercase; letter-spacing: 1.5px;">Chi tiết ${fieldTitle}</div>${displayHtml}<div style="display: flex; gap: 12px;"><button onclick="closeCustomPopup('custom-detail-modal')" style="flex: 1; padding: 14px 0; border-radius: 16px; border: 1px solid var(--glass-border); background: var(--inner-card-bg); color: var(--text-main); font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s;" onmouseover="this.style.background='var(--glass-hover)'" onmouseout="this.style.background='var(--inner-card-bg)'">Đóng</button><button onclick="closeCustomPopup('custom-detail-modal'); setTimeout(() => { window['${editFuncName}'](null, null); }, 400);" style="flex: 1; padding: 14px 0; border-radius: 16px; border: none; background: var(--btn-blue); color: #000; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 5px 20px rgba(168, 199, 250, 0.4); transition: 0.3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">Thay đổi</button></div></div></div></div>`;
+
+        let html =
+          '<div id="custom-detail-modal" style="position: fixed; inset: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); z-index: 9999999; display: flex; justify-content: center; align-items: center; opacity: 0; transition: all 0.85s ease; margin: 0; padding: 0; pointer-events: auto;"><div style="width: 360px; background: var(--glass-bg); border: 1px solid var(--glass-border); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); border-radius: 24px; display: flex; flex-direction: column; transform: scale(0.02); opacity: 0; visibility: visible; pointer-events: auto; transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 20px 60px rgba(0,0,0,0.6); overflow: hidden;"><div style="padding: 30px 25px 20px;"><div style="font-size: 13px; font-weight: 600; color: var(--text-sub); text-align: center; text-transform: uppercase; letter-spacing: 1.5px;">Chi tiết ' +
+          fieldTitle +
+          "</div>" +
+          displayHtml +
+          '<div style="display: flex; gap: 12px;"><button onclick="closeCustomPopup(\'custom-detail-modal\')" style="flex: 1; padding: 14px 0; border-radius: 16px; border: 1px solid var(--glass-border); background: var(--inner-card-bg); color: var(--text-main); font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s;" onmouseover="this.style.background=\'var(--glass-hover)\'" onmouseout="this.style.background=\'var(--inner-card-bg)\'">Đóng</button><button onclick="closeCustomPopup(\'custom-detail-modal\'); setTimeout(() => { window[\'' +
+          editFuncName +
+          '\'](null, null); }, 400);" style="flex: 1; padding: 14px 0; border-radius: 16px; border: none; background: var(--btn-blue); color: #000; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 5px 20px rgba(168, 199, 250, 0.4); transition: 0.3s;" onmouseover="this.style.transform=\'translateY(-2px)\'" onmouseout="this.style.transform=\'translateY(0)\'">Thay đổi</button></div></div></div></div>';
         document.body.insertAdjacentHTML("beforeend", html);
         openCustomPopup("custom-detail-modal", e, elem);
       };
@@ -10761,9 +10844,19 @@
 
       // 6. Giao diện Quản lý Tài khoản Chính
       window.getAccountManageContent = function () {
+        let initial = "K";
+        let currentName = curA.name || "Khách";
+        if (currentName !== "Chưa đặt" && currentName !== "Khách") {
+          initial = currentName.charAt(0).toUpperCase();
+        }
+        let colors = ["#ff3b30", "#ff9500", "#34c759", "#007aff", "#af52de"];
+        let dynamicColor =
+          colors[initial.charCodeAt(0) % colors.length] || "#ff3b30";
+
         let avatarHtml = curA.avatar
           ? `<img src="${curA.avatar}" style="width:34px;height:34px;border-radius:50%;object-fit:cover;box-shadow:0 2px 5px rgba(0,0,0,0.2);">`
-          : `<div style="width:34px;height:34px;border-radius:50%;background:${curA.color || "#4f46e5"};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:15px;box-shadow:0 2px 5px rgba(0,0,0,0.2);">${(curA.name || "K").charAt(0).toUpperCase()}</div>`;
+          : // Thay curA.color bằng dynamicColor
+            `<div style="width:34px;height:34px;border-radius:50%;background:${dynamicColor};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:15px;box-shadow:0 2px 5px rgba(0,0,0,0.2);">${initial}</div>`;
 
         // Đếm thông minh đa liên kết
         let cChild = syncArr("childAcc", true).length;
@@ -10823,7 +10916,12 @@
         // Dùng vòng lặp in ra toàn bộ lịch sử
         logs.forEach((log, index) => {
           let isCurrent = index === 0 && log.type === "Đăng nhập";
-          let icon = isCurrent ? "🟢" : "⚪";
+
+          // Giảm margin-right xuống kịch kim còn 3px
+          let icon = isCurrent
+            ? '<div style="width: 12px; height: 12px; border-radius: 50%; background: radial-gradient(circle, #85ff9e 10%, #34c759 70%); box-shadow: 0 0 8px 2px rgba(52, 199, 89, 0.7); margin-right: 3px; transform: translateY(-1px); flex-shrink: 0;"></div>'
+            : '<div style="width: 12px; height: 12px; border-radius: 50%; background: radial-gradient(circle, #7a7a7c 10%, #48484a 70%); box-shadow: inset 0 1px 3px rgba(0,0,0,0.8), 0 1px 1px rgba(255,255,255,0.05); margin-right: 3px; transform: translateY(-1px); flex-shrink: 0;"></div>';
+
           let statusBg = isCurrent ? "var(--btn-blue)" : "var(--glass-border)";
           let statusColor = isCurrent ? "#000" : "var(--text-sub)";
           let cardOpacity = isCurrent ? "1" : "0.7";
@@ -12532,8 +12630,23 @@
         });
       }
       function refreshUI() {
-        let txt = curA.avatar ? "" : curA.name.charAt(0).toUpperCase();
-        let bg = curA.avatar ? `url(${curA.avatar}) center/cover` : curA.color;
+        let initial = "K";
+        let currentName = curA.name || "Khách";
+        if (currentName !== "Chưa đặt" && currentName !== "Khách") {
+          initial = currentName.charAt(0).toUpperCase();
+        }
+
+        // Tính toán lại màu sắc động
+        let colors = ["#ff3b30", "#ff9500", "#34c759", "#007aff", "#af52de"];
+        let dynamicColor =
+          colors[initial.charCodeAt(0) % colors.length] || "#ff3b30";
+
+        let txt = curA.avatar ? "" : initial;
+        // Bỏ curA.color, thay bằng dynamicColor
+        let bg = curA.avatar
+          ? `url(${curA.avatar}) center/cover`
+          : dynamicColor;
+
         document.getElementById("u-display-name").innerText = curA.name;
         let av = document.getElementById("avt");
         if (av) {
