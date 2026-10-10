@@ -20742,7 +20742,7 @@
     </script>
 
     <!-- ======================================================= -->
-    <!-- HÒM THƯ TNG AI (THƯ CHỦ NHẬT & TỐI ƯU MOBILE V61)       -->
+    <!-- HÒM THƯ TNG AI (ÉP THƯ CẢM ƠN XUỐNG DƯỚI CÙNG V63)      -->
     <!-- ======================================================= -->
     <style>
       .tng-mailbox-overlay {
@@ -21179,16 +21179,15 @@
         max-width: 320px;
       }
 
-      /* ĐÃ TĂNG SIZE ICON LÊN 10% CHO ĐIỆN THOẠI NHƯNG VẪN GIỮ ĐỘ BO CONG */
       @media (max-width: 600px) {
         .notif-empty-icon {
-          width: 88px;
-          height: 88px;
+          width: 90px;
+          height: 90px;
           margin-bottom: 14px;
         }
         .notif-empty-svg {
-          width: 38px;
-          height: 38px;
+          width: 40px;
+          height: 40px;
         }
         .notif-empty-title {
           font-size: 19px;
@@ -21656,7 +21655,7 @@
         window.checkAndDeliverMailbox = function () {
           if (!window.curA || !window.curA.id) return [];
 
-          let key = "tng_mailbox_v61_" + window.curA.id; // NÂNG CẤP V61
+          let key = "tng_mailbox_v63_" + window.curA.id; // NÂNG CẤP V63 ĐỂ KÍCH HOẠT LỆNH SẮP XẾP MỚI
           let letters = JSON.parse(localStorage.getItem(key)) || [];
           let isNewLetterAdded = false;
 
@@ -21674,6 +21673,10 @@
           }
           let exactFirstLoginMs = parseInt(exactFirstLoginMsStr);
 
+          let flStartObj = new Date(exactFirstLoginMs);
+          flStartObj.setHours(0, 0, 0, 0);
+          let flStartMs = flStartObj.getTime();
+
           let lastActiveKey = "tng_last_active_v55_" + window.curA.id;
           let lastActiveMsStr = localStorage.getItem(lastActiveKey);
           if (!lastActiveMsStr) {
@@ -21682,13 +21685,14 @@
           }
           let lastActiveMs = parseInt(lastActiveMsStr);
 
-          let flDateObj = new Date(exactFirstLoginMs);
-          let startYear = flDateObj.getFullYear();
-          let flMonth = flDateObj.getMonth();
-          let flDay = flDateObj.getDate();
+          let startYear = flStartObj.getFullYear();
+          let flMonth = flStartObj.getMonth();
+          let flDay = flStartObj.getDate();
+
+          let currentName = window.curA.name || "bạn";
 
           // =========================================================
-          // 1. THƯ CẢM ƠN LẦN ĐẦU (GỌI LÀ BẠN)
+          // 1. THƯ CẢM ƠN LẦN ĐẦU
           // =========================================================
           let firstLoginLetter = letters.find(
             (l) => l.id === "first_login_thank_you",
@@ -21718,7 +21722,7 @@
             for (let m = 1; m <= 12; m++) {
               let monthDate = new Date(y, m - 1, 1, 8, 0, 0);
               let monthMs = monthDate.getTime();
-              if (monthMs >= exactFirstLoginMs && monthMs <= todayMs) {
+              if (monthMs >= flStartMs && monthMs <= todayMs) {
                 let letterId = `monthly_letter_${m}_${y}`;
                 if (!letters.some((l) => l.id === letterId)) {
                   let iconTheoThang = MONTHLY_ICONS[m - 1];
@@ -21743,7 +21747,7 @@
             HOLIDAYS.forEach((hol) => {
               let holDate = new Date(y, hol.month - 1, hol.day, 8, 0, 0);
               let holMs = holDate.getTime();
-              if (holMs >= exactFirstLoginMs && holMs <= todayMs) {
+              if (holMs >= flStartMs && holMs <= todayMs) {
                 let letterId = `letter_${hol.day}-${hol.month}_${y}`;
                 if (!letters.some((l) => l.id === letterId)) {
                   let content = window.generateEmotionalMailboxLetter(
@@ -21771,11 +21775,10 @@
           }
 
           // =========================================================
-          // 3. MÁY QUÉT THƯ CUỐI TUẦN (SÁNG CHỦ NHẬT HÀNG TUẦN - V61)
+          // 3. MÁY QUÉT THƯ CUỐI TUẦN (SÁNG CHỦ NHẬT HÀNG TUẦN)
           // =========================================================
           let d = new Date(exactFirstLoginMs);
           d.setHours(8, 0, 0, 0);
-          // CHUYỂN SANG 0 LÀ CHỦ NHẬT (Sunday = 0 in JS Date)
           while (d.getDay() !== 0) {
             d.setDate(d.getDate() + 1);
           }
@@ -21910,7 +21913,7 @@
             let bdayDate = new Date(y, TNG_BIRTH_MONTH, TNG_BIRTH_DAY, 8, 0, 0);
             let bdayMs = bdayDate.getTime();
 
-            if (bdayMs <= todayMs && bdayMs >= exactFirstLoginMs) {
+            if (bdayMs <= todayMs && bdayMs >= flStartMs) {
               let age = y - TNG_BIRTH_YEAR;
               let letterId = `tng_birthday_${age}yo_${y}`;
               if (!letters.some((l) => l.id === letterId)) {
@@ -21933,7 +21936,23 @@
             }
           }
 
+          // =========================================================
+          // LỆNH VÁ LỖI V63: ÉP BỨC THƯ CẢM ƠN XUỐNG ĐÁY HÒM THƯ
+          // =========================================================
           letters.sort((a, b) => {
+            // Đặt ngoại lệ: Nếu bức thư là "Thư Cảm Ơn Lần Đầu", luôn luôn cho nó chìm xuống dưới cùng (return 1)
+            if (
+              a.id === "first_login_thank_you" &&
+              b.id !== "first_login_thank_you"
+            )
+              return 1;
+            if (
+              b.id === "first_login_thank_you" &&
+              a.id !== "first_login_thank_you"
+            )
+              return -1;
+
+            // Các bức thư khác vẫn được sắp xếp theo thời gian mới nhất nổi lên trên
             let timeA = a.timestamp || parseDateStringForMailbox(a.time);
             let timeB = b.timestamp || parseDateStringForMailbox(b.time);
             return timeB - timeA;
@@ -21950,7 +21969,7 @@
 
         window.updateMailboxBadgeOnly = function () {
           if (!window.curA || !window.curA.id) return;
-          let key = "tng_mailbox_v61_" + window.curA.id;
+          let key = "tng_mailbox_v63_" + window.curA.id;
           let letters = JSON.parse(localStorage.getItem(key)) || [];
           let unreadCount = letters.filter(
             (l) => !l.isRead && !l.isDeleted,
@@ -22160,7 +22179,7 @@
         window.initiateMailboxDelete = function (id, e) {
           if (e) e.stopPropagation();
           let key =
-            "tng_mailbox_v61_" + (window.curA ? window.curA.id : "guest");
+            "tng_mailbox_v63_" + (window.curA ? window.curA.id : "guest");
           let letters = JSON.parse(localStorage.getItem(key)) || [];
           let letter = letters.find((l) => l.id === id);
 
@@ -22227,7 +22246,7 @@
 
           setTimeout(() => {
             let key =
-              "tng_mailbox_v61_" + (window.curA ? window.curA.id : "guest");
+              "tng_mailbox_v63_" + (window.curA ? window.curA.id : "guest");
             let letters = JSON.parse(localStorage.getItem(key)) || [];
             let letter = letters.find((l) => l.id === id);
             if (letter) letter.isDeleted = true;
@@ -22252,7 +22271,7 @@
         window.openMailboxReader = function (id, e) {
           if (e) e.stopPropagation();
           let key =
-            "tng_mailbox_v61_" + (window.curA ? window.curA.id : "guest");
+            "tng_mailbox_v63_" + (window.curA ? window.curA.id : "guest");
           let letters = JSON.parse(localStorage.getItem(key)) || [];
           let letterIndex = letters.findIndex((l) => l.id === id);
           if (letterIndex === -1) return;
@@ -22372,7 +22391,7 @@
     </script>
 
     <!-- ======================================================= -->
-    <!-- PATCH VÁ LỖI CÂN BẰNG GIAO DIỆN & XUỐNG DÒNG THÔNG MINH -->
+    <!-- PATCH VÁ LỖI CÂN BẰNG GIAO DIỆN & KHOẢNG CÁCH CHỮ       -->
     <!-- ======================================================= -->
     <style>
       @media (max-width: 768px) {
@@ -22388,19 +22407,20 @@
           margin-bottom: 0 !important;
         }
 
-        /* Ép khít khoảng cách các dòng chữ lại với nhau */
+        /* Kéo khít khoảng cách hai dòng chữ lại với nhau chuẩn như bản gốc */
         .greeting h1 {
-          line-height: 1.3 !important;
+          line-height: 1.25 !important;
+          margin-bottom: 0px !important; /* TRIỆT TIÊU KHOẢNG TRỐNG DƯ THỪA ĐÁY H1 */
         }
         .greeting h2 {
           line-height: 1.3 !important;
-          margin-top: 5px !important;
+          margin-top: 4px !important; /* Kéo sát dòng "Hôm nay..." lên trên */
         }
 
         /* BẢO TOÀN KHỐI TÊN: Nếu không đủ chỗ cạnh "Xin chào", rớt trọn vẹn nguyên khối tên xuống hàng dưới */
         .greeting h1 > span {
           display: inline-block !important;
-          max-width: 100% !important; /* Đảm bảo tên quá dài không tràn viền màn hình */
+          max-width: 100% !important;
           word-break: break-word !important;
         }
       }
