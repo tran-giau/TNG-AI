@@ -20742,7 +20742,7 @@
     </script>
 
     <!-- ======================================================= -->
-    <!-- HÒM THƯ TNG AI (ICON NGÔI SAO VÀNG CĂN GIỮA V60)        -->
+    <!-- HÒM THƯ TNG AI (THƯ CHỦ NHẬT & TỐI ƯU MOBILE V61)       -->
     <!-- ======================================================= -->
     <style>
       .tng-mailbox-overlay {
@@ -21179,15 +21179,16 @@
         max-width: 320px;
       }
 
+      /* ĐÃ TĂNG SIZE ICON LÊN 10% CHO ĐIỆN THOẠI NHƯNG VẪN GIỮ ĐỘ BO CONG */
       @media (max-width: 600px) {
         .notif-empty-icon {
-          width: 80px;
-          height: 80px;
+          width: 88px;
+          height: 88px;
           margin-bottom: 14px;
         }
         .notif-empty-svg {
-          width: 34px;
-          height: 34px;
+          width: 38px;
+          height: 38px;
         }
         .notif-empty-title {
           font-size: 19px;
@@ -21387,7 +21388,6 @@
       try {
         if (!window.curA) window.curA = { id: "guest", name: "bạn" };
 
-        // ĐÃ ĐỔI "🇻🇳" THÀNH "⭐" CĂN GIỮA TUYỆT ĐỐI
         const HOLIDAYS = [
           {
             day: 1,
@@ -21656,7 +21656,7 @@
         window.checkAndDeliverMailbox = function () {
           if (!window.curA || !window.curA.id) return [];
 
-          let key = "tng_mailbox_v60_" + window.curA.id; // NÂNG CẤP LÊN V60 ĐỂ UPDATE NGÔI SAO
+          let key = "tng_mailbox_v61_" + window.curA.id; // NÂNG CẤP V61
           let letters = JSON.parse(localStorage.getItem(key)) || [];
           let isNewLetterAdded = false;
 
@@ -21687,6 +21687,9 @@
           let flMonth = flDateObj.getMonth();
           let flDay = flDateObj.getDate();
 
+          // =========================================================
+          // 1. THƯ CẢM ƠN LẦN ĐẦU (GỌI LÀ BẠN)
+          // =========================================================
           let firstLoginLetter = letters.find(
             (l) => l.id === "first_login_thank_you",
           );
@@ -21708,6 +21711,9 @@
             isNewLetterAdded = true;
           }
 
+          // =========================================================
+          // 2. MÁY QUÉT THƯ LỄ HỘI VÀ HÀNG THÁNG
+          // =========================================================
           for (let y = startYear; y <= curYear; y++) {
             for (let m = 1; m <= 12; m++) {
               let monthDate = new Date(y, m - 1, 1, 8, 0, 0);
@@ -21764,17 +21770,21 @@
             });
           }
 
+          // =========================================================
+          // 3. MÁY QUÉT THƯ CUỐI TUẦN (SÁNG CHỦ NHẬT HÀNG TUẦN - V61)
+          // =========================================================
           let d = new Date(exactFirstLoginMs);
           d.setHours(8, 0, 0, 0);
-          while (d.getDay() !== 6) {
+          // CHUYỂN SANG 0 LÀ CHỦ NHẬT (Sunday = 0 in JS Date)
+          while (d.getDay() !== 0) {
             d.setDate(d.getDate() + 1);
           }
-          let satMs = d.getTime();
+          let sunMs = d.getTime();
 
-          while (satMs <= todayMs) {
-            let wd = new Date(satMs);
+          while (sunMs <= todayMs) {
+            let wd = new Date(sunMs);
             let wDateStr = `${wd.getDate()} THG ${wd.getMonth() + 1}, ${wd.getFullYear()}`;
-            let letterId = `weekend_${satMs}`;
+            let letterId = `weekend_${sunMs}`;
             if (!letters.some((l) => l.id === letterId)) {
               letters.push({
                 id: letterId,
@@ -21785,15 +21795,18 @@
                 body: `<b>Thân gửi bạn,</b><br><br>Một tuần bận rộn lại vừa trôi qua! Đây là khoảnh khắc tuyệt vời để bạn tạm gác lại những âu lo, thả lỏng tâm hồn và nạp lại năng lượng tích cực cho bản thân.<br><br>Dù bạn chọn cách nghỉ ngơi thư giãn tại nhà hay dạo phố cùng những người thân yêu, TNG AI đều mong bạn sẽ có những phút giây thật bình yên, ấm áp và trọn vẹn. Hãy nhớ chăm sóc sức khỏe và tận hưởng ngày nghỉ thật ý nghĩa nhé!`,
                 footer: `Trân trọng,<br><span style='font-size: 19px; display: inline-block; margin-top: 5px;'>Đội ngũ TNG AI</span>`,
                 time: wDateStr,
-                timestamp: satMs,
+                timestamp: sunMs,
                 isRead: false,
                 isDeleted: false,
               });
               isNewLetterAdded = true;
             }
-            satMs += 7 * 24 * 60 * 60 * 1000;
+            sunMs += 7 * 24 * 60 * 60 * 1000;
           }
 
+          // =========================================================
+          // 4. MÁY QUÉT CẢM BIẾN VẮNG MẶT
+          // =========================================================
           let gapMs = todayMs - lastActiveMs;
           const inactivityThresholds = [
             { days: 7, label: "1 tuần", title: "TNG AI nhớ bạn!" },
@@ -21856,6 +21869,9 @@
             }
           }
 
+          // =========================================================
+          // 5. MÁY QUÉT KỶ NIỆM ĐỒNG HÀNH
+          // =========================================================
           for (let y = startYear + 1; y <= curYear; y++) {
             let anniDate = new Date(y, flMonth, flDay, 8, 0, 0);
             let anniMs = anniDate.getTime();
@@ -21883,6 +21899,9 @@
             }
           }
 
+          // =========================================================
+          // 6. MÁY QUÉT SINH NHẬT TNG AI
+          // =========================================================
           const TNG_BIRTH_YEAR = 2026;
           const TNG_BIRTH_MONTH = 4; // Tháng 5
           const TNG_BIRTH_DAY = 8;
@@ -21931,7 +21950,7 @@
 
         window.updateMailboxBadgeOnly = function () {
           if (!window.curA || !window.curA.id) return;
-          let key = "tng_mailbox_v60_" + window.curA.id;
+          let key = "tng_mailbox_v61_" + window.curA.id;
           let letters = JSON.parse(localStorage.getItem(key)) || [];
           let unreadCount = letters.filter(
             (l) => !l.isRead && !l.isDeleted,
@@ -22141,7 +22160,7 @@
         window.initiateMailboxDelete = function (id, e) {
           if (e) e.stopPropagation();
           let key =
-            "tng_mailbox_v60_" + (window.curA ? window.curA.id : "guest");
+            "tng_mailbox_v61_" + (window.curA ? window.curA.id : "guest");
           let letters = JSON.parse(localStorage.getItem(key)) || [];
           let letter = letters.find((l) => l.id === id);
 
@@ -22208,7 +22227,7 @@
 
           setTimeout(() => {
             let key =
-              "tng_mailbox_v60_" + (window.curA ? window.curA.id : "guest");
+              "tng_mailbox_v61_" + (window.curA ? window.curA.id : "guest");
             let letters = JSON.parse(localStorage.getItem(key)) || [];
             let letter = letters.find((l) => l.id === id);
             if (letter) letter.isDeleted = true;
@@ -22233,7 +22252,7 @@
         window.openMailboxReader = function (id, e) {
           if (e) e.stopPropagation();
           let key =
-            "tng_mailbox_v60_" + (window.curA ? window.curA.id : "guest");
+            "tng_mailbox_v61_" + (window.curA ? window.curA.id : "guest");
           let letters = JSON.parse(localStorage.getItem(key)) || [];
           let letterIndex = letters.findIndex((l) => l.id === id);
           if (letterIndex === -1) return;
@@ -22351,5 +22370,40 @@
         console.error("Lỗi Hệ thống Hòm thư:", err);
       }
     </script>
+
+    <!-- ======================================================= -->
+    <!-- PATCH VÁ LỖI CÂN BẰNG GIAO DIỆN & XUỐNG DÒNG THÔNG MINH -->
+    <!-- ======================================================= -->
+    <style>
+      @media (max-width: 768px) {
+        /* Tự động cân bằng khối hiển thị vào chính giữa màn hình */
+        .home-view {
+          justify-content: center !important;
+          padding-top: 10px !important;
+          padding-bottom: 140px !important; /* Chừa khoảng không cho thanh chat */
+        }
+
+        /* Xóa khoảng trống đáy bị dư thừa */
+        .chips {
+          margin-bottom: 0 !important;
+        }
+
+        /* Ép khít khoảng cách các dòng chữ lại với nhau */
+        .greeting h1 {
+          line-height: 1.3 !important;
+        }
+        .greeting h2 {
+          line-height: 1.3 !important;
+          margin-top: 5px !important;
+        }
+
+        /* BẢO TOÀN KHỐI TÊN: Nếu không đủ chỗ cạnh "Xin chào", rớt trọn vẹn nguyên khối tên xuống hàng dưới */
+        .greeting h1 > span {
+          display: inline-block !important;
+          max-width: 100% !important; /* Đảm bảo tên quá dài không tràn viền màn hình */
+          word-break: break-word !important;
+        }
+      }
+    </style>
   </body>
 </html>
