@@ -1733,74 +1733,76 @@
       .arrow-up {
         transform: rotate(-135deg);
       }
-      /* THẺ VỎ BỌC NGUYÊN KHỐI: Tự động co giãn che lấp mọi khe hở */
+      /* 1. THẺ VỎ BỌC NGUYÊN KHỐI: Đảm nhận màu nền duy nhất cho toàn bộ bảng */
       .acc-wrap-container {
-        background: var(--inner-card-bg);
+        background: var(--inner-card-bg) !important;
         border-radius: 20px;
-        overflow: hidden; /* Cắt gọn gàng các thành phần bên trong */
+        overflow: hidden;
         transition: border-radius 0.4s ease;
       }
 
-      /* Loại bỏ màu nền của thẻ Header vì lớp vỏ bọc đã đảm nhận */
+      /* 2. TIÊU ĐỀ: Trong suốt để hòa làm 1 khối với vỏ bọc */
       .acc-collapse-header {
         background: transparent !important;
-        /* Giữ nguyên các thuộc tính khác như padding, display flex... */
       }
 
-      /* PHẦN DANH SÁCH BÊN TRONG */
+      /* 3. PHẦN DANH SÁCH BÊN TRONG (TRẠNG THÁI ĐÓNG) */
       .acc-expanded-list {
         background: transparent !important;
         border-radius: 0 0 20px 20px;
         display: flex;
         flex-direction: column;
 
-        -webkit-overflow-scrolling: touch;
-        scroll-behavior: smooth;
-        overscroll-behavior: contain;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        overflow: hidden;
 
         /* TRẠNG THÁI ĐÓNG */
         max-height: 0;
-        opacity: 0;
+        opacity: 1;
         padding-top: 0;
         padding-bottom: 0;
         visibility: hidden;
-        overflow: hidden;
-
         transform: none;
 
         /* 
-           GIA TỐC LÒ XO CỰC ĐẠI:
-           - Tăng thời gian lên 0.85s để mắt bạn kịp nhìn thấy toàn bộ quỹ đạo nảy.
-           - Tăng độ bật lò xo lên mức 1.9 (nảy rất rõ và sâu).
+           CUỘN LÊN (ĐÓNG): 
+           Áp dụng lực âm (-0.9). Đáy hộp nhún xuống lấy đà chính xác 18px rồi vút lên.
         */
         transition:
-          max-height 0.85s cubic-bezier(0.34, 1.9, 0.64, 1),
-          opacity 0.4s ease,
-          padding 0.85s cubic-bezier(0.34, 1.9, 0.64, 1),
-          visibility 0.85s;
+          max-height 0.7s cubic-bezier(0.34, -0.9, 0.64, 1),
+          padding 0.7s cubic-bezier(0.34, -0.9, 0.64, 1),
+          visibility 0.7s;
+      }
+
+      .acc-expanded-list::-webkit-scrollbar {
+        display: none;
+        width: 0;
       }
 
       .acc-expanded-list > * {
         flex-shrink: 0 !important;
       }
 
-      /* TRẠNG THÁI MỞ */
+      /* 4. TRẠNG THÁI MỞ (CUỘN XUỐNG) */
       .acc-expanded-list.show {
-        max-height: 450px;
+        max-height: 400px;
         opacity: 1;
         padding-top: 5px;
-        /* Tăng nhẹ đệm đáy để khi lò xo kéo lố, lớp vỏ xám sẽ giãn nảy dài ra rồi thu lại */
-        padding-bottom: 16px;
+
+        /* Khoảng đệm mốc 20px để làm chuẩn tính toán lực nảy 18px */
+        padding-bottom: 20px;
         visibility: visible;
         overflow-y: auto;
-      }
 
-      .acc-expanded-list::-webkit-scrollbar {
-        width: 5px;
-      }
-      .acc-expanded-list::-webkit-scrollbar-thumb {
-        background: var(--glass-border);
-        border-radius: 5px;
+        /* 
+           CUỘN XUỐNG (MỞ): 
+           Áp dụng lực dương (1.9). Đáy hộp trượt lố chính xác 18px rồi đàn hồi thu về êm ái.
+        */
+        transition:
+          max-height 0.7s cubic-bezier(0.34, 1.9, 0.64, 1),
+          padding 0.7s cubic-bezier(0.34, 1.9, 0.64, 1),
+          visibility 0.7s;
       }
       .acc-item-row {
         display: flex;
