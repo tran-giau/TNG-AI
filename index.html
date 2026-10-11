@@ -21294,8 +21294,8 @@
 
       @media (max-width: 600px) {
         .notif-empty-icon {
-          width: 90px;
-          height: 90px;
+          width: 100px;
+          height: 100px;
           margin-bottom: 14px;
         }
         .notif-empty-svg {
@@ -21833,7 +21833,7 @@
           // =========================================================
           for (let y = startYear; y <= curYear; y++) {
             for (let m = 1; m <= 12; m++) {
-              let monthDate = new Date(y, m - 1, 1, 8, 0, 0);
+              let monthDate = new Date(y, m - 1, 1, 0, 0, 0, 0);
               let monthMs = monthDate.getTime();
               if (monthMs >= flStartMs && monthMs <= todayMs) {
                 let letterId = `monthly_letter_${m}_${y}`;
@@ -21858,7 +21858,7 @@
             }
 
             HOLIDAYS.forEach((hol) => {
-              let holDate = new Date(y, hol.month - 1, hol.day, 8, 0, 0);
+              let holDate = new Date(y, hol.month - 1, hol.day, 0, 0, 0, 0);
               let holMs = holDate.getTime();
               if (holMs >= flStartMs && holMs <= todayMs) {
                 let letterId = `letter_${hol.day}-${hol.month}_${y}`;
@@ -21891,7 +21891,7 @@
           // 3. MÁY QUÉT THƯ CUỐI TUẦN (SÁNG CHỦ NHẬT HÀNG TUẦN)
           // =========================================================
           let d = new Date(exactFirstLoginMs);
-          d.setHours(8, 0, 0, 0);
+          d.setHours(0, 0, 0, 0);
           while (d.getDay() !== 0) {
             d.setDate(d.getDate() + 1);
           }
@@ -21989,7 +21989,7 @@
           // 5. MÁY QUÉT KỶ NIỆM ĐỒNG HÀNH
           // =========================================================
           for (let y = startYear + 1; y <= curYear; y++) {
-            let anniDate = new Date(y, flMonth, flDay, 8, 0, 0);
+            let anniDate = new Date(y, flMonth, flDay, 0, 0, 0, 0);
             let anniMs = anniDate.getTime();
 
             if (anniMs <= todayMs) {
@@ -22023,7 +22023,15 @@
           const TNG_BIRTH_DAY = 8;
 
           for (let y = TNG_BIRTH_YEAR + 1; y <= curYear; y++) {
-            let bdayDate = new Date(y, TNG_BIRTH_MONTH, TNG_BIRTH_DAY, 8, 0, 0);
+            let bdayDate = new Date(
+              y,
+              TNG_BIRTH_MONTH,
+              TNG_BIRTH_DAY,
+              0,
+              0,
+              0,
+              0,
+            );
             let bdayMs = bdayDate.getTime();
 
             if (bdayMs <= todayMs && bdayMs >= flStartMs) {
