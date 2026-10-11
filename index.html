@@ -1733,18 +1733,68 @@
       .arrow-up {
         transform: rotate(-135deg);
       }
-      .acc-expanded-list {
+      /* THẺ VỎ BỌC NGUYÊN KHỐI: Tự động co giãn che lấp mọi khe hở */
+      .acc-wrap-container {
         background: var(--inner-card-bg);
+        border-radius: 20px;
+        overflow: hidden; /* Cắt gọn gàng các thành phần bên trong */
+        transition: border-radius 0.4s ease;
+      }
+
+      /* Loại bỏ màu nền của thẻ Header vì lớp vỏ bọc đã đảm nhận */
+      .acc-collapse-header {
+        background: transparent !important;
+        /* Giữ nguyên các thuộc tính khác như padding, display flex... */
+      }
+
+      /* PHẦN DANH SÁCH BÊN TRONG */
+      .acc-expanded-list {
+        background: transparent !important;
         border-radius: 0 0 20px 20px;
-        padding: 5px 0 10px 0;
         display: flex;
         flex-direction: column;
-        max-height: 50vh;
-        overflow-y: auto;
+
         -webkit-overflow-scrolling: touch;
         scroll-behavior: smooth;
         overscroll-behavior: contain;
+
+        /* TRẠNG THÁI ĐÓNG */
+        max-height: 0;
+        opacity: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        visibility: hidden;
+        overflow: hidden;
+
+        transform: none;
+
+        /* 
+           GIA TỐC LÒ XO CỰC ĐẠI:
+           - Tăng thời gian lên 0.85s để mắt bạn kịp nhìn thấy toàn bộ quỹ đạo nảy.
+           - Tăng độ bật lò xo lên mức 1.9 (nảy rất rõ và sâu).
+        */
+        transition:
+          max-height 0.85s cubic-bezier(0.34, 1.9, 0.64, 1),
+          opacity 0.4s ease,
+          padding 0.85s cubic-bezier(0.34, 1.9, 0.64, 1),
+          visibility 0.85s;
       }
+
+      .acc-expanded-list > * {
+        flex-shrink: 0 !important;
+      }
+
+      /* TRẠNG THÁI MỞ */
+      .acc-expanded-list.show {
+        max-height: 450px;
+        opacity: 1;
+        padding-top: 5px;
+        /* Tăng nhẹ đệm đáy để khi lò xo kéo lố, lớp vỏ xám sẽ giãn nảy dài ra rồi thu lại */
+        padding-bottom: 16px;
+        visibility: visible;
+        overflow-y: auto;
+      }
+
       .acc-expanded-list::-webkit-scrollbar {
         width: 5px;
       }
@@ -1815,14 +1865,15 @@
         display: flex;
         gap: 10px;
         padding: 0 15px 0 65px;
-        max-height: 0; /* Ẩn đi bằng cách thu chiều cao về 0 */
+        max-height: 0;
         opacity: 0;
         overflow: hidden;
-        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         border-bottom: 1px solid transparent;
+        /* Áp dụng nhịp thở/trượt chuẩn Apple */
+        transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
       }
       .acc-action-btns.show {
-        max-height: 60px; /* Bung ra khi được chọn */
+        max-height: 80px; /* Điều chỉnh chiều cao phù hợp */
         opacity: 1;
         padding-bottom: 15px;
         margin-bottom: 5px;
@@ -12666,8 +12717,91 @@
       }
       function renderAccList() {
         let area = document.getElementById("acc-dynamic-area");
+        if (!area) return;
+
         let inactiveAccs = accounts.filter((a) => !a.active);
-        if (!isAccExpanded) {
+        let activeA = accounts.find((a) => a.active);
+
+        // 1. Dựng sẵn chuỗi HTML cho các Mini Avatars (Khi thu gọn)
+        let miniAvatars = inactiveAccs
+          .map((a) => {
+            let abg = a.avatar ? `url(${a.avatar}) center/cover` : a.color;
+            let atxt = a.avatar ? "" : a.name.charAt(0).toUpperCase();
+            return `<div class="mini-avt" style="background:${abg}">${atxt}</div>`;
+          })
+          .join("");
+
+        // 2. Dựng sẵn HTML cho Danh sách mở rộng
+        let abgMain = activeA
+          ? activeA.avatar
+            ? `url(${activeA.avatar}) center/cover`
+            : activeA.color
+          : "";
+        let atxtMain = activeA
+          ? activeA.avatar
+            ? ""
+            : activeA.name.charAt(0).toUpperCase()
+          : "K";
+        let activeName = activeA ? activeA.name : "Khách";
+        let activeEmail = activeA ? activeA.email : "";
+
+        let listHtml = `<div class="acc-item-row"><div class="acc-item-avt" style="background:${abgMain}">${atxtMain}</div><div class="acc-item-info"><div class="acc-item-name">${activeName}</div><div class="acc-item-mail">${activeEmail}</div></div><span class="badge-default">Mặc định</span></div>`;
+
+        inactiveAccs.forEach((a) => {
+          let abg = a.avatar ? `url(${a.avatar}) center/cover` : a.color;
+          let atxt = a.avatar ? "" : a.name.charAt(0).toUpperCase();
+          listHtml += `<div class="acc-wrap-box" id="acc-box-${a.id}" onclick="toggleAccActions('${a.id}', event)"><div class="acc-item-row inactive-row" style="padding-bottom:5px;"><div class="acc-item-avt" style="background:${abg}">${atxt}</div><div class="acc-item-info"><div class="acc-item-name">${a.name}</div><div class="acc-item-mail">${a.email}</div></div><span class="badge-logout">Đã đăng xuất</span></div><div class="acc-action-btns" id="acc-actions-${a.id}"><button class="acc-btn-login" onclick="switchAcc('${a.id}', event)">Đăng nhập</button><button class="acc-btn-del" onclick="deleteAcc('${a.id}', event)">Xóa</button></div></div>`;
+        });
+        listHtml += `<div class="acc-row-btn" onclick="addAccFlow(event)"><span style="font-size:20px; font-weight:400; width:24px; text-align:center;">+</span> Thêm tài khoản khác</div><div class="acc-row-btn" onclick="promptConfirm('Xóa toàn bộ dữ liệu?', logoutAll)"><span style="font-size:18px; width:24px; text-align:center;">⎗</span> Đăng xuất khỏi tất cả các tài khoản</div>`;
+
+        // 3. Kiểm tra trạng thái hiện tại để set giao diện tiêu đề
+        let headerText = isAccExpanded
+          ? "Ẩn bớt tài khoản"
+          : "Hiện thêm tài khoản";
+        let headerIcon = isAccExpanded
+          ? `<div class="arrow-icon arrow-up"></div>`
+          : `<div style="display:flex;align-items:center;gap:5px;">${miniAvatars}<div class="arrow-icon arrow-down"></div></div>`;
+        let showClass = isAccExpanded ? "show" : "";
+
+        // 4. BỌC TRONG VỎ NGUYÊN KHỐI (.acc-wrap-container)
+        area.innerHTML = `
+          <div class="acc-wrap-container">
+            <div class="acc-collapse-header" id="acc-toggle-header" onclick="toggleAccListAnim(event)">
+                <span id="acc-toggle-text">${headerText}</span>
+                <div id="acc-toggle-icon">${headerIcon}</div>
+            </div>
+            <div class="acc-expanded-list ${showClass}" id="acc-expandable-list">
+                ${listHtml}
+            </div>
+          </div>
+        `;
+      }
+
+      // 5. Hàm Javascript mới xử lý đóng/mở mượt mà (Dán ngay dưới hàm trên)
+      window.toggleAccListAnim = function (e) {
+        if (e) e.stopPropagation();
+        let list = document.getElementById("acc-expandable-list");
+        let header = document.getElementById("acc-toggle-header");
+        let text = document.getElementById("acc-toggle-text");
+        let iconDiv = document.getElementById("acc-toggle-icon");
+        if (!list || !header) return;
+
+        isAccExpanded = !isAccExpanded;
+
+        if (isAccExpanded) {
+          // Mở danh sách ra
+          list.classList.add("show");
+          header.style.borderRadius = "20px 20px 0 0";
+          text.innerText = "Ẩn bớt tài khoản";
+          iconDiv.innerHTML = '<div class="arrow-icon arrow-up"></div>';
+        } else {
+          // Thu danh sách lại
+          list.classList.remove("show");
+          header.style.borderRadius = "20px";
+          text.innerText = "Hiện thêm tài khoản";
+
+          // Lấy lại Mini Avatars
+          let inactiveAccs = accounts.filter((a) => !a.active);
           let miniAvatars = inactiveAccs
             .map((a) => {
               let abg = a.avatar ? `url(${a.avatar}) center/cover` : a.color;
@@ -12675,26 +12809,9 @@
               return `<div class="mini-avt" style="background:${abg}">${atxt}</div>`;
             })
             .join("");
-          area.innerHTML = `<div class="acc-collapse-header" onclick="toggleAccExpand(event)"><span>Hiện thêm tài khoản</span><div style="display:flex;align-items:center;gap:5px;">${miniAvatars}<div class="arrow-icon arrow-down"></div></div></div>`;
-        } else {
-          let activeA = accounts.find((a) => a.active);
-          let abgMain = activeA.avatar
-            ? `url(${activeA.avatar}) center/cover`
-            : activeA.color;
-          let atxtMain = activeA.avatar
-            ? ""
-            : activeA.name.charAt(0).toUpperCase();
-          let html = `<div class="acc-collapse-header" onclick="toggleAccExpand(event)" style="background:var(--inner-card-bg); border-radius: 20px 20px 0 0;"><span>Ẩn bớt tài khoản</span><div class="arrow-icon arrow-up"></div></div><div class="acc-expanded-list"><div class="acc-item-row"><div class="acc-item-avt" style="background:${abgMain}">${atxtMain}</div><div class="acc-item-info"><div class="acc-item-name">${activeA.name}</div><div class="acc-item-mail">${activeA.email}</div></div><span class="badge-default">Mặc định</span></div>`;
-          inactiveAccs.forEach((a) => {
-            let abg = a.avatar ? `url(${a.avatar}) center/cover` : a.color;
-            let atxt = a.avatar ? "" : a.name.charAt(0).toUpperCase();
-            // Dùng div class acc-wrap-box để bọc cả hàng thông tin và 2 nút
-            html += `<div class="acc-wrap-box" id="acc-box-${a.id}" onclick="toggleAccActions('${a.id}', event)"><div class="acc-item-row inactive-row" style="padding-bottom:5px;"><div class="acc-item-avt" style="background:${abg}">${atxt}</div><div class="acc-item-info"><div class="acc-item-name">${a.name}</div><div class="acc-item-mail">${a.email}</div></div><span class="badge-logout">Đã đăng xuất</span></div><div class="acc-action-btns" id="acc-actions-${a.id}"><button class="acc-btn-login" onclick="switchAcc('${a.id}', event)">Đăng nhập</button><button class="acc-btn-del" onclick="deleteAcc('${a.id}', event)">Xóa</button></div></div>`;
-          });
-          html += `<div class="acc-row-btn" onclick="addAccFlow(event)"><span style="font-size:20px; font-weight:400; width:24px; text-align:center;">+</span> Thêm tài khoản khác</div><div class="acc-row-btn" onclick="promptConfirm('Xóa toàn bộ dữ liệu?', logoutAll)"><span style="font-size:18px; width:24px; text-align:center;">⎗</span> Đăng xuất khỏi tất cả các tài khoản</div></div>`;
-          area.innerHTML = html;
+          iconDiv.innerHTML = `<div style="display:flex;align-items:center;gap:5px;">${miniAvatars}<div class="arrow-icon arrow-down"></div></div>`;
         }
-      }
+      };
       function toggleAccActions(id, e) {
         if (e) e.stopPropagation();
 
