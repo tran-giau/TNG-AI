@@ -1761,12 +1761,11 @@
         max-height: 0;
         opacity: 1;
         padding-top: 0;
-        /* XÓA BỎ LỚP ĐỆM THỪA: Ép về 0 tuyệt đối để nút Đăng xuất bo sát mép dưới */
-        padding-bottom: 0 !important;
+        padding-bottom: 0;
         visibility: hidden;
         transform: none;
 
-        /* Loại padding-bottom khỏi transition của thẻ cha */
+        /* Lực nảy tổng thể của danh sách */
         transition:
           max-height 0.7s cubic-bezier(0.34, -2.5, 0.64, 1),
           padding-top 0.7s cubic-bezier(0.34, -2.5, 0.64, 1),
@@ -1787,8 +1786,7 @@
         max-height: 400px;
         opacity: 1;
         padding-top: 5px;
-        /* KHÔNG CÒN KHOẢNG TRỐNG TĨNH DƯỚI ĐÁY */
-        padding-bottom: 0 !important;
+        padding-bottom: 0;
         visibility: visible;
         overflow-y: auto;
 
@@ -1798,22 +1796,24 @@
           visibility 0.7s;
       }
 
-      /* 5. GÁN HIỆU ỨNG NẢY VÀO CHÍNH NÚT ĐĂNG XUẤT ĐỂ NỀN CHẠY THEO */
-      /* Khi đóng: Nút bị ép padding về 0 */
+      /* 5. GÁN HIỆU ỨNG NẢY VÀO CHÍNH NÚT ĐĂNG XUẤT */
+      /* Khi đóng: Rút đệm về 0 */
       .acc-expanded-list .acc-row-btn:last-child {
         padding-bottom: 0;
-        /* Lấy đà: Phình to đáy nút xuống 32px (lực âm -1.66) để nhún rồi mới vút lên */
+        border-radius: 0 0 20px 20px;
+        /* Nhún lấy đà đúng 20px (tỷ lệ lực -1.25 so với mốc 16px) */
         transition:
-          padding-bottom 0.7s cubic-bezier(0.34, -1.66, 0.64, 1),
+          padding-bottom 0.7s cubic-bezier(0.34, -1.25, 0.64, 1),
           background-color 0.2s ease !important;
       }
 
-      /* Khi mở: Nút bung về padding 12px (chuẩn kích thước) */
+      /* Khi mở: Bơm đệm đáy 16px */
       .acc-expanded-list.show .acc-row-btn:last-child {
-        padding-bottom: 12px;
-        /* Nảy lò xo: Kéo giãn đáy nút lố xuống 32px (lực dương 2.66) rồi đàn hồi về 12px */
+        padding-bottom: 16px;
+        border-radius: 0 0 20px 20px;
+        /* Bung nảy lố đúng 20px (tỷ lệ lực 2.25 so với mốc 16px) */
         transition:
-          padding-bottom 0.7s cubic-bezier(0.34, 2.66, 0.64, 1),
+          padding-bottom 0.7s cubic-bezier(0.34, 2.25, 0.64, 1),
           background-color 0.2s ease !important;
       }
       .acc-item-row {
