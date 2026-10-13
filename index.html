@@ -1761,17 +1761,15 @@
         max-height: 0;
         opacity: 1;
         padding-top: 0;
-        padding-bottom: 0;
+        /* XÓA BỎ LỚP ĐỆM THỪA: Ép về 0 tuyệt đối để nút Đăng xuất bo sát mép dưới */
+        padding-bottom: 0 !important;
         visibility: hidden;
         transform: none;
 
-        /* 
-           CUỘN LÊN (ĐÓNG): 
-           Áp dụng lực âm (-1.0). Đáy hộp nhún xuống lấy đà chính xác 20px rồi vút lên.
-        */
+        /* Loại padding-bottom khỏi transition của thẻ cha */
         transition:
-          max-height 0.7s cubic-bezier(0.34, -1, 0.64, 1),
-          padding 0.7s cubic-bezier(0.34, -1, 0.64, 1),
+          max-height 0.7s cubic-bezier(0.34, -2.5, 0.64, 1),
+          padding-top 0.7s cubic-bezier(0.34, -2.5, 0.64, 1),
           visibility 0.7s;
       }
 
@@ -1789,20 +1787,34 @@
         max-height: 400px;
         opacity: 1;
         padding-top: 5px;
-
-        /* Khoảng đệm mốc 20px để làm chuẩn tính toán lực nảy 20px */
-        padding-bottom: 20px;
+        /* KHÔNG CÒN KHOẢNG TRỐNG TĨNH DƯỚI ĐÁY */
+        padding-bottom: 0 !important;
         visibility: visible;
         overflow-y: auto;
 
-        /* 
-           CUỘN XUỐNG (MỞ): 
-           Áp dụng lực dương (2.0). Đáy hộp trượt lố chính xác 20px rồi đàn hồi thu về.
-        */
         transition:
-          max-height 0.7s cubic-bezier(0.34, 2, 0.64, 1),
-          padding 0.7s cubic-bezier(0.34, 2, 0.64, 1),
+          max-height 0.7s cubic-bezier(0.34, 3.5, 0.64, 1),
+          padding-top 0.7s cubic-bezier(0.34, 3.5, 0.64, 1),
           visibility 0.7s;
+      }
+
+      /* 5. GÁN HIỆU ỨNG NẢY VÀO CHÍNH NÚT ĐĂNG XUẤT ĐỂ NỀN CHẠY THEO */
+      /* Khi đóng: Nút bị ép padding về 0 */
+      .acc-expanded-list .acc-row-btn:last-child {
+        padding-bottom: 0;
+        /* Lấy đà: Phình to đáy nút xuống 32px (lực âm -1.66) để nhún rồi mới vút lên */
+        transition:
+          padding-bottom 0.7s cubic-bezier(0.34, -1.66, 0.64, 1),
+          background-color 0.2s ease !important;
+      }
+
+      /* Khi mở: Nút bung về padding 12px (chuẩn kích thước) */
+      .acc-expanded-list.show .acc-row-btn:last-child {
+        padding-bottom: 12px;
+        /* Nảy lò xo: Kéo giãn đáy nút lố xuống 32px (lực dương 2.66) rồi đàn hồi về 12px */
+        transition:
+          padding-bottom 0.7s cubic-bezier(0.34, 2.66, 0.64, 1),
+          background-color 0.2s ease !important;
       }
       .acc-item-row {
         display: flex;
@@ -12754,7 +12766,7 @@
           let atxt = a.avatar ? "" : a.name.charAt(0).toUpperCase();
           listHtml += `<div class="acc-wrap-box" id="acc-box-${a.id}" onclick="toggleAccActions('${a.id}', event)"><div class="acc-item-row inactive-row" style="padding-bottom:5px;"><div class="acc-item-avt" style="background:${abg}">${atxt}</div><div class="acc-item-info"><div class="acc-item-name">${a.name}</div><div class="acc-item-mail">${a.email}</div></div><span class="badge-logout">Đã đăng xuất</span></div><div class="acc-action-btns" id="acc-actions-${a.id}"><button class="acc-btn-login" onclick="switchAcc('${a.id}', event)">Đăng nhập</button><button class="acc-btn-del" onclick="deleteAcc('${a.id}', event)">Xóa</button></div></div>`;
         });
-        listHtml += `<div class="acc-row-btn" onclick="addAccFlow(event)"><span style="font-size:20px; font-weight:400; width:24px; text-align:center;">+</span> Thêm tài khoản khác</div><div class="acc-row-btn" onclick="promptConfirm('Xóa toàn bộ dữ liệu?', logoutAll)"><span style="font-size:18px; width:24px; text-align:center;">⎗</span> Đăng xuất khỏi tất cả các tài khoản</div>`;
+        listHtml += `<div class="acc-row-btn" onclick="addAccFlow(event)"><span style="font-size:20px; font-weight:400; width:24px; text-align:center;">+</span> <span>Thêm tài khoản khác</span></div><div class="acc-row-btn" onclick="promptConfirm('Xóa toàn bộ dữ liệu?', logoutAll)"><span style="font-size:18px; width:24px; text-align:center;">⎗</span> <span>Đăng xuất khỏi tất cả các tài khoản</span></div>`;
 
         // 3. Kiểm tra trạng thái hiện tại để set giao diện tiêu đề
         let headerText = isAccExpanded
@@ -22663,6 +22675,52 @@
           max-width: 100% !important;
           word-break: break-word !important;
         }
+      }
+
+      /* ============================================================ */
+      /* BẬT HIỆU ỨNG LÚN CHỮ (HOVER & ACTIVE 3D) CHO NÚT TÀI KHOẢN   */
+      /* ============================================================ */
+
+      /* 1. Khóa vỏ nền đứng im, chỉ cho phép đổi màu */
+      .acc-row-btn {
+        transition: background-color 0.2s ease !important;
+        transform: scale(1) !important;
+      }
+
+      /* 2. Ép chữ và icon bên trong thành khối để có thể co giãn 3D */
+      .acc-row-btn > span {
+        display: inline-block !important;
+        will-change: transform;
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+      }
+
+      /* 3. Tinh chỉnh tâm lún: Icon lún ở giữa, Chữ lún từ lề trái */
+      .acc-row-btn > span:first-child {
+        transform-origin: center center !important;
+      }
+      .acc-row-btn > span:last-child {
+        transform-origin: left center !important;
+      }
+
+      /* 4. Hiệu ứng HOVER: Lướt chuột vào lún nhẹ mượt mà */
+      @media (hover: hover) {
+        .acc-row-btn:hover > span {
+          transform: scale(0.965) !important;
+        }
+      }
+
+      /* 5. Hiệu ứng ACTIVE: Nhấn giữ bóp lún sâu chớp nhoáng */
+      .acc-row-btn:active > span {
+        transform: scale(0.88) !important;
+        transition-duration: 0.05s !important;
+      }
+
+      /* 6. Chớp nền xám khi nhấn (Vỏ ngoài) */
+      .acc-row-btn:active {
+        background-color: rgba(255, 255, 255, 0.08) !important;
+      }
+      [data-theme="light"] .acc-row-btn:active {
+        background-color: rgba(0, 0, 0, 0.06) !important;
       }
     </style>
   </body>
