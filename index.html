@@ -21030,6 +21030,9 @@
           inset 0 1px 1px rgba(255, 255, 255, 0.1);
         overflow: hidden;
         position: relative;
+        /* FIX LỖI TRÀN VIỀN VÀ LỆCH TÂM */
+        box-sizing: border-box;
+        margin: auto;
       }
       .tng-mailbox-box {
         width: 95%;
@@ -21423,7 +21426,32 @@
         max-width: 320px;
       }
 
+      /* ĐÃ BỔ SUNG MEDIA QUERY CHO MOBILE ĐỂ CÂN ĐỐI LẠI SIZE VÀ PADDING */
       @media (max-width: 600px) {
+        .holiday-letter-reader {
+          width: 92%;
+          padding: 25px 20px;
+          border-radius: 24px;
+        }
+        .reader-header {
+          gap: 15px;
+          padding-bottom: 15px;
+          margin-bottom: 15px;
+        }
+        .reader-icon {
+          width: 60px;
+          height: 60px;
+          font-size: 32px;
+          border-radius: 18px;
+        }
+        .reader-title {
+          font-size: 20px;
+        }
+        .reader-body-text {
+          font-size: 15px;
+          max-height: 60vh;
+        }
+
         .notif-empty-icon {
           width: 94px;
           height: 94px;
@@ -21827,7 +21855,7 @@
             `chúng tôi xin gửi đến bạn muôn vàn những điều tốt đẹp nhất. Cuộc sống dẫu có đôi lúc bộn bề lo toan, mong bạn luôn tìm thấy sự bình yên trong tâm hồn, giữ được ngọn lửa đam mê và gặt hái thêm nhiều thành tựu vinh quang. Mỗi ngày trôi qua đều là một cơ hội mới, chúc bạn luôn nắm bắt và tỏa sáng theo cách độc bản của riêng mình.`,
             `hệ thống muốn gửi gắm đến bạn một lời tri ân sâu sắc cùng những ước nguyện an lành nhất. Chúc bạn có một ngày lễ thật trọn vẹn, ấm áp và đong đầy tiếng cười bên gia đình và những người thân thiết. Hy vọng rằng sức khỏe, may mắn và tài lộc sẽ luôn kề vai sát cánh cùng bạn trên mọi nẻo đường tương lai.`,
             `đội ngũ phát triển xin gửi lời chúc sức khỏe, hạnh phúc và vạn sự như ý đến bạn cùng toàn thể gia quyến. Mong rằng những mệt nhọc của ngày thường sẽ hoàn toàn tan biến, nhường chỗ cho những niềm vui rộn rã và những kỷ niệm không thể nào quên. Hãy thả lỏng tâm hồn và tận hưởng trọn vẹn từng phút giây của ngày hôm nay nhé!`,
-            `TNG AI xin chúc bạn luôn rạng rỡ, tự tin và vững bước với quyết tâm rực cháy trên con đường đã chọn. Chúc cho những ước mơ lớn lao của bạn sẽ sớm đơm hoa kết trái, những khó khăn sẽ chỉ là viên gạch lót đường để bạn vươn cao hơn nữa. Hãy luôn kiêu hãnh tỏa sáng và lan tỏa thứ năng lượng tích cực tuyệt vời ấy đến mọi người xung quanh.`,
+            `TNG AI xin chúc bạn luôn rạng rỡ, tự tự tin và vững bước với quyết tâm rực cháy trên con đường đã chọn. Chúc cho những ước mơ lớn lao của bạn sẽ sớm đơm hoa kết trái, những khó khăn sẽ chỉ là viên gạch lót đường để bạn vươn cao hơn nữa. Hãy luôn kiêu hãnh tỏa sáng và lan tỏa thứ năng lượng tích cực tuyệt vời ấy đến mọi người xung quanh.`,
           ];
           const thanks = [
             `Sự đồng hành bền bỉ của bạn trong suốt hành trình vừa qua chính là món quà quý giá nhất, là bệ phóng to lớn để TNG AI không ngừng học hỏi, tiến bộ và vươn xa hơn nữa.`,
@@ -22611,11 +22639,14 @@
                 cy = e.clientY;
               }
             }
+
+            // FIX LỖI CÚ PHÁP TÍNH TOÁN Ở ĐÂY
             box.style.setProperty(
               "transform-origin",
               `calc(50% + ${cx - window.innerWidth / 2}px) calc(50% + ${cy - window.innerHeight / 2}px)`,
               "important",
             );
+
             setTimeout(() => {
               modal.classList.add("show");
             }, 10);
