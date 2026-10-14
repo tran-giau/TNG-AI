@@ -21030,9 +21030,9 @@
           inset 0 1px 1px rgba(255, 255, 255, 0.1);
         overflow: hidden;
         position: relative;
-        /* FIX LỖI TRÀN VIỀN VÀ LỆCH TÂM */
-        box-sizing: border-box;
+        /* FIX LỖI CĂN GIỮA: Giúp bảng luôn nổi ở tâm màn hình */
         margin: auto;
+        box-sizing: border-box;
       }
       .tng-mailbox-box {
         width: 95%;
@@ -21426,32 +21426,7 @@
         max-width: 320px;
       }
 
-      /* ĐÃ BỔ SUNG MEDIA QUERY CHO MOBILE ĐỂ CÂN ĐỐI LẠI SIZE VÀ PADDING */
       @media (max-width: 600px) {
-        .holiday-letter-reader {
-          width: 92%;
-          padding: 25px 20px;
-          border-radius: 24px;
-        }
-        .reader-header {
-          gap: 15px;
-          padding-bottom: 15px;
-          margin-bottom: 15px;
-        }
-        .reader-icon {
-          width: 60px;
-          height: 60px;
-          font-size: 32px;
-          border-radius: 18px;
-        }
-        .reader-title {
-          font-size: 20px;
-        }
-        .reader-body-text {
-          font-size: 15px;
-          max-height: 60vh;
-        }
-
         .notif-empty-icon {
           width: 94px;
           height: 94px;
@@ -21468,6 +21443,12 @@
         .notif-empty-desc {
           font-size: 13.5px;
           padding: 0 20px;
+        }
+
+        /* FIX LỖI ÉP CHIỀU CAO TRÊN MOBILE */
+        .tng-mailbox-box {
+          height: auto !important; /* Gỡ bỏ ràng buộc chiều cao */
+          max-height: 85dvh; /* Vẫn giữ tối đa 85% màn hình để không bị tràn */
         }
       }
 
@@ -22640,10 +22621,12 @@
               }
             }
 
-            // FIX LỖI CÚ PHÁP TÍNH TOÁN Ở ĐÂY
+            let dx = cx - window.innerWidth / 2;
+            let dy = cy - window.innerHeight / 2;
+
             box.style.setProperty(
               "transform-origin",
-              `calc(50% + ${cx - window.innerWidth / 2}px) calc(50% + ${cy - window.innerHeight / 2}px)`,
+              `calc(50% + ${dx}px) calc(50% + ${dy}px)`,
               "important",
             );
 
