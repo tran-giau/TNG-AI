@@ -20993,7 +20993,7 @@
         position: fixed;
         inset: 0;
         width: 100vw;
-        height: 100vh;
+        height: 100dvh; /* FIX LỖI LỆCH TÂM: Sử dụng 100dvh để đo chính xác màn hình điện thoại */
         background: rgba(0, 0, 0, 0.65);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
@@ -21030,14 +21030,11 @@
           inset 0 1px 1px rgba(255, 255, 255, 0.1);
         overflow: hidden;
         position: relative;
-        /* GIỮ BẢNG CÂN ĐỐI VÀ KHÔNG BỊ TRÀN VIỀN */
-        box-sizing: border-box;
-        margin: auto;
       }
       .tng-mailbox-box {
         width: 95%;
         max-width: 800px;
-        height: 85dvh; /* Khôi phục kích thước bản gốc của hòm thư */
+        height: 85dvh;
       }
       .holiday-letter-reader {
         width: 92%;
@@ -21048,8 +21045,6 @@
         box-shadow:
           inset 0 0 0 1.5px rgba(255, 255, 255, 0.2),
           0 30px 70px rgba(0, 0, 0, 0.7);
-        height: 85dvh; /* Ép cứng giới hạn chiều dọc đồng bộ với hòm thư */
-        max-height: 85dvh;
       }
 
       .tng-mailbox-overlay.show .tng-mailbox-box,
@@ -21335,9 +21330,9 @@
         font-weight: 400;
         opacity: 0.95;
         text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-        padding-right: 10px;
-        /* Chế độ cuộn cho máy tính */
+        max-height: 55vh;
         overflow-y: auto;
+        padding-right: 10px;
       }
       .reader-body-text::-webkit-scrollbar {
         width: 6px;
@@ -21428,7 +21423,6 @@
         max-width: 320px;
       }
 
-      /* MEDIA QUERIES ĐIỆN THOẠI */
       @media (max-width: 600px) {
         .notif-empty-icon {
           width: 94px;
@@ -21447,12 +21441,11 @@
           font-size: 13.5px;
           padding: 0 20px;
         }
-
         .holiday-letter-reader {
           width: 92%;
           padding: 25px 20px;
           border-radius: 24px;
-          height: 85dvh; /* Ép cứng chiều cao 85dvh trên điện thoại để đồng bộ tuyệt đối */
+          height: 85dvh;
           max-height: 85dvh;
         }
         .reader-header {
@@ -21471,14 +21464,13 @@
         }
         .reader-body-text {
           font-size: 15px;
-          flex: 1; /* Cho phép thân chữ tự động giãn nở trong khoảng an toàn */
+          flex: 1;
           overflow-y: auto;
-          max-height: none; /* Bỏ giới hạn max-height tĩnh đi */
+          max-height: none;
         }
 
-        /* FIX LỖI ÉP CHIỀU CAO TRÊN MOBILE */
         .tng-mailbox-box {
-          height: 85dvh !important; /* Đảm bảo hòm thư cũng ép cứng 85dvh để đồng bộ với lá thư */
+          height: 85dvh !important;
           max-height: 85dvh;
         }
       }
@@ -21591,7 +21583,7 @@
           padding: 25px 20px;
           align-items: center;
           text-align: center;
-          height: auto !important; /* Cục bộ: Giữ hộp xác nhận xóa thư không bị kéo giãn theo 85dvh */
+          height: auto !important;
           box-shadow:
             0 30px 60px rgba(0, 0, 0, 0.8),
             inset 0 1px 1px rgba(255, 255, 255, 0.15);
@@ -21940,7 +21932,7 @@
         window.checkAndDeliverMailbox = function () {
           if (!window.curA || !window.curA.id) return [];
 
-          let key = "tng_mailbox_v63_" + window.curA.id; // NÂNG CẤP V63 ĐỂ KÍCH HOẠT LỆNH SẮP XẾP MỚI
+          let key = "tng_mailbox_v63_" + window.curA.id;
           let letters = JSON.parse(localStorage.getItem(key)) || [];
           let isNewLetterAdded = false;
 
@@ -22479,6 +22471,8 @@
           if (letter && !letter.isRead) {
             window.mailboxLetterToDelete = id;
             let modal = document.getElementById("tng-mailbox-confirm-modal");
+
+            // TRẢ LẠI HIỆU ỨNG THU PHÓNG TỪ NGÓN TAY CHO BẢNG XÓA
             let cx = e.clientX || window.innerWidth / 2;
             let cy = e.clientY || window.innerHeight / 2;
             let dx = cx - window.innerWidth / 2;
@@ -22597,13 +22591,14 @@
                   </div>
               `;
 
+          // TRẢ LẠI HIỆU ỨNG THU PHÓNG TỪ NGÓN TAY CHO LÁ THƯ
           let cx = window.innerWidth / 2,
             cy = window.innerHeight / 2;
           if (e) {
             if (e.touches && e.touches.length > 0) {
               cx = e.touches[0].clientX;
               cy = e.touches[0].clientY;
-            } else if (e.clientX) {
+            } else if (e.clientX !== undefined) {
               cx = e.clientX;
               cy = e.clientY;
             }
@@ -22615,6 +22610,7 @@
             `calc(50% + ${dx}px) calc(50% + ${dy}px)`,
             "important",
           );
+
           setTimeout(() => {
             readerModal.classList.add("show");
           }, 10);
@@ -22638,6 +22634,7 @@
           if (forceClose || modal.classList.contains("show")) {
             modal.classList.remove("show");
           } else {
+            // TRẢ LẠI HIỆU ỨNG THU PHÓNG TỪ NGÓN TAY CHO HÒM THƯ TNG AI
             let cx = window.innerWidth / 2,
               cy = window.innerHeight / 2;
             if (
