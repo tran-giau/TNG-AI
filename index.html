@@ -21030,14 +21030,14 @@
           inset 0 1px 1px rgba(255, 255, 255, 0.1);
         overflow: hidden;
         position: relative;
-        /* FIX LỖI CĂN GIỮA: Giúp bảng luôn nổi ở tâm màn hình */
-        margin: auto;
+        /* GIỮ BẢNG CÂN ĐỐI VÀ KHÔNG BỊ TRÀN VIỀN */
         box-sizing: border-box;
+        margin: auto;
       }
       .tng-mailbox-box {
         width: 95%;
         max-width: 800px;
-        height: 85dvh;
+        height: 85dvh; /* Khôi phục kích thước bản gốc của hòm thư */
       }
       .holiday-letter-reader {
         width: 92%;
@@ -21048,6 +21048,8 @@
         box-shadow:
           inset 0 0 0 1.5px rgba(255, 255, 255, 0.2),
           0 30px 70px rgba(0, 0, 0, 0.7);
+        height: 85dvh; /* Ép cứng giới hạn chiều dọc đồng bộ với hòm thư */
+        max-height: 85dvh;
       }
 
       .tng-mailbox-overlay.show .tng-mailbox-box,
@@ -21333,9 +21335,9 @@
         font-weight: 400;
         opacity: 0.95;
         text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-        max-height: 55vh;
-        overflow-y: auto;
         padding-right: 10px;
+        /* Chế độ cuộn cho máy tính */
+        overflow-y: auto;
       }
       .reader-body-text::-webkit-scrollbar {
         width: 6px;
@@ -21426,6 +21428,7 @@
         max-width: 320px;
       }
 
+      /* MEDIA QUERIES ĐIỆN THOẠI */
       @media (max-width: 600px) {
         .notif-empty-icon {
           width: 94px;
@@ -21445,10 +21448,38 @@
           padding: 0 20px;
         }
 
+        .holiday-letter-reader {
+          width: 92%;
+          padding: 25px 20px;
+          border-radius: 24px;
+          height: 85dvh; /* Ép cứng chiều cao 85dvh trên điện thoại để đồng bộ tuyệt đối */
+          max-height: 85dvh;
+        }
+        .reader-header {
+          gap: 15px;
+          padding-bottom: 15px;
+          margin-bottom: 15px;
+        }
+        .reader-icon {
+          width: 60px;
+          height: 60px;
+          font-size: 32px;
+          border-radius: 18px;
+        }
+        .reader-title {
+          font-size: 20px;
+        }
+        .reader-body-text {
+          font-size: 15px;
+          flex: 1; /* Cho phép thân chữ tự động giãn nở trong khoảng an toàn */
+          overflow-y: auto;
+          max-height: none; /* Bỏ giới hạn max-height tĩnh đi */
+        }
+
         /* FIX LỖI ÉP CHIỀU CAO TRÊN MOBILE */
         .tng-mailbox-box {
-          height: auto !important; /* Gỡ bỏ ràng buộc chiều cao */
-          max-height: 85dvh; /* Vẫn giữ tối đa 85% màn hình để không bị tràn */
+          height: 85dvh !important; /* Đảm bảo hòm thư cũng ép cứng 85dvh để đồng bộ với lá thư */
+          max-height: 85dvh;
         }
       }
 
@@ -21560,6 +21591,7 @@
           padding: 25px 20px;
           align-items: center;
           text-align: center;
+          height: auto !important; /* Cục bộ: Giữ hộp xác nhận xóa thư không bị kéo giãn theo 85dvh */
           box-shadow:
             0 30px 60px rgba(0, 0, 0, 0.8),
             inset 0 1px 1px rgba(255, 255, 255, 0.15);
@@ -22552,7 +22584,7 @@
           readerBox.innerHTML = `
                   <div class="letter-glass-overlay"></div>
                   <button type="button" onclick="closeMailboxReader(event)" style="position: absolute; top: 22px; right: 22px; z-index: 10; width: 32px; height: 32px; border-radius: 50%; border: none; background: rgba(255,255,255,0.2); color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">✕</button>
-                  <div style="position: relative; z-index: 3; display: flex; flex-direction: column;">
+                  <div style="position: relative; z-index: 3; display: flex; flex-direction: column; height: 100%;">
                       <div class="reader-header">
                           <div class="reader-icon">${letter.icon}</div>
                           <div style="flex: 1; padding-right: 35px;">
