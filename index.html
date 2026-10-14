@@ -21030,6 +21030,9 @@
           inset 0 1px 1px rgba(255, 255, 255, 0.1);
         overflow: hidden;
         position: relative;
+        /* GIỮ BẢNG CÂN ĐỐI VÀ KHÔNG BỊ TRÀN VIỀN */
+        box-sizing: border-box;
+        margin: auto;
       }
       .tng-mailbox-box {
         width: 95%;
@@ -21045,6 +21048,7 @@
         box-shadow:
           inset 0 0 0 1.5px rgba(255, 255, 255, 0.2),
           0 30px 70px rgba(0, 0, 0, 0.7);
+        /* Đã xóa giới hạn chiều cao ở đây để máy tính hiển thị kích thước lớn như bản gốc */
       }
 
       .tng-mailbox-overlay.show .tng-mailbox-box,
@@ -21423,6 +21427,7 @@
         max-width: 320px;
       }
 
+      /* MEDIA QUERIES ĐIỆN THOẠI */
       @media (max-width: 600px) {
         .notif-empty-icon {
           width: 94px;
@@ -21441,11 +21446,12 @@
           font-size: 13.5px;
           padding: 0 20px;
         }
+
         .holiday-letter-reader {
           width: 92%;
           padding: 25px 20px;
           border-radius: 24px;
-          height: 85dvh;
+          height: 85dvh; /* CHỈ ÁP DỤNG TRÊN ĐIỆN THOẠI: Để lá thư đồng bộ với bảng Hòm thư */
           max-height: 85dvh;
         }
         .reader-header {
@@ -21584,9 +21590,8 @@
           align-items: center;
           text-align: center;
           height: auto !important;
-          box-shadow:
-            0 30px 60px rgba(0, 0, 0, 0.8),
-            inset 0 1px 1px rgba(255, 255, 255, 0.15);
+          border: 1px solid var(--glass-border);
+          box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
         "
         onclick="event.stopPropagation()"
       >
@@ -22472,7 +22477,6 @@
             window.mailboxLetterToDelete = id;
             let modal = document.getElementById("tng-mailbox-confirm-modal");
 
-            // TRẢ LẠI HIỆU ỨNG THU PHÓNG TỪ NGÓN TAY CHO BẢNG XÓA
             let cx = e.clientX || window.innerWidth / 2;
             let cy = e.clientY || window.innerHeight / 2;
             let dx = cx - window.innerWidth / 2;
@@ -22591,7 +22595,6 @@
                   </div>
               `;
 
-          // TRẢ LẠI HIỆU ỨNG THU PHÓNG TỪ NGÓN TAY CHO LÁ THƯ
           let cx = window.innerWidth / 2,
             cy = window.innerHeight / 2;
           if (e) {
@@ -22634,7 +22637,6 @@
           if (forceClose || modal.classList.contains("show")) {
             modal.classList.remove("show");
           } else {
-            // TRẢ LẠI HIỆU ỨNG THU PHÓNG TỪ NGÓN TAY CHO HÒM THƯ TNG AI
             let cx = window.innerWidth / 2,
               cy = window.innerHeight / 2;
             if (
