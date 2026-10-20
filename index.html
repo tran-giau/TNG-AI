@@ -21004,7 +21004,6 @@
         opacity: 0;
         visibility: hidden;
         pointer-events: none;
-        /* FIX CHỚP NỀN: Chỉ animate opacity/visibility, bỏ 'all' để không bị chớp khi chiều cao màn hình đổi */
         transition:
           opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
           visibility 0.85s cubic-bezier(0.16, 1, 0.3, 1);
@@ -21022,7 +21021,7 @@
         border-radius: 30px;
         display: flex;
         flex-direction: column;
-        transform: scale(0.02) translateZ(0); /* FIX CHỚP HỘP: Thêm translateZ(0) để ép bật tăng tốc GPU */
+        transform: scale(0.02) translateZ(0);
         opacity: 0;
         pointer-events: auto;
         transition:
@@ -21035,7 +21034,6 @@
         position: relative;
         box-sizing: border-box;
         margin: auto;
-        /* KHÓA LỚP GPU CHỐNG CHỚP GIẬT SAU 0.85s */
         will-change: transform, opacity;
         -webkit-backface-visibility: hidden;
         backface-visibility: hidden;
@@ -21054,12 +21052,12 @@
         box-shadow:
           inset 0 0 0 1.5px rgba(255, 255, 255, 0.2),
           0 30px 70px rgba(0, 0, 0, 0.7);
-        max-height: 85dvh;
+        /* FIX LỖI CẮT CHỮ TRÊN MÁY TÍNH: Xóa max-height: 85dvh ở đây để chiều cao tự giãn nguyên bản */
       }
 
       .tng-mailbox-overlay.show .tng-mailbox-box,
       .tng-mailbox-overlay.show .holiday-letter-reader {
-        transform: scale(1) translateZ(0); /* Giữ vững lớp GPU khi bảng đã bung ra */
+        transform: scale(1) translateZ(0);
         opacity: 1;
       }
 
@@ -21476,9 +21474,9 @@
         }
         .reader-body-text {
           font-size: 15px;
-          flex: 1;
           overflow-y: auto;
-          max-height: none;
+          /* Ép giới hạn khu vực chữ bằng tổng chiều cao trừ đi header và footer */
+          max-height: calc(85dvh - 190px);
         }
 
         .tng-mailbox-box {
@@ -22588,7 +22586,7 @@
           readerBox.innerHTML = `
                   <div class="letter-glass-overlay"></div>
                   <button type="button" onclick="closeMailboxReader(event)" style="position: absolute; top: 22px; right: 22px; z-index: 10; width: 32px; height: 32px; border-radius: 50%; border: none; background: rgba(255,255,255,0.2); color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">✕</button>
-                  <div style="position: relative; z-index: 3; display: flex; flex-direction: column; height: 100%;">
+                  <div style="position: relative; z-index: 3; display: flex; flex-direction: column;">
                       <div class="reader-header">
                           <div class="reader-icon">${letter.icon}</div>
                           <div style="flex: 1; padding-right: 35px;">
