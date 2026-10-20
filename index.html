@@ -21052,7 +21052,6 @@
         box-shadow:
           inset 0 0 0 1.5px rgba(255, 255, 255, 0.2),
           0 30px 70px rgba(0, 0, 0, 0.7);
-        /* FIX LỖI CẮT CHỮ TRÊN MÁY TÍNH: Xóa max-height: 85dvh ở đây để chiều cao tự giãn nguyên bản */
       }
 
       .tng-mailbox-overlay.show .tng-mailbox-box,
@@ -21296,6 +21295,7 @@
         border-bottom: 1px dashed rgba(255, 255, 255, 0.25);
         padding-bottom: 20px;
         margin-bottom: 20px;
+        flex-shrink: 0;
       }
       .reader-icon {
         width: 75px;
@@ -21361,6 +21361,7 @@
         opacity: 0.9;
         padding-top: 20px;
         border-top: 1px solid rgba(255, 255, 255, 0.1);
+        flex-shrink: 0;
       }
 
       [data-theme="light"] .reader-header {
@@ -21475,8 +21476,14 @@
         .reader-body-text {
           font-size: 15px;
           overflow-y: auto;
-          /* Ép giới hạn khu vực chữ bằng tổng chiều cao trừ đi header và footer */
-          max-height: calc(85dvh - 190px);
+          flex: 1 1 auto;
+          min-height: 0;
+          /* Đảm bảo chừa đủ không gian cho cả Header, Footer và Padding trên điện thoại */
+          max-height: calc(85dvh - 265px);
+        }
+        .reader-footer {
+          margin-top: 15px;
+          padding-top: 15px;
         }
 
         .tng-mailbox-box {
@@ -22234,7 +22241,6 @@
           // LỆNH VÁ LỖI V63: ÉP BỨC THƯ CẢM ƠN XUỐNG ĐÁY HÒM THƯ
           // =========================================================
           letters.sort((a, b) => {
-            // Đặt ngoại lệ: Nếu bức thư là "Thư Cảm Ơn Lần Đầu", luôn luôn cho nó chìm xuống dưới cùng (return 1)
             if (
               a.id === "first_login_thank_you" &&
               b.id !== "first_login_thank_you"
@@ -22246,7 +22252,6 @@
             )
               return -1;
 
-            // Các bức thư khác vẫn được sắp xếp theo thời gian mới nhất nổi lên trên
             let timeA = a.timestamp || parseDateStringForMailbox(a.time);
             let timeB = b.timestamp || parseDateStringForMailbox(b.time);
             return timeB - timeA;
@@ -22586,7 +22591,7 @@
           readerBox.innerHTML = `
                   <div class="letter-glass-overlay"></div>
                   <button type="button" onclick="closeMailboxReader(event)" style="position: absolute; top: 22px; right: 22px; z-index: 10; width: 32px; height: 32px; border-radius: 50%; border: none; background: rgba(255,255,255,0.2); color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">✕</button>
-                  <div style="position: relative; z-index: 3; display: flex; flex-direction: column;">
+                  <div style="position: relative; z-index: 3; display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0;">
                       <div class="reader-header">
                           <div class="reader-icon">${letter.icon}</div>
                           <div style="flex: 1; padding-right: 35px;">
