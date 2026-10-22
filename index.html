@@ -21679,6 +21679,19 @@
       try {
         if (!window.curA) window.curA = { id: "guest", name: "bạn" };
 
+        // TỰ ĐỘNG XÓA CHỮ "THÔNG BÁO" KHI DI CHUỘT VÀO NÚT HÒM THƯ
+        function removeMailboxButtonTooltip() {
+          let mbBtns = document.querySelectorAll(
+            'button[title="Thông báo"], button[onclick*="toggleMailbox"]',
+          );
+          mbBtns.forEach((btn) => {
+            if (btn.hasAttribute("title")) {
+              btn.removeAttribute("title");
+            }
+          });
+        }
+        removeMailboxButtonTooltip();
+
         const HOLIDAYS = [
           {
             day: 1,
@@ -21913,6 +21926,8 @@
         window.currentMailboxUserId = null;
 
         window.processMailboxUserChange = function () {
+          removeMailboxButtonTooltip();
+
           let currentId =
             window.curA && window.curA.id ? window.curA.id : "guest";
 
@@ -22683,6 +22698,7 @@
               box &&
               !box.contains(e.target) &&
               !e.target.closest('button[title="Thông báo"]') &&
+              !e.target.closest('button[onclick*="toggleMailbox"]') &&
               !e.target.closest("#tng-mailbox-reader-modal") &&
               !e.target.closest("#tng-mailbox-confirm-modal")
             ) {
