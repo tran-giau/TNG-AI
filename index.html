@@ -21478,7 +21478,6 @@
           overflow-y: auto;
           flex: 1 1 auto;
           min-height: 0;
-          /* Đảm bảo chừa đủ không gian cho cả Header, Footer và Padding trên điện thoại */
           max-height: calc(85dvh - 265px);
         }
         .reader-footer {
@@ -22425,10 +22424,10 @@
             let openOffset = element.dataset.isOpen === "true" ? -76 : 0;
             let targetX = openOffset + diffX;
             if (targetX > 0) {
-              targetX = targetX * 0.45;
+              targetX = targetX * 0.65;
             } else if (targetX < -76) {
               let overPull = Math.abs(targetX) - 76;
-              targetX = -76 - overPull * 0.45;
+              targetX = -76 - overPull * 0.65;
             }
             element.style.transform = `translateX(${targetX}px)`;
           }
