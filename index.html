@@ -16868,13 +16868,16 @@
 
         let subCss = `
                                             <style>
-                                                .sub-panel { display: flex; flex-direction: column; height: 100%; width: 100%; box-sizing: border-box; overflow-x: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+                                                .sub-panel { display: flex; flex-direction: column; height: 100%; width: 100%; box-sizing: border-box; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
                                                 .tabs-control { position: relative; display: flex; background: rgba(0,0,0,0.25); border: 1px solid var(--glass-border); border-radius: 14px; padding: 4px; margin-bottom: 20px; flex-shrink: 0; box-shadow: inset 0 2px 5px rgba(0,0,0,0.2); width: 100%; box-sizing: border-box; }
-                                                .tab-slider { position: absolute; top: 4px; left: 4px; height: calc(100% - 8px); width: calc((100% - 8px) / 3); background: var(--btn-blue); border-radius: 10px; transition: transform 0.4s cubic-bezier(0.25, 1, 0.2, 1); z-index: 1; box-shadow: 0 4px 12px rgba(168,199,250,0.35); }
-                                                .tab-trigger { position: relative; z-index: 2; flex: 1; text-align: center; padding: 10px 0; border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--text-sub); cursor: pointer; transition: color 0.3s; }
+                                                .tab-slider { position: absolute; top: 4px; left: 4px; height: calc(100% - 8px); width: calc((100% - 8px) / 3); background: var(--btn-blue); border-radius: 10px; transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1); z-index: 1; box-shadow: 0 4px 12px rgba(168,199,250,0.35); will-change: transform; transform: translate3d(0, 0, 0); }
+                                                .tab-trigger { position: relative; z-index: 2; flex: 1; text-align: center; padding: 10px 0; border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--text-sub); cursor: pointer; transition: color 0.3s ease; -webkit-tap-highlight-color: transparent; user-select: none; }
                                                 .tab-trigger.active { color: #000 !important; font-weight: 700; }
-                                                .cards-deck { flex: 1 1 0%; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; gap: 16px; padding-bottom: 30px; -webkit-overflow-scrolling: touch; width: 100%; box-sizing: border-box; }
-                                                .plan-card { background: linear-gradient(145deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01)); border: 1px solid var(--glass-border); border-radius: 18px; padding: 24px 20px 20px 20px; position: relative; display: flex; flex-direction: column; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); width: 100%; box-sizing: border-box; }
+                                                .cards-deck { flex: 1 1 0%; overflow: hidden; position: relative; width: 100%; box-sizing: border-box; }
+                                                .cards-track { display: flex; width: 100%; height: 100%; gap: 20px; transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1); will-change: transform; transform: translate3d(0, 0, 0); }
+                                                .cards-page { flex: 0 0 100%; width: 100%; height: 100%; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; gap: 16px; padding-bottom: 30px; -webkit-overflow-scrolling: touch; box-sizing: border-box; scrollbar-width: none; -ms-overflow-style: none; }
+                                                .cards-page::-webkit-scrollbar { display: none; width: 0; }
+                                                .plan-card { background: linear-gradient(145deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01)); border: 1px solid var(--glass-border); border-radius: 18px; padding: 24px 20px 20px 20px; position: relative; display: flex; flex-direction: column; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); width: 100%; box-sizing: border-box; flex-shrink: 0; }
                                                 .plan-card.active { border-color: var(--btn-blue); box-shadow: inset 0 0 20px rgba(168,199,250,0.08), 0 10px 30px rgba(0,0,0,0.3); }
                                                 .plan-card.pro-glow { border: 1px solid rgba(230, 235, 245, 0.35) !important; background: linear-gradient(135deg, rgba(255,255,255,0.07) 0%, rgba(144,164,174,0.02) 50%, rgba(207,216,220,0.06) 100%) !important; box-shadow: inset 0 0 25px rgba(255,255,255,0.12), 0 12px 35px rgba(200,210,230,0.18) !important; }
                                                 .plan-card.ultra-glow { border: 1px solid rgba(255, 215, 0, 0.4) !important; background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,215,0,0.03) 50%, rgba(255,140,0,0.08) 100%) !important; box-shadow: inset 0 0 30px rgba(255,215,0,0.1), 0 12px 35px rgba(255,160,0,0.2) !important; }
@@ -16923,7 +16926,9 @@
         if (!deck) return;
 
         let slider = document.getElementById("tab-slider");
-        if (slider) slider.style.transform = `translateX(${index * 100}%)`;
+        if (slider) {
+          slider.style.transform = `translate3d(${index * 100}%, 0, 0)`;
+        }
 
         document.querySelectorAll(".tab-trigger").forEach((tab, idx) => {
           if (idx === index) tab.classList.add("active");
@@ -16931,20 +16936,23 @@
         });
 
         let userTier = localStorage.getItem("tng_user_tier") || "Basic";
-        let html = "";
+        let track = document.getElementById("sub-cards-track");
 
-        let btnText = (tier) =>
-          userTier === tier ? "Đang sử dụng" : "Nâng cấp";
-        let btnClass = (tier) => {
-          if (userTier === tier) return "sub-btn";
-          if (tier.includes("Ultra")) return "sub-btn ultra-btn";
-          if (tier.includes("Pro")) return "sub-btn pro-btn";
-          return "sub-btn primary";
-        };
-        let disabledAttr = (tier) => (userTier === tier ? "disabled" : "");
+        // Chỉ khởi tạo hoặc cập nhật lại DOM khi mở bảng lần đầu hoặc khi gói thuê bao thay đổi
+        if (!track || deck.dataset.renderedTier !== userTier) {
+          deck.dataset.renderedTier = userTier;
 
-        if (category === "personal") {
-          html = `
+          let btnText = (tier) =>
+            userTier === tier ? "Đang sử dụng" : "Nâng cấp";
+          let btnClass = (tier) => {
+            if (userTier === tier) return "sub-btn";
+            if (tier.includes("Ultra")) return "sub-btn ultra-btn";
+            if (tier.includes("Pro")) return "sub-btn pro-btn";
+            return "sub-btn primary";
+          };
+          let disabledAttr = (tier) => (userTier === tier ? "disabled" : "");
+
+          let personalHtml = `
                                                     <div class="plan-card ${userTier === "Basic" ? "active" : ""}">
                                                         ${userTier === "Basic" ? '<div class="plan-badge">ĐANG DÙNG</div>' : ""}
                                                         <div class="plan-name" style="margin-bottom: 2px;">TNG AI Basic</div>
@@ -16989,8 +16997,8 @@
                                                             ${btnText("Ultra")}
                                                         </button>
                                                     </div>`;
-        } else if (category === "family") {
-          html = `
+
+          let familyHtml = `
                                                     <div class="plan-card pro-glow ${userTier === "Family Pro" ? "active" : ""}">
                                                         ${userTier === "Family Pro" ? '<div class="plan-badge" style="background:#ffffff; color:#000;">ĐANG DÙNG</div>' : ""}
                                                         <div class="plan-name" style="color: #ffffff;">TNG AI Family Pro</div>
@@ -17016,12 +17024,12 @@
                                                             <li>Chia sẻ linh hoạt tài nguyên xử lý đồ họa máy tính trên đám mây.</li>
                                                             <li>Ưu tiên hỗ trợ xử lý sự cố kỹ thuật từ đội ngũ chuyên gia TNG.</li>
                                                         </ul>
-                                                        <button class="${btnClass("Family Ultra")} " ${disabledAttr("Family Ultra")} onclick="window.initiatePlanPayment('Family Ultra', '1.190.000đ')">
+                                                        <button class="${btnClass("Family Ultra")}" ${disabledAttr("Family Ultra")} onclick="window.initiatePlanPayment('Family Ultra', '1.190.000đ')">
                                                             ${btnText("Family Ultra")}
                                                         </button>
                                                     </div>`;
-        } else if (category === "enterprise") {
-          html = `
+
+          let enterpriseHtml = `
                                                     <div class="plan-card pro-glow ${userTier === "Enterprise Pro" ? "active" : ""}">
                                                         ${userTier === "Enterprise Pro" ? '<div class="plan-badge" style="background:#ffffff; color:#000;">ĐANG DÙNG</div>' : ""}
                                                         <div class="plan-name" style="color: #e0e0e0;">TNG AI Enterprise Pro</div>
@@ -17051,8 +17059,20 @@
                                                             ${btnText("Enterprise Ultra")}
                                                         </button>
                                                     </div>`;
+
+          deck.innerHTML = `
+            <div class="cards-track" id="sub-cards-track">
+              <div class="cards-page">${personalHtml}</div>
+              <div class="cards-page">${familyHtml}</div>
+              <div class="cards-page">${enterpriseHtml}</div>
+            </div>
+          `;
+          track = document.getElementById("sub-cards-track");
         }
-        deck.innerHTML = html;
+
+        if (track) {
+          track.style.transform = `translate3d(calc(-${index * 100}% - ${index * 20}px), 0, 0)`;
+        }
       };
 
       // 4. CỔNG THANH TOÁN VIETQR: ĐỒNG BỘ NỀN NGUYÊN KHỐI & NÚT ICON SAO CHÉP MỎNG
