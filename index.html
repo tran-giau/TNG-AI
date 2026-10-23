@@ -16868,16 +16868,22 @@
 
         let subCss = `
                                             <style>
-                                                .sub-panel { display: flex; flex-direction: column; height: 100%; width: 100%; box-sizing: border-box; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-                                                .tabs-control { position: relative; display: flex; background: rgba(0,0,0,0.25); border: 1px solid var(--glass-border); border-radius: 14px; padding: 4px; margin-bottom: 20px; flex-shrink: 0; box-shadow: inset 0 2px 5px rgba(0,0,0,0.2); width: 100%; box-sizing: border-box; }
-                                                .tab-slider { position: absolute; top: 4px; left: 4px; height: calc(100% - 8px); width: calc((100% - 8px) / 3); background: var(--btn-blue); border-radius: 10px; transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1); z-index: 1; box-shadow: 0 4px 12px rgba(168,199,250,0.35); will-change: transform; transform: translate3d(0, 0, 0); }
+                                                .sub-panel { display: flex; flex-direction: column; height: calc(100% + 25px); margin-bottom: -25px; width: 100%; box-sizing: border-box; overflow: visible; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+                                                .tabs-control { position: relative; display: flex; background: rgba(0,0,0,0.25); border: 1px solid var(--glass-border); border-radius: 14px; padding: 4px; margin-bottom: 16px; flex-shrink: 0; box-shadow: inset 0 2px 5px rgba(0,0,0,0.2); width: 100%; box-sizing: border-box; }
+                                                .tab-slider { position: absolute; top: 4px; left: 4px; height: calc(100% - 8px); width: calc((100% - 8px) / 3); background: var(--btn-blue); border-radius: 10px; transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1); z-index: 1; box-shadow: 0 4px 12px rgba(168,199,250,0.35); will-change: transform; transform: translate3d(0, 0, 0); }
                                                 .tab-trigger { position: relative; z-index: 2; flex: 1; text-align: center; padding: 10px 0; border-radius: 10px; font-size: 14px; font-weight: 500; color: var(--text-sub); cursor: pointer; transition: color 0.3s ease; -webkit-tap-highlight-color: transparent; user-select: none; }
                                                 .tab-trigger.active { color: #000 !important; font-weight: 700; }
-                                                .cards-deck { flex: 1 1 0%; overflow: hidden; position: relative; width: 100%; box-sizing: border-box; }
-                                                .cards-track { display: flex; width: 100%; height: 100%; gap: 20px; transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1); will-change: transform; transform: translate3d(0, 0, 0); }
-                                                .cards-page { flex: 0 0 100%; width: 100%; height: 100%; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; gap: 16px; padding-bottom: 30px; -webkit-overflow-scrolling: touch; box-sizing: border-box; scrollbar-width: none; -ms-overflow-style: none; }
+                                                .cards-deck { flex: 1 1 0%; min-height: 0; overflow: hidden; position: relative; width: calc(100% + 50px); margin-left: -25px; margin-right: -25px; box-sizing: border-box; }
+                                                .cards-track { display: flex; width: 100%; height: 100%; gap: 0; transition: transform 0.72s cubic-bezier(0.16, 1, 0.3, 1); will-change: transform; transform: translate3d(0, 0, 0); }
+                                                .cards-page { flex: 0 0 100%; width: 100%; height: 100%; overflow-y: auto; overflow-x: hidden; display: flex; flex-direction: column; gap: 16px; padding: 4px 25px 25px 25px; -webkit-overflow-scrolling: touch; box-sizing: border-box; scrollbar-width: none; -ms-overflow-style: none; }
                                                 .cards-page::-webkit-scrollbar { display: none; width: 0; }
-                                                .plan-card { background: linear-gradient(145deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01)); border: 1px solid var(--glass-border); border-radius: 18px; padding: 24px 20px 20px 20px; position: relative; display: flex; flex-direction: column; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); width: 100%; box-sizing: border-box; flex-shrink: 0; }
+                                                @media (max-width: 768px) {
+                                                    .sub-panel { height: auto; margin-bottom: -15px; }
+                                                    .cards-deck { flex: none; width: calc(100% + 30px); margin-left: -15px; margin-right: -15px; }
+                                                    .cards-track { height: auto; align-items: flex-start; }
+                                                    .cards-page { height: auto; overflow: visible; padding: 4px 15px 15px 15px; }
+                                                }
+                                                .plan-card { background: linear-gradient(145deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01)); border: 1px solid var(--glass-border); border-radius: 18px; padding: 24px 20px 20px 20px; position: relative; display: flex; flex-direction: column; width: 100%; box-sizing: border-box; flex-shrink: 0; will-change: transform, opacity; transform-origin: center center; transition: box-shadow 0.4s ease, border-color 0.4s ease; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
                                                 .plan-card.active { border-color: var(--btn-blue); box-shadow: inset 0 0 20px rgba(168,199,250,0.08), 0 10px 30px rgba(0,0,0,0.3); }
                                                 .plan-card.pro-glow { border: 1px solid rgba(230, 235, 245, 0.35) !important; background: linear-gradient(135deg, rgba(255,255,255,0.07) 0%, rgba(144,164,174,0.02) 50%, rgba(207,216,220,0.06) 100%) !important; box-shadow: inset 0 0 25px rgba(255,255,255,0.12), 0 12px 35px rgba(200,210,230,0.18) !important; }
                                                 .plan-card.ultra-glow { border: 1px solid rgba(255, 215, 0, 0.4) !important; background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,215,0,0.03) 50%, rgba(255,140,0,0.08) 100%) !important; box-shadow: inset 0 0 30px rgba(255,215,0,0.1), 0 12px 35px rgba(255,160,0,0.2) !important; }
@@ -17068,10 +17074,103 @@
             </div>
           `;
           track = document.getElementById("sub-cards-track");
+
+          if (window.subDeckResizeObserver) {
+            window.subDeckResizeObserver.disconnect();
+          }
+          window.subDeckResizeObserver = new ResizeObserver(() => {
+            let activeIdx = parseInt(deck.dataset.activeIndex || "0", 10);
+            let pages = deck.querySelectorAll(".cards-page");
+            if (window.innerWidth <= 768 && pages[activeIdx]) {
+              deck.style.height = pages[activeIdx].offsetHeight + "px";
+            } else {
+              deck.style.height = "";
+            }
+          });
+          deck
+            .querySelectorAll(".cards-page")
+            .forEach((p) => window.subDeckResizeObserver.observe(p));
+        }
+
+        let prevIndex =
+          deck.dataset.activeIndex !== undefined
+            ? parseInt(deck.dataset.activeIndex, 10)
+            : index;
+        deck.dataset.activeIndex = index;
+
+        let pages = deck.querySelectorAll(".cards-page");
+
+        // Hiệu ứng gia tốc quán tính lệch pha từng thẻ chuẩn HyperOS / iOS
+        if (prevIndex !== index && pages[index]) {
+          let dir = index > prevIndex ? 1 : -1;
+
+          // 1. Các thẻ của trang mới lao vào theo bậc thang quán tính mềm mại
+          let incomingCards = pages[index].querySelectorAll(".plan-card");
+          incomingCards.forEach((card, i) => {
+            if (card.getAnimations) {
+              card.getAnimations().forEach((anim) => anim.cancel());
+            }
+            let startX = dir * (130 + i * 170);
+            let startScale = Math.max(0.88, 0.96 - i * 0.035);
+            let duration = 680 + i * 150;
+            let delay = i * 45;
+
+            card.animate(
+              [
+                {
+                  transform: `translate3d(${startX}px, 0, 0) scale(${startScale})`,
+                  opacity: 0.55,
+                },
+                {
+                  transform: "translate3d(0px, 0, 0) scale(1)",
+                  opacity: 1,
+                },
+              ],
+              {
+                duration: duration,
+                delay: delay,
+                easing: "cubic-bezier(0.16, 1, 0.3, 1)",
+                fill: "backwards",
+              },
+            );
+          });
+
+          // 2. Các thẻ của trang cũ rời đi lệch pha tự nhiên
+          if (pages[prevIndex]) {
+            let outgoingCards = pages[prevIndex].querySelectorAll(".plan-card");
+            outgoingCards.forEach((card, i) => {
+              if (card.getAnimations) {
+                card.getAnimations().forEach((anim) => anim.cancel());
+              }
+              let exitLagX = dir * (i * 110 - 30);
+              card.animate(
+                [
+                  {
+                    transform: "translate3d(0px, 0, 0) scale(1)",
+                    opacity: 1,
+                  },
+                  {
+                    transform: `translate3d(${exitLagX}px, 0, 0) scale(0.94)`,
+                    opacity: 0.5,
+                  },
+                ],
+                {
+                  duration: 560 + i * 90,
+                  easing: "cubic-bezier(0.16, 1, 0.3, 1)",
+                },
+              );
+            });
+          }
+        }
+
+        if (window.innerWidth <= 768 && pages[index]) {
+          deck.style.height = pages[index].offsetHeight + "px";
+        } else {
+          deck.style.height = "";
         }
 
         if (track) {
-          track.style.transform = `translate3d(calc(-${index * 100}% - ${index * 20}px), 0, 0)`;
+          track.style.transform = `translate3d(-${index * 100}%, 0, 0)`;
         }
       };
 
