@@ -16881,7 +16881,7 @@
                                                     .sub-panel { height: auto; margin-bottom: -15px; }
                                                     .cards-deck { flex: none; width: calc(100% + 30px); margin-left: -15px; margin-right: -15px; }
                                                     .cards-track { height: auto; align-items: flex-start; }
-                                                    .cards-page { height: auto; overflow: visible; padding: 4px 15px 15px 15px; }
+                                                    .cards-page { height: auto; overflow: hidden; padding: 4px 15px 15px 15px; }
                                                 }
                                                 .plan-card { background: linear-gradient(145deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01)); border: 1px solid var(--glass-border); border-radius: 18px; padding: 24px 20px 20px 20px; position: relative; display: flex; flex-direction: column; width: 100%; box-sizing: border-box; flex-shrink: 0; will-change: transform, opacity; transform-origin: center center; transition: box-shadow 0.4s ease, border-color 0.4s ease; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
                                                 .plan-card.active { border-color: var(--btn-blue); box-shadow: inset 0 0 20px rgba(168,199,250,0.08), 0 10px 30px rgba(0,0,0,0.3); }
@@ -17100,6 +17100,13 @@
 
         let pages = deck.querySelectorAll(".cards-page");
 
+        // Dọn dẹp mọi hoạt ảnh cũ trên tất cả các thẻ trước khi chạy chuyển tiếp mới
+        deck.querySelectorAll(".plan-card").forEach((c) => {
+          if (c.getAnimations) {
+            c.getAnimations().forEach((anim) => anim.cancel());
+          }
+        });
+
         // Hiệu ứng gia tốc quán tính lệch pha từng thẻ chuẩn HyperOS / iOS
         if (prevIndex !== index && pages[index]) {
           let dir = index > prevIndex ? 1 : -1;
@@ -17107,19 +17114,16 @@
           // 1. Các thẻ của trang mới lao vào theo bậc thang quán tính mềm mại
           let incomingCards = pages[index].querySelectorAll(".plan-card");
           incomingCards.forEach((card, i) => {
-            if (card.getAnimations) {
-              card.getAnimations().forEach((anim) => anim.cancel());
-            }
-            let startX = dir * (130 + i * 170);
-            let startScale = Math.max(0.88, 0.96 - i * 0.035);
-            let duration = 680 + i * 150;
-            let delay = i * 45;
+            let startX = dir * (110 + i * 150);
+            let startScale = Math.max(0.9, 0.96 - i * 0.03);
+            let duration = 680 + i * 140;
+            let delay = i * 40;
 
             card.animate(
               [
                 {
                   transform: `translate3d(${startX}px, 0, 0) scale(${startScale})`,
-                  opacity: 0.55,
+                  opacity: 0.6,
                 },
                 {
                   transform: "translate3d(0px, 0, 0) scale(1)",
@@ -17135,14 +17139,11 @@
             );
           });
 
-          // 2. Các thẻ của trang cũ rời đi lệch pha tự nhiên
+          // 2. Các thẻ của trang cũ thu nhẹ theo hướng thoát ra, không lấn sang trang mới
           if (pages[prevIndex]) {
             let outgoingCards = pages[prevIndex].querySelectorAll(".plan-card");
             outgoingCards.forEach((card, i) => {
-              if (card.getAnimations) {
-                card.getAnimations().forEach((anim) => anim.cancel());
-              }
-              let exitLagX = dir * (i * 110 - 30);
+              let exitShiftX = -dir * Math.max(0, 35 - i * 15);
               card.animate(
                 [
                   {
@@ -17150,12 +17151,12 @@
                     opacity: 1,
                   },
                   {
-                    transform: `translate3d(${exitLagX}px, 0, 0) scale(0.94)`,
-                    opacity: 0.5,
+                    transform: `translate3d(${exitShiftX}px, 0, 0) scale(0.95)`,
+                    opacity: 0.45,
                   },
                 ],
                 {
-                  duration: 560 + i * 90,
+                  duration: 480 + i * 60,
                   easing: "cubic-bezier(0.16, 1, 0.3, 1)",
                 },
               );
