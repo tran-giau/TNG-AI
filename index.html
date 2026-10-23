@@ -17107,17 +17107,17 @@
           }
         });
 
-        // Hiệu ứng gia tốc quán tính lệch pha từng thẻ chuẩn HyperOS / iOS
+        // Hiệu ứng gia tốc quán tính lệch pha từng thẻ (đã cân chỉnh mức trung gian vừa vặn)
         if (prevIndex !== index && pages[index]) {
           let dir = index > prevIndex ? 1 : -1;
 
-          // 1. Các thẻ của trang mới lao vào theo bậc thang quán tính mềm mại
+          // 1. Các thẻ của trang mới lao vào với độ lệch pha rõ nét nhưng vẫn bám sát nhau
           let incomingCards = pages[index].querySelectorAll(".plan-card");
           incomingCards.forEach((card, i) => {
-            let startX = dir * (110 + i * 150);
-            let startScale = Math.max(0.9, 0.96 - i * 0.03);
-            let duration = 680 + i * 140;
-            let delay = i * 40;
+            let startX = dir * (110 + i * 130);
+            let startScale = Math.max(0.9, 0.96 - i * 0.025);
+            let duration = 680 + i * 125;
+            let delay = i * 34;
 
             card.animate(
               [
@@ -17143,7 +17143,7 @@
           if (pages[prevIndex]) {
             let outgoingCards = pages[prevIndex].querySelectorAll(".plan-card");
             outgoingCards.forEach((card, i) => {
-              let exitShiftX = -dir * Math.max(0, 35 - i * 15);
+              let exitShiftX = -dir * Math.max(0, 34 - i * 14);
               card.animate(
                 [
                   {
@@ -17156,7 +17156,7 @@
                   },
                 ],
                 {
-                  duration: 480 + i * 60,
+                  duration: 470 + i * 50,
                   easing: "cubic-bezier(0.16, 1, 0.3, 1)",
                 },
               );
