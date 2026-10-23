@@ -17107,23 +17107,23 @@
           }
         });
 
-        // Hiệu ứng gia tốc quán tính lệch pha từng thẻ (đã cân chỉnh mức trung gian vừa vặn)
+        // Hiệu ứng gia tốc quán tính lệch pha từng thẻ (đã thu hẹp thêm một chút cho vừa khít)
         if (prevIndex !== index && pages[index]) {
           let dir = index > prevIndex ? 1 : -1;
 
-          // 1. Các thẻ của trang mới lao vào với độ lệch pha rõ nét nhưng vẫn bám sát nhau
+          // 1. Các thẻ của trang mới lao vào với khoảng cách sát hơn nhưng vẫn rõ nhịp đuổi
           let incomingCards = pages[index].querySelectorAll(".plan-card");
           incomingCards.forEach((card, i) => {
-            let startX = dir * (110 + i * 130);
-            let startScale = Math.max(0.9, 0.96 - i * 0.025);
-            let duration = 680 + i * 125;
-            let delay = i * 34;
+            let startX = dir * (105 + i * 112);
+            let startScale = Math.max(0.91, 0.96 - i * 0.022);
+            let duration = 670 + i * 110;
+            let delay = i * 29;
 
             card.animate(
               [
                 {
                   transform: `translate3d(${startX}px, 0, 0) scale(${startScale})`,
-                  opacity: 0.6,
+                  opacity: 0.62,
                 },
                 {
                   transform: "translate3d(0px, 0, 0) scale(1)",
@@ -17143,7 +17143,7 @@
           if (pages[prevIndex]) {
             let outgoingCards = pages[prevIndex].querySelectorAll(".plan-card");
             outgoingCards.forEach((card, i) => {
-              let exitShiftX = -dir * Math.max(0, 34 - i * 14);
+              let exitShiftX = -dir * Math.max(0, 32 - i * 13);
               card.animate(
                 [
                   {
@@ -17156,7 +17156,7 @@
                   },
                 ],
                 {
-                  duration: 470 + i * 50,
+                  duration: 465 + i * 45,
                   easing: "cubic-bezier(0.16, 1, 0.3, 1)",
                 },
               );
