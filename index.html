@@ -13289,222 +13289,274 @@
         } else if (f.type === "video") {
           html = `<video src="${f.data}" controls autoplay style="max-width:100%;max-height:100%;width:100%;height:100%;object-fit:contain;border-radius:10px;display:block;margin:auto;"></video>`;
         } else if (f.type === "audio") {
-          if (!window.tngMpInitDone) {
-            window.tngMpInitDone = true;
-            window.TNG_50_MUSIC_COVERS = [
-              "https://picsum.photos/id/10/400/400",
-              "https://picsum.photos/id/11/400/400",
-              "https://picsum.photos/id/12/400/400",
-              "https://picsum.photos/id/13/400/400",
-              "https://picsum.photos/id/14/400/400",
-              "https://picsum.photos/id/15/400/400",
-              "https://picsum.photos/id/16/400/400",
-              "https://picsum.photos/id/17/400/400",
-              "https://picsum.photos/id/18/400/400",
-              "https://picsum.photos/id/19/400/400",
-              "https://picsum.photos/id/20/400/400",
-              "https://picsum.photos/id/22/400/400",
-              "https://picsum.photos/id/24/400/400",
-              "https://picsum.photos/id/25/400/400",
-              "https://picsum.photos/id/26/400/400",
-              "https://picsum.photos/id/27/400/400",
-              "https://picsum.photos/id/28/400/400",
-              "https://picsum.photos/id/29/400/400",
-              "https://picsum.photos/id/36/400/400",
-              "https://picsum.photos/id/37/400/400",
-              "https://picsum.photos/id/39/400/400",
-              "https://picsum.photos/id/40/400/400",
-              "https://picsum.photos/id/42/400/400",
-              "https://picsum.photos/id/43/400/400",
-              "https://picsum.photos/id/48/400/400",
-              "https://picsum.photos/id/49/400/400",
-              "https://picsum.photos/id/54/400/400",
-              "https://picsum.photos/id/56/400/400",
-              "https://picsum.photos/id/57/400/400",
-              "https://picsum.photos/id/58/400/400",
-              "https://picsum.photos/id/60/400/400",
-              "https://picsum.photos/id/64/400/400",
-              "https://picsum.photos/id/65/400/400",
-              "https://picsum.photos/id/68/400/400",
-              "https://picsum.photos/id/76/400/400",
-              "https://picsum.photos/id/82/400/400",
-              "https://picsum.photos/id/84/400/400",
-              "https://picsum.photos/id/88/400/400",
-              "https://picsum.photos/id/96/400/400",
-              "https://picsum.photos/id/100/400/400",
-              "https://picsum.photos/id/103/400/400",
-              "https://picsum.photos/id/104/400/400",
-              "https://picsum.photos/id/106/400/400",
-              "https://picsum.photos/id/111/400/400",
-              "https://picsum.photos/id/116/400/400",
-              "https://picsum.photos/id/119/400/400",
-              "https://picsum.photos/id/129/400/400",
-              "https://picsum.photos/id/133/400/400",
-              "https://picsum.photos/id/145/400/400",
-              "https://picsum.photos/id/160/400/400",
-            ];
+          window.TNG_50_MUSIC_COVERS = window.TNG_50_MUSIC_COVERS || [
+            "https://picsum.photos/id/10/400/400",
+            "https://picsum.photos/id/11/400/400",
+            "https://picsum.photos/id/12/400/400",
+            "https://picsum.photos/id/13/400/400",
+            "https://picsum.photos/id/14/400/400",
+            "https://picsum.photos/id/15/400/400",
+            "https://picsum.photos/id/16/400/400",
+            "https://picsum.photos/id/17/400/400",
+            "https://picsum.photos/id/18/400/400",
+            "https://picsum.photos/id/19/400/400",
+            "https://picsum.photos/id/20/400/400",
+            "https://picsum.photos/id/22/400/400",
+            "https://picsum.photos/id/24/400/400",
+            "https://picsum.photos/id/25/400/400",
+            "https://picsum.photos/id/26/400/400",
+            "https://picsum.photos/id/27/400/400",
+            "https://picsum.photos/id/28/400/400",
+            "https://picsum.photos/id/29/400/400",
+            "https://picsum.photos/id/36/400/400",
+            "https://picsum.photos/id/37/400/400",
+            "https://picsum.photos/id/39/400/400",
+            "https://picsum.photos/id/40/400/400",
+            "https://picsum.photos/id/42/400/400",
+            "https://picsum.photos/id/43/400/400",
+            "https://picsum.photos/id/48/400/400",
+            "https://picsum.photos/id/49/400/400",
+            "https://picsum.photos/id/54/400/400",
+            "https://picsum.photos/id/56/400/400",
+            "https://picsum.photos/id/57/400/400",
+            "https://picsum.photos/id/58/400/400",
+            "https://picsum.photos/id/60/400/400",
+            "https://picsum.photos/id/64/400/400",
+            "https://picsum.photos/id/65/400/400",
+            "https://picsum.photos/id/68/400/400",
+            "https://picsum.photos/id/76/400/400",
+            "https://picsum.photos/id/82/400/400",
+            "https://picsum.photos/id/84/400/400",
+            "https://picsum.photos/id/88/400/400",
+            "https://picsum.photos/id/96/400/400",
+            "https://picsum.photos/id/100/400/400",
+            "https://picsum.photos/id/103/400/400",
+            "https://picsum.photos/id/104/400/400",
+            "https://picsum.photos/id/106/400/400",
+            "https://picsum.photos/id/111/400/400",
+            "https://picsum.photos/id/116/400/400",
+            "https://picsum.photos/id/119/400/400",
+            "https://picsum.photos/id/129/400/400",
+            "https://picsum.photos/id/133/400/400",
+            "https://picsum.photos/id/145/400/400",
+            "https://picsum.photos/id/160/400/400",
+          ];
 
-            window._tngCoverCache = window._tngCoverCache || {};
-            window.tngCacheImg = function (url) {
-              if (!url || window._tngCoverCache[url]) return;
-              let img = new Image();
-              img.referrerPolicy = "no-referrer";
-              img.decoding = "async";
-              img.src = url;
-              window._tngCoverCache[url] = img;
-            };
+          window._tngCoverCache = window._tngCoverCache || {};
+          window.tngCacheImg = function (url) {
+            if (!url || window._tngCoverCache[url]) return;
+            let img = new Image();
+            img.referrerPolicy = "no-referrer";
+            img.decoding = "async";
+            img.src = url;
+            window._tngCoverCache[url] = img;
+          };
 
-            window.tngGetSongCover = function (fileObj) {
-              let songKey = String(
-                (fileObj && (fileObj.id || fileObj.name)) || "default_audio",
-              );
-              let map = {};
-              try {
-                map = JSON.parse(
-                  localStorage.getItem("tng_music_covers_v1") || "{}",
-                );
-              } catch (e) {
-                map = {};
-              }
-              if (fileObj && fileObj.cover) {
-                map[songKey] = fileObj.cover;
+          // Ngắt luồng phát âm thanh ngay tức khắc (0ms) khi nhấn nút ✕ hoặc đóng bảng
+          window.tngKillMusicNow = function () {
+            document
+              .querySelectorAll(
+                "#tng-mp-audio, #viewer-modal audio, #viewer-modal video",
+              )
+              .forEach((media) => {
                 try {
-                  localStorage.setItem(
-                    "tng_music_covers_v1",
-                    JSON.stringify(map),
-                  );
+                  media.muted = true;
+                  media.volume = 0;
+                  media.pause();
+                  media.removeAttribute("src");
+                  media.load();
                 } catch (e) {}
-                window.tngCacheImg(fileObj.cover);
-                return fileObj.cover;
-              }
-              if (map[songKey]) {
-                if (fileObj) fileObj.cover = map[songKey];
-                window.tngCacheImg(map[songKey]);
-                return map[songKey];
-              }
-              let picked =
-                window.TNG_50_MUSIC_COVERS[
-                  Math.floor(Math.random() * window.TNG_50_MUSIC_COVERS.length)
-                ];
-              map[songKey] = picked;
-              if (fileObj) fileObj.cover = picked;
+              });
+          };
+
+          if (!window._tngCloseAudioHooked) {
+            window._tngCloseAudioHooked = true;
+            const origClose = window.closeViewer;
+            if (typeof origClose === "function") {
+              window.closeViewer = function () {
+                window.tngKillMusicNow();
+                return origClose.apply(this, arguments);
+              };
+            }
+            const closeBtn = document.querySelector(
+              "#viewer-modal .viewer-close",
+            );
+            if (closeBtn) {
+              closeBtn.addEventListener(
+                "pointerdown",
+                window.tngKillMusicNow,
+                true,
+              );
+              closeBtn.addEventListener("touchstart", window.tngKillMusicNow, {
+                capture: true,
+                passive: true,
+              });
+              closeBtn.addEventListener("click", window.tngKillMusicNow, true);
+            }
+            const viewerModal = document.getElementById("viewer-modal");
+            if (viewerModal) {
+              viewerModal.addEventListener(
+                "click",
+                function (ev) {
+                  if (!ev.target.closest(".tng-ios-music-card")) {
+                    window.tngKillMusicNow();
+                  }
+                },
+                true,
+              );
+            }
+          }
+
+          window.tngGetSongCover = function (fileObj) {
+            let songKey = String(
+              (fileObj && (fileObj.id || fileObj.name)) || "default_audio",
+            );
+            let map = {};
+            try {
+              map = JSON.parse(
+                localStorage.getItem("tng_music_covers_v1") || "{}",
+              );
+            } catch (e) {
+              map = {};
+            }
+            if (fileObj && fileObj.cover) {
+              map[songKey] = fileObj.cover;
               try {
                 localStorage.setItem(
                   "tng_music_covers_v1",
                   JSON.stringify(map),
                 );
               } catch (e) {}
-              window.tngCacheImg(picked);
-              return picked;
-            };
+              window.tngCacheImg(fileObj.cover);
+              return fileObj.cover;
+            }
+            if (map[songKey]) {
+              if (fileObj) fileObj.cover = map[songKey];
+              window.tngCacheImg(map[songKey]);
+              return map[songKey];
+            }
+            let picked =
+              window.TNG_50_MUSIC_COVERS[
+                Math.floor(Math.random() * window.TNG_50_MUSIC_COVERS.length)
+              ];
+            map[songKey] = picked;
+            if (fileObj) fileObj.cover = picked;
+            try {
+              localStorage.setItem("tng_music_covers_v1", JSON.stringify(map));
+            } catch (e) {}
+            window.tngCacheImg(picked);
+            return picked;
+          };
 
-            window.tngMpFmt = function (s) {
-              if (!s || isNaN(s) || !isFinite(s)) return "00:00";
-              s = Math.max(0, Math.floor(s));
-              return (
-                String(Math.floor(s / 60)).padStart(2, "0") +
-                ":" +
-                String(s % 60).padStart(2, "0")
-              );
-            };
+          window.tngMpFmt = function (s) {
+            if (!s || isNaN(s) || !isFinite(s)) return "00:00";
+            s = Math.max(0, Math.floor(s));
+            return (
+              String(Math.floor(s / 60)).padStart(2, "0") +
+              ":" +
+              String(s % 60).padStart(2, "0")
+            );
+          };
 
-            window.tngMpToggle = function () {
-              let a = document.getElementById("tng-mp-audio");
-              if (!a) return;
-              if (a.paused) a.play().catch(() => {});
-              else a.pause();
-            };
+          window.tngMpToggle = function () {
+            let a = document.getElementById("tng-mp-audio");
+            if (!a) return;
+            if (a.paused) a.play().catch(() => {});
+            else a.pause();
+          };
 
-            window.tngMpSyncIcon = function (playing) {
-              let btn = document.getElementById("tng-mp-play");
-              if (!btn) return;
-              btn.innerHTML = playing
-                ? `<svg class="tng-mp-play-svg" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`
-                : `<svg class="tng-mp-play-svg" viewBox="0 0 24 24"><path d="M8 5.14v14l11-7-11-7z"/></svg>`;
-            };
+          window.tngMpSyncIcon = function (playing) {
+            let btn = document.getElementById("tng-mp-play");
+            if (!btn) return;
+            btn.innerHTML = playing
+              ? `<svg class="tng-mp-play-svg" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`
+              : `<svg class="tng-mp-play-svg" viewBox="0 0 24 24"><path d="M8 5.14v14l11-7-11-7z"/></svg>`;
+          };
 
-            window.tngMpSkip = function (dir) {
-              let a = document.getElementById("tng-mp-audio");
-              if (!a) return;
-              a.currentTime = 0;
-              a.play().catch(() => {});
-            };
+          window.tngMpSkip = function (dir) {
+            let a = document.getElementById("tng-mp-audio");
+            if (!a) return;
+            a.currentTime = 0;
+            a.play().catch(() => {});
+          };
 
-            window.tngMpStartSeek = function (e, el) {
-              let a = document.getElementById("tng-mp-audio");
-              let fill = document.getElementById("tng-mp-seek-fill");
-              let thumb = document.getElementById("tng-mp-seek-thumb");
-              let cur = document.getElementById("tng-mp-cur");
-              if (!a || !fill) return;
-              el.dataset.dragging = "1";
-              el.classList.add("is-seeking");
-              const calc = (ev) => {
-                let r = el.getBoundingClientRect();
-                let x =
-                  ev.touches && ev.touches.length
-                    ? ev.touches[0].clientX
-                    : ev.changedTouches && ev.changedTouches.length
-                      ? ev.changedTouches[0].clientX
-                      : ev.clientX;
-                let rt = Math.min(1, Math.max(0, (x - r.left) / r.width));
-                let pct = rt * 100 + "%";
-                fill.style.width = pct;
-                if (thumb) thumb.style.left = pct;
-                if (a.duration && cur)
-                  cur.textContent = window.tngMpFmt(rt * a.duration);
-                return rt;
-              };
-              calc(e);
-              const move = (ev) => calc(ev);
-              const up = (ev) => {
-                let rt = calc(ev);
-                if (a.duration && isFinite(a.duration))
-                  a.currentTime = rt * a.duration;
-                delete el.dataset.dragging;
-                el.classList.remove("is-seeking");
-                window.removeEventListener("mousemove", move);
-                window.removeEventListener("mouseup", up);
-                window.removeEventListener("touchmove", move);
-                window.removeEventListener("touchend", up);
-              };
-              window.addEventListener("mousemove", move);
-              window.addEventListener("mouseup", up);
-              window.addEventListener("touchmove", move, { passive: true });
-              window.addEventListener("touchend", up);
+          window.tngMpStartSeek = function (e, el) {
+            let a = document.getElementById("tng-mp-audio");
+            let fill = document.getElementById("tng-mp-seek-fill");
+            let thumb = document.getElementById("tng-mp-seek-thumb");
+            let cur = document.getElementById("tng-mp-cur");
+            if (!a || !fill) return;
+            el.dataset.dragging = "1";
+            el.classList.add("is-seeking");
+            const calc = (ev) => {
+              let r = el.getBoundingClientRect();
+              let x =
+                ev.touches && ev.touches.length
+                  ? ev.touches[0].clientX
+                  : ev.changedTouches && ev.changedTouches.length
+                    ? ev.changedTouches[0].clientX
+                    : ev.clientX;
+              let rt = Math.min(1, Math.max(0, (x - r.left) / r.width));
+              let pct = rt * 100 + "%";
+              fill.style.width = pct;
+              if (thumb) thumb.style.left = pct;
+              if (a.duration && cur)
+                cur.textContent = window.tngMpFmt(rt * a.duration);
+              return rt;
             };
+            calc(e);
+            const move = (ev) => calc(ev);
+            const up = (ev) => {
+              let rt = calc(ev);
+              if (a.duration && isFinite(a.duration))
+                a.currentTime = rt * a.duration;
+              delete el.dataset.dragging;
+              el.classList.remove("is-seeking");
+              window.removeEventListener("mousemove", move);
+              window.removeEventListener("mouseup", up);
+              window.removeEventListener("touchmove", move);
+              window.removeEventListener("touchend", up);
+            };
+            window.addEventListener("mousemove", move);
+            window.addEventListener("mouseup", up);
+            window.addEventListener("touchmove", move, { passive: true });
+            window.addEventListener("touchend", up);
+          };
 
-            window.tngMpStartVol = function (e, el) {
-              let a = document.getElementById("tng-mp-audio");
-              let fill = document.getElementById("tng-mp-vol-fill");
-              let thumb = document.getElementById("tng-mp-vol-thumb");
-              if (!a || !fill || !thumb) return;
-              const calc = (ev) => {
-                let r = el.getBoundingClientRect();
-                let x =
-                  ev.touches && ev.touches.length
-                    ? ev.touches[0].clientX
-                    : ev.changedTouches && ev.changedTouches.length
-                      ? ev.changedTouches[0].clientX
-                      : ev.clientX;
-                let rt = Math.min(1, Math.max(0, (x - r.left) / r.width));
-                a.volume = rt;
-                fill.style.width = rt * 100 + "%";
-                thumb.style.left = rt * 100 + "%";
-              };
-              calc(e);
-              const move = (ev) => calc(ev);
-              const up = () => {
-                window.removeEventListener("mousemove", move);
-                window.removeEventListener("mouseup", up);
-                window.removeEventListener("touchmove", move);
-                window.removeEventListener("touchend", up);
-              };
-              window.addEventListener("mousemove", move);
-              window.addEventListener("mouseup", up);
-              window.addEventListener("touchmove", move, { passive: true });
-              window.addEventListener("touchend", up);
+          window.tngMpStartVol = function (e, el) {
+            let a = document.getElementById("tng-mp-audio");
+            let fill = document.getElementById("tng-mp-vol-fill");
+            let thumb = document.getElementById("tng-mp-vol-thumb");
+            if (!a || !fill || !thumb) return;
+            el.classList.add("is-seeking");
+            const calc = (ev) => {
+              let r = el.getBoundingClientRect();
+              let x =
+                ev.touches && ev.touches.length
+                  ? ev.touches[0].clientX
+                  : ev.changedTouches && ev.changedTouches.length
+                    ? ev.changedTouches[0].clientX
+                    : ev.clientX;
+              let rt = Math.min(1, Math.max(0, (x - r.left) / r.width));
+              a.volume = rt;
+              let pct = rt * 100 + "%";
+              fill.style.width = pct;
+              thumb.style.left = pct;
             };
-          }
+            calc(e);
+            const move = (ev) => calc(ev);
+            const up = () => {
+              el.classList.remove("is-seeking");
+              window.removeEventListener("mousemove", move);
+              window.removeEventListener("mouseup", up);
+              window.removeEventListener("touchmove", move);
+              window.removeEventListener("touchend", up);
+            };
+            window.addEventListener("mousemove", move);
+            window.addEventListener("mouseup", up);
+            window.addEventListener("touchmove", move, { passive: true });
+            window.addEventListener("touchend", up);
+          };
 
           let songCover = window.tngGetSongCover(f);
           let cleanTitle = (f.name || "Bản nhạc TNG AI")
@@ -13528,9 +13580,9 @@
                 pointer-events: none !important;
               }
 
-              /* 2. TĂNG NHẸ ĐỘ NHÒE PHÍA SAU LÊN 12PX ĐỂ MỊN HƠN MÀ VẪN XUYÊN THẤU RÕ */
+              /* 2. ĐỘ NHÒE NỀN PHÍA SAU 12PX & MỞ KHÓA RÀNG BUỘC KÍCH THƯỚC KHUNG BAO */
               #viewer-modal:has(.tng-ios-music-card) {
-                background: rgba(8, 10, 16, 0.24) !important;
+                background: rgba(8, 10, 16, 0.25) !important;
                 backdrop-filter: blur(12px) saturate(170%) !important;
                 -webkit-backdrop-filter: blur(12px) saturate(170%) !important;
               }
@@ -13541,31 +13593,42 @@
                 box-shadow: none !important;
                 overflow: visible !important;
                 padding: 0 !important;
+                width: auto !important;
+                height: auto !important;
+                max-width: none !important;
+                max-height: none !important;
               }
 
-              /* 3. KÍCH THƯỚC TRÌNH PHÁT NHẠC TRÊN MÁY TÍNH (ĐÃ PHÓNG TO CÂN ĐỐI VỚI MÀN HÌNH PC) */
+              /* 3. KHUNG PHÁT NHẠC TRÊN PC (ĐÃ TĂNG ĐỘ ĐỤC KÍNH LÊN 1 XÍU XÌU XIU: 0.115 / 0.058 / 0.088) */
               .tng-ios-music-card {
-                position: relative;
-                width: 495px;
-                max-width: 92vw;
-                border-radius: 42px;
-                padding: 30px 36px 28px 36px;
-                box-sizing: border-box;
-                overflow: hidden;
-                color: #ffffff;
+                position: relative !important;
+                height: 90vh !important;
+                height: 90dvh !important;
+                max-height: 90dvh !important;
+                width: calc(90vh / 1.28) !important;
+                width: calc(90dvh / 1.28) !important;
+                max-width: 92vw !important;
+                aspect-ratio: 1 / 1.28 !important;
+                border-radius: clamp(38px, 4.8vh, 52px) !important;
+                padding: 4.2vh 4.8vh 3.8vh 4.8vh !important;
+                box-sizing: border-box !important;
+                overflow: hidden !important;
+                color: #ffffff !important;
                 background: linear-gradient(
                   145deg,
-                  rgba(255, 255, 255, 0.095) 0%,
-                  rgba(255, 255, 255, 0.04) 50%,
-                  rgba(255, 255, 255, 0.07) 100%
-                );
-                border: 1px solid rgba(255, 255, 255, 0.22);
+                  rgba(255, 255, 255, 0.115) 0%,
+                  rgba(255, 255, 255, 0.058) 50%,
+                  rgba(255, 255, 255, 0.088) 100%
+                ) !important;
+                border: 1px solid rgba(255, 255, 255, 0.24) !important;
                 box-shadow:
-                  0 28px 65px rgba(0, 0, 0, 0.42),
-                  inset 0 1px 1.5px rgba(255, 255, 255, 0.35),
-                  inset 0 -1px 1px rgba(255, 255, 255, 0.12);
+                  0 30px 70px rgba(0, 0, 0, 0.45),
+                  inset 0 1px 1.5px rgba(255, 255, 255, 0.38),
+                  inset 0 -1px 1px rgba(255, 255, 255, 0.14) !important;
                 user-select: none;
                 -webkit-user-select: none;
+                display: flex !important;
+                flex-direction: column !important;
               }
 
               .tng-mp-glass-sheen {
@@ -13573,7 +13636,7 @@
                 inset: 0;
                 background: radial-gradient(
                   circle at 20% 10%,
-                  rgba(255, 255, 255, 0.08) 0%,
+                  rgba(255, 255, 255, 0.095) 0%,
                   transparent 55%
                 );
                 z-index: 1;
@@ -13586,24 +13649,26 @@
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+                justify-content: space-between;
                 width: 100%;
+                height: 100%;
               }
               .tng-mp-header {
                 width: 100%;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                margin-bottom: 22px;
+                margin-bottom: 0 !important;
               }
               .tng-mp-header-title {
-                font-size: 19.5px;
+                font-size: clamp(19px, 2.4vh, 24px) !important;
                 font-weight: 600;
                 color: rgba(255, 255, 255, 0.96);
                 letter-spacing: -0.2px;
               }
               .tng-mp-logo-wrap {
-                width: 28px;
-                height: 28px;
+                width: clamp(26px, 3.3vh, 34px);
+                height: clamp(26px, 3.3vh, 34px);
                 color: #ffffff;
                 opacity: 0.96;
                 display: flex;
@@ -13611,18 +13676,20 @@
                 justify-content: center;
               }
               .tng-mp-logo-wrap svg {
-                width: 25px;
-                height: 25px;
+                width: 100%;
+                height: 100%;
               }
               .tng-mp-artwork-wrap {
-                width: 265px;
-                height: 265px;
-                border-radius: 26px;
+                width: 41vh !important;
+                height: 41vh !important;
+                width: 41dvh !important;
+                height: 41dvh !important;
+                border-radius: clamp(22px, 3vh, 32px) !important;
                 overflow: hidden;
                 box-shadow:
-                  0 18px 40px rgba(0, 0, 0, 0.45),
+                  0 20px 45px rgba(0, 0, 0, 0.48),
                   0 0 0 1px rgba(255, 255, 255, 0.18);
-                margin-bottom: 22px;
+                margin: 0.5vh 0 !important;
                 background: rgba(255, 255, 255, 0.06);
                 flex-shrink: 0;
               }
@@ -13635,7 +13702,7 @@
               .tng-mp-info {
                 width: 100%;
                 text-align: center;
-                margin-bottom: 18px;
+                margin-bottom: 0 !important;
                 overflow: hidden;
               }
               .tng-mp-title-mask {
@@ -13647,73 +13714,83 @@
               }
               .tng-mp-title {
                 display: inline-block;
-                font-size: 19.5px;
+                font-size: clamp(19px, 2.45vh, 25px) !important;
                 font-weight: 600;
                 color: #ffffff;
                 letter-spacing: -0.2px;
                 padding: 0 10px;
               }
               .tng-mp-subtitle {
-                font-size: 16px;
+                font-size: clamp(15px, 1.95vh, 20px) !important;
                 font-weight: 400;
                 color: rgba(255, 255, 255, 0.62);
-                margin-top: 4px;
+                margin-top: 0.5vh;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
               }
 
-              /* 4. THANH THỜI GIAN CÓ ĐẦU TRÒN & VÒNG SÁNG TRÒN KHI KÉO */
+              /* 4. THANH THỜI GIAN & THANH ÂM LƯỢNG ĐỒNG BỘ HIỆU ỨNG KHI NHẤN KÉO */
               .tng-mp-progress-row {
                 width: 100%;
                 display: flex;
                 align-items: center;
-                gap: 14px;
-                margin-bottom: 24px;
+                gap: 1.8vh;
+                margin-bottom: 0 !important;
               }
               .tng-mp-time {
-                font-size: 13.5px;
+                font-size: clamp(13px, 1.7vh, 17px) !important;
                 font-weight: 500;
                 color: rgba(255, 255, 255, 0.6);
                 font-variant-numeric: tabular-nums;
-                min-width: 40px;
+                min-width: clamp(38px, 5vh, 50px);
               }
-              .tng-mp-bar-area {
+              .tng-mp-bar-area,
+              .tng-mp-vol-area {
                 flex: 1;
-                height: 28px;
+                height: 3.2vh;
+                min-height: 26px;
                 display: flex;
                 align-items: center;
                 cursor: pointer;
                 position: relative;
                 touch-action: none;
               }
-              .tng-mp-track {
+              .tng-mp-track,
+              .tng-mp-vol-track {
                 width: 100%;
-                height: 5px;
+                height: clamp(5px, 0.65vh, 7px);
                 background: rgba(255, 255, 255, 0.24);
-                border-radius: 5px;
+                border-radius: 6px;
                 position: relative;
                 overflow: hidden;
               }
-              .tng-mp-fill {
+              .tng-mp-fill,
+              .tng-mp-vol-fill {
                 height: 100%;
-                width: 0%;
                 background: #ffffff;
-                border-radius: 5px;
+                border-radius: 6px;
               }
-              /* Đầu tròn + Vòng sáng tròn quanh điểm kéo */
-              .tng-mp-seek-thumb {
+              .tng-mp-fill {
+                width: 0%;
+              }
+              .tng-mp-vol-fill {
+                width: 80%;
+              }
+
+              /* Đầu tròn trắng + Vòng sáng tròn chỉ hiện khi nhấn kéo cho cả 2 thanh */
+              .tng-mp-seek-thumb,
+              .tng-mp-vol-thumb {
                 position: absolute;
                 top: 50%;
-                left: 0%;
-                width: 14px;
-                height: 14px;
+                width: clamp(14px, 1.85vh, 18px);
+                height: clamp(14px, 1.85vh, 18px);
                 background: #ffffff;
                 border-radius: 50%;
                 transform: translate(-50%, -50%) scale(0.25);
                 opacity: 0;
                 box-shadow:
-                  0 0 0 9.5px rgba(255, 255, 255, 0.25),
+                  0 0 0 11px rgba(255, 255, 255, 0.25),
                   0 2px 6px rgba(0, 0, 0, 0.3);
                 pointer-events: none;
                 transition:
@@ -13721,7 +13798,14 @@
                   opacity 0.18s ease;
                 z-index: 5;
               }
-              .tng-mp-bar-area.is-seeking .tng-mp-seek-thumb {
+              .tng-mp-seek-thumb {
+                left: 0%;
+              }
+              .tng-mp-vol-thumb {
+                left: 80%;
+              }
+              .tng-mp-bar-area.is-seeking .tng-mp-seek-thumb,
+              .tng-mp-vol-area.is-seeking .tng-mp-vol-thumb {
                 opacity: 1;
                 transform: translate(-50%, -50%) scale(1);
               }
@@ -13731,14 +13815,14 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                gap: 74px;
-                margin-bottom: 24px;
+                gap: clamp(68px, 9.5vh, 96px) !important;
+                margin-bottom: 0 !important;
               }
               .tng-mp-ctrl-btn {
                 background: transparent !important;
                 border: none !important;
                 color: #ffffff !important;
-                padding: 6px;
+                padding: 8px;
                 cursor: pointer;
                 display: flex;
                 align-items: center;
@@ -13751,19 +13835,19 @@
                 display: block;
               }
               .tng-mp-skip-svg {
-                width: 28px;
-                height: 28px;
+                width: clamp(27px, 3.6vh, 35px);
+                height: clamp(27px, 3.6vh, 35px);
               }
               .tng-mp-play-svg {
-                width: 33px;
-                height: 33px;
+                width: clamp(33px, 4.4vh, 43px);
+                height: clamp(33px, 4.4vh, 43px);
               }
               .tng-mp-volume-row {
                 width: 100%;
                 display: flex;
                 align-items: center;
-                gap: 16px;
-                margin-bottom: 2px;
+                gap: 1.8vh;
+                margin-bottom: 0 !important;
               }
               .tng-mp-vol-icon {
                 color: rgba(255, 255, 255, 0.52);
@@ -13772,92 +13856,57 @@
                 justify-content: center;
                 flex-shrink: 0;
               }
-              .tng-mp-vol-area {
-                flex: 1;
-                height: 24px;
-                display: flex;
-                align-items: center;
-                cursor: pointer;
-                position: relative;
-                touch-action: none;
-              }
-              .tng-mp-vol-track {
-                width: 100%;
-                height: 5px;
-                background: rgba(255, 255, 255, 0.24);
-                border-radius: 5px;
-                position: relative;
-              }
-              .tng-mp-vol-fill {
-                height: 100%;
-                width: 80%;
-                background: #ffffff;
-                border-radius: 5px;
-              }
-              .tng-mp-vol-thumb {
-                position: absolute;
-                top: 50%;
-                left: 80%;
-                width: 16px;
-                height: 16px;
-                background: #ffffff;
-                border-radius: 50%;
-                transform: translate(-50%, -50%);
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-                pointer-events: none;
+              .tng-mp-vol-icon svg {
+                width: clamp(22px, 2.8vh, 28px);
+                height: clamp(22px, 2.8vh, 28px);
               }
 
-              /* TỐI ƯU RIÊNG CHO ĐIỆN THOẠI (MOBILE) */
+              /* 5. TỐI ƯU ĐIỆN THOẠI (MOBILE): GIỮ NGUYÊN TỶ LỆ 1 : 1.3 TRÊN MÀN HÌNH NHỎ */
               @media (max-width: 768px) {
                 .tng-ios-music-card {
-                  width: 88vw;
-                  max-width: 385px;
-                  border-radius: 34px;
-                  padding: 20px 22px 18px 22px;
-                }
-                .tng-mp-header {
-                  margin-bottom: 15px;
+                  width: 88vw !important;
+                  min-width: 0 !important;
+                  max-width: 380px !important;
+                  height: auto !important;
+                  max-height: 88dvh !important;
+                  aspect-ratio: 1 / 1.3 !important;
+                  border-radius: 36px !important;
+                  padding: 24px 24px 22px 24px !important;
                 }
                 .tng-mp-header-title {
-                  font-size: 16px;
+                  font-size: 16.5px !important;
                 }
                 .tng-mp-logo-wrap {
                   width: 24px;
                   height: 24px;
                 }
-                .tng-mp-logo-wrap svg {
-                  width: 22px;
-                  height: 22px;
-                }
                 .tng-mp-artwork-wrap {
-                  width: 196px;
-                  height: 196px;
-                  border-radius: 20px;
-                  margin-bottom: 15px;
-                }
-                .tng-mp-info {
-                  margin-bottom: 13px;
+                  width: 205px !important;
+                  height: 205px !important;
+                  border-radius: 22px !important;
+                  margin: 2px 0 !important;
                 }
                 .tng-mp-title {
-                  font-size: 16px;
+                  font-size: 16.5px !important;
                 }
                 .tng-mp-subtitle {
-                  font-size: 14px;
+                  font-size: 14px !important;
                   margin-top: 3px;
                 }
-                .tng-mp-progress-row {
-                  gap: 10px;
-                  margin-bottom: 16px;
+                .tng-mp-progress-row,
+                .tng-mp-volume-row {
+                  gap: 12px;
                 }
                 .tng-mp-time {
-                  font-size: 12px;
+                  font-size: 12px !important;
                   min-width: 35px;
                 }
                 .tng-mp-track,
                 .tng-mp-vol-track {
                   height: 4.5px;
                 }
-                .tng-mp-seek-thumb {
+                .tng-mp-seek-thumb,
+                .tng-mp-vol-thumb {
                   width: 13px;
                   height: 13px;
                   box-shadow:
@@ -13865,24 +13914,19 @@
                     0 2px 6px rgba(0, 0, 0, 0.3);
                 }
                 .tng-mp-controls {
-                  gap: 54px;
-                  margin-bottom: 16px;
+                  gap: 56px !important;
                 }
                 .tng-mp-skip-svg {
                   width: 24px;
                   height: 24px;
                 }
                 .tng-mp-play-svg {
-                  width: 28px;
-                  height: 28px;
+                  width: 29px;
+                  height: 29px;
                 }
-                .tng-mp-volume-row {
-                  gap: 14px;
-                  margin-bottom: 2px;
-                }
-                .tng-mp-vol-thumb {
-                  width: 15px;
-                  height: 15px;
+                .tng-mp-vol-icon svg {
+                  width: 21px;
+                  height: 21px;
                 }
               }
             </style>
@@ -13939,7 +13983,7 @@
                 </div>
                 <div class="tng-mp-volume-row">
                   <div class="tng-mp-vol-icon">
-                    <svg width="21" height="21" viewBox="0 0 24 24" fill="none">
+                    <svg viewBox="0 0 24 24" fill="none">
                       <path d="M2.8 9.8C2.8 9.02 3.43 8.4 4.2 8.4H6.6L10.75 4.68C11.6 3.92 12.95 4.52 12.95 5.66V18.34C12.95 19.48 11.6 20.08 10.75 19.32L6.6 15.6H4.2C3.43 15.6 2.8 14.98 2.8 14.2V9.8Z" fill="currentColor"/>
                       <path d="M15.7 9.4C16.75 10.8 16.75 13.2 15.7 14.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
                     </svg>
@@ -13951,7 +13995,7 @@
                     <div class="tng-mp-vol-thumb" id="tng-mp-vol-thumb"></div>
                   </div>
                   <div class="tng-mp-vol-icon">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                    <svg viewBox="0 0 24 24" fill="none">
                       <path d="M1.8 9.8C1.8 9.02 2.43 8.4 3.2 8.4H5.6L9.75 4.68C10.6 3.92 11.95 4.52 11.95 5.66V18.34C11.95 19.48 10.6 20.08 9.75 19.32L5.6 15.6H3.2C2.43 15.6 1.8 14.98 1.8 14.2V9.8Z" fill="currentColor"/>
                       <path d="M14.7 9.4C15.75 10.8 15.75 13.2 14.7 14.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
                       <path d="M17.45 7.15C19.3 9.95 19.3 14.05 17.45 16.85" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
