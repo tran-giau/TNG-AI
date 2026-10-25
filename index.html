@@ -2701,6 +2701,35 @@
         transform-origin: center;
         max-width: 100%;
         max-height: 100%;
+        background: var(--modal-bg);
+        border-radius: 28px !important;
+        overflow: hidden !important;
+        box-shadow:
+          0 25px 60px rgba(0, 0, 0, 0.55),
+          inset 0 1px 1px rgba(255, 255, 255, 0.14);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        position: relative;
+      }
+
+      /* Tự động bo cong 4 góc 28px đồng bộ cho khối Báo cáo & Lộ trình học bên trong */
+      #viewer-modal-body:not(:has(.tng-ios-music-card)):not(
+          :has(img.chat-img)
+        ):not(:has(video)) {
+        border-radius: 28px !important;
+        overflow: hidden !important;
+      }
+      #viewer-modal-body:not(:has(.tng-ios-music-card)) > div {
+        border-radius: 28px !important;
+        box-sizing: border-box !important;
+      }
+      @media (max-width: 768px) {
+        .media-viewer-content,
+        #viewer-modal-body:not(:has(.tng-ios-music-card)):not(
+            :has(img.chat-img)
+          ):not(:has(video)),
+        #viewer-modal-body:not(:has(.tng-ios-music-card)) > div {
+          border-radius: 24px !important;
+        }
       }
 
       .viewer-close {
@@ -13582,6 +13611,7 @@
               return;
             btn.dataset.playingState = playing ? "1" : "0";
 
+            // Tọa độ đa giác Play (tại góc 0deg) và Pause (tại góc +-90deg)
             const PLAY_P1 = [6.5, 5, 19, 12, 19, 12, 6.5, 12.25];
             const PLAY_P2 = [6.5, 11.75, 19, 12, 19, 12, 6.5, 19];
             const PAUSE_P1 = [5, 6, 19, 6, 19, 9.6, 5, 9.6];
@@ -13592,6 +13622,9 @@
 
             if (window._tngMorphRaf) cancelAnimationFrame(window._tngMorphRaf);
 
+            // Luôn xoay sang phải từ trên đầu xoay qua (+90 độ cùng chiều kim đồng hồ):
+            // - Khi chuyển sang Play: từ -90deg (đỉnh 12h) xoay sang phải về 0deg (hướng 3h)
+            // - Khi chuyển sang Pause: từ 0deg xoay sang phải về +90deg
             let startAngle = playing ? 0 : -90;
             let endAngle = playing ? 90 : 0;
             let from1 = playing ? PLAY_P1 : PAUSE_P1;
@@ -13602,6 +13635,7 @@
             let startTime = performance.now();
             let duration = 480;
 
+            // Đường cong đàn hồi mượt kiểu iOS
             function easeOutBack(t) {
               const c1 = 1.35;
               const c3 = c1 + 1;
@@ -13781,18 +13815,18 @@
                 max-height: none !important;
               }
 
-              /* 3. KHUNG KÍNH LIQUID GLASS ĐỒNG BỘ TỶ LỆ 1 : 1.4 TRÊN CẢ PC & MOBILE */
+              /* 3. KHUNG KÍNH LIQUID GLASS ĐỒNG BỘ TỶ LỆ 1 : 1.35 */
               .tng-ios-music-card {
                 position: relative !important;
                 height: 90vh !important;
                 height: 90dvh !important;
                 max-height: 90dvh !important;
-                width: calc(90vh / 1.4) !important;
-                width: calc(90dvh / 1.4) !important;
+                width: calc(90vh / 1.35) !important;
+                width: calc(90dvh / 1.35) !important;
                 min-width: 0 !important;
                 max-width: 92vw !important;
-                aspect-ratio: 1 / 1.4 !important;
-                border-radius: clamp(36px, 4.6vh, 50px) !important;
+                aspect-ratio: 1 / 1.35 !important;
+                border-radius: clamp(38px, 4.8vh, 52px) !important;
                 padding: 0 !important;
                 box-sizing: border-box !important;
                 overflow: hidden !important;
@@ -13825,13 +13859,13 @@
                 z-index: 6;
               }
 
-              /* 4. HỆ THỐNG HÒA TAN ẢNH 2 LỚP THEO TỶ LỆ 1:1.4 */
+              /* 4. HỆ THỐNG HÒA TAN ẢNH 2 LỚP (KHÔNG LỘ VIỀN DƯỚI) */
               .tng-mp-hero {
                 position: absolute;
                 top: 0;
                 left: 0;
                 right: 0;
-                height: 72.5%;
+                height: 71%;
                 overflow: hidden;
                 pointer-events: none;
                 z-index: 1;
@@ -13849,20 +13883,20 @@
                 -webkit-mask-image: linear-gradient(
                   180deg,
                   transparent 24%,
-                  rgba(0, 0, 0, 0.85) 51%,
-                  rgba(0, 0, 0, 0.52) 69%,
-                  rgba(0, 0, 0, 0.16) 84%,
-                  rgba(0, 0, 0, 0.03) 93%,
-                  transparent 99%
+                  rgba(0, 0, 0, 0.85) 50%,
+                  rgba(0, 0, 0, 0.52) 68%,
+                  rgba(0, 0, 0, 0.16) 83%,
+                  rgba(0, 0, 0, 0.03) 92%,
+                  transparent 98%
                 );
                 mask-image: linear-gradient(
                   180deg,
                   transparent 24%,
-                  rgba(0, 0, 0, 0.85) 51%,
-                  rgba(0, 0, 0, 0.52) 69%,
-                  rgba(0, 0, 0, 0.16) 84%,
-                  rgba(0, 0, 0, 0.03) 93%,
-                  transparent 99%
+                  rgba(0, 0, 0, 0.85) 50%,
+                  rgba(0, 0, 0, 0.52) 68%,
+                  rgba(0, 0, 0, 0.16) 83%,
+                  rgba(0, 0, 0, 0.03) 92%,
+                  transparent 98%
                 );
               }
               .tng-mp-artwork-img {
@@ -13875,20 +13909,20 @@
                 -webkit-mask-image: linear-gradient(
                   180deg,
                   #000000 0%,
-                  #000000 45%,
-                  rgba(0, 0, 0, 0.82) 57%,
-                  rgba(0, 0, 0, 0.36) 69%,
-                  rgba(0, 0, 0, 0.07) 78%,
-                  transparent 85%
+                  #000000 44%,
+                  rgba(0, 0, 0, 0.82) 56%,
+                  rgba(0, 0, 0, 0.36) 68%,
+                  rgba(0, 0, 0, 0.07) 77%,
+                  transparent 84%
                 );
                 mask-image: linear-gradient(
                   180deg,
                   #000000 0%,
-                  #000000 45%,
-                  rgba(0, 0, 0, 0.82) 57%,
-                  rgba(0, 0, 0, 0.36) 69%,
-                  rgba(0, 0, 0, 0.07) 78%,
-                  transparent 85%
+                  #000000 44%,
+                  rgba(0, 0, 0, 0.82) 56%,
+                  rgba(0, 0, 0, 0.36) 68%,
+                  rgba(0, 0, 0, 0.07) 77%,
+                  transparent 84%
                 );
               }
 
@@ -13896,8 +13930,8 @@
                 position: absolute;
                 top: clamp(20px, 2.8vh, 28px);
                 right: clamp(20px, 2.8vh, 28px);
-                width: clamp(25px, 3.3vh, 33px);
-                height: clamp(25px, 3.3vh, 33px);
+                width: clamp(26px, 3.4vh, 34px);
+                height: clamp(26px, 3.4vh, 34px);
                 color: #ffffff;
                 opacity: 0.96;
                 display: flex;
@@ -13911,18 +13945,18 @@
                 height: 100%;
               }
 
-              /* 5. PHẦN THÂN DƯỚI: GIỮ NGUYÊN KHOẢNG CÁCH GẦN NHAU GIỮA CÁC PHẦN */
+              /* 5. PHẦN THÂN DƯỚI */
               .tng-mp-body {
                 position: relative;
                 z-index: 3;
                 width: 100%;
-                padding: 0 4vh 4vh 4vh;
+                padding: 0 4.2vh 4.2vh 4.2vh;
                 box-sizing: border-box;
                 display: flex;
                 flex-direction: column;
                 justify-content: flex-end;
                 align-items: center;
-                gap: 2vh;
+                gap: 2.2vh;
               }
 
               /* 6. TÊN BÀI HÁT & CHẠY CHỮ TỰ ĐỘNG KHI DÀI */
@@ -13930,7 +13964,7 @@
                 width: 100%;
                 text-align: center;
                 overflow: hidden;
-                margin-bottom: 0.25vh;
+                margin-bottom: 0.3vh;
               }
               .tng-mp-title-mask {
                 width: 100%;
@@ -13957,7 +13991,7 @@
               }
               .tng-mp-title {
                 display: inline-block;
-                font-size: clamp(21px, 2.95vh, 29px) !important;
+                font-size: clamp(22px, 3.1vh, 30px) !important;
                 font-weight: 700;
                 color: #ffffff;
                 letter-spacing: -0.3px;
@@ -13975,10 +14009,10 @@
                 }
               }
               .tng-mp-subtitle {
-                font-size: clamp(14px, 1.9vh, 18.5px) !important;
+                font-size: clamp(14.5px, 1.95vh, 19px) !important;
                 font-weight: 500;
                 color: rgba(255, 255, 255, 0.72);
-                margin-top: 0.35vh;
+                margin-top: 0.4vh;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -13990,12 +14024,12 @@
                 width: 100%;
                 display: flex;
                 flex-direction: column;
-                gap: 0.42vh;
+                gap: 0.45vh;
               }
               .tng-mp-bar-area,
               .tng-mp-vol-area {
                 width: 100%;
-                height: 2.35vh;
+                height: 2.4vh;
                 min-height: 22px;
                 display: flex;
                 align-items: center;
@@ -14005,7 +14039,7 @@
               }
               .tng-mp-track {
                 width: 100%;
-                height: clamp(5px, 0.63vh, 6.5px);
+                height: clamp(5px, 0.65vh, 6.5px);
                 background: rgba(255, 255, 255, 0.24);
                 border-radius: 99px;
                 position: relative;
@@ -14043,7 +14077,7 @@
                 align-items: center;
               }
               .tng-mp-time {
-                font-size: clamp(11.5px, 1.52vh, 15px) !important;
+                font-size: clamp(12px, 1.55vh, 15px) !important;
                 font-weight: 500;
                 color: rgba(255, 255, 255, 0.5);
                 font-variant-numeric: tabular-nums;
@@ -14052,7 +14086,7 @@
               /* 8. THANH ÂM LƯỢNG & NÚT KÉO TRÒN */
               .tng-mp-vol-track {
                 width: 100%;
-                height: clamp(5px, 0.63vh, 6.5px);
+                height: clamp(5px, 0.65vh, 6.5px);
                 background: rgba(255, 255, 255, 0.24);
                 border-radius: 99px;
                 position: relative;
@@ -14068,14 +14102,14 @@
               .tng-mp-vol-thumb {
                 position: absolute;
                 top: 50%;
-                width: clamp(13px, 1.8vh, 17px);
-                height: clamp(13px, 1.8vh, 17px);
+                width: clamp(14px, 1.85vh, 18px);
+                height: clamp(14px, 1.85vh, 18px);
                 background: #ffffff;
                 border-radius: 50%;
                 transform: translate(-50%, -50%) scale(0.25);
                 opacity: 0;
                 box-shadow:
-                  0 0 0 10px rgba(255, 255, 255, 0.25),
+                  0 0 0 11px rgba(255, 255, 255, 0.25),
                   0 2px 6px rgba(0, 0, 0, 0.3);
                 pointer-events: none;
                 transition:
@@ -14092,7 +14126,7 @@
                 transform: translate(-50%, -50%) scale(1);
               }
 
-              /* 9. CỤM 5 NÚT ĐIỀU KHIỂN: KHÓA GAP: 0 ĐỂ DÀN ĐỀU TRONG KHUNG */
+              /* 9. CỤM 5 NÚT ĐIỀU KHIỂN: KHÓA GAP: 0 ĐỂ KHÔNG BAO GIỜ TRÀN VIỀN PHẢI */
               .tng-mp-controls {
                 width: 100% !important;
                 display: flex !important;
@@ -14101,14 +14135,14 @@
                 gap: 0 !important;
                 padding: 0 2px !important;
                 box-sizing: border-box !important;
-                margin: 0.18vh 0 !important;
+                margin: 0.2vh 0 !important;
               }
               .tng-mp-ctrl-btn {
                 background: transparent !important;
                 border: none !important;
                 color: #ffffff !important;
-                width: clamp(41px, 5.4vh, 52px);
-                height: clamp(41px, 5.4vh, 52px);
+                width: clamp(42px, 5.5vh, 52px);
+                height: clamp(42px, 5.5vh, 52px);
                 flex-shrink: 0;
                 padding: 0;
                 cursor: pointer;
@@ -14136,8 +14170,8 @@
               .tng-mp-sub-btn svg {
                 fill: none !important;
                 stroke: #ffffff;
-                width: clamp(20px, 2.75vh, 26px);
-                height: clamp(20px, 2.75vh, 26px);
+                width: clamp(21px, 2.8vh, 26px);
+                height: clamp(21px, 2.8vh, 26px);
                 transition: all 0.22s ease;
               }
               .tng-mp-sub-btn.liked {
@@ -14152,12 +14186,12 @@
                 opacity: 1;
               }
               .tng-mp-skip-svg {
-                width: clamp(24px, 3.25vh, 31px);
-                height: clamp(24px, 3.25vh, 31px);
+                width: clamp(25px, 3.3vh, 32px);
+                height: clamp(25px, 3.3vh, 32px);
               }
               .tng-mp-play-svg {
-                width: clamp(31px, 4.1vh, 39px);
-                height: clamp(31px, 4.1vh, 39px);
+                width: clamp(32px, 4.2vh, 40px);
+                height: clamp(32px, 4.2vh, 40px);
                 transform-origin: 50% 50%;
                 will-change: transform;
               }
@@ -14166,8 +14200,8 @@
                 width: 100%;
                 display: flex;
                 align-items: center;
-                gap: 1.55vh;
-                margin-top: 0.18vh !important;
+                gap: 1.6vh;
+                margin-top: 0.2vh !important;
                 margin-bottom: 0 !important;
               }
               .tng-mp-vol-icon {
@@ -14178,24 +14212,24 @@
                 flex-shrink: 0;
               }
               .tng-mp-vol-icon svg {
-                width: clamp(20px, 2.65vh, 26px);
-                height: clamp(20px, 2.65vh, 26px);
+                width: clamp(21px, 2.7vh, 26px);
+                height: clamp(21px, 2.7vh, 26px);
               }
 
-              /* 10. ĐIỆN THOẠI (MOBILE): KHÓA CỨNG TỶ LỆ 1 : 1.4 & GIỮ KHOẢNG CÁCH GẦN NHAU Ở ĐÁY */
+              /* 10. ĐIỆN THOẠI (MOBILE): KHÓA CỨNG TỶ LỆ CHIỀU CAO 1 : 1.35 BẰNG VỚI PC & CHỐNG TRÀN NÚT */
               @media (max-width: 768px) {
                 .tng-ios-music-card {
-                  width: min(88vw, 375px, calc(88dvh / 1.4)) !important;
+                  width: min(88vw, 380px) !important;
                   min-width: 0 !important;
-                  max-width: 375px !important;
-                  height: calc(min(88vw, 375px, calc(88dvh / 1.4)) * 1.4) !important;
-                  max-height: 88dvh !important;
-                  aspect-ratio: 1 / 1.4 !important;
+                  max-width: 380px !important;
+                  height: calc(min(88vw, 380px) * 1.35) !important;
+                  max-height: 86dvh !important;
+                  aspect-ratio: 1 / 1.35 !important;
                   border-radius: 38px !important;
                   padding: 0 !important;
                 }
                 .tng-mp-hero {
-                  height: 72.5%;
+                  height: 71%;
                 }
                 .tng-mp-logo-wrap {
                   top: 18px;
@@ -14204,8 +14238,8 @@
                   height: 24px;
                 }
                 .tng-mp-body {
-                  padding: 0 22px 23px 22px;
-                  gap: 14px;
+                  padding: 0 22px 24px 22px;
+                  gap: 15px;
                 }
                 .tng-mp-title {
                   font-size: 20px !important;
@@ -24323,52 +24357,415 @@
           word-break: break-word !important;
         }
       }
-
-      /* ============================================================ */
-      /* BẬT HIỆU ỨNG LÚN CHỮ (HOVER & ACTIVE 3D) CHO NÚT TÀI KHOẢN   */
-      /* ============================================================ */
-
-      /* 1. Khóa vỏ nền đứng im, chỉ cho phép đổi màu */
-      .acc-row-btn {
-        transition: background-color 0.2s ease !important;
-        transform: scale(1) !important;
+    </style>
+    <style>
+      /* Bo cong 4 góc 28px tinh tế cho khung Báo cáo & Lộ trình học */
+      .media-viewer-content {
+        border-radius: 28px !important;
+        overflow: hidden !important;
+        box-shadow:
+          0 25px 60px rgba(0, 0, 0, 0.55),
+          inset 0 1px 1px rgba(255, 255, 255, 0.14) !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
       }
-
-      /* 2. Ép chữ và icon bên trong thành khối để có thể co giãn 3D */
-      .acc-row-btn > span {
-        display: inline-block !important;
-        will-change: transform;
-        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+      #viewer-modal-body:not(:has(.tng-ios-music-card)):not(
+          :has(img.chat-img)
+        ):not(:has(video)) {
+        border-radius: 28px !important;
+        overflow: hidden !important;
       }
-
-      /* 3. Tinh chỉnh tâm lún: Icon lún ở giữa, Chữ lún từ lề trái */
-      .acc-row-btn > span:first-child {
-        transform-origin: center center !important;
+      #viewer-modal-body:not(:has(.tng-ios-music-card)) > div {
+        border-radius: 28px !important;
+        box-sizing: border-box !important;
       }
-      .acc-row-btn > span:last-child {
-        transform-origin: left center !important;
-      }
-
-      /* 4. Hiệu ứng HOVER: Lướt chuột vào lún nhẹ mượt mà */
-      @media (hover: hover) {
-        .acc-row-btn:hover > span {
-          transform: scale(0.965) !important;
+      @media (max-width: 768px) {
+        .media-viewer-content,
+        #viewer-modal-body:not(:has(.tng-ios-music-card)):not(
+            :has(img.chat-img)
+          ):not(:has(video)),
+        #viewer-modal-body:not(:has(.tng-ios-music-card)) > div {
+          border-radius: 24px !important;
         }
       }
-
-      /* 5. Hiệu ứng ACTIVE: Nhấn giữ bóp lún sâu chớp nhoáng */
-      .acc-row-btn:active > span {
-        transform: scale(0.88) !important;
-        transition-duration: 0.05s !important;
-      }
-
-      /* 6. Chớp nền xám khi nhấn (Vỏ ngoài) */
-      .acc-row-btn:active {
-        background-color: rgba(255, 255, 255, 0.08) !important;
-      }
-      [data-theme="light"] .acc-row-btn:active {
-        background-color: rgba(0, 0, 0, 0.06) !important;
-      }
     </style>
+
+    <script>
+      // =========================================================================
+      // BỘ GỌI AI TẠO NỘI DUNG BÁO CÁO & LỘ TRÌNH HỌC (GIỚI HẠN KÝ TỰ + DỰ PHÒNG)
+      // =========================================================================
+      (function () {
+        function clampLine(str, maxChars) {
+          maxChars = maxChars || 95;
+          if (!str) return "";
+          let clean = String(str)
+            .split("**")
+            .join("")
+            .replace(/^[•\-\d\.\(\)\s]+/, "")
+            .trim();
+          if (clean.length <= maxChars) return clean;
+          let sliced = clean.slice(0, maxChars);
+          let lastSpace = sliced.lastIndexOf(" ");
+          if (lastSpace > maxChars * 0.6) sliced = sliced.slice(0, lastSpace);
+          return sliced.replace(/[.,;:\-\s]+$/, "") + "...";
+        }
+
+        async function queryInternalAIs(promptText) {
+          // 1. Ưu tiên gọi các AI có sẵn trong file code (askGemini: Gemini / Groq / OpenRouter...)
+          if (typeof window.askGemini === "function") {
+            try {
+              let res = await Promise.race([
+                window.askGemini(promptText, []),
+                new Promise(function (resolve) {
+                  setTimeout(function () {
+                    resolve(null);
+                  }, 9000);
+                }),
+              ]);
+              if (res && typeof res === "string" && res.trim().length > 15) {
+                return res.trim();
+              }
+            } catch (e) {}
+          }
+
+          // 2. Luồng AI dự phòng nếu các API trong file bị giới hạn
+          try {
+            let resp = await fetch("https://text.pollinations.ai/openai", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                model: "openai",
+                messages: [
+                  {
+                    role: "system",
+                    content:
+                      "Bạn là trợ lý học thuật TNG AI. Trả lời bằng tiếng Việt thật ngắn gọn, súc tích, đúng định dạng yêu cầu.",
+                  },
+                  { role: "user", content: promptText },
+                ],
+                temperature: 0.5,
+              }),
+            });
+            if (resp.ok) {
+              let data = await resp.json();
+              let text =
+                data &&
+                data.choices &&
+                data.choices[0] &&
+                data.choices[0].message
+                  ? data.choices[0].message.content
+                  : typeof data === "string"
+                    ? data
+                    : "";
+              if (text && text.trim().length > 15) return text.trim();
+            }
+          } catch (e) {}
+
+          return null;
+        }
+
+        // Tạo 3 ý Báo cáo (Deep Research) theo bố cục mẫu & giới hạn ký tự
+        window.tngBuildReportPoints = async function (topic) {
+          const cleanTopic = String(topic || "chủ đề này")
+            .replace(/^(báo cáo|nghiên cứu|tìm hiểu)\s*[:\-]?\s*/i, "")
+            .trim();
+
+          const defaultPoints = [
+            "(1) Thu thập số liệu thống kê mới nhất về chủ đề này.",
+            "(2) Phân tích các phương thức hoạt động và xu hướng thị trường.",
+            "(3) Đề xuất giải pháp và định hướng tương lai.",
+          ];
+
+          const prompt =
+            'Hãy viết báo cáo tóm tắt về chủ đề "' +
+            cleanTopic +
+            '" gồm ĐÚNG 3 dòng theo bố cục sau (mỗi dòng tối đa 85 ký tự, tổng 3 dòng dưới 260 ký tự, không giải thích thêm):\n' +
+            "(1) [Số liệu thống kê hoặc dữ kiện cốt lõi quan trọng nhất về " +
+            cleanTopic +
+            "]\n" +
+            "(2) [Phân tích nguyên lý hoạt động, bản chất hoặc xu hướng chính của " +
+            cleanTopic +
+            "]\n" +
+            "(3) [Đề xuất giải pháp ứng dụng thực tiễn và định hướng tương lai cho " +
+            cleanTopic +
+            "]";
+
+          const aiRaw = await queryInternalAIs(prompt);
+          if (!aiRaw) return defaultPoints;
+
+          const lines = aiRaw
+            .split(/\r?\n/)
+            .map(function (l) {
+              return l.trim();
+            })
+            .filter(function (l) {
+              return l.length > 8;
+            });
+
+          let p1 =
+            lines.find(function (l) {
+              return /^[•\-]?\s*\(?1[\)\.]/.test(l);
+            }) || lines[0];
+          let p2 =
+            lines.find(function (l) {
+              return /^[•\-]?\s*\(?2[\)\.]/.test(l);
+            }) || lines[1];
+          let p3 =
+            lines.find(function (l) {
+              return /^[•\-]?\s*\(?3[\)\.]/.test(l);
+            }) || lines[2];
+
+          if (!p1 || !p2 || !p3) return defaultPoints;
+
+          return [
+            "(1) " + clampLine(p1, 90),
+            "(2) " + clampLine(p2, 90),
+            "(3) " + clampLine(p3, 90),
+          ];
+        };
+
+        // Tạo 3 giai đoạn Lộ trình học (Học có hướng dẫn) theo bố cục mẫu & giới hạn ký tự
+        window.tngBuildLearningStages = async function (topic) {
+          const cleanTopic = String(topic || "chủ đề này")
+            .replace(/^(lộ trình học|học|tìm hiểu)\s*[:\-]?\s*/i, "")
+            .trim();
+
+          const defaultStages = [
+            "1. Giai đoạn Nhập môn: Khái niệm cốt lõi, bối cảnh lịch sử và lý thuyết nền tảng.",
+            "2. Giai đoạn Thực hành: Áp dụng kiến thức vào thực tế, giải quyết bài toán.",
+            "3. Giai đoạn Nâng cao: Nghiên cứu chuyên sâu, mở rộng vấn đề và tổng kết.",
+          ];
+
+          const prompt =
+            'Hãy thiết kế lộ trình học "' +
+            cleanTopic +
+            '" gồm ĐÚNG 3 dòng theo đúng mẫu sau (phần nội dung sau dấu hai chấm mỗi dòng tối đa 75 ký tự, tổng cả 3 dòng dưới 250 ký tự, không viết thêm bất kỳ câu nào khác):\n' +
+            "1. Giai đoạn Nhập môn: [Các khái niệm, kiến thức nền tảng cần nắm về " +
+            cleanTopic +
+            "]\n" +
+            "2. Giai đoạn Thực hành: [Cách vận dụng, bài tập hoặc kỹ năng thực tế của " +
+            cleanTopic +
+            "]\n" +
+            "3. Giai đoạn Nâng cao: [Chuyên đề chuyên sâu, tối ưu hóa và mở rộng về " +
+            cleanTopic +
+            "]";
+
+          const aiRaw = await queryInternalAIs(prompt);
+          if (!aiRaw) return defaultStages;
+
+          const lines = aiRaw
+            .split(/\r?\n/)
+            .map(function (l) {
+              return l.trim();
+            })
+            .filter(function (l) {
+              return l.length > 10;
+            });
+
+          function extractStageBody(line, fallbackBody) {
+            if (!line) return fallbackBody;
+            let parts = line.split(":");
+            let body =
+              parts.length > 1 ? parts.slice(1).join(":").trim() : line;
+            return clampLine(body, 80) || fallbackBody;
+          }
+
+          let s1 =
+            lines.find(function (l) {
+              return /1|nhập môn/i.test(l);
+            }) || lines[0];
+          let s2 =
+            lines.find(function (l) {
+              return /2|thực hành/i.test(l);
+            }) || lines[1];
+          let s3 =
+            lines.find(function (l) {
+              return /3|nâng cao/i.test(l);
+            }) || lines[2];
+
+          if (!s1 || !s2 || !s3) return defaultStages;
+
+          return [
+            "1. Giai đoạn Nhập môn: " +
+              extractStageBody(
+                s1,
+                "Khái niệm cốt lõi, bối cảnh lịch sử và lý thuyết nền tảng.",
+              ),
+            "2. Giai đoạn Thực hành: " +
+              extractStageBody(
+                s2,
+                "Áp dụng kiến thức vào thực tế, giải quyết bài toán.",
+              ),
+            "3. Giai đoạn Nâng cao: " +
+              extractStageBody(
+                s3,
+                "Nghiên cứu chuyên sâu, mở rộng vấn đề và tổng kết.",
+              ),
+          ];
+        };
+
+        // Tự động nâng cấp nội dung mặc định sang nội dung AI khi tạo mới hoặc mở xem
+        window.tngUpgradeDefaultDocWithAI = async function (
+          fileObj,
+          domContainer,
+        ) {
+          if (!fileObj || fileObj._aiUpgraded) return;
+
+          const isDefaultReport =
+            typeof fileObj.data === "string" &&
+            fileObj.data.indexOf(
+              "Thu thập số liệu thống kê mới nhất về chủ đề này",
+            ) !== -1;
+          const isDefaultLearn =
+            typeof fileObj.data === "string" &&
+            fileObj.data.indexOf(
+              "Khái niệm cốt lõi, bối cảnh lịch sử và lý thuyết nền tảng",
+            ) !== -1;
+
+          if (!isDefaultReport && !isDefaultLearn) return;
+          fileObj._aiUpgraded = true;
+
+          let rawTopic = String(fileObj.name || "")
+            .replace(/^(📌\s*)?(Báo cáo|Lộ trình học)\s*:\s*/i, "")
+            .trim();
+          if (!rawTopic) rawTopic = "chủ đề này";
+
+          if (isDefaultReport) {
+            const pts = await window.tngBuildReportPoints(rawTopic);
+            fileObj.data = fileObj.data
+              .replace(
+                /\(1\)\s*Thu thập số liệu thống kê mới nhất về chủ đề này\./g,
+                pts[0],
+              )
+              .replace(
+                /\(2\)\s*Phân tích các phương thức hoạt động và xu hướng thị trường\./g,
+                pts[1],
+              )
+              .replace(
+                /\(3\)\s*Đề xuất giải pháp và định hướng tương lai\./g,
+                pts[2],
+              );
+          } else if (isDefaultLearn) {
+            const stg = await window.tngBuildLearningStages(rawTopic);
+            fileObj.data = fileObj.data
+              .replace(
+                /1\.\s*Giai đoạn Nhập môn:\s*Khái niệm cốt lõi, bối cảnh lịch sử và lý thuyết nền tảng\./g,
+                "<b>1. Giai đoạn Nhập môn:</b> " +
+                  stg[0].replace(/^1\.\s*Giai đoạn Nhập môn:\s*/i, ""),
+              )
+              .replace(
+                /2\.\s*Giai đoạn Thực hành:\s*Áp dụng kiến thức vào thực tế, giải quyết bài toán\./g,
+                "<b>2. Giai đoạn Thực hành:</b> " +
+                  stg[1].replace(/^2\.\s*Giai đoạn Thực hành:\s*/i, ""),
+              )
+              .replace(
+                /3\.\s*Giai đoạn Nâng cao:\s*Nghiên cứu chuyên sâu, mở rộng vấn đề và tổng kết\./g,
+                "<b>3. Giai đoạn Nâng cao:</b> " +
+                  stg[2].replace(/^3\.\s*Giai đoạn Nâng cao:\s*/i, ""),
+              );
+          }
+
+          try {
+            if (typeof safeSaveCurA === "function") safeSaveCurA();
+            else if (typeof accounts !== "undefined") {
+              localStorage.setItem("tng_accounts", JSON.stringify(accounts));
+            }
+          } catch (e) {}
+
+          if (domContainer) {
+            domContainer.innerHTML = fileObj.data;
+          }
+        };
+
+        const origViewMedia = window.viewMediaById;
+        if (typeof origViewMedia === "function") {
+          window.viewMediaById = function (id, e) {
+            const res = origViewMedia.apply(this, arguments);
+            try {
+              let filesArr = (curA && curA.files) || [];
+              let f = filesArr.find(function (x) {
+                return String(x.id) === String(id);
+              });
+              let body = document.getElementById("viewer-modal-body");
+              if (
+                f &&
+                body &&
+                f.type !== "audio" &&
+                f.type !== "image" &&
+                f.type !== "video"
+              ) {
+                window.tngUpgradeDefaultDocWithAI(f, body);
+              }
+            } catch (err) {}
+            return res;
+          };
+        }
+
+        const chatBox = document.getElementById("cb");
+        if (chatBox) {
+          const chatObserver = new MutationObserver(function () {
+            if (curA && Array.isArray(curA.files)) {
+              curA.files.forEach(function (f) {
+                if (!f._aiUpgraded && typeof f.data === "string") {
+                  window.tngUpgradeDefaultDocWithAI(f, null);
+                }
+              });
+            }
+            chatBox.querySelectorAll(".ai-msg").forEach(async function (msgEl) {
+              if (msgEl.dataset.aiDocChecked) return;
+              const htmlText = msgEl.innerHTML || "";
+              if (
+                htmlText.indexOf(
+                  "Thu thập số liệu thống kê mới nhất về chủ đề này",
+                ) !== -1
+              ) {
+                msgEl.dataset.aiDocChecked = "1";
+                let topicMatch =
+                  msgEl.textContent.match(/Báo cáo:\s*([^\n•]+)/i);
+                let topic = topicMatch ? topicMatch[1].trim() : "chủ đề này";
+                const pts = await window.tngBuildReportPoints(topic);
+                msgEl.innerHTML = msgEl.innerHTML
+                  .replace(
+                    /\(1\)\s*Thu thập số liệu thống kê mới nhất về chủ đề này\./g,
+                    pts[0],
+                  )
+                  .replace(
+                    /\(2\)\s*Phân tích các phương thức hoạt động và xu hướng thị trường\./g,
+                    pts[1],
+                  )
+                  .replace(
+                    /\(3\)\s*Đề xuất giải pháp và định hướng tương lai\./g,
+                    pts[2],
+                  );
+              } else if (
+                htmlText.indexOf(
+                  "Khái niệm cốt lõi, bối cảnh lịch sử và lý thuyết nền tảng",
+                ) !== -1
+              ) {
+                msgEl.dataset.aiDocChecked = "1";
+                let topicMatch = msgEl.textContent.match(
+                  /Lộ trình học:\s*([^\n]+?)(?:Rất vui|$)/i,
+                );
+                let topic = topicMatch ? topicMatch[1].trim() : "chủ đề này";
+                const stg = await window.tngBuildLearningStages(topic);
+                msgEl.innerHTML = msgEl.innerHTML
+                  .replace(
+                    /1\.\s*Giai đoạn Nhập môn:\s*Khái niệm cốt lõi, bối cảnh lịch sử và lý thuyết nền tảng\./g,
+                    stg[0],
+                  )
+                  .replace(
+                    /2\.\s*Giai đoạn Thực hành:\s*Áp dụng kiến thức vào thực tế, giải quyết bài toán\./g,
+                    stg[1],
+                  )
+                  .replace(
+                    /3\.\s*Giai đoạn Nâng cao:\s*Nghiên cứu chuyên sâu, mở rộng vấn đề và tổng kết\./g,
+                    stg[2],
+                  );
+              }
+            });
+          });
+          chatObserver.observe(chatBox, { childList: true, subtree: true });
+        }
+      })();
+    </script>
   </body>
 </html>
