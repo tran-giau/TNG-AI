@@ -13611,7 +13611,6 @@
               return;
             btn.dataset.playingState = playing ? "1" : "0";
 
-            // Tọa độ đa giác Play (tại góc 0deg) và Pause (tại góc +-90deg)
             const PLAY_P1 = [6.5, 5, 19, 12, 19, 12, 6.5, 12.25];
             const PLAY_P2 = [6.5, 11.75, 19, 12, 19, 12, 6.5, 19];
             const PAUSE_P1 = [5, 6, 19, 6, 19, 9.6, 5, 9.6];
@@ -13622,9 +13621,6 @@
 
             if (window._tngMorphRaf) cancelAnimationFrame(window._tngMorphRaf);
 
-            // Luôn xoay sang phải từ trên đầu xoay qua (+90 độ cùng chiều kim đồng hồ):
-            // - Khi chuyển sang Play: từ -90deg (đỉnh 12h) xoay sang phải về 0deg (hướng 3h)
-            // - Khi chuyển sang Pause: từ 0deg xoay sang phải về +90deg
             let startAngle = playing ? 0 : -90;
             let endAngle = playing ? 90 : 0;
             let from1 = playing ? PLAY_P1 : PAUSE_P1;
@@ -13635,7 +13631,6 @@
             let startTime = performance.now();
             let duration = 480;
 
-            // Đường cong đàn hồi mượt kiểu iOS
             function easeOutBack(t) {
               const c1 = 1.35;
               const c3 = c1 + 1;
@@ -13815,18 +13810,18 @@
                 max-height: none !important;
               }
 
-              /* 3. KHUNG KÍNH LIQUID GLASS ĐỒNG BỘ TỶ LỆ 1 : 1.35 */
+              /* 3. KHUNG KÍNH LIQUID GLASS ĐỒNG BỘ TỶ LỆ 1 : 1.38 TRÊN CẢ PC & MOBILE */
               .tng-ios-music-card {
                 position: relative !important;
                 height: 90vh !important;
                 height: 90dvh !important;
                 max-height: 90dvh !important;
-                width: calc(90vh / 1.35) !important;
-                width: calc(90dvh / 1.35) !important;
+                width: calc(90vh / 1.38) !important;
+                width: calc(90dvh / 1.38) !important;
                 min-width: 0 !important;
                 max-width: 92vw !important;
-                aspect-ratio: 1 / 1.35 !important;
-                border-radius: clamp(38px, 4.8vh, 52px) !important;
+                aspect-ratio: 1 / 1.38 !important;
+                border-radius: clamp(36px, 4.6vh, 50px) !important;
                 padding: 0 !important;
                 box-sizing: border-box !important;
                 overflow: hidden !important;
@@ -13859,13 +13854,13 @@
                 z-index: 6;
               }
 
-              /* 4. HỆ THỐNG HÒA TAN ẢNH 2 LỚP (KHÔNG LỘ VIỀN DƯỚI) */
+              /* 4. HỆ THỐNG HÒA TAN ẢNH 2 LỚP THEO TỶ LỆ 1:1.38 */
               .tng-mp-hero {
                 position: absolute;
                 top: 0;
                 left: 0;
                 right: 0;
-                height: 71%;
+                height: 72%;
                 overflow: hidden;
                 pointer-events: none;
                 z-index: 1;
@@ -13883,20 +13878,20 @@
                 -webkit-mask-image: linear-gradient(
                   180deg,
                   transparent 24%,
-                  rgba(0, 0, 0, 0.85) 50%,
-                  rgba(0, 0, 0, 0.52) 68%,
-                  rgba(0, 0, 0, 0.16) 83%,
-                  rgba(0, 0, 0, 0.03) 92%,
-                  transparent 98%
+                  rgba(0, 0, 0, 0.85) 51%,
+                  rgba(0, 0, 0, 0.52) 69%,
+                  rgba(0, 0, 0, 0.16) 84%,
+                  rgba(0, 0, 0, 0.03) 93%,
+                  transparent 99%
                 );
                 mask-image: linear-gradient(
                   180deg,
                   transparent 24%,
-                  rgba(0, 0, 0, 0.85) 50%,
-                  rgba(0, 0, 0, 0.52) 68%,
-                  rgba(0, 0, 0, 0.16) 83%,
-                  rgba(0, 0, 0, 0.03) 92%,
-                  transparent 98%
+                  rgba(0, 0, 0, 0.85) 51%,
+                  rgba(0, 0, 0, 0.52) 69%,
+                  rgba(0, 0, 0, 0.16) 84%,
+                  rgba(0, 0, 0, 0.03) 93%,
+                  transparent 99%
                 );
               }
               .tng-mp-artwork-img {
@@ -13909,20 +13904,20 @@
                 -webkit-mask-image: linear-gradient(
                   180deg,
                   #000000 0%,
-                  #000000 44%,
-                  rgba(0, 0, 0, 0.82) 56%,
-                  rgba(0, 0, 0, 0.36) 68%,
-                  rgba(0, 0, 0, 0.07) 77%,
-                  transparent 84%
+                  #000000 45%,
+                  rgba(0, 0, 0, 0.82) 57%,
+                  rgba(0, 0, 0, 0.36) 69%,
+                  rgba(0, 0, 0, 0.07) 78%,
+                  transparent 85%
                 );
                 mask-image: linear-gradient(
                   180deg,
                   #000000 0%,
-                  #000000 44%,
-                  rgba(0, 0, 0, 0.82) 56%,
-                  rgba(0, 0, 0, 0.36) 68%,
-                  rgba(0, 0, 0, 0.07) 77%,
-                  transparent 84%
+                  #000000 45%,
+                  rgba(0, 0, 0, 0.82) 57%,
+                  rgba(0, 0, 0, 0.36) 69%,
+                  rgba(0, 0, 0, 0.07) 78%,
+                  transparent 85%
                 );
               }
 
@@ -13930,8 +13925,8 @@
                 position: absolute;
                 top: clamp(20px, 2.8vh, 28px);
                 right: clamp(20px, 2.8vh, 28px);
-                width: clamp(26px, 3.4vh, 34px);
-                height: clamp(26px, 3.4vh, 34px);
+                width: clamp(25px, 3.3vh, 33px);
+                height: clamp(25px, 3.3vh, 33px);
                 color: #ffffff;
                 opacity: 0.96;
                 display: flex;
@@ -13945,18 +13940,18 @@
                 height: 100%;
               }
 
-              /* 5. PHẦN THÂN DƯỚI */
+              /* 5. PHẦN THÂN DƯỚI: GIỮ NGUYÊN KHOẢNG CÁCH GẦN NHAU GIỮA CÁC PHẦN */
               .tng-mp-body {
                 position: relative;
                 z-index: 3;
                 width: 100%;
-                padding: 0 4.2vh 4.2vh 4.2vh;
+                padding: 0 4vh 4vh 4vh;
                 box-sizing: border-box;
                 display: flex;
                 flex-direction: column;
                 justify-content: flex-end;
                 align-items: center;
-                gap: 2.2vh;
+                gap: 2.05vh;
               }
 
               /* 6. TÊN BÀI HÁT & CHẠY CHỮ TỰ ĐỘNG KHI DÀI */
@@ -13964,7 +13959,7 @@
                 width: 100%;
                 text-align: center;
                 overflow: hidden;
-                margin-bottom: 0.3vh;
+                margin-bottom: 0.25vh;
               }
               .tng-mp-title-mask {
                 width: 100%;
@@ -13991,7 +13986,7 @@
               }
               .tng-mp-title {
                 display: inline-block;
-                font-size: clamp(22px, 3.1vh, 30px) !important;
+                font-size: clamp(21px, 2.95vh, 29px) !important;
                 font-weight: 700;
                 color: #ffffff;
                 letter-spacing: -0.3px;
@@ -14009,10 +14004,10 @@
                 }
               }
               .tng-mp-subtitle {
-                font-size: clamp(14.5px, 1.95vh, 19px) !important;
+                font-size: clamp(14px, 1.9vh, 18.5px) !important;
                 font-weight: 500;
                 color: rgba(255, 255, 255, 0.72);
-                margin-top: 0.4vh;
+                margin-top: 0.35vh;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -14024,12 +14019,12 @@
                 width: 100%;
                 display: flex;
                 flex-direction: column;
-                gap: 0.45vh;
+                gap: 0.42vh;
               }
               .tng-mp-bar-area,
               .tng-mp-vol-area {
                 width: 100%;
-                height: 2.4vh;
+                height: 2.35vh;
                 min-height: 22px;
                 display: flex;
                 align-items: center;
@@ -14039,7 +14034,7 @@
               }
               .tng-mp-track {
                 width: 100%;
-                height: clamp(5px, 0.65vh, 6.5px);
+                height: clamp(5px, 0.63vh, 6.5px);
                 background: rgba(255, 255, 255, 0.24);
                 border-radius: 99px;
                 position: relative;
@@ -14077,7 +14072,7 @@
                 align-items: center;
               }
               .tng-mp-time {
-                font-size: clamp(12px, 1.55vh, 15px) !important;
+                font-size: clamp(11.5px, 1.52vh, 15px) !important;
                 font-weight: 500;
                 color: rgba(255, 255, 255, 0.5);
                 font-variant-numeric: tabular-nums;
@@ -14086,7 +14081,7 @@
               /* 8. THANH ÂM LƯỢNG & NÚT KÉO TRÒN */
               .tng-mp-vol-track {
                 width: 100%;
-                height: clamp(5px, 0.65vh, 6.5px);
+                height: clamp(5px, 0.63vh, 6.5px);
                 background: rgba(255, 255, 255, 0.24);
                 border-radius: 99px;
                 position: relative;
@@ -14102,14 +14097,14 @@
               .tng-mp-vol-thumb {
                 position: absolute;
                 top: 50%;
-                width: clamp(14px, 1.85vh, 18px);
-                height: clamp(14px, 1.85vh, 18px);
+                width: clamp(13px, 1.8vh, 17px);
+                height: clamp(13px, 1.8vh, 17px);
                 background: #ffffff;
                 border-radius: 50%;
                 transform: translate(-50%, -50%) scale(0.25);
                 opacity: 0;
                 box-shadow:
-                  0 0 0 11px rgba(255, 255, 255, 0.25),
+                  0 0 0 10px rgba(255, 255, 255, 0.25),
                   0 2px 6px rgba(0, 0, 0, 0.3);
                 pointer-events: none;
                 transition:
@@ -14126,7 +14121,7 @@
                 transform: translate(-50%, -50%) scale(1);
               }
 
-              /* 9. CỤM 5 NÚT ĐIỀU KHIỂN: KHÓA GAP: 0 ĐỂ KHÔNG BAO GIỜ TRÀN VIỀN PHẢI */
+              /* 9. CỤM 5 NÚT ĐIỀU KHIỂN: KHÓA GAP: 0 ĐỂ DÀN ĐỀU TRONG KHUNG */
               .tng-mp-controls {
                 width: 100% !important;
                 display: flex !important;
@@ -14135,14 +14130,14 @@
                 gap: 0 !important;
                 padding: 0 2px !important;
                 box-sizing: border-box !important;
-                margin: 0.2vh 0 !important;
+                margin: 0.18vh 0 !important;
               }
               .tng-mp-ctrl-btn {
                 background: transparent !important;
                 border: none !important;
                 color: #ffffff !important;
-                width: clamp(42px, 5.5vh, 52px);
-                height: clamp(42px, 5.5vh, 52px);
+                width: clamp(41px, 5.4vh, 52px);
+                height: clamp(41px, 5.4vh, 52px);
                 flex-shrink: 0;
                 padding: 0;
                 cursor: pointer;
@@ -14170,8 +14165,8 @@
               .tng-mp-sub-btn svg {
                 fill: none !important;
                 stroke: #ffffff;
-                width: clamp(21px, 2.8vh, 26px);
-                height: clamp(21px, 2.8vh, 26px);
+                width: clamp(20px, 2.75vh, 26px);
+                height: clamp(20px, 2.75vh, 26px);
                 transition: all 0.22s ease;
               }
               .tng-mp-sub-btn.liked {
@@ -14186,12 +14181,12 @@
                 opacity: 1;
               }
               .tng-mp-skip-svg {
-                width: clamp(25px, 3.3vh, 32px);
-                height: clamp(25px, 3.3vh, 32px);
+                width: clamp(24px, 3.25vh, 31px);
+                height: clamp(24px, 3.25vh, 31px);
               }
               .tng-mp-play-svg {
-                width: clamp(32px, 4.2vh, 40px);
-                height: clamp(32px, 4.2vh, 40px);
+                width: clamp(31px, 4.1vh, 39px);
+                height: clamp(31px, 4.1vh, 39px);
                 transform-origin: 50% 50%;
                 will-change: transform;
               }
@@ -14200,8 +14195,8 @@
                 width: 100%;
                 display: flex;
                 align-items: center;
-                gap: 1.6vh;
-                margin-top: 0.2vh !important;
+                gap: 1.55vh;
+                margin-top: 0.18vh !important;
                 margin-bottom: 0 !important;
               }
               .tng-mp-vol-icon {
@@ -14212,24 +14207,24 @@
                 flex-shrink: 0;
               }
               .tng-mp-vol-icon svg {
-                width: clamp(21px, 2.7vh, 26px);
-                height: clamp(21px, 2.7vh, 26px);
+                width: clamp(20px, 2.65vh, 26px);
+                height: clamp(20px, 2.65vh, 26px);
               }
 
-              /* 10. ĐIỆN THOẠI (MOBILE): KHÓA CỨNG TỶ LỆ CHIỀU CAO 1 : 1.35 BẰNG VỚI PC & CHỐNG TRÀN NÚT */
+              /* 10. ĐIỆN THOẠI (MOBILE): KHÓA CỨNG TỶ LỆ 1 : 1.38 & GIỮ KHOẢNG CÁCH GẦN NHAU Ở ĐÁY */
               @media (max-width: 768px) {
                 .tng-ios-music-card {
-                  width: min(88vw, 380px) !important;
+                  width: min(88vw, 375px, calc(88dvh / 1.38)) !important;
                   min-width: 0 !important;
-                  max-width: 380px !important;
-                  height: calc(min(88vw, 380px) * 1.35) !important;
-                  max-height: 86dvh !important;
-                  aspect-ratio: 1 / 1.35 !important;
+                  max-width: 375px !important;
+                  height: calc(min(88vw, 375px, calc(88dvh / 1.38)) * 1.38) !important;
+                  max-height: 88dvh !important;
+                  aspect-ratio: 1 / 1.38 !important;
                   border-radius: 38px !important;
                   padding: 0 !important;
                 }
                 .tng-mp-hero {
-                  height: 71%;
+                  height: 72%;
                 }
                 .tng-mp-logo-wrap {
                   top: 18px;
@@ -14238,8 +14233,8 @@
                   height: 24px;
                 }
                 .tng-mp-body {
-                  padding: 0 22px 24px 22px;
-                  gap: 15px;
+                  padding: 0 22px 23px 22px;
+                  gap: 14px;
                 }
                 .tng-mp-title {
                   font-size: 20px !important;
