@@ -14146,12 +14146,21 @@
                 justify-content: center;
                 border-radius: 50% !important;
                 box-shadow: none !important;
+                will-change: transform, background-color, box-shadow;
                 transition:
-                  transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
-                  background-color 0.18s ease,
-                  box-shadow 0.18s ease !important;
+                  transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  background-color 0.2s ease,
+                  box-shadow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
               }
-              .tng-mp-ctrl-btn:active {
+              @media (hover: hover) {
+                .tng-mp-ctrl-btn:hover:not([disabled]) {
+                  transform: scale(0.96) !important;
+                }
+              }
+              .tng-mp-ctrl-btn:active:not([disabled]) {
+                transition-duration: 0.05s !important;
+                transform: scale(0.88) !important;
+                opacity: 0.8 !important;
                 background: rgba(255, 255, 255, 0.16) !important;
                 box-shadow: 0 0 18px rgba(255, 255, 255, 0.2) !important;
               }
@@ -24354,75 +24363,1548 @@
       }
     </style>
     <style>
-      /* Bo cong 4 góc 28px tinh tế cho khung Báo cáo & Lộ trình học */
+      /* ========================================================================= */
+      /* 1. BO CONG 4 GÓC (38PX) & TRÌNH BÀY BÁO CÁO, LỘ TRÌNH HỌC ĐẦY ĐỦ, ĐẸP MẮT */
+      /* ========================================================================= */
       .media-viewer-content {
-        border-radius: 28px !important;
+        border-radius: 38px !important;
         overflow: hidden !important;
         box-shadow:
-          0 25px 60px rgba(0, 0, 0, 0.55),
-          inset 0 1px 1px rgba(255, 255, 255, 0.14) !important;
-        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+          0 28px 65px rgba(0, 0, 0, 0.6),
+          inset 0 1px 1.5px rgba(255, 255, 255, 0.18) !important;
+        border: 1px solid rgba(255, 255, 255, 0.14) !important;
       }
+
       #viewer-modal-body:not(:has(.tng-ios-music-card)):not(
           :has(img.chat-img)
-        ):not(:has(video)) {
-        border-radius: 28px !important;
+        ):not(:has(video)):not(:has(.slide-page)) {
+        border-radius: 38px !important;
         overflow: hidden !important;
+        width: min(94vw, 760px) !important;
+        max-width: 94vw !important;
       }
-      #viewer-modal-body:not(:has(.tng-ios-music-card)) > div {
-        border-radius: 28px !important;
+
+      #viewer-modal-body:not(:has(.tng-ios-music-card)):not(:has(.slide-page))
+        > div {
+        border-radius: 38px !important;
         box-sizing: border-box !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        max-height: 84dvh !important;
+        overflow-y: auto !important;
+        padding: 28px 26px !important;
       }
+
+      #viewer-modal-body:not(:has(.tng-ios-music-card)) ul,
+      #viewer-modal-body:not(:has(.tng-ios-music-card)) ol,
+      .ai-msg ul {
+        padding-left: 18px !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+      }
+
+      #viewer-modal-body:not(:has(.tng-ios-music-card)) li {
+        margin-bottom: 12px !important;
+        line-height: 1.65 !important;
+        color: var(--text-main);
+        text-align: left;
+      }
+
+      #viewer-modal-body:not(:has(.tng-ios-music-card)) li:last-child {
+        margin-bottom: 0 !important;
+      }
+
+      .tng-doc-lead {
+        font-size: 14.5px;
+        color: var(--text-sub);
+        margin-bottom: 16px;
+        line-height: 1.6;
+        text-align: left;
+      }
+
+      .tng-report-list {
+        list-style: none !important;
+        padding-left: 0 !important;
+        margin: 0 !important;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .tng-report-sec {
+        background: rgba(255, 255, 255, 0.035);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        border-left: 3.5px solid var(--btn-blue);
+        border-radius: 14px;
+        padding: 12px 16px;
+        line-height: 1.62;
+        font-size: 14.5px;
+        color: var(--text-main);
+        text-align: left;
+      }
+
+      .tng-report-sec-title {
+        display: block;
+        font-weight: 600;
+        color: var(--btn-blue);
+        margin-bottom: 4px;
+        font-size: 15px;
+      }
+
+      .tng-learn-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin: 14px 0 0 0;
+      }
+
+      .tng-learn-stage {
+        background: rgba(255, 255, 255, 0.035);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        border-radius: 14px;
+        padding: 12px 16px;
+        line-height: 1.6;
+        font-size: 14.5px;
+        color: var(--text-main);
+        text-align: left;
+      }
+
+      .tng-learn-stage-head {
+        display: block;
+        font-weight: 600;
+        color: #ffffff;
+        font-size: 15px;
+        margin-bottom: 4px;
+      }
+
+      [data-theme="light"] .tng-learn-stage-head {
+        color: #102a43;
+      }
+
+      .tng-learn-stage-goal {
+        display: block;
+        margin-top: 6px;
+        font-size: 13px;
+        color: var(--btn-blue);
+        font-weight: 500;
+      }
+
+      #viewer-modal-body .ai-actions-bar,
+      #viewer-modal-body button[onclick*="viewMediaById"] {
+        display: none !important;
+      }
+
+      /* ========================================================================= */
+      /* 2. SLIDE CANVAS 16:9 FULL MÀN HÌNH (20 SLIDES) & 10 GIAO DIỆN ĐỘC LẬP     */
+      /* ========================================================================= */
+      #viewer-modal-body:has(.slide-page) {
+        border-radius: 36px !important;
+        overflow: hidden !important;
+        width: min(94vw, calc(88dvh * 16 / 9)) !important;
+        max-width: 94vw !important;
+        max-height: 88dvh !important;
+        aspect-ratio: 16 / 9 !important;
+        height: auto !important;
+        background: transparent !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        box-shadow:
+          0 32px 80px rgba(0, 0, 0, 0.72),
+          inset 0 1px 1.5px rgba(255, 255, 255, 0.22) !important;
+      }
+
+      #viewer-modal-body:has(.slide-page) > div,
+      .tng-modern-deck {
+        position: relative !important;
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        max-width: 100% !important;
+        aspect-ratio: 16 / 9 !important;
+        border-radius: inherit !important;
+        overflow: hidden !important;
+        background: var(
+          --deck-bg,
+          linear-gradient(145deg, #131726 0%, #0b0d16 100%)
+        ) !important;
+        color: var(--deck-text, #ffffff) !important;
+        box-sizing: border-box !important;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+
+      .tng-deck-decor-1 {
+        position: absolute;
+        width: 42%;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        top: -18%;
+        right: -10%;
+        background: var(--deck-orb-1, rgba(66, 133, 244, 0.18));
+        filter: blur(55px);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .tng-deck-decor-2 {
+        position: absolute;
+        width: 38%;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        bottom: -18%;
+        left: -8%;
+        background: var(--deck-orb-2, rgba(155, 114, 203, 0.16));
+        filter: blur(55px);
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      #viewer-modal-body .slide-page,
+      .tng-modern-deck .slide-page {
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 0 !important;
+        padding: clamp(18px, 3.6%, 40px) clamp(22px, 4.6%, 54px)
+          clamp(48px, 8.2%, 70px) clamp(22px, 4.6%, 54px) !important;
+        box-sizing: border-box !important;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start !important;
+        align-items: stretch;
+        position: relative;
+        z-index: 2;
+        overflow: hidden !important;
+        background: transparent !important;
+        color: var(--deck-text, #ffffff) !important;
+        will-change: transform, opacity;
+      }
+
+      @keyframes tngSlideEnterNext {
+        0% {
+          opacity: 0;
+          transform: translate3d(42px, 0, 0) scale(0.985);
+        }
+        100% {
+          opacity: 1;
+          transform: translate3d(0, 0, 0) scale(1);
+        }
+      }
+
+      @keyframes tngSlideEnterPrev {
+        0% {
+          opacity: 0;
+          transform: translate3d(-42px, 0, 0) scale(0.985);
+        }
+        100% {
+          opacity: 1;
+          transform: translate3d(0, 0, 0) scale(1);
+        }
+      }
+
+      @keyframes tngCardCascade {
+        0% {
+          opacity: 0;
+          transform: translate3d(0, 12px, 0);
+        }
+        100% {
+          opacity: 1;
+          transform: translate3d(0, 0, 0);
+        }
+      }
+
+      .slide-page.tng-anim-next {
+        animation: tngSlideEnterNext 0.46s cubic-bezier(0.22, 1, 0.36, 1)
+          forwards;
+      }
+
+      .slide-page.tng-anim-prev {
+        animation: tngSlideEnterPrev 0.46s cubic-bezier(0.22, 1, 0.36, 1)
+          forwards;
+      }
+
+      .slide-page.tng-anim-next .tng-slide-card-item,
+      .slide-page.tng-anim-prev .tng-slide-card-item {
+        opacity: 0;
+        animation: tngCardCascade 0.42s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      }
+
+      .slide-page .tng-slide-card-item:nth-child(1) {
+        animation-delay: 0.04s;
+      }
+      .slide-page .tng-slide-card-item:nth-child(2) {
+        animation-delay: 0.09s;
+      }
+      .slide-page .tng-slide-card-item:nth-child(3) {
+        animation-delay: 0.14s;
+      }
+      .slide-page .tng-slide-card-item:nth-child(4) {
+        animation-delay: 0.19s;
+      }
+      .slide-page .tng-slide-card-item:nth-child(5) {
+        animation-delay: 0.24s;
+      }
+
+      .tng-slide-top-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        margin-bottom: clamp(8px, 1.5vh, 15px);
+        flex-shrink: 0;
+      }
+
+      .tng-slide-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 14px;
+        border-radius: var(--deck-badge-radius, 99px);
+        font-size: clamp(10.5px, 1.15vw, 13px);
+        font-weight: 700;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        color: var(--deck-accent, #a8c7fa);
+        background: var(--deck-badge-bg, rgba(168, 199, 250, 0.14));
+        border: 1px solid var(--deck-badge-border, rgba(168, 199, 250, 0.3));
+      }
+
+      .tng-slide-brand {
+        font-size: clamp(11px, 1.15vw, 13.5px);
+        font-weight: 600;
+        color: var(--deck-subtext, rgba(255, 255, 255, 0.52));
+        letter-spacing: 0.3px;
+      }
+
+      .tng-slide-cover-box {
+        display: flex;
+        flex-direction: column;
+        align-items: var(--deck-cover-align, center);
+        justify-content: center;
+        text-align: var(--deck-cover-text-align, center);
+        flex: 1;
+        width: 100%;
+        padding: 0 5%;
+        box-sizing: border-box;
+      }
+
+      .tng-slide-cover-pill {
+        padding: 6px 16px;
+        border-radius: var(--deck-badge-radius, 99px);
+        font-size: clamp(10.5px, 1.2vw, 13px);
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--deck-accent, #c2e7ff);
+        background: var(--deck-badge-bg, rgba(66, 133, 244, 0.2));
+        border: 1px solid var(--deck-badge-border, rgba(168, 199, 250, 0.35));
+        margin-bottom: clamp(12px, 2.2vh, 20px);
+      }
+
+      .tng-slide-cover-title {
+        font-size: clamp(24px, 4.3vw, 48px) !important;
+        font-weight: 800 !important;
+        line-height: 1.2 !important;
+        letter-spacing: -0.5px;
+        margin: 0 0 clamp(12px, 2vh, 18px) 0 !important;
+        color: var(--deck-title-solid, #ffffff) !important;
+        background: var(
+          --deck-title-grad,
+          linear-gradient(135deg, #ffffff 20%, #a8c7fa 70%, #d96570 100%)
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: var(--deck-title-fill, transparent);
+        max-width: 94%;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .tng-slide-cover-line {
+        width: clamp(56px, 8vw, 92px);
+        height: 4px;
+        border-radius: 99px;
+        background: var(
+          --deck-line-grad,
+          linear-gradient(90deg, #4285f4, #9b72cb, #d96570)
+        );
+        margin-bottom: clamp(12px, 2vh, 18px);
+      }
+
+      .tng-slide-cover-sub {
+        font-size: clamp(12.5px, 1.5vw, 17px) !important;
+        font-weight: 500 !important;
+        color: var(--deck-subtext, rgba(255, 255, 255, 0.7)) !important;
+        margin: 0 !important;
+      }
+
+      .tng-slide-heading {
+        font-size: clamp(17px, 2.4vw, 28px) !important;
+        font-weight: 700 !important;
+        color: var(--deck-text, #ffffff) !important;
+        margin: 0 0 clamp(10px, 2vh, 20px) 0 !important;
+        padding-bottom: clamp(7px, 1.3vh, 13px) !important;
+        border-bottom: 1.5px solid
+          var(--deck-divider, rgba(255, 255, 255, 0.12)) !important;
+        line-height: 1.25 !important;
+        letter-spacing: -0.3px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        flex-shrink: 0;
+      }
+
+      .tng-slide-cards {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start !important;
+        gap: clamp(7px, 1.3vh, 12px);
+        width: 100%;
+        flex: 0 1 auto;
+      }
+
+      .tng-modern-deck[data-card-layout="bento"]
+        .tng-slide-cards[data-count="4"] {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: clamp(8px, 1.5vh, 14px) !important;
+      }
+
+      .tng-modern-deck[data-card-layout="bento"]
+        .tng-slide-cards[data-count="4"]
+        .tng-slide-card-item {
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        padding: clamp(10px, 1.8vh, 16px) !important;
+        gap: 8px;
+      }
+
+      .tng-slide-cards[data-count="4"] {
+        gap: clamp(6px, 1.1vh, 10px);
+      }
+      .tng-slide-cards[data-count="5"] {
+        gap: clamp(5px, 0.9vh, 8px);
+      }
+
+      .tng-slide-card-item {
+        display: flex;
+        align-items: center;
+        gap: clamp(10px, 1.4vw, 15px);
+        padding: clamp(8px, 1.4vh, 14px) clamp(14px, 1.8vw, 20px);
+        border-radius: var(--deck-card-radius, 15px);
+        background: var(--deck-card-bg, rgba(255, 255, 255, 0.06));
+        border: 1px solid var(--deck-card-border, rgba(255, 255, 255, 0.12));
+        border-left: var(
+          --deck-card-left-bar,
+          1px solid rgba(255, 255, 255, 0.12)
+        );
+        box-shadow: var(--deck-card-shadow, none);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+
+      .tng-slide-cards[data-count="4"] .tng-slide-card-item {
+        padding: clamp(7px, 1.2vh, 11px) clamp(12px, 1.6vw, 18px);
+      }
+
+      .tng-slide-cards[data-count="5"] .tng-slide-card-item {
+        padding: clamp(5.5px, 1vh, 9.5px) clamp(12px, 1.5vw, 16px);
+      }
+
+      .tng-slide-card-num {
+        width: clamp(24px, 2.5vw, 31px);
+        height: clamp(24px, 2.5vw, 31px);
+        border-radius: var(--deck-num-radius, 50%);
+        background: var(--deck-num-bg, rgba(66, 133, 244, 0.3));
+        border: 1px solid var(--deck-num-border, rgba(168, 199, 250, 0.4));
+        color: var(--deck-num-text, #ffffff);
+        font-size: clamp(10.5px, 1.15vw, 13px);
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .tng-slide-cards[data-count="5"] .tng-slide-card-num {
+        width: clamp(20px, 2.2vw, 26px);
+        height: clamp(20px, 2.2vw, 26px);
+        font-size: clamp(9.5px, 1.05vw, 11.5px);
+      }
+
+      .tng-slide-card-text {
+        font-size: clamp(12px, 1.4vw, 16px);
+        font-weight: 450;
+        color: var(--deck-card-text, rgba(255, 255, 255, 0.94));
+        line-height: 1.42;
+        flex: 1;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .tng-slide-cards[data-count="5"] .tng-slide-card-text {
+        font-size: clamp(11.5px, 1.3vw, 14.5px);
+        -webkit-line-clamp: 1;
+        line-clamp: 1;
+      }
+
+      .tng-slide-nav-bar {
+        position: absolute;
+        left: 50%;
+        bottom: clamp(10px, 1.9vh, 16px);
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 4px 8px;
+        border-radius: 99px;
+        background: rgba(18, 21, 32, 0.84);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+        z-index: 25;
+      }
+
+      .tng-slide-nav-btn {
+        width: clamp(26px, 2.8vw, 33px) !important;
+        height: clamp(26px, 2.8vw, 33px) !important;
+        border-radius: 50% !important;
+        border: none !important;
+        background: rgba(255, 255, 255, 0.12) !important;
+        color: #ffffff !important;
+        font-size: clamp(11px, 1.25vw, 13.5px) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        padding: 0 !important;
+      }
+
+      .tng-slide-nav-btn:hover {
+        background: rgba(255, 255, 255, 0.24) !important;
+      }
+
+      .tng-slide-nav-count {
+        font-size: clamp(11px, 1.25vw, 13.5px) !important;
+        font-weight: 600 !important;
+        color: #ffffff !important;
+        min-width: 58px;
+        text-align: center;
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* ========================================================================= */
+      /* 3. NÚT TẢI XUỐNG FILE PPT BÊN TRÁI DẤU X                                  */
+      /* ========================================================================= */
+      #tng-slide-download-btn {
+        position: fixed;
+        top: 20px;
+        right: 72px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.65);
+        border: 1px solid rgba(255, 255, 255, 0.32);
+        color: #ffffff;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 99999999;
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        padding: 0;
+        transition:
+          background 0.2s ease,
+          transform 0.2s ease;
+      }
+
+      #tng-slide-download-btn:hover {
+        background: rgba(0, 0, 0, 0.88);
+      }
+
+      #viewer-modal.show:has(.slide-page) #tng-slide-download-btn {
+        display: flex !important;
+      }
+
+      /* ========================================================================= */
+      /* 4. TỐI ƯU HIỂN THỊ TRÊN ĐIỆN THOẠI (MOBILE)                                */
+      /* ========================================================================= */
       @media (max-width: 768px) {
         .media-viewer-content,
         #viewer-modal-body:not(:has(.tng-ios-music-card)):not(
             :has(img.chat-img)
-          ):not(:has(video)),
-        #viewer-modal-body:not(:has(.tng-ios-music-card)) > div {
+          ):not(:has(video)):not(:has(.slide-page)),
+        #viewer-modal-body:not(:has(.tng-ios-music-card)):not(:has(.slide-page))
+          > div {
+          border-radius: 32px !important;
+        }
+
+        #viewer-modal-body:not(:has(.tng-ios-music-card)):not(:has(.slide-page))
+          > div {
+          padding: 20px 16px !important;
+        }
+
+        #viewer-modal-body:has(.slide-page) {
+          width: 96vw !important;
+          max-width: 96vw !important;
+          aspect-ratio: 16 / 9 !important;
+          height: auto !important;
           border-radius: 24px !important;
+        }
+
+        #viewer-modal-body .slide-page,
+        .tng-modern-deck .slide-page {
+          padding: 10px 14px 32px 14px !important;
+        }
+
+        .tng-slide-top-bar {
+          margin-bottom: 4px;
+        }
+        .tng-slide-badge {
+          padding: 2px 8px;
+          font-size: 8.5px;
+        }
+        .tng-slide-brand {
+          font-size: 8.5px;
+        }
+
+        .tng-slide-heading {
+          font-size: 12.5px !important;
+          margin-bottom: 5px !important;
+          padding-bottom: 4px !important;
+        }
+
+        .tng-slide-cards,
+        .tng-slide-cards[data-count="4"],
+        .tng-slide-cards[data-count="5"] {
+          gap: 3px !important;
+        }
+
+        .tng-modern-deck[data-card-layout="bento"]
+          .tng-slide-cards[data-count="4"] {
+          gap: 4px !important;
+        }
+
+        .tng-slide-card-item,
+        .tng-slide-cards[data-count="4"] .tng-slide-card-item,
+        .tng-slide-cards[data-count="5"] .tng-slide-card-item,
+        .tng-modern-deck[data-card-layout="bento"]
+          .tng-slide-cards[data-count="4"]
+          .tng-slide-card-item {
+          padding: 3px 7px !important;
+          gap: 5px !important;
+          border-radius: 7px !important;
+          flex-direction: row !important;
+          align-items: center !important;
+        }
+
+        .tng-slide-card-num,
+        .tng-slide-cards[data-count="5"] .tng-slide-card-num {
+          width: 15px !important;
+          height: 15px !important;
+          font-size: 8px !important;
+        }
+
+        .tng-slide-card-text,
+        .tng-slide-cards[data-count="5"] .tng-slide-card-text {
+          font-size: 9.5px !important;
+          line-height: 1.22 !important;
+          -webkit-line-clamp: 1 !important;
+          line-clamp: 1 !important;
+        }
+
+        .tng-slide-cover-pill {
+          padding: 2px 8px;
+          font-size: 8px;
+          margin-bottom: 5px;
+        }
+        .tng-slide-cover-title {
+          font-size: 18px !important;
+          margin-bottom: 5px !important;
+        }
+        .tng-slide-cover-line {
+          width: 36px;
+          height: 2.5px;
+          margin-bottom: 5px;
+        }
+        .tng-slide-cover-sub {
+          font-size: 10.5px !important;
+        }
+
+        .tng-slide-nav-bar {
+          bottom: 4px;
+          padding: 2px 6px;
+          gap: 5px;
+        }
+        .tng-slide-nav-btn {
+          width: 19px !important;
+          height: 19px !important;
+          font-size: 9px !important;
+        }
+        .tng-slide-nav-count {
+          font-size: 9.5px !important;
+          min-width: 42px;
         }
       }
     </style>
 
     <script>
       // =========================================================================
-      // BỘ GỌI AI TẠO NỘI DUNG BÁO CÁO & LỘ TRÌNH HỌC (GIỚI HẠN KÝ TỰ + DỰ PHÒNG)
+      // TÍCH HỢP TRỰC TIẾP VÀO LUỒNG CHỜ CỦA FILE CODE (20 SLIDES 16:9, 10 THEMES
+      // ĐA DẠNG, BỎ CÂU HỎI DƯỚI ĐÁY LỘ TRÌNH HỌC, TẢI FILE PPTX/PPT)
       // =========================================================================
       (function () {
-        function clampLine(str, maxChars) {
-          maxChars = maxChars || 95;
+        const TOTAL_SLIDES = 20; // 1 Bìa + 18 Nội dung + 1 Kết thúc = 20 Slides
+
+        // 1. DANH SÁCH 10 GIAO DIỆN (THEMES) ĐỘC LẬP CHO CANVAS SLIDE
+        const CANVAS_THEMES = [
+          {
+            id: "aurora_cyber",
+            name: "Aurora Cyber Glass",
+            layout: "glass",
+            coverAlign: "center",
+            bg: "radial-gradient(circle at 14% 18%, rgba(66,133,244,0.25) 0%, transparent 48%), radial-gradient(circle at 86% 82%, rgba(155,114,203,0.22) 0%, transparent 50%), linear-gradient(145deg, #111524 0%, #090b12 60%, #121626 100%)",
+            text: "#ffffff",
+            subtext: "rgba(255,255,255,0.62)",
+            accent: "#a8c7fa",
+            badgeBg: "rgba(168,199,250,0.14)",
+            badgeBorder: "rgba(168,199,250,0.32)",
+            badgeRadius: "99px",
+            titleGrad:
+              "linear-gradient(135deg, #ffffff 20%, #a8c7fa 68%, #d96570 100%)",
+            titleFill: "transparent",
+            titleSolid: "#ffffff",
+            lineGrad: "linear-gradient(90deg, #4285f4, #9b72cb, #d96570)",
+            divider: "rgba(255,255,255,0.12)",
+            cardBg: "rgba(255,255,255,0.06)",
+            cardBorder: "rgba(255,255,255,0.12)",
+            cardLeftBar: "1px solid rgba(255,255,255,0.12)",
+            cardRadius: "15px",
+            cardText: "rgba(255,255,255,0.94)",
+            numBg:
+              "linear-gradient(135deg, rgba(66,133,244,0.38), rgba(155,114,203,0.38))",
+            numBorder: "rgba(168,199,250,0.45)",
+            numText: "#ffffff",
+            numRadius: "50%",
+            pptBg: "0E121F",
+            pptCardBg: "1A2035",
+            pptText: "FFFFFF",
+            pptSub: "A0AAB8",
+            pptAccent: "8AB4F8",
+          },
+          {
+            id: "executive_ivory",
+            name: "Executive Editorial Ivory",
+            layout: "editorial",
+            coverAlign: "flex-start",
+            bg: "radial-gradient(circle at 88% 15%, rgba(217,119,6,0.12) 0%, transparent 45%), linear-gradient(135deg, #faf8f5 0%, #f1ece1 100%)",
+            text: "#18181b",
+            subtext: "#52525b",
+            accent: "#b45309",
+            badgeBg: "rgba(180,83,9,0.1)",
+            badgeBorder: "rgba(180,83,9,0.28)",
+            badgeRadius: "8px",
+            titleGrad: "none",
+            titleFill: "#18181b",
+            titleSolid: "#18181b",
+            lineGrad: "linear-gradient(90deg, #b45309, #d97706)",
+            divider: "rgba(24,24,27,0.12)",
+            cardBg: "rgba(255,255,255,0.86)",
+            cardBorder: "rgba(24,24,27,0.09)",
+            cardLeftBar: "4px solid #d97706",
+            cardRadius: "12px",
+            cardText: "#27272a",
+            numBg: "#fef3c7",
+            numBorder: "#f59e0b",
+            numText: "#92400e",
+            numRadius: "8px",
+            pptBg: "F7F4EC",
+            pptCardBg: "FFFFFF",
+            pptText: "18181B",
+            pptSub: "52525B",
+            pptAccent: "B45309",
+          },
+          {
+            id: "emerald_biotech",
+            name: "Emerald Nature & Biotech",
+            layout: "bento",
+            coverAlign: "center",
+            bg: "radial-gradient(circle at 20% 80%, rgba(16,185,129,0.22) 0%, transparent 50%), radial-gradient(circle at 85% 20%, rgba(20,184,166,0.18) 0%, transparent 45%), linear-gradient(145deg, #061c17 0%, #09261e 55%, #051612 100%)",
+            text: "#ecfdf5",
+            subtext: "rgba(209,250,229,0.65)",
+            accent: "#34d399",
+            badgeBg: "rgba(52,211,153,0.14)",
+            badgeBorder: "rgba(52,211,153,0.35)",
+            badgeRadius: "99px",
+            titleGrad:
+              "linear-gradient(135deg, #ffffff 15%, #6ee7b7 70%, #fcd34d 100%)",
+            titleFill: "transparent",
+            titleSolid: "#ecfdf5",
+            lineGrad: "linear-gradient(90deg, #10b981, #fbbf24)",
+            divider: "rgba(52,211,153,0.18)",
+            cardBg: "rgba(6,78,59,0.36)",
+            cardBorder: "rgba(52,211,153,0.22)",
+            cardLeftBar: "1px solid rgba(52,211,153,0.22)",
+            cardRadius: "16px",
+            cardText: "#ecfdf5",
+            numBg: "rgba(16,185,129,0.28)",
+            numBorder: "#34d399",
+            numText: "#6ee7b7",
+            numRadius: "10px",
+            pptBg: "071E18",
+            pptCardBg: "0F3329",
+            pptText: "ECFDF5",
+            pptSub: "A7F3D0",
+            pptAccent: "34D399",
+          },
+          {
+            id: "sunset_coral",
+            name: "Sunset Coral & Warm Gold",
+            layout: "editorial",
+            coverAlign: "flex-start",
+            bg: "radial-gradient(circle at 80% 22%, rgba(251,113,133,0.24) 0%, transparent 48%), radial-gradient(circle at 18% 82%, rgba(245,158,11,0.18) 0%, transparent 48%), linear-gradient(145deg, #1f0e15 0%, #14090e 60%, #241118 100%)",
+            text: "#fff1f2",
+            subtext: "rgba(255,228,230,0.65)",
+            accent: "#fda4af",
+            badgeBg: "rgba(251,113,133,0.16)",
+            badgeBorder: "rgba(253,164,175,0.35)",
+            badgeRadius: "99px",
+            titleGrad:
+              "linear-gradient(135deg, #ffffff 15%, #fda4af 60%, #fcd34d 100%)",
+            titleFill: "transparent",
+            titleSolid: "#fff1f2",
+            lineGrad: "linear-gradient(90deg, #fb7185, #f59e0b)",
+            divider: "rgba(251,113,133,0.18)",
+            cardBg: "rgba(255,255,255,0.055)",
+            cardBorder: "rgba(253,164,175,0.16)",
+            cardLeftBar: "4px solid #fb7185",
+            cardRadius: "14px",
+            cardText: "#ffe4e6",
+            numBg: "rgba(244,63,94,0.28)",
+            numBorder: "#fb7185",
+            numText: "#fecdd3",
+            numRadius: "50%",
+            pptBg: "1D0E14",
+            pptCardBg: "2E1620",
+            pptText: "FFF1F2",
+            pptSub: "FECDD3",
+            pptAccent: "FB7185",
+          },
+          {
+            id: "nordic_frost",
+            name: "Nordic Frost & Ocean Clean",
+            layout: "bento",
+            coverAlign: "center",
+            bg: "radial-gradient(circle at 15% 20%, rgba(59,130,246,0.14) 0%, transparent 48%), linear-gradient(145deg, #f0f7ff 0%, #e0effe 100%)",
+            text: "#0f172a",
+            subtext: "#475569",
+            accent: "#2563eb",
+            badgeBg: "rgba(37,99,235,0.1)",
+            badgeBorder: "rgba(37,99,235,0.26)",
+            badgeRadius: "99px",
+            titleGrad: "none",
+            titleFill: "#0f172a",
+            titleSolid: "#0f172a",
+            lineGrad: "linear-gradient(90deg, #2563eb, #06b6d4)",
+            divider: "rgba(15,23,42,0.1)",
+            cardBg: "rgba(255,255,255,0.9)",
+            cardBorder: "rgba(37,99,235,0.16)",
+            cardLeftBar: "1px solid rgba(37,99,235,0.16)",
+            cardRadius: "16px",
+            cardText: "#1e293b",
+            numBg: "#dbeafe",
+            numBorder: "#60a5fa",
+            numText: "#1d4ed8",
+            numRadius: "50%",
+            pptBg: "EDF5FF",
+            pptCardBg: "FFFFFF",
+            pptText: "0F172A",
+            pptSub: "475569",
+            pptAccent: "2563EB",
+          },
+          {
+            id: "royal_amethyst",
+            name: "Royal Amethyst & Champagne Gold",
+            layout: "glass",
+            coverAlign: "flex-start",
+            bg: "radial-gradient(circle at 82% 20%, rgba(192,132,252,0.22) 0%, transparent 46%), radial-gradient(circle at 20% 80%, rgba(245,208,138,0.15) 0%, transparent 48%), linear-gradient(145deg, #150d24 0%, #0b0714 60%, #1a102c 100%)",
+            text: "#faf5ff",
+            subtext: "rgba(233,213,255,0.65)",
+            accent: "#f5d08a",
+            badgeBg: "rgba(245,208,138,0.12)",
+            badgeBorder: "rgba(245,208,138,0.35)",
+            badgeRadius: "6px",
+            titleGrad:
+              "linear-gradient(135deg, #ffffff 20%, #f5d08a 65%, #c084fc 100%)",
+            titleFill: "transparent",
+            titleSolid: "#faf5ff",
+            lineGrad: "linear-gradient(90deg, #f5d08a, #c084fc)",
+            divider: "rgba(245,208,138,0.18)",
+            cardBg: "rgba(255,255,255,0.05)",
+            cardBorder: "rgba(245,208,138,0.2)",
+            cardLeftBar: "3.5px solid #f5d08a",
+            cardRadius: "12px",
+            cardText: "#f3e8ff",
+            numBg: "rgba(245,208,138,0.18)",
+            numBorder: "#f5d08a",
+            numText: "#f5d08a",
+            numRadius: "6px",
+            pptBg: "140C22",
+            pptCardBg: "231638",
+            pptText: "FAF5FF",
+            pptSub: "D8B4FE",
+            pptAccent: "F5D08A",
+          },
+          {
+            id: "swiss_grid",
+            name: "Swiss Architectural Grid",
+            layout: "editorial",
+            coverAlign: "flex-start",
+            bg: "linear-gradient(180deg, #ffffff 0%, #f4f4f5 100%)",
+            text: "#111111",
+            subtext: "#52525b",
+            accent: "#e11d48",
+            badgeBg: "#ffe4e6",
+            badgeBorder: "#f43f5e",
+            badgeRadius: "4px",
+            titleGrad: "none",
+            titleFill: "#111111",
+            titleSolid: "#111111",
+            lineGrad: "linear-gradient(90deg, #e11d48, #111111)",
+            divider: "rgba(17,17,17,0.15)",
+            cardBg: "#ffffff",
+            cardBorder: "rgba(17,17,17,0.14)",
+            cardLeftBar: "4px solid #e11d48",
+            cardRadius: "8px",
+            cardText: "#18181b",
+            numBg: "#111111",
+            numBorder: "#111111",
+            numText: "#ffffff",
+            numRadius: "4px",
+            pptBg: "F4F4F5",
+            pptCardBg: "FFFFFF",
+            pptText: "111111",
+            pptSub: "52525B",
+            pptAccent: "E11D48",
+          },
+          {
+            id: "cyber_teal",
+            name: "Cybernetic Teal & Carbon",
+            layout: "bento",
+            coverAlign: "center",
+            bg: "radial-gradient(circle at 80% 18%, rgba(0,242,254,0.2) 0%, transparent 45%), radial-gradient(circle at 18% 82%, rgba(79,172,254,0.18) 0%, transparent 48%), linear-gradient(145deg, #0b1319 0%, #070b0e 65%, #0e1921 100%)",
+            text: "#ecfeff",
+            subtext: "rgba(165,243,252,0.62)",
+            accent: "#22d3ee",
+            badgeBg: "rgba(34,211,238,0.12)",
+            badgeBorder: "rgba(34,211,238,0.35)",
+            badgeRadius: "6px",
+            titleGrad:
+              "linear-gradient(135deg, #ffffff 20%, #22d3ee 70%, #38bdf8 100%)",
+            titleFill: "transparent",
+            titleSolid: "#ecfeff",
+            lineGrad: "linear-gradient(90deg, #22d3ee, #3b82f6)",
+            divider: "rgba(34,211,238,0.18)",
+            cardBg: "rgba(15,29,38,0.7)",
+            cardBorder: "rgba(34,211,238,0.22)",
+            cardLeftBar: "3.5px solid #22d3ee",
+            cardRadius: "12px",
+            cardText: "#cffafe",
+            numBg: "rgba(34,211,238,0.2)",
+            numBorder: "#22d3ee",
+            numText: "#22d3ee",
+            numRadius: "6px",
+            pptBg: "0B1319",
+            pptCardBg: "13222C",
+            pptText: "ECFEFF",
+            pptSub: "A5F3FC",
+            pptAccent: "22D3EE",
+          },
+          {
+            id: "matcha_zen",
+            name: "Matcha Botanical & Zen Cream",
+            layout: "bento",
+            coverAlign: "center",
+            bg: "radial-gradient(circle at 85% 18%, rgba(101,163,13,0.14) 0%, transparent 46%), radial-gradient(circle at 15% 82%, rgba(21,128,61,0.1) 0%, transparent 48%), linear-gradient(145deg, #f4f7f2 0%, #e6efe2 100%)",
+            text: "#1a2e1f",
+            subtext: "#4b6352",
+            accent: "#2e6f40",
+            badgeBg: "rgba(46,111,64,0.12)",
+            badgeBorder: "rgba(46,111,64,0.3)",
+            badgeRadius: "99px",
+            titleGrad: "none",
+            titleFill: "#1a2e1f",
+            titleSolid: "#1a2e1f",
+            lineGrad: "linear-gradient(90deg, #2e6f40, #65a30d)",
+            divider: "rgba(26,46,31,0.12)",
+            cardBg: "rgba(255,255,255,0.88)",
+            cardBorder: "rgba(46,111,64,0.18)",
+            cardLeftBar: "4px solid #2e6f40",
+            cardRadius: "16px",
+            cardText: "#233829",
+            numBg: "#dcfce7",
+            numBorder: "#4ade80",
+            numText: "#166534",
+            numRadius: "10px",
+            pptBg: "EFF5EC",
+            pptCardBg: "FFFFFF",
+            pptText: "1A2E1F",
+            pptSub: "4B6352",
+            pptAccent: "2E6F40",
+          },
+          {
+            id: "obsidian_crimson",
+            name: "Obsidian Crimson & Titanium",
+            layout: "editorial",
+            coverAlign: "flex-start",
+            bg: "radial-gradient(circle at 82% 20%, rgba(225,29,72,0.24) 0%, transparent 46%), radial-gradient(circle at 16% 80%, rgba(161,161,170,0.12) 0%, transparent 48%), linear-gradient(145deg, #0d0d11 0%, #17090d 58%, #09090b 100%)",
+            text: "#fafafa",
+            subtext: "rgba(228,228,231,0.62)",
+            accent: "#fb7185",
+            badgeBg: "rgba(225,29,72,0.18)",
+            badgeBorder: "rgba(251,113,133,0.4)",
+            badgeRadius: "6px",
+            titleGrad:
+              "linear-gradient(135deg, #ffffff 25%, #fda4af 68%, #e11d48 100%)",
+            titleFill: "transparent",
+            titleSolid: "#fafafa",
+            lineGrad: "linear-gradient(90deg, #e11d48, #a1a1aa)",
+            divider: "rgba(251,113,133,0.2)",
+            cardBg: "rgba(24,24,27,0.78)",
+            cardBorder: "rgba(251,113,133,0.2)",
+            cardLeftBar: "4px solid #e11d48",
+            cardRadius: "10px",
+            cardText: "#f4f4f5",
+            numBg: "rgba(225,29,72,0.28)",
+            numBorder: "#fb7185",
+            numText: "#ffe4e6",
+            numRadius: "6px",
+            pptBg: "0E0B0D",
+            pptCardBg: "1C1417",
+            pptText: "FAFAFA",
+            pptSub: "D4D4D8",
+            pptAccent: "FB7185",
+          },
+        ];
+
+        function pickNextCanvasTheme(fileId) {
+          let map = {};
+          try {
+            map = JSON.parse(
+              localStorage.getItem("tng_canvas_theme_map_v1") || "{}",
+            );
+          } catch (e) {}
+          if (fileId && map[fileId] !== undefined) {
+            return CANVAS_THEMES[map[fileId] % CANVAS_THEMES.length];
+          }
+          let counter = parseInt(
+            localStorage.getItem("tng_canvas_theme_seq_v1") || "0",
+            10,
+          );
+          if (isNaN(counter)) counter = 0;
+          let pickedIdx = counter % CANVAS_THEMES.length;
+          try {
+            localStorage.setItem(
+              "tng_canvas_theme_seq_v1",
+              String(counter + 1),
+            );
+            if (fileId) {
+              map[fileId] = pickedIdx;
+              localStorage.setItem(
+                "tng_canvas_theme_map_v1",
+                JSON.stringify(map),
+              );
+            }
+          } catch (e) {}
+          return CANVAS_THEMES[pickedIdx];
+        }
+
+        // 2. NÚT TẢI XUỐNG FILE POWERPOINT 20 SLIDES (Baithuyettrinh_<Tên>.pptx / .ppt)
+        function ensureSlideDownloadButton() {
+          let viewerModal = document.getElementById("viewer-modal");
+          if (!viewerModal || document.getElementById("tng-slide-download-btn"))
+            return;
+          let dlBtn = document.createElement("button");
+          dlBtn.id = "tng-slide-download-btn";
+          dlBtn.type = "button";
+          dlBtn.title = "Tải xuống file PowerPoint (Baithuyettrinh)";
+          dlBtn.innerHTML =
+            '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">' +
+            '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>' +
+            '<polyline points="7 10 12 15 17 10"></polyline>' +
+            '<line x1="12" y1="15" x2="12" y2="3"></line>' +
+            "</svg>";
+          dlBtn.onclick = function (ev) {
+            ev.stopPropagation();
+            if (typeof window.tngDownloadCurrentSlides === "function") {
+              window.tngDownloadCurrentSlides();
+            }
+          };
+          viewerModal.appendChild(dlBtn);
+        }
+        ensureSlideDownloadButton();
+
+        function loadPptxGenLibrary() {
+          if (window.PptxGenJS) return Promise.resolve(window.PptxGenJS);
+          return new Promise(function (resolve) {
+            let s = document.createElement("script");
+            s.src =
+              "https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js";
+            s.onload = function () {
+              resolve(window.PptxGenJS || null);
+            };
+            s.onerror = function () {
+              resolve(null);
+            };
+            document.head.appendChild(s);
+          });
+        }
+
+        window.tngDownloadCurrentSlides = async function () {
+          let body = document.getElementById("viewer-modal-body");
+          if (!body) return;
+          let deck = body.querySelector(".tng-modern-deck");
+          if (!deck) return;
+
+          let rawTopic =
+            deck.getAttribute("data-topic-name") ||
+            (deck.querySelector(".tng-slide-cover-title") &&
+              deck.querySelector(".tng-slide-cover-title").textContent) ||
+            "TNG_AI";
+          rawTopic = rawTopic.trim();
+
+          let cleanFileTopic = rawTopic
+            .replace(/[\\/:*?"<>|]+/g, "")
+            .replace(/\s+/g, "_")
+            .trim();
+          if (!cleanFileTopic) cleanFileTopic = "TNG_AI";
+          let baseFileName = "Baithuyettrinh_" + cleanFileTopic;
+
+          let themeId = deck.getAttribute("data-theme-id") || "aurora_cyber";
+          let themeObj =
+            CANVAS_THEMES.find(function (t) {
+              return t.id === themeId;
+            }) || CANVAS_THEMES[0];
+
+          let slideEls = deck.querySelectorAll(".slide-page");
+          let totalCount = slideEls.length || TOTAL_SLIDES;
+          let PptxLib = await loadPptxGenLibrary();
+
+          if (PptxLib) {
+            try {
+              let pptx = new PptxLib();
+              pptx.layout = "LAYOUT_16x9";
+              pptx.author = "TNG AI 1.0";
+              pptx.title = rawTopic;
+
+              slideEls.forEach(function (slEl, idx) {
+                let slide = pptx.addSlide();
+                slide.background = { color: themeObj.pptBg };
+
+                let coverBox = slEl.querySelector(".tng-slide-cover-box");
+                if (coverBox) {
+                  let pillText =
+                    (coverBox.querySelector(".tng-slide-cover-pill") &&
+                      coverBox.querySelector(".tng-slide-cover-pill")
+                        .textContent) ||
+                    "SLIDE " +
+                      String(idx + 1).padStart(2, "0") +
+                      " / " +
+                      totalCount;
+                  let mainTitle =
+                    (coverBox.querySelector(".tng-slide-cover-title") &&
+                      coverBox.querySelector(".tng-slide-cover-title")
+                        .textContent) ||
+                    rawTopic;
+                  let subTitle =
+                    (coverBox.querySelector(".tng-slide-cover-sub") &&
+                      coverBox.querySelector(".tng-slide-cover-sub")
+                        .textContent) ||
+                    "Bản trình bày tự động bởi TNG AI 1.0";
+
+                  slide.addText(pillText, {
+                    x: 1.0,
+                    y: 1.6,
+                    w: 8.0,
+                    h: 0.45,
+                    fontSize: 11,
+                    bold: true,
+                    color: themeObj.pptAccent,
+                    align: "center",
+                  });
+                  slide.addText(mainTitle, {
+                    x: 0.8,
+                    y: 2.15,
+                    w: 8.4,
+                    h: 1.3,
+                    fontSize: 34,
+                    bold: true,
+                    color: themeObj.pptText,
+                    align: "center",
+                    valign: "middle",
+                  });
+                  slide.addText(subTitle, {
+                    x: 1.0,
+                    y: 3.65,
+                    w: 8.0,
+                    h: 0.5,
+                    fontSize: 14,
+                    color: themeObj.pptSub,
+                    align: "center",
+                  });
+                } else {
+                  let badgeText =
+                    (slEl.querySelector(".tng-slide-badge") &&
+                      slEl.querySelector(".tng-slide-badge").textContent) ||
+                    "SLIDE " +
+                      String(idx + 1).padStart(2, "0") +
+                      " / " +
+                      totalCount;
+                  let headingText =
+                    (slEl.querySelector(".tng-slide-heading") &&
+                      slEl.querySelector(".tng-slide-heading").textContent) ||
+                    "Nội dung trọng tâm";
+
+                  slide.addText(badgeText + "  •  " + rawTopic, {
+                    x: 0.65,
+                    y: 0.4,
+                    w: 8.7,
+                    h: 0.35,
+                    fontSize: 10,
+                    bold: true,
+                    color: themeObj.pptAccent,
+                  });
+                  slide.addText(headingText, {
+                    x: 0.65,
+                    y: 0.8,
+                    w: 8.7,
+                    h: 0.6,
+                    fontSize: 22,
+                    bold: true,
+                    color: themeObj.pptText,
+                  });
+
+                  let items = slEl.querySelectorAll(".tng-slide-card-item");
+                  let startY = 1.55;
+                  let stepY =
+                    items.length >= 5 ? 0.72 : items.length === 4 ? 0.88 : 1.08;
+                  let boxH =
+                    items.length >= 5 ? 0.62 : items.length === 4 ? 0.75 : 0.92;
+
+                  items.forEach(function (itemEl, bIdx) {
+                    let numTxt = String(bIdx + 1).padStart(2, "0");
+                    let bodyTxt =
+                      (itemEl.querySelector(".tng-slide-card-text") &&
+                        itemEl.querySelector(".tng-slide-card-text")
+                          .textContent) ||
+                      itemEl.textContent ||
+                      "";
+                    let curY = startY + bIdx * stepY;
+
+                    slide.addText(numTxt + ".  " + bodyTxt.trim(), {
+                      x: 0.65,
+                      y: curY,
+                      w: 8.7,
+                      h: boxH,
+                      fontSize: items.length >= 5 ? 12.5 : 13.5,
+                      color: themeObj.pptText,
+                      fill: { color: themeObj.pptCardBg },
+                      line: { color: themeObj.pptAccent, width: 0.75 },
+                      margin: [6, 12, 6, 12],
+                      valign: "middle",
+                    });
+                  });
+                }
+              });
+
+              await pptx.writeFile({ fileName: baseFileName + ".pptx" });
+              return;
+            } catch (err) {}
+          }
+
+          let pptHtml =
+            '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:p="urn:schemas-microsoft-com:office:powerpoint" xmlns="http://www.w3.org/TR/REC-html40">' +
+            '<head><meta charset="utf-8"><title>' +
+            rawTopic +
+            "</title>" +
+            "<style>" +
+            "@page { size: 13.333in 7.5in; margin: 0; }" +
+            "body { margin: 0; padding: 0; font-family: Arial, sans-serif; background: #" +
+            themeObj.pptBg +
+            "; color: #" +
+            themeObj.pptText +
+            "; }" +
+            ".ppt-slide { width: 13.333in; height: 7.5in; padding: 0.6in 0.8in; box-sizing: border-box; page-break-after: always; background: #" +
+            themeObj.pptBg +
+            "; color: #" +
+            themeObj.pptText +
+            "; }" +
+            ".ppt-badge { color: #" +
+            themeObj.pptAccent +
+            "; font-size: 12pt; font-weight: bold; margin-bottom: 10pt; }" +
+            ".ppt-title { font-size: 26pt; font-weight: bold; margin-bottom: 18pt; color: #" +
+            themeObj.pptText +
+            "; }" +
+            ".ppt-card { background: #" +
+            themeObj.pptCardBg +
+            "; border-left: 4pt solid #" +
+            themeObj.pptAccent +
+            "; padding: 12pt 16pt; margin-bottom: 10pt; font-size: 14pt; color: #" +
+            themeObj.pptText +
+            "; }" +
+            "</style></head><body>";
+
+          slideEls.forEach(function (slEl, idx) {
+            let coverBox = slEl.querySelector(".tng-slide-cover-box");
+            if (coverBox) {
+              let mainTitle =
+                (coverBox.querySelector(".tng-slide-cover-title") &&
+                  coverBox.querySelector(".tng-slide-cover-title")
+                    .textContent) ||
+                rawTopic;
+              let subTitle =
+                (coverBox.querySelector(".tng-slide-cover-sub") &&
+                  coverBox.querySelector(".tng-slide-cover-sub").textContent) ||
+                "";
+              pptHtml +=
+                '<div class="ppt-slide" style="text-align:center; padding-top:2.2in;">' +
+                '<div class="ppt-badge">SLIDE ' +
+                String(idx + 1).padStart(2, "0") +
+                " / " +
+                totalCount +
+                "</div>" +
+                '<div class="ppt-title" style="font-size:38pt;">' +
+                mainTitle +
+                "</div>" +
+                '<div style="font-size:16pt; color:#' +
+                themeObj.pptSub +
+                ';">' +
+                subTitle +
+                "</div></div>";
+            } else {
+              let headingText =
+                (slEl.querySelector(".tng-slide-heading") &&
+                  slEl.querySelector(".tng-slide-heading").textContent) ||
+                "";
+              pptHtml +=
+                '<div class="ppt-slide">' +
+                '<div class="ppt-badge">SLIDE ' +
+                String(idx + 1).padStart(2, "0") +
+                " / " +
+                totalCount +
+                " • " +
+                rawTopic +
+                "</div>" +
+                '<div class="ppt-title">' +
+                headingText +
+                "</div>";
+              slEl
+                .querySelectorAll(".tng-slide-card-item")
+                .forEach(function (it, bIdx) {
+                  let txt =
+                    (it.querySelector(".tng-slide-card-text") &&
+                      it.querySelector(".tng-slide-card-text").textContent) ||
+                    it.textContent ||
+                    "";
+                  pptHtml +=
+                    '<div class="ppt-card"><b>0' +
+                    (bIdx + 1) +
+                    ".</b> " +
+                    txt.trim() +
+                    "</div>";
+                });
+              pptHtml += "</div>";
+            }
+          });
+          pptHtml += "</body></html>";
+
+          let blob = new Blob(["\ufeff", pptHtml], {
+            type: "application/vnd.ms-powerpoint;charset=utf-8",
+          });
+          let url = URL.createObjectURL(blob);
+          let a = document.createElement("a");
+          a.href = url;
+          a.download = baseFileName + ".ppt";
+          document.body.appendChild(a);
+          a.click();
+          setTimeout(function () {
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+          }, 200);
+        };
+
+        // 3. HÀM LÀM SẠCH VĂN BẢN, TRÍCH XUẤT CHỦ ĐỀ CHUẨN XÁC & CHUYỂN SLIDE
+        function extractCleanTopic(rawStr, fallbackTopic) {
+          let fb = String(fallbackTopic || "").trim();
+          if (fb && fb !== "chủ đề này") {
+            return fb
+              .replace(
+                /^(📌\s*)?(báo cáo|lộ trình học|canvas|slide|nghiên cứu|học)\s*[:\-]?\s*/i,
+                "",
+              )
+              .trim();
+          }
+          if (!rawStr) return "chủ đề này";
+          let textOnly = String(rawStr).replace(/<[^>]+>/g, "\n");
+          let m = textOnly.match(
+            /(?:Báo cáo|Lộ trình học|Canvas|Slide)\s*:\s*([^\r\n•\(]+)/i,
+          );
+          if (m && m[1]) {
+            let t = m[1]
+              .replace(/(?:Báo cáo nghiên cứu|Rất vui được|Đã tạo).*$/i, "")
+              .trim();
+            if (t) return t;
+          }
+          return fb || "chủ đề này";
+        }
+
+        function formatCleanSentence(str, maxChars) {
+          maxChars = maxChars || 320;
           if (!str) return "";
           let clean = String(str)
             .split("**")
             .join("")
-            .replace(/^[•\-\d\.\(\)\s]+/, "")
+            .split("##")
+            .join("")
+            .replace(/^[•\-\*\d\.\(\)\s]+/, "")
+            .replace(/^slide\s*\d+\s*[:\-]?\s*/i, "")
             .trim();
-          if (clean.length <= maxChars) return clean;
+          if (
+            clean.indexOf('"assistant"') !== -1 ||
+            clean.indexOf('"reasoning"') !== -1 ||
+            clean.indexOf("The user wants") !== -1
+          ) {
+            return "";
+          }
+          if (clean.length <= maxChars) {
+            if (!/[.!?]$/.test(clean)) clean += ".";
+            return clean;
+          }
           let sliced = clean.slice(0, maxChars);
-          let lastSpace = sliced.lastIndexOf(" ");
-          if (lastSpace > maxChars * 0.6) sliced = sliced.slice(0, lastSpace);
-          return sliced.replace(/[.,;:\-\s]+$/, "") + "...";
+          let lastDot = Math.max(
+            sliced.lastIndexOf(". "),
+            sliced.lastIndexOf("; "),
+            sliced.lastIndexOf(", "),
+          );
+          if (lastDot > maxChars * 0.55) {
+            sliced = sliced.slice(0, lastDot);
+          } else {
+            let lastSpace = sliced.lastIndexOf(" ");
+            if (lastSpace > maxChars * 0.6) sliced = sliced.slice(0, lastSpace);
+          }
+          return sliced.replace(/[.,;:\-\s]+$/, "") + ".";
+        }
+
+        window.changeSlide = function (dir) {
+          let modalBody = document.getElementById("viewer-modal-body");
+          let scope =
+            modalBody && modalBody.querySelectorAll(".slide-page").length > 0
+              ? modalBody
+              : document;
+          let slides = scope.querySelectorAll(".slide-page");
+          if (!slides || slides.length === 0) return;
+
+          let currentIdx = 0;
+          slides.forEach(function (sl, idx) {
+            if (sl.style.display !== "none") currentIdx = idx;
+          });
+
+          let nextIdx = (currentIdx + dir + slides.length) % slides.length;
+          let animClass = dir >= 0 ? "tng-anim-next" : "tng-anim-prev";
+
+          slides.forEach(function (sl, idx) {
+            sl.classList.remove("tng-anim-next", "tng-anim-prev");
+            if (idx === nextIdx) {
+              sl.style.display = "flex";
+              void sl.offsetWidth;
+              sl.classList.add(animClass);
+            } else {
+              sl.style.display = "none";
+            }
+          });
+
+          let counter = scope.querySelector("#slide-counter");
+          if (counter) {
+            counter.textContent = nextIdx + 1 + " / " + slides.length;
+          }
+        };
+
+        if (!window._tngSlideKeyHooked) {
+          window._tngSlideKeyHooked = true;
+          window.addEventListener("keydown", function (ev) {
+            let modal = document.getElementById("viewer-modal");
+            if (!modal || !modal.classList.contains("show")) return;
+            if (!modal.querySelector(".slide-page")) return;
+            if (ev.key === "ArrowRight") window.changeSlide(1);
+            else if (ev.key === "ArrowLeft") window.changeSlide(-1);
+          });
+        }
+
+        // 4. HÀM GỌI AI TRONG FILE CODE (askGemini -> Dự phòng Pollinations)
+        function sanitizeAiOutput(raw) {
+          if (!raw || typeof raw !== "string") return null;
+          let trimmed = raw.trim();
+          if (
+            trimmed.charAt(0) === "{" ||
+            trimmed.indexOf('"reasoning"') !== -1
+          ) {
+            try {
+              let parsed = JSON.parse(trimmed);
+              let extracted =
+                parsed.content ||
+                (parsed.choices &&
+                  parsed.choices[0] &&
+                  parsed.choices[0].message &&
+                  parsed.choices[0].message.content) ||
+                "";
+              if (extracted && typeof extracted === "string") {
+                trimmed = extracted.trim();
+              } else {
+                return null;
+              }
+            } catch (e) {
+              return null;
+            }
+          }
+          if (
+            trimmed.indexOf('"assistant"') !== -1 ||
+            trimmed.indexOf('"reasoning"') !== -1 ||
+            trimmed.indexOf("The user wants") !== -1
+          ) {
+            return null;
+          }
+          return trimmed.length > 25 ? trimmed : null;
         }
 
         async function queryInternalAIs(promptText) {
-          // 1. Ưu tiên gọi các AI có sẵn trong file code (askGemini: Gemini / Groq / OpenRouter...)
-          if (typeof window.askGemini === "function") {
-            try {
+          try {
+            let fn =
+              typeof askGemini === "function"
+                ? askGemini
+                : typeof window.askGemini === "function"
+                  ? window.askGemini
+                  : null;
+            if (fn) {
               let res = await Promise.race([
-                window.askGemini(promptText, []),
+                fn(promptText, []),
                 new Promise(function (resolve) {
                   setTimeout(function () {
                     resolve(null);
-                  }, 9000);
+                  }, 10500);
                 }),
               ]);
-              if (res && typeof res === "string" && res.trim().length > 15) {
-                return res.trim();
-              }
-            } catch (e) {}
-          }
+              let cleanRes = sanitizeAiOutput(res);
+              if (cleanRes) return cleanRes;
+            }
+          } catch (e) {}
 
-          // 2. Luồng AI dự phòng nếu các API trong file bị giới hạn
           try {
             let resp = await fetch("https://text.pollinations.ai/openai", {
               method: "POST",
@@ -24433,11 +25915,11 @@
                   {
                     role: "system",
                     content:
-                      "Bạn là trợ lý học thuật TNG AI. Trả lời bằng tiếng Việt thật ngắn gọn, súc tích, đúng định dạng yêu cầu.",
+                      "Bạn là chuyên gia học thuật TNG AI. Hãy trả lời hoàn toàn bằng tiếng Việt chuẩn xác, mạch lạc, đầy đủ ý nghĩa và tuân thủ đúng cấu trúc từng dòng theo yêu cầu. Không trả về JSON, không chào hỏi thừa.",
                   },
                   { role: "user", content: promptText },
                 ],
-                temperature: 0.5,
+                temperature: 0.45,
               }),
             });
             if (resp.ok) {
@@ -24448,317 +25930,1531 @@
                 data.choices[0] &&
                 data.choices[0].message
                   ? data.choices[0].message.content
-                  : typeof data === "string"
-                    ? data
-                    : "";
-              if (text && text.trim().length > 15) return text.trim();
+                  : "";
+              let cleanText = sanitizeAiOutput(text);
+              if (cleanText) return cleanText;
             }
           } catch (e) {}
 
           return null;
         }
 
-        // Tạo 3 ý Báo cáo (Deep Research) theo bố cục mẫu & giới hạn ký tự
-        window.tngBuildReportPoints = async function (topic) {
-          const cleanTopic = String(topic || "chủ đề này")
-            .replace(/^(báo cáo|nghiên cứu|tìm hiểu)\s*[:\-]?\s*/i, "")
-            .trim();
-
-          const defaultPoints = [
-            "(1) Thu thập số liệu thống kê mới nhất về chủ đề này.",
-            "(2) Phân tích các phương thức hoạt động và xu hướng thị trường.",
-            "(3) Đề xuất giải pháp và định hướng tương lai.",
+        // =========================================================================
+        // 5. SƯỜN BÁO CÁO (5 PHẦN CHUYÊN SÂU)
+        // =========================================================================
+        function getDefaultReportSections(topic) {
+          let t = extractCleanTopic(topic, topic);
+          return [
+            {
+              title: "(1) Tổng quan & Bản chất cốt lõi:",
+              body:
+                "Xác định khái niệm chuẩn xác, nguồn gốc hình thành, phân loại các nhóm chính và những đặc điểm nhận diện quan trọng nhất của " +
+                t +
+                " trong hệ thống tri thức hiện đại.",
+            },
+            {
+              title: "(2) Số liệu thống kê & Dữ kiện thực tế:",
+              body:
+                "Tổng hợp các chỉ số định lượng, thông số đặc trưng, quy mô phổ biến và những dữ kiện khoa học, thực tiễn tiêu biểu gắn liền với " +
+                t +
+                ".",
+            },
+            {
+              title: "(3) Cơ chế vận hành & Phân tích chuyên sâu:",
+              body:
+                "Làm rõ cấu trúc thành phần, nguyên lý hoạt động bên trong, quy luật tương tác cũng như các yếu tố môi trường tác động trực tiếp đến " +
+                t +
+                ".",
+            },
+            {
+              title: "(4) Đánh giá Thực trạng & Giá trị ứng dụng:",
+              body:
+                "Phân tích vai trò, lợi ích thiết thực của " +
+                t +
+                " trong đời sống và công việc thực tế, đồng thời chỉ ra những điểm mạnh nổi bật cùng các rào cản, thách thức hiện hành.",
+            },
+            {
+              title: "(5) Giải pháp tối ưu & Định hướng tương lai:",
+              body:
+                "Đề xuất các phương án khai thác, ứng dụng hoặc bảo tồn/phát triển " +
+                t +
+                " hiệu quả, kết hợp dự báo xu hướng đổi mới bền vững trong giai đoạn tới.",
+            },
           ];
+        }
 
-          const prompt =
-            'Hãy viết báo cáo tóm tắt về chủ đề "' +
+        window.tngFetchReportSections = async function (topic) {
+          let cleanTopic = extractCleanTopic(topic, topic);
+          let defaults = getDefaultReportSections(cleanTopic);
+
+          let prompt =
+            'Hãy lập báo cáo nghiên cứu chuyên sâu về chủ đề "' +
             cleanTopic +
-            '" gồm ĐÚNG 3 dòng theo bố cục sau (mỗi dòng tối đa 85 ký tự, tổng 3 dòng dưới 260 ký tự, không giải thích thêm):\n' +
-            "(1) [Số liệu thống kê hoặc dữ kiện cốt lõi quan trọng nhất về " +
+            '" bằng tiếng Việt thật đầy đủ ý, khoa học và mạch lạc. Trả về ĐÚNG 5 dòng tương ứng với 5 phần của sườn báo cáo sau (mỗi dòng từ 35 đến 55 từ, không xuống dòng bên trong từng mục, không viết lời mở đầu hay kết luận thừa):\n' +
+            "(1) [Tổng quan định nghĩa, phân loại, nguồn gốc và đặc điểm nhận diện cốt lõi của " +
             cleanTopic +
             "]\n" +
-            "(2) [Phân tích nguyên lý hoạt động, bản chất hoặc xu hướng chính của " +
+            "(2) [Các số liệu thống kê, thông số kích thước/đặc tính hoặc dữ kiện khoa học thực tế quan trọng nhất về " +
             cleanTopic +
             "]\n" +
-            "(3) [Đề xuất giải pháp ứng dụng thực tiễn và định hướng tương lai cho " +
+            "(3) [Phân tích chuyên sâu cấu trúc, tập tính/nguyên lý hoạt động và các yếu tố tác động đến " +
+            cleanTopic +
+            "]\n" +
+            "(4) [Đánh giá thực trạng hiện nay, giá trị ứng dụng thực tiễn và các lợi ích/thách thức đối với " +
+            cleanTopic +
+            "]\n" +
+            "(5) [Đề xuất giải pháp ứng dụng, chăm sóc/tối ưu hóa hiệu quả và định hướng phát triển tương lai cho " +
             cleanTopic +
             "]";
 
-          const aiRaw = await queryInternalAIs(prompt);
-          if (!aiRaw) return defaultPoints;
+          let aiRaw = await queryInternalAIs(prompt);
+          if (!aiRaw) return defaults;
 
-          const lines = aiRaw
+          let lines = aiRaw
             .split(/\r?\n/)
             .map(function (l) {
               return l.trim();
             })
             .filter(function (l) {
-              return l.length > 8;
+              return l.length > 18 && l.indexOf('"assistant"') === -1;
             });
 
-          let p1 =
-            lines.find(function (l) {
-              return /^[•\-]?\s*\(?1[\)\.]/.test(l);
-            }) || lines[0];
-          let p2 =
-            lines.find(function (l) {
-              return /^[•\-]?\s*\(?2[\)\.]/.test(l);
-            }) || lines[1];
-          let p3 =
-            lines.find(function (l) {
-              return /^[•\-]?\s*\(?3[\)\.]/.test(l);
-            }) || lines[2];
+          if (lines.length < 3) return defaults;
 
-          if (!p1 || !p2 || !p3) return defaultPoints;
-
-          return [
-            "(1) " + clampLine(p1, 90),
-            "(2) " + clampLine(p2, 90),
-            "(3) " + clampLine(p3, 90),
-          ];
+          return defaults.map(function (defItem, idx) {
+            let num = idx + 1;
+            let regex = new RegExp(
+              "^[•\\-\\*]?\\s*\\(?" + num + "[\\)\\.:]",
+              "i",
+            );
+            let matched =
+              lines.find(function (l) {
+                return regex.test(l);
+              }) || lines[idx];
+            if (!matched) return defItem;
+            let stripped = matched
+              .replace(/^[•\-\*]?\s*\(?[1-5][\)\.:]\s*/i, "")
+              .replace(/^[^:]{3,38}:\s*/, "")
+              .trim();
+            let cleanBody = formatCleanSentence(stripped, 310);
+            return {
+              title: defItem.title,
+              body: cleanBody || defItem.body,
+            };
+          });
         };
 
-        // Tạo 3 giai đoạn Lộ trình học (Học có hướng dẫn) theo bố cục mẫu & giới hạn ký tự
-        window.tngBuildLearningStages = async function (topic) {
-          const cleanTopic = String(topic || "chủ đề này")
-            .replace(/^(lộ trình học|học|tìm hiểu)\s*[:\-]?\s*/i, "")
-            .trim();
+        function buildReportItemsHTML(sectionsArr) {
+          let html =
+            '<div class="tng-doc-lead">Báo cáo phân tích tổng hợp và hệ thống hóa dữ liệu trọng tâm qua 5 bước chuyên sâu:</div>' +
+            '<div class="tng-report-list">';
+          sectionsArr.forEach(function (sec) {
+            html +=
+              '<div class="tng-report-sec">' +
+              '<span class="tng-report-sec-title">' +
+              sec.title +
+              "</span>" +
+              "<span>" +
+              sec.body +
+              "</span>" +
+              "</div>";
+          });
+          html += "</div>";
+          return html;
+        }
 
-          const defaultStages = [
-            "1. Giai đoạn Nhập môn: Khái niệm cốt lõi, bối cảnh lịch sử và lý thuyết nền tảng.",
-            "2. Giai đoạn Thực hành: Áp dụng kiến thức vào thực tế, giải quyết bài toán.",
-            "3. Giai đoạn Nâng cao: Nghiên cứu chuyên sâu, mở rộng vấn đề và tổng kết.",
+        // =========================================================================
+        // 6. SƯỜN LỘ TRÌNH HỌC (5 GIAI ĐOẠN - ĐÃ BỎ HOÀN TOÀN CÂU HỎI DƯỚI ĐÁY)
+        // =========================================================================
+        function getDefaultLearningStages(topic) {
+          let t = extractCleanTopic(topic, topic);
+          return [
+            {
+              head: "1. Giai đoạn 1 – Khởi động & Nền tảng cốt lõi (Nhập môn):",
+              body:
+                "Làm quen với hệ thống khái niệm cơ sở, thuật ngữ chuyên ngành, bối cảnh hình thành và các quy tắc tư duy nền tảng của " +
+                t +
+                ".",
+              goal:
+                "→ Mục tiêu đạt được: Hiểu đúng bản chất và nắm vững khung kiến thức tổng thể về " +
+                t +
+                ".",
+            },
+            {
+              head: "2. Giai đoạn 2 – Lý thuyết trọng tâm & Phương pháp luận:",
+              body:
+                "Đi sâu phân tích các nguyên lý, định lý/cấu trúc cốt lõi, công thức vận hành và phương pháp tiếp cận từng phân nhánh trong " +
+                t +
+                ".",
+              goal: "→ Mục tiêu đạt được: Nắm chắc cơ chế logic và liên kết được các chuyên đề lý thuyết.",
+            },
+            {
+              head: "3. Giai đoạn 3 – Thực hành & Giải quyết bài toán thực tế:",
+              body:
+                "Vận dụng kiến thức " +
+                t +
+                " đã học vào giải quyết hệ thống bài tập từ cơ bản đến phân loại, phân tích ví dụ minh họa và xử lý tình huống thực tế.",
+              goal: "→ Mục tiêu đạt được: Hình thành kỹ năng thực hành độc lập và khắc phục các lỗi sai thường gặp.",
+            },
+            {
+              head: "4. Giai đoạn 4 – Chuyên đề nâng cao & Tối ưu hóa:",
+              body:
+                "Khám phá các dạng bài toán phức tạp, kỹ thuật giải nhanh, phương pháp tối ưu hóa và mở rộng ứng dụng liên ngành của " +
+                t +
+                ".",
+              goal: "→ Mục tiêu đạt được: Làm chủ chiều sâu học thuật và xử lý linh hoạt các vấn đề nâng cao.",
+            },
+            {
+              head: "5. Giai đoạn 5 – Hệ thống hóa, Đánh giá & Ứng dụng dài hạn:",
+              body: "Tổng kết toàn bộ lộ trình bằng sơ đồ tư duy, tự kiểm tra đánh giá năng lực qua dự án/đề tổng hợp và ứng dụng bền vững vào thực tiễn.",
+              goal:
+                "→ Mục tiêu đạt được: Vận dụng thành thạo " +
+                t +
+                " vào học tập, nghiên cứu và công việc.",
+            },
           ];
+        }
 
-          const prompt =
-            'Hãy thiết kế lộ trình học "' +
-            cleanTopic +
-            '" gồm ĐÚNG 3 dòng theo đúng mẫu sau (phần nội dung sau dấu hai chấm mỗi dòng tối đa 75 ký tự, tổng cả 3 dòng dưới 250 ký tự, không viết thêm bất kỳ câu nào khác):\n' +
-            "1. Giai đoạn Nhập môn: [Các khái niệm, kiến thức nền tảng cần nắm về " +
-            cleanTopic +
-            "]\n" +
-            "2. Giai đoạn Thực hành: [Cách vận dụng, bài tập hoặc kỹ năng thực tế của " +
-            cleanTopic +
-            "]\n" +
-            "3. Giai đoạn Nâng cao: [Chuyên đề chuyên sâu, tối ưu hóa và mở rộng về " +
-            cleanTopic +
-            "]";
+        window.tngFetchLearningStages = async function (topic) {
+          let cleanTopic = extractCleanTopic(topic, topic);
+          let defaults = getDefaultLearningStages(cleanTopic);
 
-          const aiRaw = await queryInternalAIs(prompt);
-          if (!aiRaw) return defaultStages;
+          let prompt =
+            'Hãy thiết kế lộ trình học tập toàn diện gồm 5 giai đoạn cho chủ đề "' +
+            cleanTopic +
+            '" bằng tiếng Việt thật chi tiết, hợp lý. Trả về ĐÚNG 5 dòng theo cấu trúc sau (ngăn cách phần nội dung học và mục tiêu bằng dấu | , mỗi dòng từ 35 đến 55 từ, không viết câu nào khác):\n' +
+            "G1: [Các kiến thức nhập môn, khái niệm cơ sở cần học đầu tiên về " +
+            cleanTopic +
+            "] | [Mục tiêu đầu ra cần đạt ở giai đoạn 1]\n" +
+            "G2: [Các lý thuyết trọng tâm, định lý/nguyên lý cốt lõi cần nắm vững của " +
+            cleanTopic +
+            "] | [Mục tiêu đầu ra cần đạt ở giai đoạn 2]\n" +
+            "G3: [Các dạng bài tập thực hành, kỹ năng vận dụng thực tế đối với " +
+            cleanTopic +
+            "] | [Mục tiêu đầu ra cần đạt ở giai đoạn 3]\n" +
+            "G4: [Các chuyên đề nâng cao, kỹ thuật chuyên sâu và mở rộng của " +
+            cleanTopic +
+            "] | [Mục tiêu đầu ra cần đạt ở giai đoạn 4]\n" +
+            "G5: [Cách ôn tập hệ thống hóa, kiểm tra đánh giá và ứng dụng thực tiễn " +
+            cleanTopic +
+            "] | [Mục tiêu đầu ra cần đạt ở giai đoạn 5]";
 
-          const lines = aiRaw
+          let aiRaw = await queryInternalAIs(prompt);
+          if (!aiRaw) return defaults;
+
+          let lines = aiRaw
             .split(/\r?\n/)
             .map(function (l) {
               return l.trim();
             })
             .filter(function (l) {
-              return l.length > 10;
+              return (
+                l.length > 18 &&
+                l.indexOf('"assistant"') === -1 &&
+                l.indexOf('"reasoning"') === -1
+              );
             });
 
-          function extractStageBody(line, fallbackBody) {
-            if (!line) return fallbackBody;
-            let parts = line.split(":");
-            let body =
-              parts.length > 1 ? parts.slice(1).join(":").trim() : line;
-            return clampLine(body, 80) || fallbackBody;
-          }
+          if (lines.length < 3) return defaults;
 
-          let s1 =
-            lines.find(function (l) {
-              return /1|nhập môn/i.test(l);
-            }) || lines[0];
-          let s2 =
-            lines.find(function (l) {
-              return /2|thực hành/i.test(l);
-            }) || lines[1];
-          let s3 =
-            lines.find(function (l) {
-              return /3|nâng cao/i.test(l);
-            }) || lines[2];
+          return defaults.map(function (defStage, idx) {
+            let num = idx + 1;
+            let regex = new RegExp(
+              "^[•\\-\\*]?\\s*(?:G" +
+                num +
+                "|" +
+                num +
+                "[\\.\\)]|Giai đoạn\\s*" +
+                num +
+                ")",
+              "i",
+            );
+            let matched =
+              lines.find(function (l) {
+                return regex.test(l);
+              }) || lines[idx];
+            if (!matched) return defStage;
 
-          if (!s1 || !s2 || !s3) return defaultStages;
+            let stripped = matched
+              .replace(
+                /^[•\-\*]?\s*(?:G[1-5]|[1-5][\.\)]|Giai đoạn\s*[1-5])\s*[:\-]?\s*/i,
+                "",
+              )
+              .replace(/^[^:|]{3,35}:\s*/, "")
+              .trim();
 
-          return [
-            "1. Giai đoạn Nhập môn: " +
-              extractStageBody(
-                s1,
-                "Khái niệm cốt lõi, bối cảnh lịch sử và lý thuyết nền tảng.",
-              ),
-            "2. Giai đoạn Thực hành: " +
-              extractStageBody(
-                s2,
-                "Áp dụng kiến thức vào thực tế, giải quyết bài toán.",
-              ),
-            "3. Giai đoạn Nâng cao: " +
-              extractStageBody(
-                s3,
-                "Nghiên cứu chuyên sâu, mở rộng vấn đề và tổng kết.",
-              ),
-          ];
+            let parts = stripped.split("|");
+            let mainBody = formatCleanSentence(parts[0].trim(), 270);
+            let goalBody =
+              parts.length > 1
+                ? formatCleanSentence(
+                    parts[1]
+                      .replace(
+                        /^(?:mục tiêu(?:\s*đầu ra)?|cần đạt)\s*[:\-]?\s*/i,
+                        "",
+                      )
+                      .trim(),
+                    140,
+                  )
+                : "";
+
+            return {
+              head: defStage.head,
+              body: mainBody || defStage.body,
+              goal: goalBody
+                ? "→ Mục tiêu đạt được: " + goalBody
+                : defStage.goal,
+            };
+          });
         };
 
-        // Tự động nâng cấp nội dung mặc định sang nội dung AI khi tạo mới hoặc mở xem
-        window.tngUpgradeDefaultDocWithAI = async function (
-          fileObj,
-          domContainer,
+        function buildLearningStagesHTML(stagesArr) {
+          let html = '<div class="tng-learn-list">';
+          stagesArr.forEach(function (st) {
+            html +=
+              '<div class="tng-learn-stage">' +
+              '<span class="tng-learn-stage-head">' +
+              st.head +
+              "</span>" +
+              "<span>" +
+              st.body +
+              "</span>" +
+              '<span class="tng-learn-stage-goal">' +
+              st.goal +
+              "</span>" +
+              "</div>";
+          });
+          html += "</div>";
+          return html;
+        }
+
+        // =========================================================================
+        // 7. BỘ 20 SLIDES CANVAS (SLIDE 1 BÌA + 18 SLIDES NỘI DUNG + SLIDE 20 KẾT)
+        // =========================================================================
+        function getDefault18ContentSlides(topic) {
+          let t = extractCleanTopic(topic, topic);
+          return [
+            {
+              title: "Tổng quan & Khái niệm cốt lõi",
+              bullets: [
+                "Định nghĩa chuẩn xác và bản chất nền tảng của " + t + ".",
+                "Các thuật ngữ trọng tâm và phạm vi nghiên cứu chính.",
+                "Vai trò cốt lõi của " +
+                  t +
+                  " trong hệ thống tri thức hiện đại.",
+                "Mục tiêu trọng tâm khi tiếp cận và làm chủ chuyên đề này.",
+              ],
+            },
+            {
+              title: "Lịch sử hình thành & Bối cảnh phát triển",
+              bullets: [
+                "Nguồn gốc ra đời và các cột mốc phát triển quan trọng của " +
+                  t +
+                  ".",
+                "Những bài toán thực tế thúc đẩy sự hình thành lĩnh vực này.",
+                "Sự chuyển dịch từ phương pháp tiếp cận truyền thống sang hiện đại.",
+              ],
+            },
+            {
+              title: "Tầm quan trọng & Giá trị nền tảng",
+              bullets: [
+                "Ý nghĩa khoa học và giá trị thực tiễn mà " + t + " mang lại.",
+                "Tác động trực tiếp đến năng suất và chất lượng công việc.",
+                "Vị trí chiến lược của " +
+                  t +
+                  " trong xu thế phát triển hiện nay.",
+                "Lý do cần trang bị kiến thức vững chắc về chuyên đề này.",
+              ],
+            },
+            {
+              title: "Cấu trúc tổng thể & Các thành phần chính",
+              bullets: [
+                "Thành phần nền tảng thứ nhất tạo nên khung sườn của " +
+                  t +
+                  ".",
+                "Các bộ phận trung tâm đảm nhận chức năng xử lý cốt lõi.",
+                "Hệ thống liên kết và tương tác giữa các phần tử bên trong.",
+                "Tiêu chuẩn đánh giá tính hoàn chỉnh của toàn bộ cấu trúc.",
+                "Các yếu tố bổ trợ giúp duy trì sự cân bằng và ổn định.",
+              ],
+            },
+            {
+              title: "Phân loại & Các nhóm đặc trưng",
+              bullets: [
+                "Phân loại " +
+                  t +
+                  " theo đặc tính cấu tạo và chức năng hoạt động.",
+                "Nhóm cơ bản phổ biến trong môi trường học thuật và đời sống.",
+                "Nhóm chuyên sâu phục vụ các bài toán kỹ thuật đặc thù.",
+                "Cách nhận diện và lựa chọn phân nhóm phù hợp với nhu cầu.",
+              ],
+            },
+            {
+              title: "Đặc điểm nhận diện & Tính chất trọng tâm",
+              bullets: [
+                "Những dấu hiệu đặc trưng giúp phân biệt " +
+                  t +
+                  " với các khái niệm khác.",
+                "Tính chất định tính và định lượng cốt lõi cần lưu ý.",
+                "Sự biến đổi trạng thái của " +
+                  t +
+                  " trong các điều kiện khác nhau.",
+              ],
+            },
+            {
+              title: "Nguyên lý hoạt động & Cơ chế cốt lõi",
+              bullets: [
+                "Các quy luật tự nhiên và nguyên tắc khoa học chi phối " +
+                  t +
+                  ".",
+                "Cơ chế chuyển đổi và tương tác năng lượng/thông tin bên trong.",
+                "Điều kiện cân bằng để hệ thống vận hành đúng quỹ đạo.",
+                "Mối quan hệ nhân quả giữa tác động đầu vào và phản hồi đầu ra.",
+              ],
+            },
+            {
+              title: "Quy trình vận hành & Các bước triển khai",
+              bullets: [
+                "Bước 1: Chuẩn bị dữ liệu, nguồn lực và điều kiện ban đầu.",
+                "Bước 2: Thiết lập cấu hình và kích hoạt cơ chế cốt lõi của " +
+                  t +
+                  ".",
+                "Bước 3: Giám sát quá trình vận hành và hiệu chỉnh thông số.",
+                "Bước 4: Kiểm tra, nghiệm thu kết quả và đánh giá mức độ đáp ứng.",
+                "Bước 5: Bảo trì, chuẩn hóa quy trình để tái sử dụng lâu dài.",
+              ],
+            },
+            {
+              title: "Phương pháp tiếp cận & Công cụ hỗ trợ",
+              bullets: [
+                "Các phương pháp phân tích và tiếp cận " +
+                  t +
+                  " hiệu quả nhất.",
+                "Hệ thống công cụ, phần mềm và thiết bị hỗ trợ chuyên dụng.",
+                "Kỹ thuật đo lường và kiểm chứng độ chính xác trong thực tế.",
+                "Kinh nghiệm lựa chọn công cụ tối ưu theo từng quy mô.",
+              ],
+            },
+            {
+              title: "Các yếu tố ảnh hưởng & Điều kiện cần thiết",
+              bullets: [
+                "Tác động của môi trường bên ngoài đến hiệu suất của " +
+                  t +
+                  ".",
+                "Yêu cầu về trình độ chuyên môn và hạ tầng kỹ thuật đi kèm.",
+                "Phương pháp kiểm soát biến số để hạn chế sai lệch phát sinh.",
+              ],
+            },
+            {
+              title: "Ứng dụng thực tiễn trong đời sống & sản xuất",
+              bullets: [
+                "Triển khai " +
+                  t +
+                  " trong các hoạt động đời sống thường nhật.",
+                "Ứng dụng vào tự động hóa và tối ưu hóa quy trình sản xuất.",
+                "Giải quyết các bài toán phức tạp trong giáo dục và nghiên cứu.",
+                "Khả năng kết hợp liên ngành với các công nghệ tiên tiến khác.",
+                "Mở rộng quy mô ứng dụng từ cấp độ cá nhân đến doanh nghiệp.",
+              ],
+            },
+            {
+              title: "Ứng dụng trong Công nghệ & Kỹ thuật hiện đại",
+              bullets: [
+                "Vai trò của " +
+                  t +
+                  " trong việc phát triển các giải pháp công nghệ mới.",
+                "Tích hợp vào hệ thống điều khiển, phân tích dữ liệu và mô phỏng.",
+                "Đóng góp vào quá trình chuyển đổi số và hiện đại hóa quy trình.",
+                "Tạo tiền đề cho các sáng kiến đột phá trong kỹ thuật.",
+              ],
+            },
+            {
+              title: "Phân tích Tình huống & Ví dụ điển hình",
+              bullets: [
+                "Mô hình mẫu minh họa cách " +
+                  t +
+                  " giải quyết vấn đề thực tế.",
+                "Phân tích số liệu trước và sau khi áp dụng phương pháp chuẩn.",
+                "Bài học kinh nghiệm rút ra từ các dự án triển khai thành công.",
+                "Những điểm mấu chốt quyết định sự thành bại trong thực tiễn.",
+              ],
+            },
+            {
+              title: "So sánh & Đối chiếu các phương pháp",
+              bullets: [
+                "Đặt " +
+                  t +
+                  " trong mối tương quan với các mô hình tương đương.",
+                "Phân tích sự khác biệt về tốc độ, chi phí và độ phức tạp.",
+                "Xác định kịch bản tối ưu để phát huy tối đa thế mạnh riêng.",
+              ],
+            },
+            {
+              title: "Ưu điểm vượt trội & Lợi ích mang lại",
+              bullets: [
+                "Tối ưu hóa thời gian, chi phí và nguồn lực thực hiện.",
+                "Nâng cao độ chính xác, tính minh bạch và hiệu suất tổng thể.",
+                "Tạo nền tảng tư duy hệ thống vững chắc cho người sử dụng.",
+                "Mang lại giá trị bền vững và lợi thế cạnh tranh dài hạn.",
+              ],
+            },
+            {
+              title: "Hạn chế, Rào cản & Thách thức thực tế",
+              bullets: [
+                "Những khó khăn và sai lầm phổ biến khi mới bắt đầu tiếp cận " +
+                  t +
+                  ".",
+                "Giới hạn kỹ thuật và các rào cản về chi phí, hạ tầng triển khai.",
+                "Rủi ro tiềm ẩn nếu áp dụng sai quy trình hoặc thiếu kiểm soát.",
+              ],
+            },
+            {
+              title: "Giải pháp tối ưu hóa & Khắc phục rủi ro",
+              bullets: [
+                "Xây dựng lộ trình chuẩn hóa nhằm nâng cao hiệu quả áp dụng " +
+                  t +
+                  ".",
+                "Áp dụng công cụ kiểm tra và đánh giá định kỳ để phòng ngừa lỗi.",
+                "Tối ưu hóa từng khâu vận hành để tiết kiệm tối đa nguồn lực.",
+                "Đào tạo nâng cao năng lực thực hành và xử lý tình huống linh hoạt.",
+              ],
+            },
+            {
+              title: "Xu hướng tương lai & Tổng kết trọng tâm",
+              bullets: [
+                "Tiềm năng đổi mới và đột phá của " +
+                  t +
+                  " trong kỷ nguyên số.",
+                "Sự giao thoa giữa " +
+                  t +
+                  " với trí tuệ nhân tạo và dữ liệu lớn.",
+                "Định hướng nghiên cứu và phát triển chuyên sâu trong 5–10 năm tới.",
+                "Tổng kết các giá trị cốt lõi cần ghi nhớ và vận dụng ngay.",
+              ],
+            },
+          ];
+        }
+
+        function render20SlidesDeckHTML(
+          topic,
+          contentSlidesArr,
+          isAiDone,
+          fileId,
         ) {
-          if (!fileObj || fileObj._aiUpgraded) return;
-
-          const isDefaultReport =
-            typeof fileObj.data === "string" &&
-            fileObj.data.indexOf(
-              "Thu thập số liệu thống kê mới nhất về chủ đề này",
-            ) !== -1;
-          const isDefaultLearn =
-            typeof fileObj.data === "string" &&
-            fileObj.data.indexOf(
-              "Khái niệm cốt lõi, bối cảnh lịch sử và lý thuyết nền tảng",
-            ) !== -1;
-
-          if (!isDefaultReport && !isDefaultLearn) return;
-          fileObj._aiUpgraded = true;
-
-          let rawTopic = String(fileObj.name || "")
-            .replace(/^(📌\s*)?(Báo cáo|Lộ trình học)\s*:\s*/i, "")
-            .trim();
-          if (!rawTopic) rawTopic = "chủ đề này";
-
-          if (isDefaultReport) {
-            const pts = await window.tngBuildReportPoints(rawTopic);
-            fileObj.data = fileObj.data
-              .replace(
-                /\(1\)\s*Thu thập số liệu thống kê mới nhất về chủ đề này\./g,
-                pts[0],
-              )
-              .replace(
-                /\(2\)\s*Phân tích các phương thức hoạt động và xu hướng thị trường\./g,
-                pts[1],
-              )
-              .replace(
-                /\(3\)\s*Đề xuất giải pháp và định hướng tương lai\./g,
-                pts[2],
-              );
-          } else if (isDefaultLearn) {
-            const stg = await window.tngBuildLearningStages(rawTopic);
-            fileObj.data = fileObj.data
-              .replace(
-                /1\.\s*Giai đoạn Nhập môn:\s*Khái niệm cốt lõi, bối cảnh lịch sử và lý thuyết nền tảng\./g,
-                "<b>1. Giai đoạn Nhập môn:</b> " +
-                  stg[0].replace(/^1\.\s*Giai đoạn Nhập môn:\s*/i, ""),
-              )
-              .replace(
-                /2\.\s*Giai đoạn Thực hành:\s*Áp dụng kiến thức vào thực tế, giải quyết bài toán\./g,
-                "<b>2. Giai đoạn Thực hành:</b> " +
-                  stg[1].replace(/^2\.\s*Giai đoạn Thực hành:\s*/i, ""),
-              )
-              .replace(
-                /3\.\s*Giai đoạn Nâng cao:\s*Nghiên cứu chuyên sâu, mở rộng vấn đề và tổng kết\./g,
-                "<b>3. Giai đoạn Nâng cao:</b> " +
-                  stg[2].replace(/^3\.\s*Giai đoạn Nâng cao:\s*/i, ""),
-              );
+          let cleanTopic = extractCleanTopic(topic, topic);
+          if (!cleanTopic || cleanTopic === "chủ đề này") {
+            cleanTopic = "Chủ đề thuyết trình";
           }
 
+          let theme = pickNextCanvasTheme(fileId);
+          let middleSlides =
+            contentSlidesArr && contentSlidesArr.length === 18
+              ? contentSlidesArr
+              : getDefault18ContentSlides(cleanTopic);
+
+          let themeVars =
+            "--deck-bg:" +
+            theme.bg +
+            ";" +
+            "--deck-text:" +
+            theme.text +
+            ";" +
+            "--deck-subtext:" +
+            theme.subtext +
+            ";" +
+            "--deck-accent:" +
+            theme.accent +
+            ";" +
+            "--deck-badge-bg:" +
+            theme.badgeBg +
+            ";" +
+            "--deck-badge-border:" +
+            theme.badgeBorder +
+            ";" +
+            "--deck-badge-radius:" +
+            theme.badgeRadius +
+            ";" +
+            "--deck-title-grad:" +
+            theme.titleGrad +
+            ";" +
+            "--deck-title-fill:" +
+            theme.titleFill +
+            ";" +
+            "--deck-title-solid:" +
+            theme.titleSolid +
+            ";" +
+            "--deck-line-grad:" +
+            theme.lineGrad +
+            ";" +
+            "--deck-divider:" +
+            theme.divider +
+            ";" +
+            "--deck-card-bg:" +
+            theme.cardBg +
+            ";" +
+            "--deck-card-border:" +
+            theme.cardBorder +
+            ";" +
+            "--deck-card-left-bar:" +
+            theme.cardLeftBar +
+            ";" +
+            "--deck-card-radius:" +
+            theme.cardRadius +
+            ";" +
+            "--deck-card-text:" +
+            theme.cardText +
+            ";" +
+            "--deck-num-bg:" +
+            theme.numBg +
+            ";" +
+            "--deck-num-border:" +
+            theme.numBorder +
+            ";" +
+            "--deck-num-text:" +
+            theme.numText +
+            ";" +
+            "--deck-num-radius:" +
+            theme.numRadius +
+            ";" +
+            "--deck-cover-align:" +
+            theme.coverAlign +
+            ";" +
+            "--deck-cover-text-align:" +
+            (theme.coverAlign === "flex-start" ? "left" : "center") +
+            ";";
+
+          let html =
+            '<div class="tng-modern-deck" data-theme-id="' +
+            theme.id +
+            '" data-card-layout="' +
+            theme.layout +
+            '" data-topic-name="' +
+            cleanTopic.replace(/"/g, "&quot;") +
+            '" ' +
+            (isAiDone ? 'data-tng-canvas-20-v7="1"' : "") +
+            ' style="' +
+            themeVars +
+            '">' +
+            '<div class="tng-deck-decor-1"></div>' +
+            '<div class="tng-deck-decor-2"></div>';
+
+          // SLIDE 1: TRANG BÌA (01 / 20)
+          html +=
+            '<div class="slide-page" style="display:flex;">' +
+            '<div class="tng-slide-cover-box">' +
+            '<div class="tng-slide-cover-pill">SLIDE 01 / 20 • ' +
+            theme.name.toUpperCase() +
+            "</div>" +
+            '<h1 class="tng-slide-cover-title">' +
+            cleanTopic +
+            "</h1>" +
+            '<div class="tng-slide-cover-line"></div>' +
+            '<p class="tng-slide-cover-sub">Bản trình bày tự động bởi TNG AI 1.0</p>' +
+            "</div>" +
+            "</div>";
+
+          // SLIDE 2 -> SLIDE 19: 18 TRANG NỘI DUNG CHI TIẾT (3 - 5 Ý MỖI TRANG)
+          for (let i = 0; i < 18; i++) {
+            let sNum = String(i + 2).padStart(2, "0");
+            let sObj = middleSlides[i];
+            let bullets =
+              sObj && Array.isArray(sObj.bullets) && sObj.bullets.length >= 3
+                ? sObj.bullets.slice(0, 5)
+                : getDefault18ContentSlides(cleanTopic)[i].bullets;
+
+            let cardsHtml = "";
+            for (let bIdx = 0; bIdx < bullets.length; bIdx++) {
+              let numLabel = String(bIdx + 1).padStart(2, "0");
+              cardsHtml +=
+                '<div class="tng-slide-card-item">' +
+                '<span class="tng-slide-card-num">' +
+                numLabel +
+                "</span>" +
+                '<span class="tng-slide-card-text">' +
+                formatCleanSentence(bullets[bIdx], 115) +
+                "</span>" +
+                "</div>";
+            }
+
+            html +=
+              '<div class="slide-page" style="display:none;">' +
+              '<div class="tng-slide-top-bar">' +
+              '<span class="tng-slide-badge">SLIDE ' +
+              sNum +
+              " / 20</span>" +
+              '<span class="tng-slide-brand">' +
+              cleanTopic.slice(0, 38) +
+              "</span>" +
+              "</div>" +
+              '<h2 class="tng-slide-heading">' +
+              String(sObj.title || "").slice(0, 65) +
+              "</h2>" +
+              '<div class="tng-slide-cards" data-count="' +
+              bullets.length +
+              '">' +
+              cardsHtml +
+              "</div>" +
+              "</div>";
+          }
+
+          // SLIDE 20: TRANG KẾT THÚC (20 / 20)
+          html +=
+            '<div class="slide-page" style="display:none;">' +
+            '<div class="tng-slide-cover-box">' +
+            '<div class="tng-slide-cover-pill">SLIDE 20 / 20 • THANK YOU</div>' +
+            '<h1 class="tng-slide-cover-title">Cảm ơn bạn đã theo dõi!</h1>' +
+            '<div class="tng-slide-cover-line"></div>' +
+            '<p class="tng-slide-cover-sub">Kết thúc bản trình bày • ' +
+            cleanTopic.slice(0, 45) +
+            "</p>" +
+            "</div>" +
+            "</div>";
+
+          // THANH ĐIỀU HƯỚNG VIÊN NANG Ở ĐÁY (1 / 20)
+          html +=
+            '<div class="tng-slide-nav-bar">' +
+            '<button type="button" class="tng-slide-nav-btn" onclick="event.stopPropagation(); window.changeSlide(-1)">❮</button>' +
+            '<div id="slide-counter" class="tng-slide-nav-count">1 / 20</div>' +
+            '<button type="button" class="tng-slide-nav-btn" onclick="event.stopPropagation(); window.changeSlide(1)">❯</button>' +
+            "</div>";
+
+          html += "</div>";
+          return html;
+        }
+
+        window.tngBuildCanvas18ContentSlides = async function (topic) {
+          let cleanTopic = extractCleanTopic(topic, topic);
+          const targetCounts = [
+            4, 3, 4, 5, 4, 3, 4, 5, 4, 3, 5, 4, 4, 3, 4, 3, 4, 4,
+          ];
+
+          let prompt =
+            'Soạn nội dung chi tiết cho 18 slide thuyết trình (từ Slide 2 đến Slide 19) về chủ đề "' +
+            cleanTopic +
+            '" bằng tiếng Việt. Trả về ĐÚNG 18 dòng theo định dạng sau (ngăn cách tiêu đề bằng dấu | và các ý bằng dấu ; , mỗi ý từ 12 đến 20 từ đầy đủ nghĩa, số lượng ý mỗi slide từ 3 đến 5 ý như mẫu, không giải thích thêm):\n' +
+            "S2: Tổng quan & Khái niệm cốt lõi | [Ý 1] ; [Ý 2] ; [Ý 3] ; [Ý 4]\n" +
+            "S3: Lịch sử hình thành & Bối cảnh | [Ý 1] ; [Ý 2] ; [Ý 3]\n" +
+            "S4: Tầm quan trọng & Giá trị nền tảng | [Ý 1] ; [Ý 2] ; [Ý 3] ; [Ý 4]\n" +
+            "S5: Cấu trúc tổng thể & Thành phần | [Ý 1] ; [Ý 2] ; [Ý 3] ; [Ý 4] ; [Ý 5]\n" +
+            "S6: Phân loại & Các nhóm đặc trưng | [Ý 1] ; [Ý 2] ; [Ý 3] ; [Ý 4]\n" +
+            "S7: Đặc điểm nhận diện & Tính chất | [Ý 1] ; [Ý 2] ; [Ý 3]\n" +
+            "S8: Nguyên lý hoạt động & Cơ chế | [Ý 1] ; [Ý 2] ; [Ý 3] ; [Ý 4]\n" +
+            "S9: Quy trình vận hành & Triển khai | [Ý 1] ; [Ý 2] ; [Ý 3] ; [Ý 4] ; [Ý 5]\n" +
+            "S10: Phương pháp tiếp cận & Công cụ | [Ý 1] ; [Ý 2] ; [Ý 3] ; [Ý 4]\n" +
+            "S11: Các yếu tố ảnh hưởng & Điều kiện | [Ý 1] ; [Ý 2] ; [Ý 3]\n" +
+            "S12: Ứng dụng thực tiễn đời sống | [Ý 1] ; [Ý 2] ; [Ý 3] ; [Ý 4] ; [Ý 5]\n" +
+            "S13: Ứng dụng Công nghệ & Kỹ thuật | [Ý 1] ; [Ý 2] ; [Ý 3] ; [Ý 4]\n" +
+            "S14: Phân tích Tình huống & Ví dụ | [Ý 1] ; [Ý 2] ; [Ý 3] ; [Ý 4]\n" +
+            "S15: So sánh & Đối chiếu phương pháp | [Ý 1] ; [Ý 2] ; [Ý 3]\n" +
+            "S16: Ưu điểm vượt trội & Lợi ích | [Ý 1] ; [Ý 2] ; [Ý 3] ; [Ý 4]\n" +
+            "S17: Hạn chế, Rào cản & Thách thức | [Ý 1] ; [Ý 2] ; [Ý 3]\n" +
+            "S18: Giải pháp tối ưu & Khắc phục | [Ý 1] ; [Ý 2] ; [Ý 3] ; [Ý 4]\n" +
+            "S19: Xu hướng tương lai & Tổng kết | [Ý 1] ; [Ý 2] ; [Ý 3] ; [Ý 4]";
+
+          let aiRaw = await queryInternalAIs(prompt);
+          if (!aiRaw) return null;
+
+          let lines = aiRaw
+            .split(/\r?\n/)
+            .map(function (l) {
+              return l.trim();
+            })
+            .filter(function (l) {
+              return (
+                l.length > 12 &&
+                (l.indexOf("|") !== -1 || l.indexOf(";") !== -1) &&
+                l.indexOf('"assistant"') === -1
+              );
+            });
+
+          if (lines.length < 8) return null;
+
+          let defaults = getDefault18ContentSlides(cleanTopic);
+          let result = [];
+
+          for (let i = 0; i < 18; i++) {
+            let tagRegex = new RegExp(
+              "^[•\\-\\*]?\\s*S" + (i + 2) + "\\b",
+              "i",
+            );
+            let line =
+              lines.find(function (l) {
+                return tagRegex.test(l);
+              }) || lines[i];
+
+            if (!line) {
+              result.push(defaults[i]);
+              continue;
+            }
+
+            let cleanedLine = line
+              .replace(/^[•\-\*]?\s*S\d+\s*[:\-]?\s*/i, "")
+              .trim();
+            let parts = cleanedLine.split("|");
+            let slideTitle =
+              parts.length > 1
+                ? parts[0]
+                    .replace(/^[•\-\*\d\.\s]+/, "")
+                    .trim()
+                    .slice(0, 58)
+                : defaults[i].title;
+            let bulletsRaw =
+              parts.length > 1 ? parts.slice(1).join("|") : cleanedLine;
+            let bulletArr = bulletsRaw
+              .split(";")
+              .map(function (b) {
+                return formatCleanSentence(b.trim(), 105);
+              })
+              .filter(function (b) {
+                return b.length > 5;
+              });
+
+            let desiredCount = targetCounts[i];
+            let finalBullets = [];
+            for (let k = 0; k < desiredCount; k++) {
+              finalBullets.push(
+                bulletArr[k] ||
+                  defaults[i].bullets[k] ||
+                  defaults[i].bullets[defaults[i].bullets.length - 1],
+              );
+            }
+
+            result.push({
+              title: slideTitle || defaults[i].title,
+              bullets: finalBullets,
+            });
+          }
+
+          return result;
+        };
+
+        // =========================================================================
+        // 8. HÀM THAY THẾ HTML BÁO CÁO & LỘ TRÌNH HỌC (XÓA SẠCH CÂU HỎI DƯỚI ĐÁY)
+        // =========================================================================
+        function removeBottomQuestionFromHtml(str) {
+          if (!str || typeof str !== "string") return str;
+          return str
+            .replace(
+              /<div[^>]*>\s*Bạn muốn bắt đầu khám phá(?: chi tiết)? từ giai đoạn nào(?: trước)?\?\s*<\/div>/gi,
+              "",
+            )
+            .replace(
+              /<p[^>]*>\s*Bạn muốn bắt đầu khám phá(?: chi tiết)? từ giai đoạn nào(?: trước)?\?\s*<\/p>/gi,
+              "",
+            )
+            .replace(
+              /(?:<br\s*\/?>|\s)*Bạn muốn bắt đầu khám phá(?: chi tiết)? từ giai đoạn nào(?: trước)?\?/gi,
+              "",
+            );
+        }
+
+        function sanitizeStoredDocHtml(htmlStr) {
+          if (!htmlStr || typeof htmlStr !== "string") return htmlStr;
+          let cleanedStr = removeBottomQuestionFromHtml(htmlStr);
+          if (
+            cleanedStr.indexOf("Bắt đầu nghiên cứu") === -1 &&
+            cleanedStr.indexOf("ai-actions-bar") === -1 &&
+            cleanedStr.indexOf("Báo cáo nghiên cứu của bạn đã sẵn sàng") === -1
+          ) {
+            return cleanedStr;
+          }
+          let temp = document.createElement("div");
+          temp.innerHTML = cleanedStr;
+          temp
+            .querySelectorAll(
+              ".ai-actions-bar, button[onclick*='viewMediaById']",
+            )
+            .forEach(function (el) {
+              el.remove();
+            });
+          temp.querySelectorAll("div, p").forEach(function (el) {
+            if (
+              el.children.length === 0 &&
+              el.textContent &&
+              el.textContent.trim() ===
+                "Báo cáo nghiên cứu của bạn đã sẵn sàng!"
+            ) {
+              el.remove();
+            }
+          });
+          return removeBottomQuestionFromHtml(temp.innerHTML);
+        }
+
+        function replaceReportBodyInHtml(rawHtml, sectionsArr) {
+          if (!rawHtml || !sectionsArr) return rawHtml;
+          let newListHtml = buildReportItemsHTML(sectionsArr);
+          let temp = document.createElement("div");
+          temp.innerHTML = rawHtml;
+
+          let oldReportList = temp.querySelector(".tng-report-list");
+          if (oldReportList) {
+            let lead = temp.querySelector(".tng-doc-lead");
+            if (lead) lead.remove();
+            oldReportList.outerHTML = newListHtml;
+            return temp.innerHTML;
+          }
+
+          let ulEl = temp.querySelector("ul");
+          if (ulEl) {
+            ulEl.outerHTML = newListHtml;
+            return temp.innerHTML;
+          }
+          return rawHtml;
+        }
+
+        function replaceLearningBodyInHtml(rawHtml, stagesArr) {
+          if (!rawHtml || !stagesArr) return rawHtml;
+          let newStagesHtml = buildLearningStagesHTML(stagesArr);
+          let cleanedRaw = removeBottomQuestionFromHtml(rawHtml);
+          let temp = document.createElement("div");
+          temp.innerHTML = cleanedRaw;
+
+          let oldLearnList = temp.querySelector(".tng-learn-list");
+          if (oldLearnList) {
+            oldLearnList.outerHTML = newStagesHtml;
+            return removeBottomQuestionFromHtml(temp.innerHTML);
+          }
+
+          let htmlStr = temp.innerHTML;
+          let pattern =
+            /(?:<b>)?1\.\s*Giai đoạn Nhập môn:[\s\S]*?tổng kết\.(?:<br\s*\/?>|\s)*/i;
+          if (pattern.test(htmlStr)) {
+            return removeBottomQuestionFromHtml(
+              htmlStr.replace(pattern, newStagesHtml),
+            );
+          }
+          return cleanedRaw;
+        }
+
+        function syncFileEverywhere(fileId, topicHint, transformFn) {
           try {
-            if (typeof safeSaveCurA === "function") safeSaveCurA();
-            else if (typeof accounts !== "undefined") {
-              localStorage.setItem("tng_accounts", JSON.stringify(accounts));
+            if (
+              typeof curA !== "undefined" &&
+              curA &&
+              Array.isArray(curA.files)
+            ) {
+              curA.files.forEach(function (f) {
+                if (!f) return;
+                let matchId = fileId && String(f.id) === String(fileId);
+                let matchTopic =
+                  !fileId &&
+                  topicHint &&
+                  f.name &&
+                  f.name.indexOf(topicHint) !== -1;
+                if ((matchId || matchTopic) && typeof f.data === "string") {
+                  f.data = transformFn(sanitizeStoredDocHtml(f.data), f.id);
+                  f._tngV7Synced = true;
+                }
+              });
+            }
+
+            for (let i = 0; i < localStorage.length; i++) {
+              let k = localStorage.key(i);
+              if (k && k.indexOf("tng_f_") === 0) {
+                let list = JSON.parse(localStorage.getItem(k) || "[]");
+                let changed = false;
+                if (Array.isArray(list)) {
+                  list.forEach(function (item) {
+                    if (!item) return;
+                    let matchId = fileId && String(item.id) === String(fileId);
+                    let matchTopic =
+                      !fileId &&
+                      topicHint &&
+                      item.name &&
+                      item.name.indexOf(topicHint) !== -1;
+                    if (
+                      (matchId || matchTopic) &&
+                      typeof item.data === "string"
+                    ) {
+                      item.data = transformFn(
+                        sanitizeStoredDocHtml(item.data),
+                        item.id,
+                      );
+                      item._tngV7Synced = true;
+                      changed = true;
+                    }
+                  });
+                  if (changed) {
+                    localStorage.setItem(k, JSON.stringify(list));
+                  }
+                }
+              }
             }
           } catch (e) {}
+        }
 
-          if (domContainer) {
-            domContainer.innerHTML = fileObj.data;
+        // =========================================================================
+        // 9. TÍCH HỢP TRỰC TIẾP VÀO LUỒNG CHỜ CỦA SENDMSG / SETTIMEOUT / GENANS
+        // =========================================================================
+        function detectActiveToolName() {
+          if (
+            typeof currentActiveTool === "string" &&
+            currentActiveTool.trim()
+          ) {
+            return currentActiveTool.trim();
           }
-        };
+          let hInd = document.getElementById("active-tool-home");
+          let cInd = document.getElementById("active-tool-chat");
+          if (hInd && hInd.classList.contains("show")) {
+            let t = document.getElementById("active-tool-text-home");
+            if (t && t.textContent) return t.textContent.trim();
+          }
+          if (cInd && cInd.classList.contains("show")) {
+            let t = document.getElementById("active-tool-text-chat");
+            if (t && t.textContent) return t.textContent.trim();
+          }
+          return "";
+        }
 
-        const origViewMedia = window.viewMediaById;
-        if (typeof origViewMedia === "function") {
-          window.viewMediaById = function (id, e) {
-            const res = origViewMedia.apply(this, arguments);
-            try {
-              let filesArr = (curA && curA.files) || [];
-              let f = filesArr.find(function (x) {
-                return String(x.id) === String(id);
-              });
-              let body = document.getElementById("viewer-modal-body");
-              if (
-                f &&
-                body &&
-                f.type !== "audio" &&
-                f.type !== "image" &&
-                f.type !== "video"
-              ) {
-                window.tngUpgradeDefaultDocWithAI(f, body);
+        async function prepareToolPayload(toolName, rawTopic) {
+          let cleanTopic = extractCleanTopic(rawTopic, rawTopic);
+          let tLow = String(toolName || "").toLowerCase();
+
+          if (
+            tLow.indexOf("research") !== -1 ||
+            tLow.indexOf("nghiên cứu") !== -1
+          ) {
+            let sections = await window.tngFetchReportSections(cleanTopic);
+            return { type: "report", topic: cleanTopic, data: sections };
+          }
+          if (tLow.indexOf("học") !== -1 || tLow.indexOf("learn") !== -1) {
+            let stages = await window.tngFetchLearningStages(cleanTopic);
+            return { type: "learn", topic: cleanTopic, data: stages };
+          }
+          if (tLow.indexOf("canvas") !== -1 || tLow.indexOf("slide") !== -1) {
+            let slides18 =
+              await window.tngBuildCanvas18ContentSlides(cleanTopic);
+            return { type: "canvas", topic: cleanTopic, data: slides18 };
+          }
+          return null;
+        }
+
+        function upgradeHtmlWithPreparedPayload(htmlStr, payload, fileIdHint) {
+          if (!htmlStr || typeof htmlStr !== "string" || !payload)
+            return htmlStr;
+          if (payload.type === "report" && payload.data) {
+            if (
+              htmlStr.indexOf("Thu thập số liệu thống kê") !== -1 ||
+              htmlStr.indexOf("Báo cáo:") !== -1
+            ) {
+              return replaceReportBodyInHtml(htmlStr, payload.data);
+            }
+          } else if (payload.type === "learn" && payload.data) {
+            if (
+              htmlStr.indexOf("Khái niệm cốt lõi, bối cảnh lịch sử") !== -1 ||
+              htmlStr.indexOf("Lộ trình học:") !== -1
+            ) {
+              return replaceLearningBodyInHtml(htmlStr, payload.data);
+            }
+          } else if (payload.type === "canvas") {
+            if (
+              htmlStr.indexOf("slide-page") !== -1 ||
+              htmlStr.indexOf("Bản trình bày tự động bởi TNG AI") !== -1
+            ) {
+              return render20SlidesDeckHTML(
+                payload.topic,
+                payload.data,
+                true,
+                fileIdHint,
+              );
+            }
+          }
+          return htmlStr;
+        }
+
+        const _origSendMsg =
+          typeof sendMsg === "function" ? sendMsg : window.sendMsg;
+        if (typeof _origSendMsg === "function" && !window._tngSendMsgHookedV7) {
+          window._tngSendMsgHookedV7 = true;
+          window.sendMsg = sendMsg = function (source) {
+            let inp =
+              document.getElementById(
+                source === "home" ? "ui-home" : "ui-chat",
+              ) ||
+              document.getElementById("ui-chat") ||
+              document.getElementById("ui-home");
+            let userText = inp && inp.value ? inp.value.trim() : "";
+            let tool = detectActiveToolName();
+
+            let isTargetTool =
+              /research|nghiên cứu|học|learn|canvas|slide/i.test(tool);
+
+            if (isTargetTool && userText) {
+              window._tngLastUserTopic = userText;
+              window._tngActiveToolTask = prepareToolPayload(tool, userText);
+              window._tngWaitingToolTimer = true;
+            } else {
+              window._tngActiveToolTask = null;
+              window._tngWaitingToolTimer = false;
+            }
+
+            return _origSendMsg.apply(this, arguments);
+          };
+        }
+
+        const _origSetTimeout = window.setTimeout;
+        if (!window._tngSetTimeoutHookedV7) {
+          window._tngSetTimeoutHookedV7 = true;
+          window.setTimeout = function (fn, delay) {
+            if (typeof fn === "function") {
+              let fnStr = "";
+              try {
+                fnStr = fn.toString();
+              } catch (e) {}
+
+              let isToolFinishTimer =
+                (window._tngWaitingToolTimer &&
+                  delay >= 800 &&
+                  delay <= 6000) ||
+                fnStr.indexOf("Báo cáo nghiên cứu của bạn đã sẵn sàng") !==
+                  -1 ||
+                fnStr.indexOf("Đây là lộ trình tôi gợi ý") !== -1 ||
+                fnStr.indexOf("Bản trình bày tự động bởi TNG AI") !== -1 ||
+                fnStr.indexOf("Mở Slide") !== -1 ||
+                fnStr.indexOf("Bắt đầu nghiên cứu") !== -1;
+
+              if (isToolFinishTimer && window._tngActiveToolTask) {
+                let taskPromise = window._tngActiveToolTask;
+                window._tngWaitingToolTimer = false;
+                let args = Array.prototype.slice.call(arguments, 2);
+
+                return _origSetTimeout.call(
+                  window,
+                  async function () {
+                    try {
+                      window._tngReadyPayload = await taskPromise;
+                    } catch (e) {
+                      window._tngReadyPayload = null;
+                    }
+
+                    fn.apply(window, args);
+
+                    if (window._tngReadyPayload) {
+                      let payload = window._tngReadyPayload;
+                      window._tngReadyPayload = null;
+                      window._tngActiveToolTask = null;
+
+                      let cb = document.getElementById("cb");
+                      if (cb) {
+                        let msgs = cb.querySelectorAll(".ai-msg");
+                        let lastMsg =
+                          msgs.length > 0 ? msgs[msgs.length - 1] : null;
+                        if (lastMsg) {
+                          let idMatch = (lastMsg.innerHTML || "").match(
+                            /viewMediaById\(['"]([^'"]+)['"]/,
+                          );
+                          let fId = idMatch ? idMatch[1] : null;
+                          lastMsg.innerHTML = upgradeHtmlWithPreparedPayload(
+                            lastMsg.innerHTML,
+                            payload,
+                            fId,
+                          );
+                          syncFileEverywhere(
+                            fId,
+                            payload.topic,
+                            function (oldData, itemFId) {
+                              return upgradeHtmlWithPreparedPayload(
+                                oldData,
+                                payload,
+                                itemFId || fId,
+                              );
+                            },
+                          );
+                          try {
+                            if (typeof sessions !== "undefined" && curId) {
+                              let sObj = sessions.find(function (s) {
+                                return s.id === curId;
+                              });
+                              if (
+                                sObj &&
+                                Array.isArray(sObj.messages) &&
+                                sObj.messages.length > 0
+                              ) {
+                                let lastM =
+                                  sObj.messages[sObj.messages.length - 1];
+                                if (lastM && lastM.text) {
+                                  lastM.text = lastMsg.innerHTML;
+                                } else if (lastM && lastM.h) {
+                                  lastM.h = lastMsg.innerHTML;
+                                }
+                              }
+                              if (curA && curA.id) {
+                                localStorage.setItem(
+                                  "tng_sessions_" + curA.id,
+                                  JSON.stringify(sessions),
+                                );
+                              }
+                            }
+                          } catch (err) {}
+                        }
+                      }
+                    }
+                  },
+                  delay,
+                );
               }
-            } catch (err) {}
+            }
+            return _origSetTimeout.apply(window, arguments);
+          };
+        }
+
+        const _origGenAns =
+          typeof genAns === "function" ? genAns : window.genAns;
+        if (typeof _origGenAns === "function" && !window._tngGenAnsHookedV7) {
+          window._tngGenAnsHookedV7 = true;
+          window.genAns = genAns = async function (txt, historyMsgs, fileData) {
+            const res = await _origGenAns.apply(this, arguments);
+            if (res && typeof res.h === "string") {
+              try {
+                let h = res.h;
+                let topic = extractCleanTopic(
+                  h,
+                  txt || window._tngLastUserTopic || "",
+                );
+                let idMatch = h.match(/viewMediaById\(['"]([^'"]+)['"]/);
+                let fileId = idMatch ? idMatch[1] : null;
+
+                let payload = window._tngReadyPayload;
+                if (!payload && window._tngActiveToolTask) {
+                  payload = await window._tngActiveToolTask;
+                }
+                if (
+                  !payload &&
+                  h.indexOf("Thu thập số liệu thống kê mới nhất") !== -1
+                ) {
+                  payload = await prepareToolPayload("Deep Research", topic);
+                } else if (
+                  !payload &&
+                  h.indexOf("Khái niệm cốt lõi, bối cảnh lịch sử") !== -1
+                ) {
+                  payload = await prepareToolPayload("Học có hướng dẫn", topic);
+                } else if (
+                  !payload &&
+                  (h.indexOf("Bản trình bày tự động bởi TNG AI") !== -1 ||
+                    h.indexOf("Mở Slide") !== -1)
+                ) {
+                  payload = await prepareToolPayload("Canvas", topic);
+                }
+
+                if (payload) {
+                  window._tngReadyPayload = null;
+                  window._tngActiveToolTask = null;
+                  res.h = upgradeHtmlWithPreparedPayload(
+                    res.h,
+                    payload,
+                    fileId,
+                  );
+                  syncFileEverywhere(
+                    fileId,
+                    payload.topic,
+                    function (oldData, itemFId) {
+                      return upgradeHtmlWithPreparedPayload(
+                        oldData,
+                        payload,
+                        itemFId || fileId,
+                      );
+                    },
+                  );
+                }
+              } catch (err) {}
+            }
             return res;
           };
         }
 
+        // =========================================================================
+        // 10. KHÔI PHỤC CÁC BÀI BÁO CÁO / LỘ TRÌNH / CANVAS CŨ TRONG LỊCH SỬ
+        // =========================================================================
+        function findFileInStorageByTopic(topicName) {
+          let cleanT = String(topicName || "")
+            .trim()
+            .toLowerCase();
+          if (!cleanT) return null;
+          try {
+            for (let i = 0; i < localStorage.length; i++) {
+              let k = localStorage.key(i);
+              if (k && k.indexOf("tng_f_") === 0) {
+                let list = JSON.parse(localStorage.getItem(k) || "[]");
+                if (Array.isArray(list)) {
+                  for (let j = list.length - 1; j >= 0; j--) {
+                    let f = list[j];
+                    if (
+                      f &&
+                      f.name &&
+                      f.name.toLowerCase().indexOf(cleanT) !== -1
+                    ) {
+                      return f;
+                    }
+                  }
+                }
+              }
+            }
+          } catch (e) {}
+          return null;
+        }
+
+        function buildRestoredChatCardHTML(kind, topicName, fileObj) {
+          let fId = fileObj && fileObj.id ? fileObj.id : Date.now();
+          if (kind === "report") {
+            let secs = getDefaultReportSections(topicName);
+            let listHtml = buildReportItemsHTML(secs);
+            return (
+              '<div style="display:flex; align-items:center; gap:10px; font-size:20px; font-weight:700; color:var(--text-main); margin-bottom:6px;">' +
+              "<span>🔍</span><span>Báo cáo: " +
+              topicName +
+              "</span></div>" +
+              '<div style="font-size:14px; color:var(--text-sub); margin-bottom:14px;">Báo cáo nghiên cứu của bạn đã sẵn sàng!</div>' +
+              '<div style="background:rgba(255,255,255,0.03); border:1px solid var(--glass-border); border-radius:22px; padding:20px;">' +
+              listHtml +
+              '<div style="text-align:center; margin-top:18px;">' +
+              '<button class="upgrade-btn" style="margin:0 auto; background:var(--btn-blue); color:#000; font-weight:600; border:none;" onclick="viewMediaById(\'' +
+              fId +
+              "')\">Bắt đầu nghiên cứu</button></div></div>"
+            );
+          } else if (kind === "learn") {
+            let stgs = getDefaultLearningStages(topicName);
+            let stgHtml = buildLearningStagesHTML(stgs);
+            return (
+              '<div style="display:flex; align-items:center; gap:10px; font-size:20px; font-weight:700; color:var(--text-main); margin-bottom:6px;">' +
+              "<span>📖</span><span>Lộ trình học: " +
+              topicName +
+              "</span></div>" +
+              '<div style="background:rgba(255,255,255,0.03); border:1px solid var(--glass-border); border-radius:22px; padding:20px; margin-top:10px;">' +
+              '<div style="margin-bottom:12px;">Rất vui được cùng bạn tìm hiểu về <b style="color:var(--btn-blue);">' +
+              topicName +
+              "</b>. Đây là lộ trình tôi gợi ý:</div>" +
+              stgHtml +
+              '<div style="text-align:center; margin-top:18px;">' +
+              '<button class="upgrade-btn" style="margin:0 auto; background:var(--btn-blue); color:#000; font-weight:600; border:none;" onclick="viewMediaById(\'' +
+              fId +
+              "')\">Mở lộ trình học</button></div></div>"
+            );
+          } else {
+            return (
+              '<div style="display:flex; align-items:center; gap:10px; font-size:20px; font-weight:700; color:var(--text-main); margin-bottom:6px;">' +
+              "<span>🎨</span><span>Canvas: " +
+              topicName +
+              "</span></div>" +
+              '<div style="font-size:14px; color:var(--text-sub); margin-bottom:14px;">Bản trình bày 20 Slide của bạn đã sẵn sàng!</div>' +
+              '<div style="text-align:left; margin-top:10px;">' +
+              '<button class="upgrade-btn" style="background:var(--btn-blue); color:#000; font-weight:600; border:none;" onclick="viewMediaById(\'' +
+              fId +
+              "')\">Mở Slide</button></div>"
+            );
+          }
+        }
+
+        function repairStuckHistoryMessages() {
+          if (window._tngWaitingToolTimer || window._tngActiveToolTask) return;
+          let cb = document.getElementById("cb");
+          if (!cb) return;
+
+          cb.querySelectorAll(".ai-msg").forEach(function (msgEl) {
+            if (
+              msgEl.innerHTML &&
+              msgEl.innerHTML.indexOf("Bạn muốn bắt đầu khám phá") !== -1
+            ) {
+              msgEl.innerHTML = removeBottomQuestionFromHtml(msgEl.innerHTML);
+            }
+
+            let hasActionsBar = !!msgEl.querySelector(".ai-actions-bar");
+            if (!hasActionsBar) return;
+
+            let clone = msgEl.cloneNode(true);
+            let bar = clone.querySelector(".ai-actions-bar");
+            if (bar) bar.remove();
+            let pureText = (clone.textContent || "").trim();
+
+            let isStuckReport =
+              pureText === "Đang nghiên cứu..." ||
+              pureText.indexOf("TNG AI đang phân tích và biên soạn Báo cáo") !==
+                -1;
+            let isStuckLearn =
+              pureText === "Đang thiết lập bài học..." ||
+              pureText.indexOf(
+                "TNG AI đang phân tích và biên soạn Lộ trình",
+              ) !== -1;
+            let isStuckCanvas =
+              pureText === "Đang tạo Canvas..." ||
+              pureText.indexOf("TNG AI đang phân tích và biên soạn Bộ") !== -1;
+
+            if (!isStuckReport && !isStuckLearn && !isStuckCanvas) return;
+
+            let row = msgEl.closest(".msg-row");
+            let prevRow = row ? row.previousElementSibling : null;
+            let topic = "";
+            if (prevRow) {
+              let uMsg = prevRow.querySelector(".user-msg");
+              if (uMsg && uMsg.textContent) topic = uMsg.textContent.trim();
+            }
+            if (!topic) topic = "Chủ đề nghiên cứu";
+
+            let kind = isStuckReport
+              ? "report"
+              : isStuckLearn
+                ? "learn"
+                : "canvas";
+            let matchedFile = findFileInStorageByTopic(topic);
+            let actionBarHtml = bar ? bar.outerHTML : "";
+            msgEl.innerHTML =
+              buildRestoredChatCardHTML(kind, topic, matchedFile) +
+              actionBarHtml;
+          });
+        }
+
         const chatBox = document.getElementById("cb");
         if (chatBox) {
-          const chatObserver = new MutationObserver(function () {
-            if (curA && Array.isArray(curA.files)) {
-              curA.files.forEach(function (f) {
-                if (!f._aiUpgraded && typeof f.data === "string") {
-                  window.tngUpgradeDefaultDocWithAI(f, null);
-                }
-              });
-            }
-            chatBox.querySelectorAll(".ai-msg").forEach(async function (msgEl) {
-              if (msgEl.dataset.aiDocChecked) return;
-              const htmlText = msgEl.innerHTML || "";
-              if (
-                htmlText.indexOf(
-                  "Thu thập số liệu thống kê mới nhất về chủ đề này",
-                ) !== -1
-              ) {
-                msgEl.dataset.aiDocChecked = "1";
-                let topicMatch =
-                  msgEl.textContent.match(/Báo cáo:\s*([^\n•]+)/i);
-                let topic = topicMatch ? topicMatch[1].trim() : "chủ đề này";
-                const pts = await window.tngBuildReportPoints(topic);
-                msgEl.innerHTML = msgEl.innerHTML
-                  .replace(
-                    /\(1\)\s*Thu thập số liệu thống kê mới nhất về chủ đề này\./g,
-                    pts[0],
-                  )
-                  .replace(
-                    /\(2\)\s*Phân tích các phương thức hoạt động và xu hướng thị trường\./g,
-                    pts[1],
-                  )
-                  .replace(
-                    /\(3\)\s*Đề xuất giải pháp và định hướng tương lai\./g,
-                    pts[2],
-                  );
-              } else if (
-                htmlText.indexOf(
-                  "Khái niệm cốt lõi, bối cảnh lịch sử và lý thuyết nền tảng",
-                ) !== -1
-              ) {
-                msgEl.dataset.aiDocChecked = "1";
-                let topicMatch = msgEl.textContent.match(
-                  /Lộ trình học:\s*([^\n]+?)(?:Rất vui|$)/i,
-                );
-                let topic = topicMatch ? topicMatch[1].trim() : "chủ đề này";
-                const stg = await window.tngBuildLearningStages(topic);
-                msgEl.innerHTML = msgEl.innerHTML
-                  .replace(
-                    /1\.\s*Giai đoạn Nhập môn:\s*Khái niệm cốt lõi, bối cảnh lịch sử và lý thuyết nền tảng\./g,
-                    stg[0],
-                  )
-                  .replace(
-                    /2\.\s*Giai đoạn Thực hành:\s*Áp dụng kiến thức vào thực tế, giải quyết bài toán\./g,
-                    stg[1],
-                  )
-                  .replace(
-                    /3\.\s*Giai đoạn Nâng cao:\s*Nghiên cứu chuyên sâu, mở rộng vấn đề và tổng kết\./g,
-                    stg[2],
-                  );
-              }
-            });
+          const repairObserver = new MutationObserver(function () {
+            repairStuckHistoryMessages();
           });
-          chatObserver.observe(chatBox, { childList: true, subtree: true });
+          repairObserver.observe(chatBox, { childList: true, subtree: true });
+          setTimeout(repairStuckHistoryMessages, 300);
+        }
+
+        // =========================================================================
+        // 11. KHI BẤM MỞ XEM TRONG MODAL (#viewer-modal-body): ĐỒNG BỘ 20 SLIDES
+        // & XÓA SẠCH CÂU HỎI DƯỚI ĐÁY LỘ TRÌNH HỌC CHO CẢ CÁC BÀI ĐÃ LƯU
+        // =========================================================================
+        const origViewMedia = window.viewMediaById;
+        if (
+          typeof origViewMedia === "function" &&
+          !window._tngViewMediaHookedV7
+        ) {
+          window._tngViewMediaHookedV7 = true;
+          window.viewMediaById = function (id, e) {
+            ensureSlideDownloadButton();
+            const res = origViewMedia.apply(this, arguments);
+
+            setTimeout(async function () {
+              let body = document.getElementById("viewer-modal-body");
+              if (!body || body.querySelector(".tng-ios-music-card")) return;
+
+              let cleaned = sanitizeStoredDocHtml(body.innerHTML);
+              if (cleaned !== body.innerHTML) {
+                body.innerHTML = cleaned;
+                syncFileEverywhere(id, null, function () {
+                  return cleaned;
+                });
+              }
+
+              let htmlNow = body.innerHTML || "";
+              let textNow = body.textContent || "";
+
+              let storedFileName = "";
+              try {
+                for (let i = 0; i < localStorage.length; i++) {
+                  let k = localStorage.key(i);
+                  if (k && k.indexOf("tng_f_") === 0) {
+                    let list = JSON.parse(localStorage.getItem(k) || "[]");
+                    if (Array.isArray(list)) {
+                      let found = list.find(function (x) {
+                        return x && String(x.id) === String(id);
+                      });
+                      if (found && found.name) {
+                        storedFileName = found.name;
+                        break;
+                      }
+                    }
+                  }
+                }
+              } catch (err) {}
+
+              // A. Báo cáo
+              if (
+                !body.querySelector(".slide-page") &&
+                (htmlNow.indexOf(
+                  "Thu thập số liệu thống kê mới nhất về chủ đề này",
+                ) !== -1 ||
+                  htmlNow.indexOf("của chủ đề này trong hệ thống tri thức") !==
+                    -1 ||
+                  (textNow.indexOf("Báo cáo:") !== -1 &&
+                    htmlNow.indexOf("tng-report-list") === -1))
+              ) {
+                let topic = extractCleanTopic(textNow, storedFileName);
+                let defSec = getDefaultReportSections(topic);
+                body.innerHTML = replaceReportBodyInHtml(
+                  body.innerHTML,
+                  defSec,
+                );
+                syncFileEverywhere(id, topic, function () {
+                  return body.innerHTML;
+                });
+
+                let aiSec = await window.tngFetchReportSections(topic);
+                body.innerHTML = replaceReportBodyInHtml(body.innerHTML, aiSec);
+                syncFileEverywhere(id, topic, function () {
+                  return body.innerHTML;
+                });
+              }
+
+              // B. Lộ trình học (Không có câu hỏi dưới đáy)
+              else if (
+                !body.querySelector(".slide-page") &&
+                (htmlNow.indexOf(
+                  "Khái niệm cốt lõi, bối cảnh lịch sử và lý thuyết nền tảng",
+                ) !== -1 ||
+                  htmlNow.indexOf("nền tảng của chủ đề này") !== -1 ||
+                  (textNow.indexOf("Lộ trình học:") !== -1 &&
+                    htmlNow.indexOf("tng-learn-list") === -1))
+              ) {
+                let topic = extractCleanTopic(textNow, storedFileName);
+                let defStg = getDefaultLearningStages(topic);
+                body.innerHTML = replaceLearningBodyInHtml(
+                  body.innerHTML,
+                  defStg,
+                );
+                syncFileEverywhere(id, topic, function () {
+                  return body.innerHTML;
+                });
+
+                let aiStg = await window.tngFetchLearningStages(topic);
+                body.innerHTML = replaceLearningBodyInHtml(
+                  body.innerHTML,
+                  aiStg,
+                );
+                syncFileEverywhere(id, topic, function () {
+                  return body.innerHTML;
+                });
+              }
+
+              // C. Canvas (Nâng cấp toàn bộ lên chuẩn 20 Slides & 10 Themes)
+              else if (
+                (htmlNow.indexOf("Bản trình bày tự động bởi TNG AI") !== -1 ||
+                  body.querySelectorAll(".slide-page").length > 0) &&
+                htmlNow.indexOf("data-tng-canvas-20-v7") === -1
+              ) {
+                let titleEl =
+                  body.querySelector(".tng-slide-cover-title") ||
+                  body.querySelector("h1, h2");
+                let rawT =
+                  titleEl && titleEl.textContent
+                    ? titleEl.textContent.trim()
+                    : storedFileName;
+                let topic = extractCleanTopic(rawT, storedFileName);
+
+                let defDeck = render20SlidesDeckHTML(topic, null, false, id);
+                body.innerHTML = defDeck;
+                syncFileEverywhere(id, topic, function () {
+                  return defDeck;
+                });
+
+                let aiSlides =
+                  await window.tngBuildCanvas18ContentSlides(topic);
+                let finalDeck = render20SlidesDeckHTML(
+                  topic,
+                  aiSlides,
+                  true,
+                  id,
+                );
+                body.innerHTML = finalDeck;
+                syncFileEverywhere(id, topic, function () {
+                  return finalDeck;
+                });
+              }
+            }, 10);
+
+            return res;
+          };
         }
       })();
     </script>
