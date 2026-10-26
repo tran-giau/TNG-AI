@@ -24364,35 +24364,37 @@
     </style>
     <style>
       /* ========================================================================= */
-      /* 1. BO CONG 4 GÓC (38PX), THANH TRƯỢT SÁT VIỀN PHẢI & CHỐNG CHẠM NÚT X     */
+      /* 1. BẢO VỆ TRÌNH XEM ẢNH/VIDEO & BO GÓC 32PX CHO BÁO CÁO, LỘ TRÌNH HỌC     */
       /* ========================================================================= */
-      .media-viewer-content {
-        border-radius: 38px !important;
-        overflow: hidden !important;
-        box-shadow:
-          0 28px 65px rgba(0, 0, 0, 0.6),
-          inset 0 1px 1.5px rgba(255, 255, 255, 0.18) !important;
-        border: 1px solid rgba(255, 255, 255, 0.14) !important;
+
+      /* Khi mở Ảnh hoặc Video: Tắt viền và bóng đổ để không có khung bao quanh ảnh */
+      #viewer-modal-body:has(img):not(:has(.tng-ios-music-card)),
+      #viewer-modal-body:has(video) {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
       }
 
-      /* Khóa padding = 0 ở vỏ ngoài để thanh trượt của Báo cáo & Lộ trình học nằm sát mép phải của bảng */
-      .media-viewer-content:has(.tng-report-list),
-      .media-viewer-content:has(.tng-learn-list),
-      #viewer-modal-body:not(:has(.tng-ios-music-card)):not(
-          :has(img.chat-img)
-        ):not(:has(video)):not(:has(.slide-page)) {
-        border-radius: 38px !important;
+      /* Chỉ áp dụng khung 32px cho Báo cáo (.tng-report-list) & Lộ trình học (.tng-learn-list) */
+      #viewer-modal-body:has(.tng-report-list),
+      #viewer-modal-body:has(.tng-learn-list) {
+        border-radius: 32px !important;
         overflow: hidden !important;
         width: min(94vw, 760px) !important;
         max-width: 94vw !important;
         max-height: calc(100dvh - 140px) !important;
         margin-top: 28px !important;
         padding: 0 !important;
+        background: var(--modal-bg) !important;
+        box-shadow:
+          0 28px 65px rgba(0, 0, 0, 0.6),
+          inset 0 1px 1.5px rgba(255, 255, 255, 0.18) !important;
+        border: 1px solid rgba(255, 255, 255, 0.14) !important;
       }
 
-      #viewer-modal-body:not(:has(.tng-ios-music-card)):not(:has(.slide-page))
-        > div {
-        border-radius: 38px !important;
+      #viewer-modal-body:has(.tng-report-list) > div,
+      #viewer-modal-body:has(.tng-learn-list) > div {
+        border-radius: 32px !important;
         box-sizing: border-box !important;
         width: 100% !important;
         max-width: 100% !important;
@@ -24403,26 +24405,34 @@
         padding: 28px 22px 28px 26px !important;
       }
 
-      /* Chỉnh thanh trượt nằm sát mép phải và thụt nhẹ 2 đầu để ôm theo góc bo tròn */
-      #viewer-modal-body:not(:has(.tng-ios-music-card)):not(:has(.slide-page))
+      /* Chỉnh thanh trượt nằm sát mép phải và thụt nhẹ 2 đầu để ôm theo góc bo tròn 32px */
+      #viewer-modal-body:not(:has(.tng-ios-music-card)):not(:has(img)):not(
+          :has(video)
+        ):not(:has(.slide-page))
         > div::-webkit-scrollbar {
         width: 6px !important;
       }
 
-      #viewer-modal-body:not(:has(.tng-ios-music-card)):not(:has(.slide-page))
+      #viewer-modal-body:not(:has(.tng-ios-music-card)):not(:has(img)):not(
+          :has(video)
+        ):not(:has(.slide-page))
         > div::-webkit-scrollbar-track {
         background: transparent !important;
-        margin: 24px 0 !important;
+        margin: 20px 0 !important;
       }
 
-      #viewer-modal-body:not(:has(.tng-ios-music-card)):not(:has(.slide-page))
+      #viewer-modal-body:not(:has(.tng-ios-music-card)):not(:has(img)):not(
+          :has(video)
+        ):not(:has(.slide-page))
         > div::-webkit-scrollbar-thumb {
         background: rgba(255, 255, 255, 0.22) !important;
         border-radius: 99px !important;
         border: none !important;
       }
 
-      #viewer-modal-body:not(:has(.tng-ios-music-card)):not(:has(.slide-page))
+      #viewer-modal-body:not(:has(.tng-ios-music-card)):not(:has(img)):not(
+          :has(video)
+        ):not(:has(.slide-page))
         > div::-webkit-scrollbar-thumb:hover {
         background: rgba(255, 255, 255, 0.38) !important;
       }
@@ -24562,7 +24572,7 @@
       /* 2. SLIDE CANVAS 16:9 FULL MÀN HÌNH (20 SLIDES) & 10 GIAO DIỆN ĐỘC LẬP     */
       /* ========================================================================= */
       #viewer-modal-body:has(.slide-page) {
-        border-radius: 36px !important;
+        border-radius: 34px !important;
         overflow: hidden !important;
         width: min(94vw, calc(88dvh * 16 / 9)) !important;
         max-width: 94vw !important;
@@ -24936,7 +24946,7 @@
       }
 
       /* ========================================================================= */
-      /* 3. NÚT TẢI XUỐNG (CHO CẢ SLIDE PPT + BÁO CÁO WORD + LỘ TRÌNH HỌC WORD)   */
+      /* 3. NÚT TẢI XUỐNG (CHO CẢ SLIDE .PPTX + BÁO CÁO & LỘ TRÌNH HỌC .DOCX)      */
       /* ========================================================================= */
       #tng-slide-download-btn {
         position: fixed;
@@ -25029,27 +25039,32 @@
       }
 
       /* ========================================================================= */
-      /* 4. TỐI ƯU HIỂN THỊ TRÊN ĐIỆN THOẠI (KHÔNG CHẠM NÚT X Ở TRÊN ĐỈNH)         */
+      /* 4. TỐI ƯU HIỂN THỊ TRÊN ĐIỆN THOẠI (BO GÓC 28PX & KHÔNG CHẠM NÚT X)       */
       /* ========================================================================= */
       @media (max-width: 768px) {
-        .media-viewer-content,
-        #viewer-modal-body:not(:has(.tng-ios-music-card)):not(
-            :has(img.chat-img)
-          ):not(:has(video)):not(:has(.slide-page)),
-        #viewer-modal-body:not(:has(.tng-ios-music-card)):not(:has(.slide-page))
+        .media-viewer-content:has(.tng-report-list),
+        .media-viewer-content:has(.tng-learn-list),
+        #viewer-modal-body:not(:has(.tng-ios-music-card)):not(:has(img)):not(
+            :has(video)
+          ):not(:has(.slide-page)),
+        #viewer-modal-body:not(:has(.tng-ios-music-card)):not(:has(img)):not(
+            :has(video)
+          ):not(:has(.slide-page))
           > div {
-          border-radius: 32px !important;
+          border-radius: 28px !important;
         }
 
-        #viewer-modal-body:not(:has(.tng-ios-music-card)):not(
-            :has(img.chat-img)
-          ):not(:has(video)):not(:has(.slide-page)) {
+        #viewer-modal-body:not(:has(.tng-ios-music-card)):not(:has(img)):not(
+            :has(video)
+          ):not(:has(.slide-page)) {
           max-height: calc(100dvh - 170px) !important;
           margin-top: 34px !important;
           padding: 0 !important;
         }
 
-        #viewer-modal-body:not(:has(.tng-ios-music-card)):not(:has(.slide-page))
+        #viewer-modal-body:not(:has(.tng-ios-music-card)):not(:has(img)):not(
+            :has(video)
+          ):not(:has(.slide-page))
           > div {
           max-height: calc(100dvh - 170px) !important;
           padding: 20px 14px 20px 18px !important;
@@ -25162,7 +25177,7 @@
     <script>
       // =========================================================================
       // ĐỒNG BỘ 100% CỠ CHỮ & ĐỘ ĐẬM CÂU DẪN, NÂNG CẤP TỰ ĐỘNG LỊCH SỬ TRÒ CHUYỆN
-      // CŨ LÊN 5 MỤC MỚI, TẢI FILE WORD (.DOC) & POWERPOINT 20 SLIDES
+      // CŨ LÊN 5 MỤC MỚI, TẢI FILE WORD (.DOCX) & POWERPOINT 20 SLIDES (.PPTX)
       // =========================================================================
       (function () {
         const TOTAL_SLIDES = 20;
@@ -25530,7 +25545,7 @@
           return CANVAS_THEMES[pickedIdx];
         }
 
-        // 2. NÚT TẢI XUỐNG ĐA NĂNG (PPT CHO SLIDE + FILE WORD .DOC CHO BÁO CÁO & LỘ TRÌNH HỌC)
+        // 2. NÚT TẢI XUỐNG ĐA NĂNG (XUẤT .PPTX CHO SLIDE + XUẤT .DOCX CHO BÁO CÁO & LỘ TRÌNH HỌC)
         function bindSquishTouch(el) {
           if (!el || el.dataset.squishBound) return;
           el.dataset.squishBound = "1";
@@ -25562,7 +25577,7 @@
           let dlBtn = document.createElement("button");
           dlBtn.id = "tng-slide-download-btn";
           dlBtn.type = "button";
-          dlBtn.title = "Tải xuống tài liệu";
+          dlBtn.title = "Tải xuống tài liệu (.docx / .pptx)";
           dlBtn.innerHTML =
             '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">' +
             '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>' +
@@ -25580,6 +25595,7 @@
         }
         ensureSlideDownloadButton();
 
+        // Nạp sẵn PptxGenJS từ 2 nguồn CDN để luôn xuất chuẩn file .pptx
         function loadPptxGenLibrary() {
           if (window.PptxGenJS) return Promise.resolve(window.PptxGenJS);
           return new Promise(function (resolve) {
@@ -25590,12 +25606,132 @@
               resolve(window.PptxGenJS || null);
             };
             s.onerror = function () {
-              resolve(null);
+              let s2 = document.createElement("script");
+              s2.src =
+                "https://cdnjs.cloudflare.com/ajax/libs/PptxGenJS/3.12.0/pptxgen.bundle.min.js";
+              s2.onload = function () {
+                resolve(window.PptxGenJS || null);
+              };
+              s2.onerror = function () {
+                resolve(null);
+              };
+              document.head.appendChild(s2);
             };
             document.head.appendChild(s);
           });
         }
+        loadPptxGenLibrary();
 
+        // Bộ đóng gói ZIP OpenXML thuần JS giúp tạo file .docx chuẩn 100% không cần thư viện ngoài
+        function createOpenXmlZipBlob(filesMap, mimeType) {
+          const enc = new TextEncoder();
+          const crcTable = (function () {
+            let c,
+              table = new Uint32Array(256);
+            for (let n = 0; n < 256; n++) {
+              c = n;
+              for (let k = 0; k < 8; k++) {
+                c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
+              }
+              table[n] = c >>> 0;
+            }
+            return table;
+          })();
+
+          function crc32(bytes) {
+            let c = 0xffffffff;
+            for (let i = 0; i < bytes.length; i++) {
+              c = crcTable[(c ^ bytes[i]) & 0xff] ^ (c >>> 8);
+            }
+            return (c ^ 0xffffffff) >>> 0;
+          }
+
+          let entries = Object.keys(filesMap).map(function (path) {
+            let nameBytes = enc.encode(path);
+            let dataBytes = enc.encode(filesMap[path]);
+            return {
+              nameBytes: nameBytes,
+              dataBytes: dataBytes,
+              crc: crc32(dataBytes),
+            };
+          });
+
+          let localSize = 0;
+          let centralSize = 0;
+          entries.forEach(function (e) {
+            e.offset = localSize;
+            localSize += 30 + e.nameBytes.length + e.dataBytes.length;
+            centralSize += 46 + e.nameBytes.length;
+          });
+
+          let totalSize = localSize + centralSize + 22;
+          let buf = new ArrayBuffer(totalSize);
+          let view = new DataView(buf);
+          let out = new Uint8Array(buf);
+          let p = 0;
+
+          entries.forEach(function (e) {
+            view.setUint32(p, 0x04034b50, true);
+            view.setUint16(p + 4, 20, true);
+            view.setUint16(p + 6, 0x0800, true);
+            view.setUint16(p + 8, 0, true);
+            view.setUint16(p + 10, 0, true);
+            view.setUint16(p + 12, 0x21, true);
+            view.setUint32(p + 14, e.crc, true);
+            view.setUint32(p + 18, e.dataBytes.length, true);
+            view.setUint32(p + 22, e.dataBytes.length, true);
+            view.setUint16(p + 26, e.nameBytes.length, true);
+            view.setUint16(p + 28, 0, true);
+            out.set(e.nameBytes, p + 30);
+            out.set(e.dataBytes, p + 30 + e.nameBytes.length);
+            p += 30 + e.nameBytes.length + e.dataBytes.length;
+          });
+
+          let cdStart = p;
+          entries.forEach(function (e) {
+            view.setUint32(p, 0x02014b50, true);
+            view.setUint16(p + 4, 20, true);
+            view.setUint16(p + 6, 20, true);
+            view.setUint16(p + 8, 0x0800, true);
+            view.setUint16(p + 10, 0, true);
+            view.setUint16(p + 12, 0, true);
+            view.setUint16(p + 14, 0x21, true);
+            view.setUint32(p + 16, e.crc, true);
+            view.setUint32(p + 20, e.dataBytes.length, true);
+            view.setUint32(p + 24, e.dataBytes.length, true);
+            view.setUint16(p + 28, e.nameBytes.length, true);
+            view.setUint16(p + 30, 0, true);
+            view.setUint16(p + 32, 0, true);
+            view.setUint16(p + 34, 0, true);
+            view.setUint16(p + 36, 0, true);
+            view.setUint32(p + 38, 0, true);
+            view.setUint32(p + 42, e.offset, true);
+            out.set(e.nameBytes, p + 46);
+            p += 46 + e.nameBytes.length;
+          });
+
+          view.setUint32(p, 0x06054b50, true);
+          view.setUint16(p + 4, 0, true);
+          view.setUint16(p + 6, 0, true);
+          view.setUint16(p + 8, entries.length, true);
+          view.setUint16(p + 10, entries.length, true);
+          view.setUint32(p + 12, centralSize, true);
+          view.setUint32(p + 16, cdStart, true);
+          view.setUint16(p + 20, 0, true);
+
+          return new Blob([buf], { type: mimeType });
+        }
+
+        function escapeXmlText(str) {
+          return String(str || "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&apos;");
+        }
+
+        // Xuất Báo cáo hoặc Lộ trình học ra file Microsoft Word (.docx) chuẩn OpenXML
         window.tngDownloadWordDocument = function (bodyEl) {
           let isReport = !!bodyEl.querySelector(".tng-report-list");
           let isLearn = !!bodyEl.querySelector(".tng-learn-list");
@@ -25613,9 +25749,38 @@
             (isReport ? "BÁO CÁO NGHIÊN CỨU: " : "LỘ TRÌNH HỌC TẬP: ") +
             topic.toUpperCase();
           let fileName =
-            (isReport ? "Baocao_" : "Lotrinhhoc_") + cleanFileTopic + ".doc";
+            (isReport ? "Baocao_" : "Lotrinhhoc_") + cleanFileTopic + ".docx";
 
-          let itemsHtml = "";
+          let leadTxt = isReport
+            ? "Báo cáo phân tích tổng hợp và hệ thống hóa dữ liệu trọng tâm qua 5 bước chuyên sâu:"
+            : "Rất vui được cùng bạn tìm hiểu về " +
+              topic +
+              ". Đây là lộ trình tôi gợi ý:";
+
+          let wParagraphs = "";
+
+          // Tiêu đề chính căn giữa
+          wParagraphs +=
+            '<w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="120" w:after="120"/></w:pPr>' +
+            '<w:r><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:b/><w:color w:val="0F172A"/><w:sz w:val="36"/><w:szCs w:val="36"/></w:rPr>' +
+            "<w:t>" +
+            escapeXmlText(docTitle) +
+            "</w:t></w:r></w:p>";
+
+          // Dòng phụ đề
+          wParagraphs +=
+            '<w:p><w:pPr><w:jc w:val="center"/><w:spacing w:after="320"/></w:pPr>' +
+            '<w:r><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:i/><w:color w:val="64748B"/><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr>' +
+            "<w:t>Tài liệu biên soạn tự động bởi TNG AI 1.0</w:t></w:r></w:p>";
+
+          // Câu dẫn nhập
+          wParagraphs +=
+            '<w:p><w:pPr><w:spacing w:after="220"/></w:pPr>' +
+            '<w:r><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:b/><w:color w:val="1E293B"/><w:sz w:val="25"/><w:szCs w:val="25"/></w:rPr>' +
+            "<w:t>" +
+            escapeXmlText(leadTxt) +
+            "</w:t></w:r></w:p>";
+
           if (isReport) {
             bodyEl.querySelectorAll(".tng-report-sec").forEach(function (sec) {
               let t =
@@ -25626,14 +25791,18 @@
                 (sec.querySelector(".tng-report-sec-body") &&
                   sec.querySelector(".tng-report-sec-body").textContent) ||
                 sec.textContent.replace(t, "").trim();
-              itemsHtml +=
-                '<div style="margin-bottom:14pt; padding:12pt 14pt; border:1pt solid #cbd5e1; border-left:4pt solid #1a73e8; background:#f8fafc;">' +
-                '<p style="margin:0 0 6pt 0; font-size:13pt; font-weight:bold; color:#1a73e8;">' +
-                t +
-                "</p>" +
-                '<p style="margin:0; font-size:12pt; line-height:1.5; color:#1e293b; text-align:justify;">' +
-                b +
-                "</p></div>";
+
+              wParagraphs +=
+                '<w:p><w:pPr><w:pBdr><w:left w:val="single" w:sz="24" w:space="12" w:color="1A73E8"/></w:pBdr><w:shd w:val="clear" w:color="auto" w:fill="F8FAFC"/><w:spacing w:before="160" w:after="80"/></w:pPr>' +
+                '<w:r><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:b/><w:color w:val="1A73E8"/><w:sz w:val="26"/><w:szCs w:val="26"/></w:rPr>' +
+                "<w:t>" +
+                escapeXmlText(t.trim()) +
+                "</w:t></w:r></w:p>" +
+                '<w:p><w:pPr><w:pBdr><w:left w:val="single" w:sz="24" w:space="12" w:color="1A73E8"/></w:pBdr><w:shd w:val="clear" w:color="auto" w:fill="F8FAFC"/><w:jc w:val="both"/><w:spacing w:after="220" w:line="320" w:lineRule="auto"/></w:pPr>' +
+                '<w:r><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:color w:val="1E293B"/><w:sz w:val="24"/><w:szCs w:val="24"/></w:rPr>' +
+                "<w:t>" +
+                escapeXmlText(b.trim()) +
+                "</w:t></w:r></w:p>";
             });
           } else {
             bodyEl.querySelectorAll(".tng-learn-stage").forEach(function (st) {
@@ -25649,40 +25818,58 @@
                 (st.querySelector(".tng-learn-stage-body") &&
                   st.querySelector(".tng-learn-stage-body").textContent) ||
                 st.textContent.replace(h, "").replace(g, "").trim();
-              itemsHtml +=
-                '<div style="margin-bottom:14pt; padding:12pt 14pt; border:1pt solid #cbd5e1; border-left:4pt solid #e85504; background:#fffaf5;">' +
-                '<p style="margin:0 0 6pt 0; font-size:13pt; font-weight:bold; color:#9a3412;">' +
-                h +
-                "</p>" +
-                '<p style="margin:0 0 6pt 0; font-size:12pt; line-height:1.5; color:#1e293b; text-align:justify;">' +
-                b +
-                "</p>" +
-                '<p style="margin:0; font-size:11.5pt; font-weight:bold; color:#1a73e8;">' +
-                g +
-                "</p></div>";
+
+              wParagraphs +=
+                '<w:p><w:pPr><w:pBdr><w:left w:val="single" w:sz="24" w:space="12" w:color="E85504"/></w:pBdr><w:shd w:val="clear" w:color="auto" w:fill="FFFAF5"/><w:spacing w:before="160" w:after="80"/></w:pPr>' +
+                '<w:r><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:b/><w:color w:val="9A3412"/><w:sz w:val="26"/><w:szCs w:val="26"/></w:rPr>' +
+                "<w:t>" +
+                escapeXmlText(h.trim()) +
+                "</w:t></w:r></w:p>" +
+                '<w:p><w:pPr><w:pBdr><w:left w:val="single" w:sz="24" w:space="12" w:color="E85504"/></w:pBdr><w:shd w:val="clear" w:color="auto" w:fill="FFFAF5"/><w:jc w:val="both"/><w:spacing w:after="80" w:line="320" w:lineRule="auto"/></w:pPr>' +
+                '<w:r><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:color w:val="1E293B"/><w:sz w:val="24"/><w:szCs w:val="24"/></w:rPr>' +
+                "<w:t>" +
+                escapeXmlText(b.trim()) +
+                "</w:t></w:r></w:p>" +
+                '<w:p><w:pPr><w:pBdr><w:left w:val="single" w:sz="24" w:space="12" w:color="E85504"/></w:pBdr><w:shd w:val="clear" w:color="auto" w:fill="FFFAF5"/><w:spacing w:after="220"/></w:pPr>' +
+                '<w:r><w:rPr><w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman"/><w:b/><w:color w:val="1A73E8"/><w:sz w:val="23"/><w:szCs w:val="23"/></w:rPr>' +
+                "<w:t>" +
+                escapeXmlText(g.trim()) +
+                "</w:t></w:r></w:p>";
             });
           }
 
-          let wordContent =
-            '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">' +
-            '<head><meta charset="utf-8"><title>' +
-            docTitle +
-            "</title>" +
-            "<style>" +
-            "@page { size: A4; margin: 2cm 2cm 2cm 2.5cm; }" +
-            "body { font-family: 'Times New Roman', serif; font-size: 12pt; color: #1e293b; line-height: 1.5; }" +
-            "</style></head><body>" +
-            '<h1 style="font-size:18pt; color:#0f172a; text-align:center; margin-bottom:6pt;">' +
-            docTitle +
-            "</h1>" +
-            '<p style="text-align:center; font-size:11pt; color:#64748b; margin-top:0; margin-bottom:20pt;">Tài liệu biên soạn tự động bởi TNG AI 1.0</p>' +
-            itemsHtml +
-            "</body></html>";
+          let contentTypesXml =
+            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+            '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">' +
+            '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>' +
+            '<Default Extension="xml" ContentType="application/xml"/>' +
+            '<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>' +
+            "</Types>";
 
-          let blob = new Blob(["\ufeff", wordContent], {
-            type: "application/msword;charset=utf-8",
-          });
-          let url = URL.createObjectURL(blob);
+          let relsXml =
+            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+            '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+            '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>' +
+            "</Relationships>";
+
+          let documentXml =
+            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+            '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">' +
+            "<w:body>" +
+            wParagraphs +
+            '<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1134" w:right="1134" w:bottom="1134" w:left="1417"/></w:sectPr>' +
+            "</w:body></w:document>";
+
+          let docxBlob = createOpenXmlZipBlob(
+            {
+              "[Content_Types].xml": contentTypesXml,
+              "_rels/.rels": relsXml,
+              "word/document.xml": documentXml,
+            },
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          );
+
+          let url = URL.createObjectURL(docxBlob);
           let a = document.createElement("a");
           a.href = url;
           a.download = fileName;
@@ -25691,12 +25878,18 @@
           setTimeout(function () {
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-          }, 200);
+          }, 250);
         };
 
         window.tngDownloadCurrentMediaDoc = async function () {
           let body = document.getElementById("viewer-modal-body");
-          if (!body) return;
+          if (
+            !body ||
+            body.querySelector(".tng-ios-music-card") ||
+            body.querySelector("img") ||
+            body.querySelector("video")
+          )
+            return;
           if (body.querySelector(".tng-modern-deck")) {
             await window.tngDownloadCurrentSlides();
           } else if (
@@ -25707,6 +25900,7 @@
           }
         };
 
+        // Xuất trọn bộ 20 Slide ra file PowerPoint (.pptx) chuẩn OpenXML
         window.tngDownloadCurrentSlides = async function () {
           let body = document.getElementById("viewer-modal-body");
           if (!body) return;
@@ -25738,246 +25932,133 @@
           let PptxLib = await loadPptxGenLibrary();
 
           if (PptxLib) {
-            try {
-              let pptx = new PptxLib();
-              pptx.layout = "LAYOUT_16x9";
-              pptx.author = "TNG AI 1.0";
-              pptx.title = rawTopic;
+            let pptx = new PptxLib();
+            pptx.layout = "LAYOUT_16x9";
+            pptx.author = "TNG AI 1.0";
+            pptx.title = rawTopic;
 
-              slideEls.forEach(function (slEl, idx) {
-                let slide = pptx.addSlide();
-                slide.background = { color: themeObj.pptBg };
+            slideEls.forEach(function (slEl, idx) {
+              let slide = pptx.addSlide();
+              slide.background = { color: themeObj.pptBg };
 
-                let coverBox = slEl.querySelector(".tng-slide-cover-box");
-                if (coverBox) {
-                  let pillText =
-                    (coverBox.querySelector(".tng-slide-cover-pill") &&
-                      coverBox.querySelector(".tng-slide-cover-pill")
-                        .textContent) ||
-                    "SLIDE " +
-                      String(idx + 1).padStart(2, "0") +
-                      " / " +
-                      totalCount;
-                  let mainTitle =
-                    (coverBox.querySelector(".tng-slide-cover-title") &&
-                      coverBox.querySelector(".tng-slide-cover-title")
-                        .textContent) ||
-                    rawTopic;
-                  let subTitle =
-                    (coverBox.querySelector(".tng-slide-cover-sub") &&
-                      coverBox.querySelector(".tng-slide-cover-sub")
-                        .textContent) ||
-                    "Bản trình bày tự động bởi TNG AI 1.0";
+              let coverBox = slEl.querySelector(".tng-slide-cover-box");
+              if (coverBox) {
+                let pillText =
+                  (coverBox.querySelector(".tng-slide-cover-pill") &&
+                    coverBox.querySelector(".tng-slide-cover-pill")
+                      .textContent) ||
+                  "SLIDE " +
+                    String(idx + 1).padStart(2, "0") +
+                    " / " +
+                    totalCount;
+                let mainTitle =
+                  (coverBox.querySelector(".tng-slide-cover-title") &&
+                    coverBox.querySelector(".tng-slide-cover-title")
+                      .textContent) ||
+                  rawTopic;
+                let subTitle =
+                  (coverBox.querySelector(".tng-slide-cover-sub") &&
+                    coverBox.querySelector(".tng-slide-cover-sub")
+                      .textContent) ||
+                  "Bản trình bày tự động bởi TNG AI 1.0";
 
-                  slide.addText(pillText, {
-                    x: 1.0,
-                    y: 1.6,
-                    w: 8.0,
-                    h: 0.45,
-                    fontSize: 11,
-                    bold: true,
-                    color: themeObj.pptAccent,
-                    align: "center",
-                  });
-                  slide.addText(mainTitle, {
-                    x: 0.8,
-                    y: 2.15,
-                    w: 8.4,
-                    h: 1.3,
-                    fontSize: 34,
-                    bold: true,
+                slide.addText(pillText, {
+                  x: 1.0,
+                  y: 1.6,
+                  w: 8.0,
+                  h: 0.45,
+                  fontSize: 11,
+                  bold: true,
+                  color: themeObj.pptAccent,
+                  align: "center",
+                });
+                slide.addText(mainTitle, {
+                  x: 0.8,
+                  y: 2.15,
+                  w: 8.4,
+                  h: 1.3,
+                  fontSize: 34,
+                  bold: true,
+                  color: themeObj.pptText,
+                  align: "center",
+                  valign: "middle",
+                });
+                slide.addText(subTitle, {
+                  x: 1.0,
+                  y: 3.65,
+                  w: 8.0,
+                  h: 0.5,
+                  fontSize: 14,
+                  color: themeObj.pptSub,
+                  align: "center",
+                });
+              } else {
+                let badgeText =
+                  (slEl.querySelector(".tng-slide-badge") &&
+                    slEl.querySelector(".tng-slide-badge").textContent) ||
+                  "SLIDE " +
+                    String(idx + 1).padStart(2, "0") +
+                    " / " +
+                    totalCount;
+                let headingText =
+                  (slEl.querySelector(".tng-slide-heading") &&
+                    slEl.querySelector(".tng-slide-heading").textContent) ||
+                  "Nội dung trọng tâm";
+
+                slide.addText(badgeText + "  •  " + rawTopic, {
+                  x: 0.65,
+                  y: 0.4,
+                  w: 8.7,
+                  h: 0.35,
+                  fontSize: 10,
+                  bold: true,
+                  color: themeObj.pptAccent,
+                });
+                slide.addText(headingText, {
+                  x: 0.65,
+                  y: 0.8,
+                  w: 8.7,
+                  h: 0.6,
+                  fontSize: 22,
+                  bold: true,
+                  color: themeObj.pptText,
+                });
+
+                let items = slEl.querySelectorAll(".tng-slide-card-item");
+                let startY = 1.55;
+                let stepY =
+                  items.length >= 5 ? 0.72 : items.length === 4 ? 0.88 : 1.08;
+                let boxH =
+                  items.length >= 5 ? 0.62 : items.length === 4 ? 0.75 : 0.92;
+
+                items.forEach(function (itemEl, bIdx) {
+                  let numTxt = String(bIdx + 1).padStart(2, "0");
+                  let bodyTxt =
+                    (itemEl.querySelector(".tng-slide-card-text") &&
+                      itemEl.querySelector(".tng-slide-card-text")
+                        .textContent) ||
+                    itemEl.textContent ||
+                    "";
+                  let curY = startY + bIdx * stepY;
+
+                  slide.addText(numTxt + ".  " + bodyTxt.trim(), {
+                    x: 0.65,
+                    y: curY,
+                    w: 8.7,
+                    h: boxH,
+                    fontSize: items.length >= 5 ? 12.5 : 13.5,
                     color: themeObj.pptText,
-                    align: "center",
+                    fill: { color: themeObj.pptCardBg },
+                    line: { color: themeObj.pptAccent, width: 0.75 },
+                    margin: [6, 12, 6, 12],
                     valign: "middle",
                   });
-                  slide.addText(subTitle, {
-                    x: 1.0,
-                    y: 3.65,
-                    w: 8.0,
-                    h: 0.5,
-                    fontSize: 14,
-                    color: themeObj.pptSub,
-                    align: "center",
-                  });
-                } else {
-                  let badgeText =
-                    (slEl.querySelector(".tng-slide-badge") &&
-                      slEl.querySelector(".tng-slide-badge").textContent) ||
-                    "SLIDE " +
-                      String(idx + 1).padStart(2, "0") +
-                      " / " +
-                      totalCount;
-                  let headingText =
-                    (slEl.querySelector(".tng-slide-heading") &&
-                      slEl.querySelector(".tng-slide-heading").textContent) ||
-                    "Nội dung trọng tâm";
-
-                  slide.addText(badgeText + "  •  " + rawTopic, {
-                    x: 0.65,
-                    y: 0.4,
-                    w: 8.7,
-                    h: 0.35,
-                    fontSize: 10,
-                    bold: true,
-                    color: themeObj.pptAccent,
-                  });
-                  slide.addText(headingText, {
-                    x: 0.65,
-                    y: 0.8,
-                    w: 8.7,
-                    h: 0.6,
-                    fontSize: 22,
-                    bold: true,
-                    color: themeObj.pptText,
-                  });
-
-                  let items = slEl.querySelectorAll(".tng-slide-card-item");
-                  let startY = 1.55;
-                  let stepY =
-                    items.length >= 5 ? 0.72 : items.length === 4 ? 0.88 : 1.08;
-                  let boxH =
-                    items.length >= 5 ? 0.62 : items.length === 4 ? 0.75 : 0.92;
-
-                  items.forEach(function (itemEl, bIdx) {
-                    let numTxt = String(bIdx + 1).padStart(2, "0");
-                    let bodyTxt =
-                      (itemEl.querySelector(".tng-slide-card-text") &&
-                        itemEl.querySelector(".tng-slide-card-text")
-                          .textContent) ||
-                      itemEl.textContent ||
-                      "";
-                    let curY = startY + bIdx * stepY;
-
-                    slide.addText(numTxt + ".  " + bodyTxt.trim(), {
-                      x: 0.65,
-                      y: curY,
-                      w: 8.7,
-                      h: boxH,
-                      fontSize: items.length >= 5 ? 12.5 : 13.5,
-                      color: themeObj.pptText,
-                      fill: { color: themeObj.pptCardBg },
-                      line: { color: themeObj.pptAccent, width: 0.75 },
-                      margin: [6, 12, 6, 12],
-                      valign: "middle",
-                    });
-                  });
-                }
-              });
-
-              await pptx.writeFile({ fileName: baseFileName + ".pptx" });
-              return;
-            } catch (err) {}
-          }
-
-          let pptHtml =
-            '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:p="urn:schemas-microsoft-com:office:powerpoint" xmlns="http://www.w3.org/TR/REC-html40">' +
-            '<head><meta charset="utf-8"><title>' +
-            rawTopic +
-            "</title>" +
-            "<style>" +
-            "@page { size: 13.333in 7.5in; margin: 0; }" +
-            "body { margin: 0; padding: 0; font-family: Arial, sans-serif; background: #" +
-            themeObj.pptBg +
-            "; color: #" +
-            themeObj.pptText +
-            "; }" +
-            ".ppt-slide { width: 13.333in; height: 7.5in; padding: 0.6in 0.8in; box-sizing: border-box; page-break-after: always; background: #" +
-            themeObj.pptBg +
-            "; color: #" +
-            themeObj.pptText +
-            "; }" +
-            ".ppt-badge { color: #" +
-            themeObj.pptAccent +
-            "; font-size: 12pt; font-weight: bold; margin-bottom: 10pt; }" +
-            ".ppt-title { font-size: 26pt; font-weight: bold; margin-bottom: 18pt; color: #" +
-            themeObj.pptText +
-            "; }" +
-            ".ppt-card { background: #" +
-            themeObj.pptCardBg +
-            "; border-left: 4pt solid #" +
-            themeObj.pptAccent +
-            "; padding: 12pt 16pt; margin-bottom: 10pt; font-size: 14pt; color: #" +
-            themeObj.pptText +
-            "; }" +
-            "</style></head><body>";
-
-          slideEls.forEach(function (slEl, idx) {
-            let coverBox = slEl.querySelector(".tng-slide-cover-box");
-            if (coverBox) {
-              let mainTitle =
-                (coverBox.querySelector(".tng-slide-cover-title") &&
-                  coverBox.querySelector(".tng-slide-cover-title")
-                    .textContent) ||
-                rawTopic;
-              let subTitle =
-                (coverBox.querySelector(".tng-slide-cover-sub") &&
-                  coverBox.querySelector(".tng-slide-cover-sub").textContent) ||
-                "";
-              pptHtml +=
-                '<div class="ppt-slide" style="text-align:center; padding-top:2.2in;">' +
-                '<div class="ppt-badge">SLIDE ' +
-                String(idx + 1).padStart(2, "0") +
-                " / " +
-                totalCount +
-                "</div>" +
-                '<div class="ppt-title" style="font-size:38pt;">' +
-                mainTitle +
-                "</div>" +
-                '<div style="font-size:16pt; color:#' +
-                themeObj.pptSub +
-                ';">' +
-                subTitle +
-                "</div></div>";
-            } else {
-              let headingText =
-                (slEl.querySelector(".tng-slide-heading") &&
-                  slEl.querySelector(".tng-slide-heading").textContent) ||
-                "";
-              pptHtml +=
-                '<div class="ppt-slide">' +
-                '<div class="ppt-badge">SLIDE ' +
-                String(idx + 1).padStart(2, "0") +
-                " / " +
-                totalCount +
-                " • " +
-                rawTopic +
-                "</div>" +
-                '<div class="ppt-title">' +
-                headingText +
-                "</div>";
-              slEl
-                .querySelectorAll(".tng-slide-card-item")
-                .forEach(function (it, bIdx) {
-                  let txt =
-                    (it.querySelector(".tng-slide-card-text") &&
-                      it.querySelector(".tng-slide-card-text").textContent) ||
-                    it.textContent ||
-                    "";
-                  pptHtml +=
-                    '<div class="ppt-card"><b>0' +
-                    (bIdx + 1) +
-                    ".</b> " +
-                    txt.trim() +
-                    "</div>";
                 });
-              pptHtml += "</div>";
-            }
-          });
-          pptHtml += "</body></html>";
+              }
+            });
 
-          let blob = new Blob(["\ufeff", pptHtml], {
-            type: "application/vnd.ms-powerpoint;charset=utf-8",
-          });
-          let url = URL.createObjectURL(blob);
-          let a = document.createElement("a");
-          a.href = url;
-          a.download = baseFileName + ".ppt";
-          document.body.appendChild(a);
-          a.click();
-          setTimeout(function () {
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-          }, 200);
+            await pptx.writeFile({ fileName: baseFileName + ".pptx" });
+          }
         };
 
         // 3. HÀM LÀM SẠCH VĂN BẢN, TRÍCH XUẤT CHỦ ĐỀ CHUẨN XÁC & CHUYỂN SLIDE
@@ -26774,7 +26855,7 @@
             '" data-topic-name="' +
             cleanTopic.replace(/"/g, "&quot;") +
             '" ' +
-            (isAiDone ? 'data-tng-canvas-20-v11="1"' : "") +
+            (isAiDone ? 'data-tng-canvas-20-v12="1"' : "") +
             ' style="' +
             themeVars +
             '">' +
@@ -27086,15 +27167,12 @@
           return cleanedRaw;
         }
 
-        // Lưu đồng bộ vào cả sessions (RAM + localStorage) để khi chuyển tab Lịch sử không bị quay về 3 dòng cũ
         function syncChatHistorySessionsEverywhere() {
           try {
             let cb = document.getElementById("cb");
-            // 1. Quét mảng sessions trong bộ nhớ
             if (typeof sessions !== "undefined" && Array.isArray(sessions)) {
               sessions.forEach(function (sObj) {
                 if (!sObj || typeof sObj !== "object") return;
-                // Nếu session lưu trực tiếp chuỗi HTML của #cb
                 if (
                   curId &&
                   sObj.id === curId &&
@@ -27111,7 +27189,6 @@
                 ) {
                   sObj.content = cb.innerHTML;
                 }
-                // Nếu session lưu mảng tin nhắn (msgs / messages / chat / items)
                 Object.keys(sObj).forEach(function (k) {
                   let arr = sObj[k];
                   if (Array.isArray(arr)) {
@@ -27149,7 +27226,6 @@
               });
             }
 
-            // 2. Quét tất cả khóa lưu session trong localStorage để nâng cấp dứt điểm dữ liệu cũ
             for (let i = 0; i < localStorage.length; i++) {
               let key = localStorage.key(i);
               if (
@@ -27236,7 +27312,7 @@
                   f.name.indexOf(topicHint) !== -1;
                 if ((matchId || matchTopic) && typeof f.data === "string") {
                   f.data = transformFn(sanitizeStoredDocHtml(f.data), f.id);
-                  f._tngV11Synced = true;
+                  f._tngV12Synced = true;
                 }
               });
             }
@@ -27263,7 +27339,7 @@
                         sanitizeStoredDocHtml(item.data),
                         item.id,
                       );
-                      item._tngV11Synced = true;
+                      item._tngV12Synced = true;
                       changed = true;
                     }
                   });
@@ -27359,9 +27435,9 @@
           typeof sendMsg === "function" ? sendMsg : window.sendMsg;
         if (
           typeof _origSendMsg === "function" &&
-          !window._tngSendMsgHookedV11
+          !window._tngSendMsgHookedV12
         ) {
-          window._tngSendMsgHookedV11 = true;
+          window._tngSendMsgHookedV12 = true;
           window.sendMsg = sendMsg = function (source) {
             let inp =
               document.getElementById(
@@ -27389,8 +27465,8 @@
         }
 
         const _origSetTimeout = window.setTimeout;
-        if (!window._tngSetTimeoutHookedV11) {
-          window._tngSetTimeoutHookedV11 = true;
+        if (!window._tngSetTimeoutHookedV12) {
+          window._tngSetTimeoutHookedV12 = true;
           window.setTimeout = function (fn, delay) {
             if (typeof fn === "function") {
               let fnStr = "";
@@ -27423,7 +27499,6 @@
                       window._tngReadyPayload = null;
                     }
 
-                    // Await fn để đảm bảo nếu fn là async, dữ liệu _tngReadyPayload không bị xóa sớm
                     await fn.apply(window, args);
 
                     if (window._tngReadyPayload) {
@@ -27472,8 +27547,8 @@
 
         const _origGenAns =
           typeof genAns === "function" ? genAns : window.genAns;
-        if (typeof _origGenAns === "function" && !window._tngGenAnsHookedV11) {
-          window._tngGenAnsHookedV11 = true;
+        if (typeof _origGenAns === "function" && !window._tngGenAnsHookedV12) {
+          window._tngGenAnsHookedV12 = true;
           window.genAns = genAns = async function (txt, historyMsgs, fileData) {
             const res = await _origGenAns.apply(this, arguments);
             if (res && typeof res.h === "string") {
@@ -27708,7 +27783,6 @@
               let topic = extractCleanTopic(msgEl.textContent || "", "");
               let storedFile = findFileInStorageByIdOrTopic(fId, topic);
 
-              // Nếu trong kho file đã có sẵn nội dung 5 bước do AI tạo thì lấy sang, nếu chưa thì dùng 5 bước chuẩn
               if (
                 storedFile &&
                 storedFile.data &&
@@ -27862,9 +27936,9 @@
         const origViewMedia = window.viewMediaById;
         if (
           typeof origViewMedia === "function" &&
-          !window._tngViewMediaHookedV11
+          !window._tngViewMediaHookedV12
         ) {
-          window._tngViewMediaHookedV11 = true;
+          window._tngViewMediaHookedV12 = true;
           window.viewMediaById = function (id, e) {
             ensureSlideDownloadButton();
             const res = origViewMedia.apply(this, arguments);
@@ -27952,7 +28026,7 @@
               } else if (
                 (htmlNow.indexOf("Bản trình bày tự động bởi TNG AI") !== -1 ||
                   body.querySelectorAll(".slide-page").length > 0) &&
-                htmlNow.indexOf("data-tng-canvas-20-v11") === -1
+                htmlNow.indexOf("data-tng-canvas-20-v12") === -1
               ) {
                 let titleEl =
                   body.querySelector(".tng-slide-cover-title") ||
