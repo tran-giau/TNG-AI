@@ -14015,7 +14015,7 @@
                 max-height: none !important;
               }
 
-              /* 3. KHUNG KÍNH LIQUID GLASS TỶ LỆ 1 : 1.46 CÂN ĐỐI VỚI KHOẢNG CÁCH MỚI */
+              /* 3. KHUNG KÍNH LIQUID GLASS TRÊN PC (1 : 1.46) */
               .tng-ios-music-card {
                 position: relative !important;
                 height: 91vh !important;
@@ -14162,7 +14162,7 @@
                 height: 100%;
               }
 
-              /* 5. PHẦN THÂN DƯỚI: TĂNG THÊM KHOẢNG CÁCH GIỮA CÁC PHẦN ĐỀU NHAU 1:1:1 */
+              /* 5. PHẦN THÂN DƯỚI: KHOẢNG CÁCH CÁC PHẦN ĐỀU NHAU 1:1:1 */
               .tng-mp-body {
                 position: relative;
                 z-index: 3;
@@ -14490,7 +14490,7 @@
                 transform: translate(-50%, -50%) scale(1);
               }
 
-              /* 10. NÚT VIÊN NANG TẢI XUỐNG: TĂNG ĐỘ TRONG SUỐT (0.075) */
+              /* 10. NÚT VIÊN NANG TẢI XUỐNG: ĐỘ TRONG SUỐT 0.075 */
               #viewer-modal button.tng-mp-output-pill,
               .tng-mp-output-pill {
                 flex: none !important;
@@ -14543,15 +14543,15 @@
                 box-shadow: 0 0 18px rgba(255, 255, 255, 0.18) !important;
               }
 
-              /* 11. ĐIỆN THOẠI (MOBILE): TỶ LỆ 1 : 1.46 & KHOẢNG CÁCH 32PX */
+              /* 11. ĐIỆN THOẠI (MOBILE): GIỮ NGUYÊN KHOẢNG CÁCH 32PX TỪ BẢN TRƯỚC & TĂNG TỶ LỆ CHIỀU CAO 1 : 1.58 ĐỂ TÊN BÀI HÁT HẠ XUỐNG ĐÚNG VÙNG LÀM MỜ */
               @media (max-width: 768px) {
                 .tng-ios-music-card {
-                  width: min(88vw, 375px, calc(89dvh / 1.46)) !important;
+                  width: min(88vw, 375px, calc(90dvh / 1.58)) !important;
                   min-width: 0 !important;
                   max-width: 375px !important;
-                  height: calc(min(88vw, 375px, calc(89dvh / 1.46)) * 1.46) !important;
-                  max-height: 89dvh !important;
-                  aspect-ratio: 1 / 1.46 !important;
+                  height: calc(min(88vw, 375px, calc(90dvh / 1.58)) * 1.58) !important;
+                  max-height: 90dvh !important;
+                  aspect-ratio: 1 / 1.58 !important;
                   border-radius: 38px !important;
                   padding: 0 !important;
                 }
