@@ -13381,7 +13381,140 @@
             window._tngCoverCache[url] = img;
           };
 
-          // Ngắt luồng phát âm thanh ngay tức khắc (0ms) khi nhấn nút ✕ hoặc đóng bảng
+          window._tngAudioBlobUrlCache = window._tngAudioBlobUrlCache || {};
+          window._tngAudioPrewarmEls = window._tngAudioPrewarmEls || {};
+
+          window.tngWarmupAudioUrl = function (rawUrl) {
+            if (!rawUrl || typeof rawUrl !== "string") return;
+            if (!window._tngAudioPrewarmEls[rawUrl]) {
+              try {
+                let preAudio = new Audio();
+                preAudio.preload = "auto";
+                preAudio.src = rawUrl;
+                preAudio.load();
+                window._tngAudioPrewarmEls[rawUrl] = preAudio;
+              } catch (e) {}
+            }
+          };
+
+          window.tngGenerateFallbackMusicBlob = function () {
+            let sampleRate = 44100;
+            let durationSec = 24;
+            let numSamples = sampleRate * durationSec;
+            let buffer = new ArrayBuffer(44 + numSamples * 4);
+            let view = new DataView(buffer);
+
+            function writeStr(offset, str) {
+              for (let i = 0; i < str.length; i++) {
+                view.setUint8(offset + i, str.charCodeAt(i));
+              }
+            }
+
+            writeStr(0, "RIFF");
+            view.setUint32(4, 36 + numSamples * 4, true);
+            writeStr(8, "WAVE");
+            writeStr(12, "fmt ");
+            view.setUint32(16, 16, true);
+            view.setUint16(20, 1, true);
+            view.setUint16(22, 2, true);
+            view.setUint32(24, sampleRate, true);
+            view.setUint32(28, sampleRate * 4, true);
+            view.setUint16(32, 4, true);
+            view.setUint16(34, 16, true);
+            writeStr(36, "data");
+            view.setUint32(40, numSamples * 4, true);
+
+            const chords = [
+              [261.63, 329.63, 392.0, 523.25],
+              [220.0, 261.63, 329.63, 440.0],
+              [174.61, 220.0, 261.63, 349.23],
+              [196.0, 246.94, 293.66, 392.0],
+            ];
+
+            let offset = 44;
+            for (let i = 0; i < numSamples; i++) {
+              let t = i / sampleRate;
+              let chordIdx = Math.floor(t / 3) % chords.length;
+              let chord = chords[chordIdx];
+              let noteIdx = Math.floor((t * 2) % 4);
+              let arpFreq = chord[noteIdx] * 2;
+              let beatPos = (t % 3) / 3;
+              let env = Math.sin(Math.PI * beatPos);
+              let noteEnv = Math.exp(-((t * 2) % 1) * 3.2);
+
+              let pad =
+                (Math.sin(2 * Math.PI * chord[0] * t) +
+                  Math.sin(2 * Math.PI * chord[1] * t) * 0.8 +
+                  Math.sin(2 * Math.PI * chord[2] * t) * 0.7) *
+                0.16 *
+                env;
+              let melody = Math.sin(2 * Math.PI * arpFreq * t) * 0.2 * noteEnv;
+
+              let fade =
+                t < 0.8
+                  ? t / 0.8
+                  : t > durationSec - 1.5
+                    ? (durationSec - t) / 1.5
+                    : 1;
+              let valL = Math.max(-1, Math.min(1, (pad + melody) * fade));
+              let valR = Math.max(
+                -1,
+                Math.min(1, (pad * 0.95 + melody * 0.85) * fade),
+              );
+
+              view.setInt16(offset, valL * 32767, true);
+              view.setInt16(offset + 2, valR * 32767, true);
+              offset += 4;
+            }
+
+            return new Blob([buffer], { type: "audio/mpeg" });
+          };
+
+          window.tngPrepareMp3BlobUrl = async function (rawUrl) {
+            if (rawUrl && window._tngAudioBlobUrlCache[rawUrl]) {
+              return window._tngAudioBlobUrlCache[rawUrl];
+            }
+            if (
+              rawUrl &&
+              (rawUrl.indexOf("blob:") === 0 || rawUrl.indexOf("data:") === 0)
+            ) {
+              return rawUrl;
+            }
+
+            let fastUrls = [
+              rawUrl,
+              "https://corsproxy.io/?url=" + encodeURIComponent(rawUrl),
+              "https://api.codetabs.com/v1/proxy?quest=" +
+                encodeURIComponent(rawUrl),
+            ];
+
+            for (let i = 0; i < fastUrls.length; i++) {
+              try {
+                let controller = new AbortController();
+                let timer = setTimeout(() => controller.abort(), 2200);
+                let resp = await fetch(fastUrls[i], {
+                  signal: controller.signal,
+                });
+                clearTimeout(timer);
+                if (resp && resp.ok) {
+                  let buf = await resp.arrayBuffer();
+                  if (buf && buf.byteLength > 10000) {
+                    let bUrl = URL.createObjectURL(
+                      new Blob([buf], { type: "audio/mpeg" }),
+                    );
+                    if (rawUrl) window._tngAudioBlobUrlCache[rawUrl] = bUrl;
+                    return bUrl;
+                  }
+                }
+              } catch (e) {}
+            }
+
+            let fallbackBlob = window.tngGenerateFallbackMusicBlob();
+            let fallbackUrl = URL.createObjectURL(fallbackBlob);
+            if (rawUrl) window._tngAudioBlobUrlCache[rawUrl] = fallbackUrl;
+            return fallbackUrl;
+          };
+
           window.tngKillMusicNow = function () {
             document
               .querySelectorAll(
@@ -13477,7 +13610,6 @@
             return picked;
           };
 
-          // Đọc mức âm lượng đã lưu (lần đầu mở mặc định 100% = 1.0)
           window.tngGetSavedVol = function () {
             let v = parseFloat(localStorage.getItem("tng_music_volume_v1"));
             if (isNaN(v) || v < 0 || v > 1) {
@@ -13489,7 +13621,6 @@
             return v;
           };
 
-          // Lưu trạng thái Like cho từng bài hát
           window.tngIsSongLiked = function (songKey) {
             try {
               let likes = JSON.parse(
@@ -13518,7 +13649,6 @@
             }
           };
 
-          // Chức năng nút Chia sẻ bài nhạc
           window.tngMpShareSong = function (btn) {
             let title = window._tngCurrentSongTitle || "Bản nhạc TNG AI";
             let audioEl = document.getElementById("tng-mp-audio");
@@ -13542,7 +13672,44 @@
             }
           };
 
-          // Kiểm tra tên bài hát dài để kích hoạt hiệu ứng chạy chữ lặp liên tục sang trái
+          window.tngMpDownloadSong = async function (btn) {
+            if (!btn || btn.dataset.downloading === "1") return;
+            let rawTitle = window._tngCurrentSongTitle || "Bài hát TNG AI";
+            let fileTitle =
+              rawTitle
+                .replace(/^📌\s*/g, "")
+                .replace(/[\\/:*?"<>|]+/g, "")
+                .replace(/\s+/g, " ")
+                .trim() || "Bài hát TNG AI";
+            let fileName = fileTitle + ".mp3";
+
+            let audioEl = document.getElementById("tng-mp-audio");
+            let src =
+              window._tngCurrentSongRawUrl || (audioEl && audioEl.src) || "";
+
+            let labelSpan = btn.querySelector("span");
+            btn.dataset.downloading = "1";
+            if (labelSpan) labelSpan.textContent = "Đang tải...";
+
+            try {
+              let blobUrl = await window.tngPrepareMp3BlobUrl(src);
+              if (blobUrl) {
+                let a = document.createElement("a");
+                a.style.display = "none";
+                a.href = blobUrl;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(function () {
+                  if (a.parentNode) a.parentNode.removeChild(a);
+                }, 500);
+              }
+            } catch (e) {}
+
+            if (labelSpan) labelSpan.textContent = "Tải lại";
+            delete btn.dataset.downloading;
+          };
+
           window.tngMpInitMarquee = function () {
             let mask = document.getElementById("tng-mp-title-mask");
             let track = document.getElementById("tng-mp-title-track");
@@ -13572,6 +13739,27 @@
             }
           };
 
+          window.tngBindMusicButtonsSquish = function () {
+            document
+              .querySelectorAll(".tng-mp-ctrl-btn, .tng-mp-output-pill")
+              .forEach(function (btn) {
+                if (btn.dataset.tngSquishBound) return;
+                btn.dataset.tngSquishBound = "1";
+                const add = function () {
+                  btn.classList.add("tng-ios-active");
+                };
+                const rm = function () {
+                  btn.classList.remove("tng-ios-active");
+                };
+                btn.addEventListener("pointerdown", add, { passive: true });
+                btn.addEventListener("pointerup", rm, { passive: true });
+                btn.addEventListener("pointercancel", rm, { passive: true });
+                btn.addEventListener("mouseleave", rm, { passive: true });
+                btn.addEventListener("touchstart", add, { passive: true });
+                btn.addEventListener("touchend", rm, { passive: true });
+              });
+          };
+
           window.tngMpFmt = function (s) {
             if (!s || isNaN(s) || !isFinite(s)) return "00:00";
             s = Math.max(0, Math.floor(s));
@@ -13594,7 +13782,6 @@
             }
           };
 
-          // Hiệu ứng biến đổi hình dáng & xoay sang phải (từ trên đầu xoay qua theo chiều kim đồng hồ)
           window.tngMpSyncIcon = function (playing) {
             let btn = document.getElementById("tng-mp-play");
             if (!btn) return;
@@ -13767,15 +13954,33 @@
             (f && (f.id || f.name)) || cleanTitle,
           );
           window._tngCurrentSongTitle = cleanTitle;
+          window._tngCurrentSongRawUrl = f.data;
           let isLiked = window.tngIsSongLiked(window._tngCurrentSongKey);
+
+          window.tngWarmupAudioUrl(f.data);
+
+          try {
+            if (window.speechSynthesis) window.speechSynthesis.cancel();
+          } catch (e) {}
 
           setTimeout(() => {
             let a = document.getElementById("tng-mp-audio");
-            if (a && typeof window._tngSavedVol === "number")
-              a.volume = window._tngSavedVol;
+            if (a) {
+              if (typeof window._tngSavedVol === "number") {
+                a.volume = window._tngSavedVol;
+              }
+              let playPromise = a.play();
+              if (playPromise && typeof playPromise.catch === "function") {
+                playPromise.catch(() => {});
+              }
+            }
+            if (window.tngBindMusicButtonsSquish)
+              window.tngBindMusicButtonsSquish();
             if (window.tngMpInitMarquee) window.tngMpInitMarquee();
-          }, 30);
+          }, 15);
           setTimeout(() => {
+            if (window.tngBindMusicButtonsSquish)
+              window.tngBindMusicButtonsSquish();
             if (window.tngMpInitMarquee) window.tngMpInitMarquee();
           }, 320);
 
@@ -13810,17 +14015,17 @@
                 max-height: none !important;
               }
 
-              /* 3. KHUNG KÍNH LIQUID GLASS ĐỒNG BỘ TỶ LỆ 1 : 1.38 TRÊN CẢ PC & MOBILE */
+              /* 3. KHUNG KÍNH LIQUID GLASS TỶ LỆ 1 : 1.43 CÂN ĐỐI VỚI KHOẢNG CÁCH MỚI */
               .tng-ios-music-card {
                 position: relative !important;
                 height: 90vh !important;
                 height: 90dvh !important;
                 max-height: 90dvh !important;
-                width: calc(90vh / 1.38) !important;
-                width: calc(90dvh / 1.38) !important;
+                width: calc(90vh / 1.43) !important;
+                width: calc(90dvh / 1.43) !important;
                 min-width: 0 !important;
                 max-width: 92vw !important;
-                aspect-ratio: 1 / 1.38 !important;
+                aspect-ratio: 1 / 1.43 !important;
                 border-radius: clamp(36px, 4.6vh, 50px) !important;
                 padding: 0 !important;
                 box-sizing: border-box !important;
@@ -13832,11 +14037,11 @@
                   rgba(255, 255, 255, 0.046) 52%,
                   rgba(255, 255, 255, 0.073) 100%
                 ) !important;
-                border: 1px solid rgba(255, 255, 255, 0.22) !important;
+                border: 0.75px solid rgba(255, 255, 255, 0.16) !important;
                 box-shadow:
                   0 30px 70px rgba(0, 0, 0, 0.48),
-                  inset 0 1px 1.5px rgba(255, 255, 255, 0.36),
-                  inset 0 -1px 1px rgba(255, 255, 255, 0.12) !important;
+                  inset 0 0.5px 0.8px rgba(255, 255, 255, 0.25),
+                  inset 0 -0.5px 0.8px rgba(255, 255, 255, 0.08) !important;
                 user-select: none;
                 -webkit-user-select: none;
                 display: flex !important;
@@ -13849,21 +14054,37 @@
                 position: absolute;
                 inset: 0;
                 border-radius: inherit;
-                box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.36);
+                box-shadow: inset 0 0.5px 0.8px rgba(255, 255, 255, 0.22);
                 pointer-events: none;
                 z-index: 6;
               }
 
-              /* 4. HỆ THỐNG HÒA TAN ẢNH 2 LỚP THEO TỶ LỆ 1:1.38 */
+              /* 4. KHUNG ẢNH BÌA VUÔNG 1:1 & XÓA TRIỆT ĐỂ VỆT VIỀN CẮT DƯỚI ĐÁY ẢNH */
               .tng-mp-hero {
                 position: absolute;
                 top: 0;
                 left: 0;
                 right: 0;
-                height: 72%;
+                width: 100% !important;
+                aspect-ratio: 1 / 1.03 !important;
+                height: auto !important;
                 overflow: hidden;
                 pointer-events: none;
                 z-index: 1;
+                -webkit-mask-image: linear-gradient(
+                  180deg,
+                  #000000 0%,
+                  #000000 78%,
+                  rgba(0, 0, 0, 0.35) 90%,
+                  transparent 98%
+                );
+                mask-image: linear-gradient(
+                  180deg,
+                  #000000 0%,
+                  #000000 78%,
+                  rgba(0, 0, 0, 0.35) 90%,
+                  transparent 98%
+                );
               }
               .tng-mp-artwork-blur {
                 position: absolute;
@@ -13875,29 +14096,31 @@
                 transform: scale(1.14);
                 filter: blur(26px) saturate(165%) brightness(0.88);
                 opacity: 0.95;
+                /* Thu điểm kết thúc về 88% để không bị scale(1.14) đẩy chạm đáy gây lộ viền */
                 -webkit-mask-image: linear-gradient(
                   180deg,
                   transparent 24%,
-                  rgba(0, 0, 0, 0.85) 51%,
-                  rgba(0, 0, 0, 0.52) 69%,
-                  rgba(0, 0, 0, 0.16) 84%,
-                  rgba(0, 0, 0, 0.03) 93%,
-                  transparent 99%
+                  rgba(0, 0, 0, 0.85) 50%,
+                  rgba(0, 0, 0, 0.52) 66%,
+                  rgba(0, 0, 0, 0.16) 78%,
+                  rgba(0, 0, 0, 0.03) 84%,
+                  transparent 88%
                 );
                 mask-image: linear-gradient(
                   180deg,
                   transparent 24%,
-                  rgba(0, 0, 0, 0.85) 51%,
-                  rgba(0, 0, 0, 0.52) 69%,
-                  rgba(0, 0, 0, 0.16) 84%,
-                  rgba(0, 0, 0, 0.03) 93%,
-                  transparent 99%
+                  rgba(0, 0, 0, 0.85) 50%,
+                  rgba(0, 0, 0, 0.52) 66%,
+                  rgba(0, 0, 0, 0.16) 78%,
+                  rgba(0, 0, 0, 0.03) 84%,
+                  transparent 88%
                 );
               }
               .tng-mp-artwork-img {
                 position: relative;
                 width: 100%;
-                height: 100%;
+                aspect-ratio: 1 / 1 !important;
+                height: auto !important;
                 object-fit: cover;
                 object-position: center 22%;
                 display: block;
@@ -13940,18 +14163,18 @@
                 height: 100%;
               }
 
-              /* 5. PHẦN THÂN DƯỚI: GIỮ NGUYÊN KHOẢNG CÁCH GẦN NHAU GIỮA CÁC PHẦN */
+              /* 5. PHẦN THÂN DƯỚI: TĂNG KHOẢNG CÁCH CÁC PHẦN LÊN THOÁNG ĐỀU 1:1:1 */
               .tng-mp-body {
                 position: relative;
                 z-index: 3;
                 width: 100%;
-                padding: 0 4vh 4vh 4vh;
-                box-sizing: border-box;
-                display: flex;
-                flex-direction: column;
-                justify-content: flex-end;
-                align-items: center;
-                gap: 2.05vh;
+                padding: 0 4vh 3.1vh 4vh !important;
+                box-sizing: border-box !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: flex-end !important;
+                align-items: center !important;
+                gap: clamp(31px, 4.1vh, 37px) !important;
               }
 
               /* 6. TÊN BÀI HÁT & CHẠY CHỮ TỰ ĐỘNG KHI DÀI */
@@ -13959,7 +14182,8 @@
                 width: 100%;
                 text-align: center;
                 overflow: hidden;
-                margin-bottom: 0.25vh;
+                margin: 0 0 -3px 0 !important;
+                padding: 0 !important;
               }
               .tng-mp-title-mask {
                 width: 100%;
@@ -13988,6 +14212,7 @@
                 display: inline-block;
                 font-size: clamp(21px, 2.95vh, 29px) !important;
                 font-weight: 700;
+                line-height: 1.2 !important;
                 color: #ffffff;
                 letter-spacing: -0.3px;
                 text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
@@ -14006,42 +14231,57 @@
               .tng-mp-subtitle {
                 font-size: clamp(14px, 1.9vh, 18.5px) !important;
                 font-weight: 500;
+                line-height: 1.25 !important;
                 color: rgba(255, 255, 255, 0.72);
-                margin-top: 0.35vh;
+                margin-top: 0.45vh !important;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 text-shadow: 0 1px 8px rgba(0, 0, 0, 0.28);
               }
 
-              /* 7. THANH THỜI GIAN PHÁT SÁNG Ở ĐẦU MŨI */
+              /* 7. THANH TRƯỢT THỜI GIAN */
               .tng-mp-progress-group {
                 width: 100%;
-                display: flex;
-                flex-direction: column;
-                gap: 0.42vh;
+                height: clamp(5px, 0.65vh, 6.5px) !important;
+                position: relative !important;
+                display: block !important;
+                flex: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
               }
-              .tng-mp-bar-area,
-              .tng-mp-vol-area {
-                width: 100%;
-                height: 2.35vh;
-                min-height: 22px;
-                display: flex;
-                align-items: center;
+              .tng-mp-bar-area {
+                flex: none !important;
+                width: 100% !important;
+                height: clamp(5px, 0.65vh, 6.5px) !important;
+                min-height: 0 !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                display: flex !important;
+                align-items: center !important;
                 cursor: pointer;
                 position: relative;
                 touch-action: none;
               }
+              .tng-mp-bar-area::before,
+              .tng-mp-vol-area::before {
+                content: "";
+                position: absolute;
+                top: -10px;
+                bottom: -10px;
+                left: 0;
+                right: 0;
+              }
               .tng-mp-track {
-                width: 100%;
-                height: clamp(5px, 0.63vh, 6.5px);
-                background: rgba(255, 255, 255, 0.24);
+                width: 100% !important;
+                height: clamp(5px, 0.65vh, 6.5px) !important;
+                background: rgba(255, 255, 255, 0.24) !important;
                 border-radius: 99px;
                 position: relative;
                 overflow: visible !important;
               }
               .tng-mp-fill {
-                height: 100%;
+                height: 100% !important;
                 width: 0%;
                 background: #ffffff;
                 border-radius: 99px;
@@ -14054,7 +14294,7 @@
                 right: -1px;
                 top: 50%;
                 width: clamp(16px, 2.2vh, 24px);
-                height: 100%;
+                height: clamp(5px, 0.65vh, 6.5px);
                 max-width: 100%;
                 border-radius: 99px;
                 background: #ffffff;
@@ -14066,103 +14306,74 @@
               }
 
               .tng-mp-time-under {
+                position: absolute !important;
+                top: calc(100% + clamp(5px, 0.72vh, 7.5px)) !important;
+                left: 0 !important;
+                right: 0 !important;
                 width: 100%;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+                margin: 0 !important;
+                padding: 0 !important;
+                pointer-events: none;
               }
               .tng-mp-time {
                 font-size: clamp(11.5px, 1.52vh, 15px) !important;
                 font-weight: 500;
+                line-height: 1 !important;
                 color: rgba(255, 255, 255, 0.5);
                 font-variant-numeric: tabular-nums;
               }
 
-              /* 8. THANH ÂM LƯỢNG & NÚT KÉO TRÒN */
-              .tng-mp-vol-track {
-                width: 100%;
-                height: clamp(5px, 0.63vh, 6.5px);
-                background: rgba(255, 255, 255, 0.24);
-                border-radius: 99px;
-                position: relative;
-                overflow: hidden;
-              }
-              .tng-mp-vol-fill {
-                height: 100%;
-                background: #ffffff;
-                border-radius: 99px;
-              }
-
-              .tng-mp-seek-thumb,
-              .tng-mp-vol-thumb {
-                position: absolute;
-                top: 50%;
-                width: clamp(13px, 1.8vh, 17px);
-                height: clamp(13px, 1.8vh, 17px);
-                background: #ffffff;
-                border-radius: 50%;
-                transform: translate(-50%, -50%) scale(0.25);
-                opacity: 0;
-                box-shadow:
-                  0 0 0 10px rgba(255, 255, 255, 0.25),
-                  0 2px 6px rgba(0, 0, 0, 0.3);
-                pointer-events: none;
-                transition:
-                  transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
-                  opacity 0.18s ease;
-                z-index: 5;
-              }
-              .tng-mp-seek-thumb {
-                left: 0%;
-              }
-              .tng-mp-bar-area.is-seeking .tng-mp-seek-thumb,
-              .tng-mp-vol-area.is-seeking .tng-mp-vol-thumb {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1);
-              }
-
-              /* 9. CỤM 5 NÚT ĐIỀU KHIỂN: KHÓA GAP: 0 ĐỂ DÀN ĐỀU TRONG KHUNG */
+              /* 8. CỤM 5 NÚT ĐIỀU KHIỂN */
               .tng-mp-controls {
                 width: 100% !important;
+                height: clamp(26px, 3.4vh, 32px) !important;
+                flex: none !important;
                 display: flex !important;
                 justify-content: space-between !important;
                 align-items: center !important;
                 gap: 0 !important;
                 padding: 0 2px !important;
+                margin: 0 !important;
                 box-sizing: border-box !important;
-                margin: 0.18vh 0 !important;
               }
+              #viewer-modal button.tng-mp-ctrl-btn,
               .tng-mp-ctrl-btn {
                 background: transparent !important;
                 border: none !important;
                 color: #ffffff !important;
-                width: clamp(41px, 5.4vh, 52px);
-                height: clamp(41px, 5.4vh, 52px);
+                width: clamp(40px, 5.2vh, 48px) !important;
+                height: clamp(40px, 5.2vh, 48px) !important;
+                margin: -8px 0 !important;
                 flex-shrink: 0;
-                padding: 0;
+                padding: 0 !important;
                 cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
                 border-radius: 50% !important;
                 box-shadow: none !important;
                 will-change: transform, background-color, box-shadow;
                 transition:
-                  transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  transform 0.42s cubic-bezier(0.34, 1.56, 0.64, 1),
                   background-color 0.2s ease,
-                  box-shadow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+                  box-shadow 0.42s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  opacity 0.2s ease !important;
               }
               @media (hover: hover) {
-                .tng-mp-ctrl-btn:hover:not([disabled]) {
-                  transform: scale(0.93) !important;
+                #viewer-modal button.tng-mp-ctrl-btn:hover:not([disabled]) {
+                  transform: scale(0.91) !important;
                 }
               }
-              .tng-mp-ctrl-btn:active:not([disabled]) {
+              #viewer-modal button.tng-mp-ctrl-btn:active:not([disabled]),
+              #viewer-modal button.tng-mp-ctrl-btn.tng-ios-active:not([disabled]) {
                 transition-duration: 0.04s !important;
-                transform: scale(0.76) !important;
+                transform: scale(0.72) !important;
                 opacity: 0.78 !important;
                 background: rgba(255, 255, 255, 0.16) !important;
-                box-shadow: 0 0 18px rgba(255, 255, 255, 0.2) !important;
+                box-shadow: 0 0 18px rgba(255, 255, 255, 0.22) !important;
               }
               .tng-mp-ctrl-btn svg {
                 fill: #ffffff;
@@ -14200,40 +14411,155 @@
                 will-change: transform;
               }
 
+              /* 9. THANH TRƯỢT ÂM LƯỢNG */
               .tng-mp-volume-row {
                 width: 100%;
-                display: flex;
-                align-items: center;
-                gap: 1.55vh;
-                margin-top: 0.18vh !important;
-                margin-bottom: 0 !important;
+                height: clamp(5px, 0.65vh, 6.5px) !important;
+                flex: none !important;
+                display: flex !important;
+                align-items: center !important;
+                gap: 1.55vh !important;
+                margin: 0 !important;
+                padding: 0 !important;
+              }
+              .tng-mp-vol-area {
+                flex: 1 1 auto !important;
+                height: clamp(5px, 0.65vh, 6.5px) !important;
+                min-height: 0 !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                display: flex !important;
+                align-items: center !important;
+                cursor: pointer;
+                position: relative;
+                touch-action: none;
+              }
+              .tng-mp-vol-track {
+                width: 100% !important;
+                height: clamp(5px, 0.65vh, 6.5px) !important;
+                background: rgba(255, 255, 255, 0.24) !important;
+                border-radius: 99px;
+                position: relative;
+                overflow: hidden;
+              }
+              .tng-mp-vol-fill {
+                height: 100% !important;
+                background: #ffffff;
+                border-radius: 99px;
               }
               .tng-mp-vol-icon {
                 color: rgba(255, 255, 255, 0.55);
+                height: clamp(5px, 0.65vh, 6.5px) !important;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 flex-shrink: 0;
+                overflow: visible;
               }
               .tng-mp-vol-icon svg {
-                width: clamp(20px, 2.65vh, 26px);
-                height: clamp(20px, 2.65vh, 26px);
+                width: clamp(19px, 2.5vh, 24px);
+                height: clamp(19px, 2.5vh, 24px);
+                display: block;
+                flex-shrink: 0;
               }
 
-              /* 10. ĐIỆN THOẠI (MOBILE): KHÓA CỨNG TỶ LỆ 1 : 1.38 & GIỮ KHOẢNG CÁCH GẦN NHAU Ở ĐÁY */
+              .tng-mp-seek-thumb,
+              .tng-mp-vol-thumb {
+                position: absolute;
+                top: 50%;
+                width: clamp(13px, 1.8vh, 17px);
+                height: clamp(13px, 1.8vh, 17px);
+                background: #ffffff;
+                border-radius: 50%;
+                transform: translate(-50%, -50%) scale(0.25);
+                opacity: 0;
+                box-shadow:
+                  0 0 0 10px rgba(255, 255, 255, 0.25),
+                  0 2px 6px rgba(0, 0, 0, 0.3);
+                pointer-events: none;
+                transition:
+                  transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                  opacity 0.18s ease;
+                z-index: 5;
+              }
+              .tng-mp-seek-thumb {
+                left: 0%;
+              }
+              .tng-mp-bar-area.is-seeking .tng-mp-seek-thumb,
+              .tng-mp-vol-area.is-seeking .tng-mp-vol-thumb {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+              }
+
+              /* 10. NÚT VIÊN NANG TẢI XUỐNG */
+              #viewer-modal button.tng-mp-output-pill,
+              .tng-mp-output-pill {
+                flex: none !important;
+                margin: 0 !important;
+                padding: clamp(7.5px, 1.08vh, 10.5px) clamp(17px, 2.35vh, 22px) !important;
+                border-radius: 99px !important;
+                background: rgba(255, 255, 255, 0.13) !important;
+                border: 0.75px solid rgba(255, 255, 255, 0.16) !important;
+                box-shadow:
+                  0 4px 14px rgba(0, 0, 0, 0.18),
+                  inset 0 0.5px 0.8px rgba(255, 255, 255, 0.22) !important;
+                backdrop-filter: blur(14px) !important;
+                -webkit-backdrop-filter: blur(14px) !important;
+                color: rgba(255, 255, 255, 0.95) !important;
+                font-size: clamp(12px, 1.62vh, 14.5px) !important;
+                font-weight: 600 !important;
+                letter-spacing: -0.1px;
+                display: inline-flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                gap: 8px !important;
+                cursor: pointer !important;
+                will-change: transform, background-color, box-shadow, opacity !important;
+                transition:
+                  transform 0.42s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  background-color 0.2s ease,
+                  box-shadow 0.42s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  opacity 0.2s ease !important;
+              }
+              .tng-mp-output-pill svg {
+                width: clamp(16.5px, 2.2vh, 19.5px) !important;
+                height: clamp(16.5px, 2.2vh, 19.5px) !important;
+                stroke: #ffffff;
+                fill: none !important;
+                flex-shrink: 0;
+                transform: none !important;
+              }
+              @media (hover: hover) {
+                #viewer-modal button.tng-mp-output-pill:hover:not([disabled]) {
+                  transform: scale(0.92) !important;
+                  background: rgba(255, 255, 255, 0.19) !important;
+                }
+              }
+              #viewer-modal button.tng-mp-output-pill:active:not([disabled]),
+              #viewer-modal button.tng-mp-output-pill.tng-ios-active:not([disabled]) {
+                transition-duration: 0.04s !important;
+                transform: scale(0.8) !important;
+                opacity: 0.8 !important;
+                background: rgba(255, 255, 255, 0.24) !important;
+                box-shadow: 0 0 18px rgba(255, 255, 255, 0.22) !important;
+              }
+
+              /* 11. ĐIỆN THOẠI (MOBILE): TỶ LỆ 1 : 1.43 & KHOẢNG CÁCH THOÁNG ĐỀU */
               @media (max-width: 768px) {
                 .tng-ios-music-card {
-                  width: min(88vw, 375px, calc(88dvh / 1.38)) !important;
+                  width: min(88vw, 375px, calc(89dvh / 1.43)) !important;
                   min-width: 0 !important;
                   max-width: 375px !important;
-                  height: calc(min(88vw, 375px, calc(88dvh / 1.38)) * 1.38) !important;
-                  max-height: 88dvh !important;
-                  aspect-ratio: 1 / 1.38 !important;
+                  height: calc(min(88vw, 375px, calc(89dvh / 1.43)) * 1.43) !important;
+                  max-height: 89dvh !important;
+                  aspect-ratio: 1 / 1.43 !important;
                   border-radius: 38px !important;
                   padding: 0 !important;
                 }
                 .tng-mp-hero {
-                  height: 72%;
+                  width: 100% !important;
+                  aspect-ratio: 1 / 1.03 !important;
+                  height: auto !important;
                 }
                 .tng-mp-logo-wrap {
                   top: 18px;
@@ -14242,19 +14568,30 @@
                   height: 24px;
                 }
                 .tng-mp-body {
-                  padding: 0 22px 23px 22px;
-                  gap: 14px;
+                  padding: 0 22px 20px 22px !important;
+                  gap: 29px !important;
                 }
                 .tng-mp-title {
                   font-size: 20px !important;
                 }
                 .tng-mp-subtitle {
                   font-size: 14px !important;
-                  margin-top: 2px;
+                  margin-top: 3px !important;
                 }
+                .tng-mp-progress-group,
+                .tng-mp-bar-area,
                 .tng-mp-track,
-                .tng-mp-vol-track {
-                  height: 4.5px;
+                .tng-mp-volume-row,
+                .tng-mp-vol-area,
+                .tng-mp-vol-track,
+                .tng-mp-vol-icon {
+                  height: 4.5px !important;
+                }
+                .tng-mp-fill::after {
+                  height: 4.5px !important;
+                }
+                .tng-mp-time-under {
+                  top: calc(100% + 5.5px) !important;
                 }
                 .tng-mp-time {
                   font-size: 11.5px !important;
@@ -14268,13 +14605,14 @@
                     0 2px 6px rgba(0, 0, 0, 0.3);
                 }
                 .tng-mp-controls {
+                  height: 26px !important;
                   gap: 0 !important;
                   justify-content: space-between !important;
                   padding: 0 !important;
                 }
-                .tng-mp-ctrl-btn {
-                  width: 42px;
-                  height: 42px;
+                #viewer-modal button.tng-mp-ctrl-btn {
+                  width: 40px !important;
+                  height: 40px !important;
                 }
                 .tng-mp-sub-btn svg {
                   width: 21px;
@@ -14289,11 +14627,21 @@
                   height: 30px;
                 }
                 .tng-mp-volume-row {
-                  gap: 12px;
+                  gap: 12px !important;
                 }
                 .tng-mp-vol-icon svg {
-                  width: 20px;
-                  height: 20px;
+                  width: 19px;
+                  height: 19px;
+                }
+                #viewer-modal button.tng-mp-output-pill {
+                  padding: 7.5px 17px !important;
+                  font-size: 12.5px !important;
+                  gap: 7.5px !important;
+                }
+                .tng-mp-output-pill svg {
+                  width: 17px !important;
+                  height: 17px !important;
+                  transform: none !important;
                 }
               }
             </style>
@@ -14406,15 +14754,26 @@
                     </svg>
                   </div>
                 </div>
+
+                <button type="button" class="tng-mp-output-pill" id="tng-mp-download" onclick="window.tngMpDownloadSong(this)" title="Tải xuống bản nhạc">
+                  <svg viewBox="0 0 24 24" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="9.5"></circle>
+                    <path d="M12 7.5v8"></path>
+                    <polyline points="8.5 12.5 12 16 15.5 12.5"></polyline>
+                  </svg>
+                  <span>Tải xuống</span>
+                </button>
               </div>
 
               <audio
                 id="tng-mp-audio"
                 src="${f.data}"
-                preload="metadata"
+                preload="auto"
                 autoplay
+                playsinline
                 style="display:none;"
                 onloadedmetadata="this.volume = window.tngGetSavedVol ? window.tngGetSavedVol() : 1; let d=document.getElementById('tng-mp-dur'); if(d) d.textContent=window.tngMpFmt(this.duration); if(window.tngMpInitMarquee) window.tngMpInitMarquee();"
+                oncanplay="if(this.paused){ this.play().catch(()=>{}); }"
                 ontimeupdate="let sa=document.getElementById('tng-mp-seek-area'); if(sa && !sa.dataset.dragging){ let c=document.getElementById('tng-mp-cur'), fl=document.getElementById('tng-mp-seek-fill'), th=document.getElementById('tng-mp-seek-thumb'); if(c) c.textContent=window.tngMpFmt(this.currentTime); if(this.duration){ let p=Math.min(100,Math.max(0,(this.currentTime/this.duration)*100))+'%'; if(fl) fl.style.width=p; if(th) th.style.left=p; } }"
                 onplay="window.tngMpSyncIcon(true)"
                 onpause="window.tngMpSyncIcon(false)"
