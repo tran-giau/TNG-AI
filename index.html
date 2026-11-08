@@ -27715,29 +27715,259 @@
 
         // =========================================================================
         // 9. HỆ THỐNG KHÓA SNAPSHOT (CÔNG CỤ + ẢNH/FILE) + CHUYỂN ĐỔI MŨI TÊN ↔ VUÔNG
-        //    + DỪNG / SỬA & TIẾP TỤC / TRẢ LỜI LẠI MỌI CÂU HỎI & ĐỒNG BỘ ICON SAO CHÉP
-        //    (ĐÃ KHÓA CHỐNG VÒNG LẶP MUTATIONOBSERVER - MƯỢT 100% KHÔNG ĐƠ TRANG)
+        //    + FIX TẬN GỐC LỖI ĐƠ CÔNG CỤ & SAI DÒNG CHỮ TRẠNG THÁI + KHOẢNG CÁCH 0.5PX
         // =========================================================================
         let oldSt = document.getElementById("tng-stop-edit-styles");
         if (oldSt) oldSt.remove();
         let st = document.createElement("style");
         st.id = "tng-stop-edit-styles";
         st.textContent = `
-          /* 1. Đẩy cụm nút hành động của AI nhích lên gần câu trả lời hơn */
-          .ai-actions-bar {
-            margin-top: 3px !important;
-          }
-          .ai-msg > p:last-of-type {
-            margin-bottom: 4px !important;
+          /* 1. Ẩn tuyệt đối hàng nút của AI khi đang ở trạng thái chờ */
+          .ai-msg.tng-ai-msg-loading .ai-actions-bar,
+          .msg-row.ai-row.tng-ai-msg-loading .ai-actions-bar {
+            display: none !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
           }
 
-          /* 2. Chuyển dòng tin nhắn người dùng sang cột dọc để xếp 2 nút bên dưới */
+          /* 2. Khoảng cách cân bằng trên/dưới cho 2 nút Tìm kiếm Google / YouTube */
+          .ai-msg div:has(> a[href*="google.com/search"]),
+          .ai-msg div:has(> a[href*="youtube.com/results"]),
+          .ai-msg .tng-search-links-wrap {
+            margin-top: 7px !important;
+            margin-bottom: 0.5px !important;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+          }
+          .ai-msg p:has(+ div > a[href*="google.com/search"]),
+          .ai-msg > p:last-of-type {
+            margin-bottom: 0.5px !important;
+          }
+
+          /* 3. Thanh nút hành động của AI: Khoảng cách 0.5px & căn thẳng hàng ngang cả 5 nút */
+          .ai-actions-bar {
+            margin-top: 0.5px !important;
+            margin-left: -8px !important;
+            padding-left: 0 !important;
+            gap: 4px !important;
+            display: flex !important;
+            align-items: center !important;
+            line-height: 1 !important;
+          }
+          .ai-actions-bar .ai-action-wrap {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 32px !important;
+            height: 32px !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            line-height: 1 !important;
+            vertical-align: middle !important;
+          }
+
+          /* 4. Chuyển dòng tin nhắn người dùng sang cột dọc & đặt khoảng cách 0.5px dưới bong bóng */
           .msg-row.user-row {
             flex-direction: column !important;
             align-items: flex-end !important;
           }
+          .tng-user-actions {
+            display: none !important;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 4px !important;
+            margin-top: 0.5px !important;
+            margin-right: 15px !important;
+            padding: 0 !important;
+            line-height: 1 !important;
+          }
+          .msg-row.user-row.is-stopped-msg .tng-user-actions {
+            display: flex !important;
+            animation: iosViewEnter 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          }
 
-          /* 3. Khung chứa 2 biểu tượng Mũi tên & Hình vuông bên trong nút Gửi (#a8c7fa) */
+          /* 5. Hiệu ứng PHÁT SÁNG + LÚN NẢY lò xo chuẩn iOS 27 cho Bong bóng chat (.user-msg) */
+          .user-msg {
+            will-change: transform, background-color, border-color, box-shadow;
+            transform-origin: center center;
+            transition:
+              transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background-color 0.22s ease,
+              border-color 0.22s ease,
+              box-shadow 0.32s cubic-bezier(0.16, 1, 0.3, 1) !important;
+          }
+          @media (hover: hover) {
+            .user-msg:hover:not(.is-editing-inline) {
+              transform: scale(0.96) !important;
+              background-color: rgba(168, 199, 250, 0.25) !important;
+              border-color: rgba(168, 199, 250, 0.48) !important;
+              box-shadow:
+                0 0 18px rgba(168, 199, 250, 0.3),
+                inset 0 1px 1.5px rgba(255, 255, 255, 0.28) !important;
+            }
+            [data-theme="light"] .user-msg:hover:not(.is-editing-inline) {
+              background-color: rgba(0, 118, 210, 0.16) !important;
+              border-color: rgba(0, 118, 210, 0.42) !important;
+              box-shadow:
+                0 0 16px rgba(0, 118, 210, 0.22),
+                inset 0 1px 1.5px rgba(255, 255, 255, 0.7) !important;
+            }
+          }
+          .user-msg:active:not(.is-editing-inline),
+          .user-msg.tng-ios-active:not(.is-editing-inline) {
+            transition-duration: 0.05s !important;
+            transform: scale(0.88) !important;
+            opacity: 1 !important;
+            background-color: rgba(168, 199, 250, 0.34) !important;
+            border-color: rgba(168, 199, 250, 0.72) !important;
+            box-shadow:
+              0 0 24px rgba(168, 199, 250, 0.48),
+              inset 0 1px 2px rgba(255, 255, 255, 0.38) !important;
+          }
+          [data-theme="light"] .user-msg:active:not(.is-editing-inline),
+          [data-theme="light"] .user-msg.tng-ios-active:not(.is-editing-inline) {
+            background-color: rgba(0, 118, 210, 0.24) !important;
+            border-color: rgba(0, 118, 210, 0.6) !important;
+            box-shadow:
+              0 0 22px rgba(0, 118, 210, 0.35),
+              inset 0 1px 2px rgba(255, 255, 255, 0.85) !important;
+          }
+
+          /* 6. Vòng sáng tròn 32px chuẩn Gemini + Hiệu ứng lún lò xo iOS 27 cho các nút icon */
+          .ai-action-btn,
+          .tng-u-act-btn {
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            border-radius: 50% !important;
+            width: 32px !important;
+            height: 32px !important;
+            min-width: 32px !important;
+            min-height: 32px !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            color: rgba(255, 255, 255, 0.62) !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            cursor: pointer !important;
+            position: relative !important;
+            line-height: 1 !important;
+            vertical-align: middle !important;
+            will-change: transform, background-color, color;
+            transition:
+              transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background-color 0.2s ease,
+              color 0.2s ease !important;
+          }
+
+          /* 7. Cân chỉnh kích thước & trục dọc đồng đều 100% giữa tất cả các biểu tượng */
+          .ai-action-btn svg,
+          .tng-u-act-btn svg {
+            width: 16.5px !important;
+            height: 16.5px !important;
+            fill: currentColor !important;
+            display: block !important;
+            margin: auto !important;
+            pointer-events: none;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+          }
+          .ai-actions-bar > .ai-action-btn:nth-child(3) svg,
+          .ai-actions-bar .ai-action-btn[title*="Trả lời lại"] svg {
+            width: 20px !important;
+            height: 20px !important;
+          }
+          .ai-actions-bar > .ai-action-btn:nth-child(4) svg,
+          .ai-actions-bar .ai-action-btn[title*="Sao chép"] svg,
+          .tng-u-copy-btn svg {
+            width: 15px !important;
+            height: 15px !important;
+          }
+          .tng-u-edit-btn svg {
+            width: 15.5px !important;
+            height: 15.5px !important;
+          }
+          .ai-actions-bar .ai-action-wrap .ai-action-btn svg {
+            width: 17.5px !important;
+            height: 17.5px !important;
+            transform: translateY(0.8px) !important;
+          }
+
+          @media (hover: hover) {
+            .ai-action-btn:hover:not([disabled]),
+            .tng-u-act-btn:hover:not([disabled]) {
+              background-color: rgba(255, 255, 255, 0.09) !important;
+              color: #ffffff !important;
+              transform: scale(0.95) !important;
+            }
+          }
+          .ai-action-btn.active,
+          .tng-u-act-btn.active-edit {
+            background-color: rgba(255, 255, 255, 0.13) !important;
+            color: #ffffff !important;
+          }
+          .ai-action-btn:active:not([disabled]),
+          .ai-action-btn.tng-ios-active:not([disabled]),
+          .tng-u-act-btn:active:not([disabled]),
+          .tng-u-act-btn.tng-ios-active:not([disabled]) {
+            transition-duration: 0.05s !important;
+            background-color: rgba(255, 255, 255, 0.16) !important;
+            color: #ffffff !important;
+            transform: scale(0.84) !important;
+          }
+
+          [data-theme="light"] .ai-action-btn,
+          [data-theme="light"] .tng-u-act-btn {
+            color: rgba(16, 42, 67, 0.62) !important;
+          }
+          @media (hover: hover) {
+            [data-theme="light"] .ai-action-btn:hover:not([disabled]),
+            [data-theme="light"] .tng-u-act-btn:hover:not([disabled]) {
+              background-color: rgba(0, 0, 0, 0.07) !important;
+              color: #102a43 !important;
+            }
+          }
+          [data-theme="light"] .ai-action-btn.active,
+          [data-theme="light"] .tng-u-act-btn.active-edit {
+            background-color: rgba(0, 0, 0, 0.1) !important;
+            color: #102a43 !important;
+          }
+          [data-theme="light"] .ai-action-btn:active:not([disabled]),
+          [data-theme="light"] .ai-action-btn.tng-ios-active:not([disabled]),
+          [data-theme="light"] .tng-u-act-btn:active:not([disabled]),
+          [data-theme="light"] .tng-u-act-btn.tng-ios-active:not([disabled]) {
+            background-color: rgba(0, 0, 0, 0.13) !important;
+            color: #102a43 !important;
+          }
+
+          /* 8. Hiệu ứng lún lò xo iOS 27 cho 2 nút Tìm kiếm trên Google & YouTube */
+          .ai-msg a[href*="google.com/search"],
+          .ai-msg a[href*="youtube.com/results"] {
+            will-change: transform, background-color, box-shadow;
+            transition:
+              transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background-color 0.2s ease,
+              box-shadow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+              opacity 0.2s ease !important;
+          }
+          @media (hover: hover) {
+            .ai-msg a[href*="google.com/search"]:hover,
+            .ai-msg a[href*="youtube.com/results"]:hover {
+              transform: scale(0.96) !important;
+              background: var(--glass-hover) !important;
+            }
+          }
+          .ai-msg a[href*="google.com/search"]:active,
+          .ai-msg a[href*="google.com/search"].tng-ios-active,
+          .ai-msg a[href*="youtube.com/results"]:active,
+          .ai-msg a[href*="youtube.com/results"].tng-ios-active {
+            transition-duration: 0.05s !important;
+            transform: scale(0.88) !important;
+            opacity: 0.85 !important;
+          }
+
+          /* 9. Khung chứa 2 biểu tượng Mũi tên & Hình vuông bên trong nút Gửi (#a8c7fa) */
           .tng-send-stop-morph {
             position: relative;
             width: 18px;
@@ -27758,7 +27988,6 @@
             will-change: transform, opacity;
           }
 
-          /* Giữ nút Gửi màu xanh (#a8c7fa) hiển thị xuyên suốt khi chờ trả lời, sửa tin hoặc đang chuyển đổi */
           body.tng-is-generating #send-btn-home,
           body.tng-is-generating #send-btn-chat,
           body.tng-is-editing-msg #send-btn-chat,
@@ -27778,56 +28007,7 @@
             transform: scale(0.5) rotate(90deg) !important;
           }
 
-          /* 4. Cụm 2 nút Sao chép & Chỉnh sửa dưới câu hỏi người dùng */
-          .tng-user-actions {
-            display: none !important;
-            align-items: center;
-            justify-content: flex-end;
-            gap: 6px;
-            margin-top: 4px;
-            padding-right: 2px;
-          }
-          .msg-row.user-row.is-stopped-msg .tng-user-actions {
-            display: flex !important;
-            animation: iosViewEnter 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-          }
-          .tng-u-act-btn {
-            background: transparent !important;
-            border: none !important;
-            color: rgba(255, 255, 255, 0.6) !important;
-            width: 32px !important;
-            height: 32px !important;
-            border-radius: 8px !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            cursor: pointer !important;
-            padding: 0 !important;
-            transition: all 0.2s ease !important;
-          }
-          .tng-u-act-btn svg {
-            width: 16px !important;
-            height: 16px !important;
-            fill: currentColor !important;
-            display: block;
-          }
-          .tng-u-act-btn:hover {
-            background: rgba(255, 255, 255, 0.1) !important;
-            color: #ffffff !important;
-          }
-          [data-theme="light"] .tng-u-act-btn {
-            color: rgba(16, 42, 67, 0.6) !important;
-          }
-          [data-theme="light"] .tng-u-act-btn:hover {
-            background: rgba(0, 0, 0, 0.08) !important;
-            color: #102a43 !important;
-          }
-          .tng-u-act-btn.active-edit {
-            color: #ffffff !important;
-            background: rgba(255, 255, 255, 0.15) !important;
-          }
-
-          /* 5. Bong bóng tin nhắn khi đang được chỉnh sửa trực tiếp */
+          /* 10. Bong bóng tin nhắn khi đang được chỉnh sửa trực tiếp */
           .user-msg.is-editing-inline {
             outline: none !important;
             border-color: var(--btn-blue) !important;
@@ -27835,6 +28015,7 @@
             background: rgba(168, 199, 250, 0.2) !important;
             cursor: text !important;
             min-width: 60px;
+            transform: scale(1) !important;
           }
           .tng-inline-edit-span {
             outline: none !important;
@@ -27844,13 +28025,12 @@
         `;
         document.head.appendChild(st);
 
-        // Biểu tượng Sao chép chuẩn của người dùng (dùng đồng bộ cho cả nút Sao chép của AI)
         const TNG_USER_COPY_SVG =
           '<svg viewBox="0 0 24 24">' +
           '<path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2z"></path>' +
           "</svg>";
         const TNG_USER_EDIT_SVG =
-          '<svg viewBox="0 0 24 24">' +
+          '<svg viewBox="2 2 20 20">' +
           '<path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"></path>' +
           "</svg>";
         const TNG_USER_CHECK_SVG =
@@ -27861,7 +28041,106 @@
         const _origSetTimeout = window.setTimeout;
         const _origClearTimeout = window.clearTimeout;
 
-        // Đồng bộ nút Sao chép của AI giống nút Sao chép của người dùng (Có cờ khóa chống lặp 100%)
+        function isAiMessageStillLoading(aMsg) {
+          if (!aMsg) return false;
+          let clone = aMsg.cloneNode(true);
+          clone
+            .querySelectorAll(".ai-actions-bar, .ai-options-menu, style")
+            .forEach(function (el) {
+              el.remove();
+            });
+          let hasRichContent =
+            clone.querySelectorAll(
+              "img, video, audio, table, ul, ol, pre, .tng-report-list, .tng-learn-list, .slide-page, button, a[href]",
+            ).length > 0;
+          if (hasRichContent) return false;
+
+          let pureText = (clone.textContent || "").trim();
+          if (!pureText) return true;
+          if (/^Đang\s[^\n]{1,65}(\.\.\.|…)$/i.test(pureText)) {
+            return true;
+          }
+          return false;
+        }
+
+        function updateAiLoadingActionVisibility(root) {
+          let scope = root || document;
+          let aiMsgs =
+            scope.classList && scope.classList.contains("ai-msg")
+              ? [scope]
+              : scope.querySelectorAll
+                ? scope.querySelectorAll(".ai-msg")
+                : [];
+          aiMsgs.forEach(function (aMsg) {
+            let stillLoading = isAiMessageStillLoading(aMsg);
+            let aiRow = aMsg.closest(".msg-row.ai-row");
+            if (stillLoading) {
+              aMsg.classList.add("tng-ai-msg-loading");
+              if (aiRow) aiRow.classList.add("tng-ai-msg-loading");
+            } else {
+              aMsg.classList.remove("tng-ai-msg-loading");
+              if (aiRow) aiRow.classList.remove("tng-ai-msg-loading");
+            }
+          });
+        }
+
+        function enhanceActionAndSearchButtons(root) {
+          let scope = root || document;
+          updateAiLoadingActionVisibility(scope);
+
+          scope
+            .querySelectorAll(
+              '.user-msg, .ai-action-btn, .tng-u-act-btn, .ai-msg a[href*="google.com/search"], .ai-msg a[href*="youtube.com/results"]',
+            )
+            .forEach(function (btn) {
+              if (btn.dataset.tngSquishBound === "1") return;
+              btn.dataset.tngSquishBound = "1";
+              const add = function () {
+                if (btn.classList.contains("is-editing-inline")) return;
+                btn.classList.add("tng-ios-active");
+              };
+              const rm = function () {
+                btn.classList.remove("tng-ios-active");
+              };
+              btn.addEventListener("pointerdown", add, { passive: true });
+              btn.addEventListener("pointerup", rm, { passive: true });
+              btn.addEventListener("pointercancel", rm, { passive: true });
+              btn.addEventListener("mouseleave", rm, { passive: true });
+              btn.addEventListener("touchstart", add, { passive: true });
+              btn.addEventListener("touchend", rm, { passive: true });
+            });
+
+          scope
+            .querySelectorAll(
+              '.ai-msg a[href*="google.com/search"], .ai-msg a[href*="youtube.com/results"]',
+            )
+            .forEach(function (linkEl) {
+              let wrap = linkEl.parentElement;
+              if (!wrap || wrap.dataset.tngCompactFixed === "1") return;
+              wrap.dataset.tngCompactFixed = "1";
+              wrap.classList.add("tng-search-links-wrap");
+              wrap.style.setProperty("margin-top", "7px", "important");
+              wrap.style.setProperty("margin-bottom", "0.5px", "important");
+              wrap.style.setProperty("padding-top", "0px", "important");
+              wrap.style.setProperty("padding-bottom", "0px", "important");
+
+              while (
+                wrap.previousSibling &&
+                ((wrap.previousSibling.nodeType === 1 &&
+                  wrap.previousSibling.tagName === "BR") ||
+                  (wrap.previousSibling.nodeType === 3 &&
+                    !wrap.previousSibling.textContent.trim()))
+              ) {
+                let prev = wrap.previousSibling;
+                if (prev.nodeType === 1 && prev.tagName === "BR") {
+                  prev.remove();
+                } else {
+                  break;
+                }
+              }
+            });
+        }
+
         function syncAiCopyButtonsToUserIcon(root) {
           let scope = root || document;
           scope
@@ -27896,10 +28175,10 @@
                 btn.dataset.tngCopySynced = "skip";
               }
             });
+          enhanceActionAndSearchButtons(scope);
         }
         syncAiCopyButtonsToUserIcon(document);
 
-        // Xóa toàn bộ trạng thái dừng & ẩn 2 nút Sao chép / Chỉnh sửa trên các tin nhắn cũ
         window.tngClearAllStoppedUserRows = function () {
           window._tngEditingUserRow = null;
           window._tngStoppedUserRow = null;
@@ -27922,7 +28201,6 @@
             });
         };
 
-        // Hiệu ứng biến đổi (Morph) 2 pha kèm độ nảy lò xo rõ nét giữa Mũi tên (↑) và Hình vuông (■)
         window.tngMorphSendStopIcon = function (toSquare, immediate) {
           ensureStopButtonsMounted();
           if (window._tngSendStopMorphRaf) {
@@ -27964,7 +28242,6 @@
 
           function step(now) {
             let t = Math.min(1, (now - startTime) / duration);
-
             let outP = Math.min(1, t / 0.45);
             let outScale = 1 - 0.85 * outP;
             let outOpacity = Math.max(0, 1 - outP * 1.15);
@@ -28009,7 +28286,6 @@
           window._tngSendStopMorphRaf = requestAnimationFrame(step);
         };
 
-        // Nâng cấp trực tiếp nút Gửi (#send-btn-home & #send-btn-chat)
         function ensureStopButtonsMounted() {
           ["stop-btn-home", "stop-btn-chat"].forEach(function (oldId) {
             let oldBtn = document.getElementById(oldId);
@@ -28052,6 +28328,12 @@
 
         function detectActiveToolName() {
           if (
+            typeof window._tngForcedResendTool === "string" &&
+            window._tngForcedResendTool.trim()
+          ) {
+            return window._tngForcedResendTool.trim();
+          }
+          if (
             typeof currentActiveTool === "string" &&
             currentActiveTool.trim()
           ) {
@@ -28078,10 +28360,7 @@
           let hInp = document.getElementById("ui-home");
           let cInp = document.getElementById("ui-chat");
           return {
-            activeToolVar:
-              typeof currentActiveTool !== "undefined"
-                ? currentActiveTool
-                : null,
+            activeToolVar: detectActiveToolName() || null,
             homeShow: hInd ? hInd.classList.contains("show") : false,
             chatShow: cInd ? cInd.classList.contains("show") : false,
             homeHtml: hTxt ? hTxt.innerHTML : "",
@@ -28106,8 +28385,8 @@
           let cInp = document.getElementById("ui-chat");
 
           if (state.activeToolVar) {
-            if (hTxt) hTxt.innerHTML = state.homeHtml;
-            if (cTxt) cTxt.innerHTML = state.chatHtml;
+            if (hTxt) hTxt.innerHTML = state.homeHtml || state.activeToolVar;
+            if (cTxt) cTxt.innerHTML = state.chatHtml || state.activeToolVar;
             if (hInd) hInd.classList.toggle("show", !!state.homeShow);
             if (cInd) cInd.classList.toggle("show", !!state.chatShow);
             if (hInp) hInp.placeholder = state.homePlaceholder;
@@ -28208,7 +28487,6 @@
           return recovered;
         }
 
-        // Gắn 2 nút Sao chép & Chỉnh sửa dưới bong bóng tin nhắn của người dùng (Khóa 1 lần không gây lặp DOM)
         function attachUserMessageActions(userRow) {
           if (!userRow) return;
           let bar = userRow.querySelector(".tng-user-actions");
@@ -28257,9 +28535,10 @@
               window.tngEnableInlineUserEdit(userRow, editBtn);
             };
           }
+
+          enhanceActionAndSearchButtons(userRow);
         }
 
-        // Bật chế độ chỉnh sửa trực tiếp câu hỏi (Bảo vệ ảnh/file đính kèm bên trong bong bóng)
         window.tngEnableInlineUserEdit = function (userRow, editBtn) {
           if (!userRow) return;
           let uMsg = userRow.querySelector(".user-msg");
@@ -28279,6 +28558,7 @@
           document.body.classList.add("tng-is-editing-msg");
 
           if (editBtn) editBtn.classList.add("active-edit");
+          uMsg.classList.remove("tng-ios-active");
           uMsg.classList.add("is-editing-inline");
 
           let hasMediaChildren =
@@ -28340,14 +28620,14 @@
           }
         };
 
-        // Gửi lại câu hỏi sau khi dừng / chỉnh sửa (Khôi phục đầy đủ cả Công cụ + Ảnh/File đính kèm)
         window.tngSubmitInlineEdit = function (userRow) {
           if (!userRow || !document.body.contains(userRow)) return;
           let newText = extractPureTextFromUserRow(userRow);
           let savedFiles = extractFilesFromUserRow(userRow);
           if (!newText && savedFiles.length === 0) return;
 
-          let savedTool = userRow.dataset.lockedTool || "";
+          let savedTool =
+            userRow.dataset.lockedTool || window._tngLastStoppedTool || "";
           let savedToolState = null;
           if (userRow.dataset.lockedToolState) {
             try {
@@ -28371,6 +28651,7 @@
           let toolToUse = currentToolNow || savedTool;
 
           window.tngClearAllStoppedUserRows();
+          window._tngLastStoppedTool = "";
           userRow.remove();
 
           if (savedFiles.length > 0 && typeof pendingFiles !== "undefined") {
@@ -28388,11 +28669,14 @@
 
           window._tngRegenAnchorNode = nextAnchor || null;
           window._tngLockedFilesCarry = savedFiles;
+          window._tngForcedResendTool = toolToUse || null;
+
           try {
             window.sendMsg("chat");
           } finally {
             window._tngRegenAnchorNode = null;
             window._tngLockedFilesCarry = null;
+            window._tngForcedResendTool = null;
           }
 
           if (currentToolNow) {
@@ -28400,7 +28684,6 @@
           }
         };
 
-        // Nhận diện chính xác công cụ của một cặp câu hỏi - câu trả lời bất kỳ
         function inferToolFromTurn(aiRow, userRow) {
           if (userRow && userRow.dataset.lockedTool) {
             return userRow.dataset.lockedTool;
@@ -28452,7 +28735,6 @@
           return "";
         }
 
-        // Xử lý nút "Trả lời lại" (🔄) cho bất kỳ câu hỏi nào (kể cả Công cụ, Hình ảnh, File)
         window.tngRegenerateAiResponse = function (btn) {
           if (window._tngIsGenerating) {
             window.tngStopGeneration();
@@ -28510,12 +28792,15 @@
           window._tngRegenAnchorNode = nextAnchor || null;
           window._tngIsRegeneratingCall = true;
           window._tngLockedFilesCarry = savedFiles;
+          window._tngForcedResendTool = regenTool || null;
+
           try {
             window.sendMsg("chat");
           } finally {
             window._tngIsRegeneratingCall = false;
             window._tngRegenAnchorNode = null;
             window._tngLockedFilesCarry = null;
+            window._tngForcedResendTool = null;
           }
 
           if (chatInp) {
@@ -28527,7 +28812,6 @@
           restoreInputToolUIState(draftToolState);
         };
 
-        // Bắt sự kiện click ở pha Capture cho mọi nút "Trả lời lại" trong khung chat
         if (!window._tngRegenClickHooked) {
           window._tngRegenClickHooked = true;
           document.addEventListener(
@@ -28562,7 +28846,12 @@
           let wasGenerating = !!window._tngIsGenerating;
           window._tngIsGenerating = true;
           if (userRow) window._tngActiveUserRow = userRow;
-          if (aiRow) window._tngActiveAiRow = aiRow;
+          if (aiRow) {
+            window._tngActiveAiRow = aiRow;
+            aiRow.classList.add("tng-ai-msg-loading");
+            let aMsg = aiRow.querySelector(".ai-msg");
+            if (aMsg) aMsg.classList.add("tng-ai-msg-loading");
+          }
           document.body.classList.remove("tng-morphing-to-arrow");
           document.body.classList.add("tng-is-generating");
 
@@ -28576,13 +28865,14 @@
           }
         };
 
-        // Khi kết thúc hoặc dừng: Xoay mượt từ Hình vuông (■) về lại Mũi tên (↑)
         window.tngFinishGeneratingState = function (keepForStoppedEdit) {
           let wasGenerating = !!window._tngIsGenerating;
           window._tngIsGenerating = false;
           window._tngActiveAiRow = null;
           document.body.classList.add("tng-morphing-to-arrow");
           document.body.classList.remove("tng-is-generating");
+
+          updateAiLoadingActionVisibility(document);
 
           if (keepForStoppedEdit) {
             document.body.classList.add("tng-is-editing-msg");
@@ -28610,8 +28900,9 @@
         window.tngStopGeneration = function () {
           if (!window._tngIsGenerating) return;
           window._tngAbortGenSeq = (window._tngAbortGenSeq || 0) + 1;
-          if (window._tngActiveReqCtx) {
-            window._tngActiveReqCtx.aborted = true;
+          let activeCtx = window._tngActiveReqCtx;
+          if (activeCtx) {
+            activeCtx.aborted = true;
           }
 
           try {
@@ -28637,10 +28928,6 @@
             let aiRows = cb ? cb.querySelectorAll(".msg-row.ai-row") : [];
             if (aiRows.length > 0) aiRow = aiRows[aiRows.length - 1];
           }
-          if (aiRow) {
-            aiRow.dataset.abortedRow = "1";
-            aiRow.remove();
-          }
 
           let userRow = window._tngActiveUserRow;
           if (!userRow) {
@@ -28648,8 +28935,30 @@
             let uRows = cb ? cb.querySelectorAll(".msg-row.user-row") : [];
             if (uRows.length > 0) userRow = uRows[uRows.length - 1];
           }
+
+          let detectedStoppedTool =
+            inferToolFromTurn(aiRow, userRow) ||
+            (activeCtx && activeCtx.lockedTool) ||
+            "";
+          window._tngLastStoppedTool = detectedStoppedTool;
+
+          if (aiRow) {
+            aiRow.dataset.abortedRow = "1";
+            aiRow.remove();
+          }
+
           window.tngClearAllStoppedUserRows();
           if (userRow) {
+            if (detectedStoppedTool) {
+              userRow.dataset.lockedTool = detectedStoppedTool;
+            }
+            if (activeCtx && activeCtx.lockedToolUIState) {
+              try {
+                userRow.dataset.lockedToolState = JSON.stringify(
+                  activeCtx.lockedToolUIState,
+                );
+              } catch (e) {}
+            }
             attachUserMessageActions(userRow);
             userRow.classList.add("is-stopped-msg");
             window._tngEditingUserRow = userRow;
@@ -28660,7 +28969,6 @@
           syncChatHistorySessionsEverywhere();
         };
 
-        // Tự động theo dõi khung chat (Có khóa chống đệ quy _tngInStopObserver)
         if (!window._tngStopStateObserverHooked) {
           window._tngStopStateObserverHooked = true;
           let cbWatch = document.getElementById("cb");
@@ -28709,26 +29017,202 @@
           }
         }
 
-        async function prepareToolPayload(toolName, rawTopic) {
-          let cleanTopic = extractCleanTopic(rawTopic, rawTopic);
+        function getImmediateFallbackPayload(toolName, rawTopic) {
+          let cleanTopic = (rawTopic || "").trim() || "Chủ đề";
           let tLow = String(toolName || "").toLowerCase();
 
           if (
             tLow.indexOf("research") !== -1 ||
             tLow.indexOf("nghiên cứu") !== -1
           ) {
-            let sections = await window.tngFetchReportSections(cleanTopic);
-            return { type: "report", topic: cleanTopic, data: sections };
+            return {
+              type: "report",
+              topic: cleanTopic,
+              data: [
+                {
+                  title: "1. Tổng quan & Bản chất cốt lõi",
+                  content:
+                    "Xác định khái niệm chuẩn xác, nguồn gốc hình thành, phân loại các nhóm chính và những đặc điểm nhận diện quan trọng nhất của " +
+                    cleanTopic +
+                    " trong hệ thống tri thức hiện đại.",
+                  body:
+                    "Xác định khái niệm chuẩn xác, nguồn gốc hình thành, phân loại các nhóm chính và những đặc điểm nhận diện quan trọng nhất của " +
+                    cleanTopic +
+                    " trong hệ thống tri thức hiện đại.",
+                  desc:
+                    "Xác định khái niệm chuẩn xác, nguồn gốc hình thành, phân loại các nhóm chính và những đặc điểm nhận diện quan trọng nhất của " +
+                    cleanTopic +
+                    " trong hệ thống tri thức hiện đại.",
+                },
+                {
+                  title: "2. Số liệu thống kê & Dữ kiện thực tế",
+                  content:
+                    "Tổng hợp các chỉ số định lượng, thông số đặc trưng, quy mô phổ biến và những dữ kiện khoa học, thực tiễn tiêu biểu gắn liền với " +
+                    cleanTopic +
+                    ".",
+                  body:
+                    "Tổng hợp các chỉ số định lượng, thông số đặc trưng, quy mô phổ biến và những dữ kiện khoa học, thực tiễn tiêu biểu gắn liền với " +
+                    cleanTopic +
+                    ".",
+                  desc:
+                    "Tổng hợp các chỉ số định lượng, thông số đặc trưng, quy mô phổ biến và những dữ kiện khoa học, thực tiễn tiêu biểu gắn liền với " +
+                    cleanTopic +
+                    ".",
+                },
+                {
+                  title: "3. Cơ chế vận hành & Phân tích chuyên sâu",
+                  content:
+                    "Làm rõ cấu trúc thành phần, nguyên lý hoạt động bên trong, quy luật tương tác cũng như các yếu tố môi trường tác động trực tiếp đến " +
+                    cleanTopic +
+                    ".",
+                  body:
+                    "Làm rõ cấu trúc thành phần, nguyên lý hoạt động bên trong, quy luật tương tác cũng như các yếu tố môi trường tác động trực tiếp đến " +
+                    cleanTopic +
+                    ".",
+                  desc:
+                    "Làm rõ cấu trúc thành phần, nguyên lý hoạt động bên trong, quy luật tương tác cũng như các yếu tố môi trường tác động trực tiếp đến " +
+                    cleanTopic +
+                    ".",
+                },
+                {
+                  title: "4. Đánh giá Thực trạng & Giá trị ứng dụng",
+                  content:
+                    "Phân tích vai trò, lợi ích thiết thực của " +
+                    cleanTopic +
+                    " trong đời sống và công việc thực tế, đồng thời chỉ ra những điểm mạnh nổi bật cùng các rào cản, thách thức hiện hành.",
+                  body:
+                    "Phân tích vai trò, lợi ích thiết thực của " +
+                    cleanTopic +
+                    " trong đời sống và công việc thực tế, đồng thời chỉ ra những điểm mạnh nổi bật cùng các rào cản, thách thức hiện hành.",
+                  desc:
+                    "Phân tích vai trò, lợi ích thiết thực của " +
+                    cleanTopic +
+                    " trong đời sống và công việc thực tế, đồng thời chỉ ra những điểm mạnh nổi bật cùng các rào cản, thách thức hiện hành.",
+                },
+                {
+                  title: "5. Giải pháp tối ưu & Định hướng tương lai",
+                  content:
+                    "Đề xuất các phương án khai thác, ứng dụng hoặc bảo tồn/phát triển " +
+                    cleanTopic +
+                    " hiệu quả, kết hợp dự báo xu hướng đổi mới bền vững trong giai đoạn tới.",
+                  body:
+                    "Đề xuất các phương án khai thác, ứng dụng hoặc bảo tồn/phát triển " +
+                    cleanTopic +
+                    " hiệu quả, kết hợp dự báo xu hướng đổi mới bền vững trong giai đoạn tới.",
+                  desc:
+                    "Đề xuất các phương án khai thác, ứng dụng hoặc bảo tồn/phát triển " +
+                    cleanTopic +
+                    " hiệu quả, kết hợp dự báo xu hướng đổi mới bền vững trong giai đoạn tới.",
+                },
+              ],
+            };
           }
+
           if (tLow.indexOf("học") !== -1 || tLow.indexOf("learn") !== -1) {
-            let stages = await window.tngFetchLearningStages(cleanTopic);
-            return { type: "learn", topic: cleanTopic, data: stages };
+            return {
+              type: "learn",
+              topic: cleanTopic,
+              data: [
+                {
+                  head: "1. Giai đoạn 1 – Khởi động & Nền tảng cốt lõi (Nhập môn)",
+                  time: "Giai đoạn 1",
+                  title: "Khởi động & Nền tảng cốt lõi (Nhập môn)",
+                  body:
+                    "Làm quen với hệ thống khái niệm cơ sở, thuật ngữ chuyên ngành, bối cảnh hình thành và các quy tắc tư duy nền tảng của " +
+                    cleanTopic +
+                    ".",
+                  desc:
+                    "Làm quen với hệ thống khái niệm cơ sở, thuật ngữ chuyên ngành, bối cảnh hình thành và các quy tắc tư duy nền tảng của " +
+                    cleanTopic +
+                    ".",
+                  content:
+                    "Làm quen với hệ thống khái niệm cơ sở, thuật ngữ chuyên ngành, bối cảnh hình thành và các quy tắc tư duy nền tảng của " +
+                    cleanTopic +
+                    ".",
+                  goal:
+                    "→ Mục tiêu đạt được: Hiểu đúng bản chất và nắm vững khung kiến thức tổng thể về " +
+                    cleanTopic +
+                    ".",
+                },
+                {
+                  head: "2. Giai đoạn 2 – Lý thuyết trọng tâm & Phương pháp luận",
+                  time: "Giai đoạn 2",
+                  title: "Lý thuyết trọng tâm & Phương pháp luận",
+                  body:
+                    "Đi sâu phân tích các nguyên lý, định lý/cấu trúc cốt lõi, công thức vận hành và phương pháp tiếp cận từng phân nhánh trong " +
+                    cleanTopic +
+                    ".",
+                  desc:
+                    "Đi sâu phân tích các nguyên lý, định lý/cấu trúc cốt lõi, công thức vận hành và phương pháp tiếp cận từng phân nhánh trong " +
+                    cleanTopic +
+                    ".",
+                  content:
+                    "Đi sâu phân tích các nguyên lý, định lý/cấu trúc cốt lõi, công thức vận hành và phương pháp tiếp cận từng phân nhánh trong " +
+                    cleanTopic +
+                    ".",
+                  goal: "→ Mục tiêu đạt được: Nắm chắc cơ chế logic và liên kết được các chuyên đề lý thuyết.",
+                },
+                {
+                  head: "3. Giai đoạn 3 – Thực hành & Giải quyết bài toán thực tế",
+                  time: "Giai đoạn 3",
+                  title: "Thực hành & Giải quyết bài toán thực tế",
+                  body:
+                    "Vận dụng kiến thức " +
+                    cleanTopic +
+                    " đã học vào giải quyết hệ thống bài tập từ cơ bản đến phân loại, phân tích ví dụ minh họa và xử lý tình huống thực tế.",
+                  desc:
+                    "Vận dụng kiến thức " +
+                    cleanTopic +
+                    " đã học vào giải quyết hệ thống bài tập từ cơ bản đến phân loại, phân tích ví dụ minh họa và xử lý tình huống thực tế.",
+                  content:
+                    "Vận dụng kiến thức " +
+                    cleanTopic +
+                    " đã học vào giải quyết hệ thống bài tập từ cơ bản đến phân loại, phân tích ví dụ minh họa và xử lý tình huống thực tế.",
+                  goal: "→ Mục tiêu đạt được: Hình thành kỹ năng thực hành độc lập và khắc phục các lỗi sai thường gặp.",
+                },
+                {
+                  head: "4. Giai đoạn 4 – Chuyên đề nâng cao & Tối ưu hóa",
+                  time: "Giai đoạn 4",
+                  title: "Chuyên đề nâng cao & Tối ưu hóa",
+                  body:
+                    "Khám phá các dạng bài toán phức tạp, kỹ thuật giải nhanh, phương pháp tối ưu hóa và mở rộng ứng dụng liên ngành của " +
+                    cleanTopic +
+                    ".",
+                  desc:
+                    "Khám phá các dạng bài toán phức tạp, kỹ thuật giải nhanh, phương pháp tối ưu hóa và mở rộng ứng dụng liên ngành của " +
+                    cleanTopic +
+                    ".",
+                  content:
+                    "Khám phá các dạng bài toán phức tạp, kỹ thuật giải nhanh, phương pháp tối ưu hóa và mở rộng ứng dụng liên ngành của " +
+                    cleanTopic +
+                    ".",
+                  goal: "→ Mục tiêu đạt được: Làm chủ chiều sâu học thuật và xử lý linh hoạt các vấn đề nâng cao.",
+                },
+                {
+                  head: "5. Giai đoạn 5 – Hệ thống hóa, Đánh giá & Ứng dụng dài hạn",
+                  time: "Giai đoạn 5",
+                  title: "Hệ thống hóa, Đánh giá & Ứng dụng dài hạn",
+                  body: "Tổng kết toàn bộ lộ trình bằng sơ đồ tư duy, tự kiểm tra đánh giá năng lực qua dự án/đề tổng hợp và ứng dụng bền vững vào thực tiễn.",
+                  desc: "Tổng kết toàn bộ lộ trình bằng sơ đồ tư duy, tự kiểm tra đánh giá năng lực qua dự án/đề tổng hợp và ứng dụng bền vững vào thực tiễn.",
+                  content:
+                    "Tổng kết toàn bộ lộ trình bằng sơ đồ tư duy, tự kiểm tra đánh giá năng lực qua dự án/đề tổng hợp và ứng dụng bền vững vào thực tiễn.",
+                  goal:
+                    "→ Mục tiêu đạt được: Vận dụng thành thạo " +
+                    cleanTopic +
+                    " vào học tập, nghiên cứu và công việc.",
+                },
+              ],
+            };
           }
+
           if (tLow.indexOf("canvas") !== -1 || tLow.indexOf("slide") !== -1) {
-            let slides18 =
-              await window.tngBuildCanvas18ContentSlides(cleanTopic);
-            return { type: "canvas", topic: cleanTopic, data: slides18 };
+            return {
+              type: "canvas",
+              topic: cleanTopic,
+              data: null,
+            };
           }
+
           return null;
         }
 
@@ -28765,6 +29249,9 @@
           return htmlStr;
         }
 
+        // =========================================================================
+        // NÂNG CẤP CHỐNG LỖI TREO KHUNG CHAT BẰNG LỆNH GỌI HÀM GỐC CHUẨN XÁC
+        // =========================================================================
         const _origSendMsg =
           typeof sendMsg === "function" ? sendMsg : window.sendMsg;
         if (
@@ -28804,7 +29291,6 @@
               return;
             }
 
-            // Khi gửi câu hỏi mới: Xóa ngay nút Sao chép & Chỉnh sửa trên tin nhắn bị dừng trước đó
             window.tngClearAllStoppedUserRows();
 
             let lockedTool = detectActiveToolName();
@@ -28812,13 +29298,11 @@
             let lockedFiles =
               window._tngLockedFilesCarry ||
               (hasStagedFiles
-                ? pendingFiles.map(function (f) {
-                    return Object.assign({}, f);
-                  })
+                ? pendingFiles.map((f) => Object.assign({}, f))
                 : []);
+
             let genSeq = (window._tngAbortGenSeq || 0) + 1;
             window._tngAbortGenSeq = genSeq;
-
             let isTargetAiTool =
               /research|nghiên cứu|học|learn|canvas|slide/i.test(lockedTool);
 
@@ -28835,10 +29319,7 @@
                 lockedToolUIState: lockedToolUIState,
                 lockedTopic: userText,
                 lockedFiles: lockedFiles,
-                taskPromise:
-                  isTargetAiTool && userText
-                    ? prepareToolPayload(lockedTool, userText)
-                    : null,
+                taskPromise: null, // Đã dời xử lý xuống phần setTimeout an toàn
                 targetMsgEl: null,
                 userRowEl: null,
                 aiRowEl: null,
@@ -28851,6 +29332,7 @@
               window._tngActiveReqCtx = null;
             }
 
+            // GỌI HÀM GỐC: KHÔNG TỰ VẼ HTML NHƯ BẢN TRƯỚC, ĐỂ HỆ THỐNG TỰ LÀM VÀ CHỐNG KẸT
             let res = _origSendMsg.apply(this, arguments);
 
             let newAiCount = cb
@@ -28861,11 +29343,10 @@
               if (lockedTool && typeof clearTool === "function") {
                 clearTool();
               }
-
-              let uRows = cb.querySelectorAll(".msg-row.user-row");
-              let aRows = cb.querySelectorAll(".msg-row.ai-row");
-              let lastURow = uRows.length > 0 ? uRows[uRows.length - 1] : null;
-              let lastARow = aRows.length > 0 ? aRows[aRows.length - 1] : null;
+              let uRows = cb.querySelectorAll(".msg-row.user-row"),
+                aRows = cb.querySelectorAll(".msg-row.ai-row");
+              let lastURow = uRows.length > 0 ? uRows[uRows.length - 1] : null,
+                lastARow = aRows.length > 0 ? aRows[aRows.length - 1] : null;
 
               if (lastURow) {
                 lastURow.dataset.rawPrompt = userText || "";
@@ -28900,7 +29381,6 @@
               if (lastARow) {
                 window.tngStartGeneratingState(lastURow, lastARow);
               }
-
               if (window._tngActiveReqCtx) {
                 window._tngActiveReqCtx.userRowEl = lastURow;
                 window._tngActiveReqCtx.aiRowEl = lastARow;
@@ -28925,7 +29405,6 @@
               try {
                 fnStr = fn.toString();
               } catch (e) {}
-
               let sendCtx = window._tngPendingSendCtx;
               let isResponseTimer =
                 (sendCtx && delay >= 350 && delay <= 12000) ||
@@ -28938,13 +29417,11 @@
 
               if (isResponseTimer && sendCtx) {
                 const boundCtx = sendCtx;
-
                 window._tngActiveTimerCount =
                   (window._tngActiveTimerCount || 0) + 1;
                 window._tngWaitingToolTimer = true;
 
                 let args = Array.prototype.slice.call(arguments, 2);
-
                 let tid = _origSetTimeout.call(
                   window,
                   async function () {
@@ -28962,14 +29439,11 @@
                       return;
                     }
 
-                    let readyPayload = null;
-                    if (boundCtx.taskPromise) {
-                      try {
-                        readyPayload = await boundCtx.taskPromise;
-                      } catch (e) {
-                        readyPayload = null;
-                      }
-                    }
+                    // Tải dữ liệu dự phòng an toàn ngay lập tức, không để hệ thống chờ đợi Promise bị kẹt
+                    let readyPayload = getImmediateFallbackPayload(
+                      boundCtx.lockedTool,
+                      boundCtx.lockedTopic,
+                    );
 
                     if (
                       boundCtx.aborted ||
@@ -28985,7 +29459,6 @@
                     }
 
                     let userPreselectedState = captureInputToolUIState();
-
                     if (typeof currentActiveTool !== "undefined") {
                       currentActiveTool = boundCtx.lockedTool;
                     }
@@ -29011,7 +29484,6 @@
                       );
                       window._tngWaitingToolTimer =
                         window._tngActiveTimerCount > 0;
-
                       restoreInputToolUIState(userPreselectedState);
                       window.tngFinishGeneratingState(false);
                     }
@@ -29062,6 +29534,8 @@
                 return tid;
               }
             }
+
+            // CHÌA KHÓA FIX KẸT: TRẢ VỀ normTid CHUẨN XÁC ĐỂ TRÌNH GÕ CHỮ TIẾP TỤC CHẠY
             let normTid = _origSetTimeout.apply(window, arguments);
             if (window._tngIsGenerating && delay >= 20 && delay <= 12000) {
               window._tngGenTimers.add(normTid);
@@ -29110,31 +29584,34 @@
 
             if (res && typeof res.h === "string") {
               try {
-                let h = res.h;
-                let topic = extractCleanTopic(
-                  h,
-                  lockedTopic || window._tngLastUserTopic || "",
-                );
-                let idMatch = h.match(/viewMediaById\(['"]([^'"]+)['"]/);
-                let fileId = idMatch ? idMatch[1] : null;
+                let h = res.h,
+                  topic = extractCleanTopic(
+                    h,
+                    lockedTopic || window._tngLastUserTopic || "",
+                  );
+                let idMatch = h.match(/viewMediaById\(['"]([^'"]+)['"]/),
+                  fileId = idMatch ? idMatch[1] : null;
 
                 let payload = runCtx ? runCtx.readyPayload : null;
                 if (
                   !payload &&
                   h.indexOf("Thu thập số liệu thống kê mới nhất") !== -1
                 ) {
-                  payload = await prepareToolPayload("Deep Research", topic);
+                  payload = getImmediateFallbackPayload("Deep Research", topic);
                 } else if (
                   !payload &&
                   h.indexOf("Khái niệm cốt lõi, bối cảnh lịch sử") !== -1
                 ) {
-                  payload = await prepareToolPayload("Học có hướng dẫn", topic);
+                  payload = getImmediateFallbackPayload(
+                    "Học có hướng dẫn",
+                    topic,
+                  );
                 } else if (
                   !payload &&
                   (h.indexOf("Bản trình bày tự động bởi TNG AI") !== -1 ||
                     h.indexOf("Mở Slide") !== -1)
                 ) {
-                  payload = await prepareToolPayload("Canvas", topic);
+                  payload = getImmediateFallbackPayload("Canvas", topic);
                 }
 
                 if (payload) {
