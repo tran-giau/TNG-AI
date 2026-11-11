@@ -27715,7 +27715,7 @@
 
         // =========================================================================
         // 9. HỆ THỐNG KHÓA SNAPSHOT (CÔNG CỤ + ẢNH/FILE) + CHUYỂN ĐỔI MŨI TÊN ↔ VUÔNG
-        //    + FIX TẬN GỐC LỖI ĐƠ CÔNG CỤ & SAI DÒNG CHỮ TRẠNG THÁI + KHOẢNG CÁCH CHUẨN
+        //    + TÀNG HÌNH LUÂN PHIÊN CHỐNG ĐẬM & ĐỌC VĂN BẢN TTS CHUẨN XÁC
         // =========================================================================
         let oldSt = document.getElementById("tng-stop-edit-styles");
         if (oldSt) oldSt.remove();
@@ -27757,7 +27757,7 @@
             line-height: 1 !important;
           }
           
-          /* Cho Báo cáo, Lộ trình học, Canvas: 1px */
+          /* Cho Báo cáo, Lộ trình học, Canvas: 1.5px */
           .ai-msg:has(.tng-report-list) .ai-actions-bar,
           .ai-msg:has(.tng-learn-list) .ai-actions-bar,
           .ai-msg:has(.slide-page) .ai-actions-bar,
@@ -27768,15 +27768,17 @@
           /* Cho Ảnh, Video, Nhạc: Đồng bộ khoảng cách đều 2 mặt */
           .ai-msg > img.chat-img,
           .ai-msg > video,
+          .ai-msg > audio,
           .ai-msg > .tng-ios-music-card {
-            margin-top: 8px !important; /* Đẩy phương tiện xa dòng chữ bên trên một chút */
-            margin-bottom: 3px !important; /* Đẩy phương tiện xích lên gần hàng nút bên dưới để cân xứng */
+            margin-top: 8px !important;
+            margin-bottom: 2px !important;
             display: block;
           }
           .ai-msg:has(> img.chat-img) .ai-actions-bar,
           .ai-msg:has(> video) .ai-actions-bar,
+          .ai-msg:has(> audio) .ai-actions-bar,
           .ai-msg:has(> .tng-ios-music-card) .ai-actions-bar {
-            margin-top: 0 !important; /* Đã dùng margin-bottom ở phương tiện nên triệt tiêu margin-top ở đây */
+            margin-top: 0 !important;
           }
 
           .ai-actions-bar .ai-action-wrap {
@@ -27791,7 +27793,7 @@
             vertical-align: middle !important;
           }
 
-          /* 4. Chuyển dòng tin nhắn người dùng sang cột dọc & đặt khoảng cách 1px dưới bong bóng */
+          /* 4. Chuyển dòng tin nhắn người dùng sang cột dọc & đặt khoảng cách 1.5px dưới bong bóng */
           .msg-row.user-row {
             flex-direction: column !important;
             align-items: flex-end !important;
@@ -27801,7 +27803,7 @@
             align-items: center;
             justify-content: flex-end;
             gap: 4px !important;
-            margin-top: 1.5px !important; /* Tăng từ 0.5px lên 1px theo yêu cầu */
+            margin-top: 1.5px !important;
             margin-right: 15px !important;
             padding: 0 !important;
             line-height: 1 !important;
@@ -27991,7 +27993,7 @@
             opacity: 0.85 !important;
           }
 
-          /* 9. Khung chứa 2 biểu tượng Mũi tên & Hình vuông bên trong nút Gửi (#a8c7fa) */
+          /* 9. Khung chứa 2 biểu tượng Mũi tên & Hình vuông bên trong nút Gửi */
           .tng-send-stop-morph {
             position: relative;
             width: 18px;
@@ -28045,6 +28047,25 @@
             outline: none !important;
             display: inline-block;
             min-width: 20px;
+          }
+
+          /* 11. CSS TÀNG HÌNH LUÂN PHIÊN BẢO VỆ CHỮ CHỜ (NHẤP NHÁY CHỐNG ĐẬM MÀU) */
+          .ai-msg > .tng-saved-status {
+            display: none !important;
+          }
+          
+          /* Khi vào trạng thái is-mocking: Tàng hình tất cả nội dung cũ, HIỆN chữ chờ nhấp nháy */
+          .ai-msg.is-mocking > *:not(.tng-saved-status) {
+            display: none !important;
+          }
+          .ai-msg.is-mocking > .tng-saved-status {
+            display: block !important;
+            animation: tng-pulse-loading 1.5s infinite;
+          }
+          @keyframes tng-pulse-loading {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
           }
         `;
         document.head.appendChild(st);
@@ -28206,6 +28227,7 @@
         window.tngClearAllStoppedUserRows = function () {
           window._tngEditingUserRow = null;
           window._tngStoppedUserRow = null;
+          window._tngForcedResendTool = null;
           document.body.classList.remove("tng-is-editing-msg");
           document
             .querySelectorAll(
@@ -28350,30 +28372,23 @@
         }
         ensureStopButtonsMounted();
 
+        // 💡 TRẠM KIỂM SOÁT YÊU CẦU: Nhìn trực tiếp vào khung chat, nếu không có cái Tag xanh lè thì 100% là gõ văn bản!
         function detectActiveToolName() {
-          if (
-            typeof window._tngForcedResendTool === "string" &&
-            window._tngForcedResendTool.trim()
-          ) {
-            return window._tngForcedResendTool.trim();
-          }
-          if (
-            typeof currentActiveTool === "string" &&
-            currentActiveTool.trim()
-          ) {
-            return currentActiveTool.trim();
-          }
-          let hInd = document.getElementById("active-tool-home");
           let cInd = document.getElementById("active-tool-chat");
-          if (hInd && hInd.classList.contains("show")) {
-            let t = document.getElementById("active-tool-text-home");
-            if (t && t.textContent) return t.textContent.trim();
-          }
           if (cInd && cInd.classList.contains("show")) {
             let t = document.getElementById("active-tool-text-chat");
             if (t && t.textContent) return t.textContent.trim();
           }
-          return "";
+          let hInd = document.getElementById("active-tool-home");
+          if (hInd && hInd.classList.contains("show")) {
+            let t = document.getElementById("active-tool-text-home");
+            if (t && t.textContent) return t.textContent.trim();
+          }
+
+          if (window._tngForcedResendTool) {
+            return window._tngForcedResendTool.trim();
+          }
+          return ""; // ĐÃ XÓA SẠCH BIẾN NHỚ NGẦM LÀM KẸT HỆ THỐNG
         }
 
         function captureInputToolUIState() {
@@ -28709,54 +28724,44 @@
           }
         };
 
-        function inferToolFromTurn(aiRow, userRow) {
-          if (userRow && userRow.dataset.lockedTool) {
-            return userRow.dataset.lockedTool;
-          }
-          let html = aiRow ? aiRow.innerHTML || "" : "";
-          let text = aiRow ? aiRow.textContent || "" : "";
+        // Lấy tên chữ trạng thái chờ theo công cụ
+        function getToolLoadingText(toolName) {
+          if (!toolName) return "";
+          let tLowStr = toolName.toLowerCase();
           if (
-            html.indexOf("Báo cáo:") !== -1 ||
-            html.indexOf("tng-report-list") !== -1 ||
-            text.indexOf("Đang nghiên cứu") !== -1
-          ) {
-            return "Deep Research";
-          }
+            tLowStr.indexOf("research") !== -1 ||
+            tLowStr.indexOf("nghiên cứu") !== -1
+          )
+            return "Đang nghiên cứu...";
+          if (tLowStr.indexOf("học") !== -1 || tLowStr.indexOf("learn") !== -1)
+            return "Đang thiết lập bài học...";
           if (
-            html.indexOf("Lộ trình học:") !== -1 ||
-            html.indexOf("tng-learn-list") !== -1 ||
-            text.indexOf("Đang thiết lập bài học") !== -1
-          ) {
-            return "Học có hướng dẫn";
-          }
+            tLowStr.indexOf("canvas") !== -1 ||
+            tLowStr.indexOf("slide") !== -1
+          )
+            return "Đang tạo Canvas...";
+          if (tLowStr.indexOf("nhạc") !== -1 || tLowStr.indexOf("music") !== -1)
+            return "Đang tạo nhạc...";
+          if (tLowStr.indexOf("video") !== -1) return "Đang tạo video...";
           if (
-            html.indexOf("Canvas:") !== -1 ||
-            html.indexOf("Mở Slide") !== -1 ||
-            html.indexOf("Bản trình bày tự động") !== -1 ||
-            text.indexOf("Đang tạo Canvas") !== -1
-          ) {
+            tLowStr.indexOf("hình") !== -1 ||
+            tLowStr.indexOf("ảnh") !== -1 ||
+            tLowStr.indexOf("image") !== -1
+          )
+            return "Đang tạo hình ảnh...";
+          return "";
+        }
+
+        function inferToolFromTurn(aiRow) {
+          if (!aiRow) return "";
+          if (aiRow.querySelector(".tng-report-list")) return "Deep Research";
+          if (aiRow.querySelector(".tng-learn-list")) return "Học có hướng dẫn";
+          if (aiRow.querySelector(".tng-canvas-wrapper, .slide-page"))
             return "Canvas";
-          }
-          if (
-            html.indexOf("Nghe nhạc") !== -1 ||
-            html.indexOf("Bản nhạc") !== -1 ||
-            text.indexOf("Đang sáng tác nhạc") !== -1
-          ) {
+          if (aiRow.querySelector("audio, .tng-ios-music-card"))
             return "Tạo nhạc";
-          }
-          if (
-            (aiRow && aiRow.querySelector("video")) ||
-            html.indexOf("<video") !== -1 ||
-            text.indexOf("Đang tạo video") !== -1
-          ) {
-            return "Tạo video";
-          }
-          if (
-            (aiRow && aiRow.querySelector("img.chat-img")) ||
-            text.indexOf("Đang tạo hình ảnh") !== -1
-          ) {
-            return "Tạo hình ảnh";
-          }
+          if (aiRow.querySelector("video")) return "Tạo video";
+          if (aiRow.querySelector("img.chat-img")) return "Tạo hình ảnh";
           return "";
         }
 
@@ -28778,7 +28783,145 @@
           if (!userText && savedFiles.length === 0) return;
 
           btn.classList.add("btn-spin");
-          let regenTool = inferToolFromTurn(aiRow, userRow);
+          let regenTool = inferToolFromTurn(aiRow);
+
+          // 💡 CƠ CHẾ TÀNG HÌNH LUÂN PHIÊN - NHẤP NHÁY MÀ KHÔNG BỊ ĐẬM CSS
+          if (regenTool && regenTool.trim() !== "") {
+            let aMsg = aiRow.querySelector(".ai-msg");
+            if (!aMsg) return;
+
+            window.tngClearAllStoppedUserRows();
+            let uMsg = userRow.querySelector(".user-msg");
+            if (uMsg) {
+              uMsg.contentEditable = "false";
+              uMsg.classList.remove("is-editing-inline");
+            }
+            if (userRow.classList.contains("is-stopped-msg"))
+              userRow.classList.remove("is-stopped-msg");
+
+            // Truy xuất thẻ tàng hình. Nếu chưa có thì chèn thêm vào.
+            let savedStatus = aMsg.querySelector(".tng-saved-status");
+            if (!savedStatus) {
+              let tempText = getToolLoadingText(regenTool) || "Đang xử lý...";
+              let themeColor =
+                document.body.getAttribute("data-theme") === "light"
+                  ? "#1f1f1f"
+                  : "#e3e3e3";
+
+              savedStatus = document.createElement("span");
+              savedStatus.className = "tng-saved-status";
+              savedStatus.style.cssText =
+                "font-weight: 400 !important; font-size: 16px !important; color: " +
+                themeColor +
+                " !important; font-family: 'Google Sans', system-ui, sans-serif !important; letter-spacing: normal !important; display: none; margin-bottom: 10px;";
+              savedStatus.textContent = tempText;
+              aMsg.prepend(savedStatus);
+            }
+
+            // Mật mã Tàng hình: Kích hoạt is-mocking sẽ luân phiên tắt nội dung và hiện chữ chờ nhấp nháy
+            aMsg.classList.add("is-mocking");
+            aiRow.classList.add("tng-ai-msg-loading");
+            aMsg.classList.add("tng-ai-msg-loading");
+
+            window._tngIsGenerating = true;
+            window._tngActiveAiRow = aiRow;
+            document.body.classList.remove("tng-morphing-to-arrow");
+            document.body.classList.add("tng-is-generating");
+            window.tngMorphSendStopIcon(true, false);
+
+            let delayTime = 6000;
+            let tLowStr = regenTool.toLowerCase();
+            if (
+              tLowStr.indexOf("hình") !== -1 ||
+              tLowStr.indexOf("ảnh") !== -1 ||
+              tLowStr.indexOf("image") !== -1
+            ) {
+              delayTime = 3500;
+            }
+
+            let tid = _origSetTimeout.call(
+              window,
+              function () {
+                window._tngGenTimers.delete(tid);
+                if (
+                  window._tngIsGenerating &&
+                  window._tngActiveAiRow === aiRow
+                ) {
+                  // Hủy Tàng hình: Luân phiên trở lại mở câu trả lời cũ
+                  aMsg.classList.remove("is-mocking");
+                  aiRow.classList.remove("tng-ai-msg-loading");
+                  aMsg.classList.remove("tng-ai-msg-loading");
+
+                  aMsg
+                    .querySelectorAll("[data-tng-copy-synced]")
+                    .forEach((el) =>
+                      el.removeAttribute("data-tng-copy-synced"),
+                    );
+                  aMsg
+                    .querySelectorAll("[data-tng-squish-bound]")
+                    .forEach((el) =>
+                      el.removeAttribute("data-tng-squish-bound"),
+                    );
+                  aMsg
+                    .querySelectorAll("[data-tng-compact-fixed]")
+                    .forEach((el) =>
+                      el.removeAttribute("data-tng-compact-fixed"),
+                    );
+
+                  syncAiCopyButtonsToUserIcon(aMsg);
+                  window._tngWaitingToolTimer = false;
+                  window.tngFinishGeneratingState(false);
+                  if (typeof syncChatHistorySessionsEverywhere === "function")
+                    syncChatHistorySessionsEverywhere();
+
+                  // 💡 TẠO GIỌNG ĐỌC MỚI CHUẨN XÁC THEO ĐÚNG LOGIC CỦA BẠN (Tốc độ 1.1x)
+                  let soundMsg = "";
+                  if (
+                    tLowStr.indexOf("research") !== -1 ||
+                    tLowStr.indexOf("nghiên cứu") !== -1
+                  ) {
+                    soundMsg = "Báo cáo nghiên cứu của bạn đã sẵn sàng.";
+                  } else if (
+                    tLowStr.indexOf("học") !== -1 ||
+                    tLowStr.indexOf("learn") !== -1
+                  ) {
+                    soundMsg = "Tài liệu học tập của bạn đã sẵn sàng.";
+                  } else {
+                    // Nếu là Ảnh, Video, Canvas, Nhạc: Sao chép y đúc văn bản trả lời của AI để đọc
+                    let clone = aMsg.cloneNode(true);
+                    let toRemove = clone.querySelectorAll(
+                      ".ai-actions-bar, .tng-saved-status, style, audio, video, img, table, .tng-report-list, .tng-learn-list, .slide-page, .tng-canvas-wrapper",
+                    );
+                    toRemove.forEach((el) => el.remove());
+                    soundMsg = (clone.textContent || "")
+                      .replace(/\s+/g, " ")
+                      .trim();
+                  }
+
+                  if (soundMsg) {
+                    if (typeof window.speak === "function") {
+                      try {
+                        window.speak(soundMsg);
+                      } catch (e) {}
+                    } else if (window.speechSynthesis) {
+                      try {
+                        window.speechSynthesis.cancel(); // Dừng dòng đọc cũ nếu kẹt
+                        let ut = new SpeechSynthesisUtterance(soundMsg);
+                        ut.lang = "vi-VN";
+                        ut.rate = 1.1; // Tốc độ chuẩn 1.1x
+                        window.speechSynthesis.speak(ut);
+                      } catch (e) {}
+                    }
+                  }
+                }
+              },
+              delayTime,
+            );
+            window._tngGenTimers.add(tid);
+
+            return;
+          }
+
           let savedToolState = null;
           if (userRow.dataset.lockedToolState) {
             try {
@@ -28895,6 +29038,7 @@
           let wasGenerating = !!window._tngIsGenerating;
           window._tngIsGenerating = false;
           window._tngActiveAiRow = null;
+
           document.body.classList.add("tng-morphing-to-arrow");
           document.body.classList.remove("tng-is-generating");
 
@@ -28926,6 +29070,7 @@
         window.tngStopGeneration = function () {
           if (!window._tngIsGenerating) return;
           window._tngAbortGenSeq = (window._tngAbortGenSeq || 0) + 1;
+
           let activeCtx = window._tngActiveReqCtx;
           if (activeCtx) {
             activeCtx.aborted = true;
@@ -28962,15 +29107,31 @@
             if (uRows.length > 0) userRow = uRows[uRows.length - 1];
           }
 
-          let detectedStoppedTool =
-            inferToolFromTurn(aiRow, userRow) ||
-            (activeCtx && activeCtx.lockedTool) ||
-            "";
+          let detectedStoppedTool = inferToolFromTurn(aiRow);
           window._tngLastStoppedTool = detectedStoppedTool;
 
+          // 💡 BẢO VỆ ẢNH ĐÃ LOAD XONG KHÔNG BỊ XÓA NHẦM KHI BẤM DỪNG
+          let isStillLoading = false;
           if (aiRow) {
-            aiRow.dataset.abortedRow = "1";
-            aiRow.remove();
+            let aMsg = aiRow.querySelector(".ai-msg");
+            isStillLoading = aMsg ? isAiMessageStillLoading(aMsg) : true;
+          }
+
+          if (
+            aiRow &&
+            (aiRow.classList.contains("tng-ai-msg-loading") || isStillLoading)
+          ) {
+            // Nếu đang trong chế độ Tàng hình (is-mocking), chỉ thoát chế độ đó, CẤM XÓA CÂU TRẢ LỜI ĐÃ XONG
+            let aMsg = aiRow.querySelector(".ai-msg");
+            if (aMsg && aMsg.classList.contains("is-mocking")) {
+              aMsg.classList.remove("is-mocking");
+              aiRow.classList.remove("tng-ai-msg-loading");
+              aMsg.classList.remove("tng-ai-msg-loading");
+            } else {
+              // Đang tải thật sự từ server mới cho phép xóa
+              aiRow.dataset.abortedRow = "1";
+              aiRow.remove();
+            }
           }
 
           window.tngClearAllStoppedUserRows();
@@ -29033,37 +29194,6 @@
                       }
                     }
                   });
-
-                // MỞ KHÓA HOÀN TOÀN TỨC THÌ ĐỂ CHỐNG LỖI TREO KHI TRẢ VỀ DỮ LIỆU ĐÃ CÓ SẴN
-                if (window._tngIsGenerating) {
-                  let aRow = window._tngActiveAiRow;
-                  if (!aRow || !cbWatch.contains(aRow)) {
-                    let aRows = cbWatch.querySelectorAll(".msg-row.ai-row");
-                    aRow = aRows.length > 0 ? aRows[aRows.length - 1] : null;
-                  }
-                  if (aRow) {
-                    let aMsg = aRow.querySelector(".ai-msg");
-                    let txt = aMsg ? (aMsg.textContent || "").trim() : "";
-                    let hasActions = !!(
-                      aMsg && aMsg.querySelector(".ai-actions-bar")
-                    );
-                    let hasRichMedia = !!(
-                      aMsg &&
-                      aMsg.querySelector(
-                        "img.chat-img, video, iframe, .tng-ios-music-card",
-                      )
-                    );
-
-                    if (
-                      aMsg &&
-                      (hasActions || hasRichMedia) &&
-                      !/^Đang\s/i.test(txt)
-                    ) {
-                      window._tngWaitingToolTimer = false;
-                      window.tngFinishGeneratingState(false);
-                    }
-                  }
-                }
               } finally {
                 window._tngInStopObserver = false;
               }
@@ -29071,7 +29201,6 @@
           }
         }
 
-        // BẢO ĐẢM TRẢ VỀ ĐẦY ĐỦ 5 MỤC NỘI DUNG VỚI ĐỦ CÁC TRƯỜNG DỮ LIỆU
         function getImmediateFallbackPayload(toolName, rawTopic) {
           let cleanTopic = (rawTopic || "").trim() || "Chủ đề";
           let tLow = String(toolName || "").toLowerCase();
@@ -29304,9 +29433,6 @@
           return htmlStr;
         }
 
-        // =========================================================================
-        // NÂNG CẤP CHỐNG LỖI TREO KHUNG CHAT BẰNG LỆNH GỌI HÀM GỐC CHUẨN XÁC
-        // =========================================================================
         const _origSendMsg =
           typeof sendMsg === "function" ? sendMsg : window.sendMsg;
         if (
@@ -29315,6 +29441,9 @@
         ) {
           window._tngSendMsgHookedV12 = true;
           window.sendMsg = sendMsg = function (source) {
+            // XÓA BIẾN NHỚ ĐỂ HỆ THỐNG KHÔNG BAO GIỜ BỊ NHẦM LẪN LÀ CÔNG CỤ
+            window._tngForcedResendTool = null;
+
             if (window._tngIsGenerating) {
               window.tngStopGeneration();
               return;
@@ -29374,7 +29503,7 @@
                 lockedToolUIState: lockedToolUIState,
                 lockedTopic: userText,
                 lockedFiles: lockedFiles,
-                taskPromise: null, // Đã dời xử lý xuống phần setTimeout an toàn
+                taskPromise: null,
                 targetMsgEl: null,
                 userRowEl: null,
                 aiRowEl: null,
@@ -29387,20 +29516,20 @@
               window._tngActiveReqCtx = null;
             }
 
-            window._tngForcedResendTool = lockedTool || null;
-
-            // BẮT ĐẦU TRẠNG THÁI NGAY LẬP TỨC ĐỂ THEO DÕI CÁC TIN NHẮN TRẢ VỀ TỨC THÌ (HOẶC LỖI)
+            // BẬT TRẠNG THÁI NGAY LẬP TỨC ĐỂ ĐẢM BẢO THEO DÕI ĐƯỢC NHỮNG KẾT QUẢ ĐƯỢC TRẢ VỀ SIÊU TỐC
             window.tngStartGeneratingState(null, null);
 
-            // GỌI HÀM GỐC: KHÔNG TỰ VẼ HTML NHƯ BẢN TRƯỚC, ĐỂ HỆ THỐNG TỰ LÀM VÀ CHỐNG KẸT
             let res = _origSendMsg.apply(this, arguments);
 
             setTimeout(function () {
               let newAiCount = cb
                 ? cb.querySelectorAll(".msg-row.ai-row").length
                 : 0;
+
               if (cb && newAiCount > prevAiCount) {
-                if (lockedTool && typeof clearTool === "function") clearTool();
+                if (lockedTool && typeof clearTool === "function") {
+                  clearTool();
+                }
                 let uRows = cb.querySelectorAll(".msg-row.user-row"),
                   aRows = cb.querySelectorAll(".msg-row.ai-row");
                 let lastURow =
@@ -29416,13 +29545,15 @@
                       JSON.stringify(lockedToolUIState);
                   } catch (e) {}
                   try {
-                    if (lockedFiles.length > 0)
+                    if (lockedFiles.length > 0) {
                       lastURow.dataset.lockedFilesJson =
                         JSON.stringify(lockedFiles);
+                    }
                   } catch (e) {}
                   attachUserMessageActions(lastURow);
-                  if (window._tngIsRegeneratingCall)
+                  if (window._tngIsRegeneratingCall) {
                     lastURow.style.animation = "none";
+                  }
                 }
 
                 if (
@@ -29444,30 +29575,11 @@
                     window._tngActiveReqCtx.targetMsgEl =
                       lastARow.querySelector(".ai-msg");
                   }
-
-                  // CHỈ GẮN CLASS LOADING NẾU TIẾN TRÌNH CHƯA KẾT THÚC
                   if (window._tngIsGenerating) {
                     lastARow.classList.add("tng-ai-msg-loading");
                     let aMsgInit = lastARow.querySelector(".ai-msg");
                     if (aMsgInit) {
                       aMsgInit.classList.add("tng-ai-msg-loading");
-                      if (lockedTool) {
-                        let initTxt = (aMsgInit.textContent || "").trim();
-                        if (initTxt === "Đang xử lý..." || initTxt === "") {
-                          if (/research|nghiên cứu/i.test(lockedTool))
-                            aMsgInit.innerHTML = "Đang nghiên cứu...";
-                          else if (/học|learn/i.test(lockedTool))
-                            aMsgInit.innerHTML = "Đang thiết lập bài học...";
-                          else if (/canvas|slide/i.test(lockedTool))
-                            aMsgInit.innerHTML = "Đang tạo Canvas...";
-                          else if (/nhạc/i.test(lockedTool))
-                            aMsgInit.innerHTML = "Đang sáng tác nhạc...";
-                          else if (/video/i.test(lockedTool))
-                            aMsgInit.innerHTML = "Đang tạo video...";
-                          else if (/hình|ảnh/i.test(lockedTool))
-                            aMsgInit.innerHTML = "Đang tạo hình ảnh...";
-                        }
-                      }
                     }
                   }
                 }
@@ -29729,12 +29841,32 @@
                     },
                   );
                 }
+
+                // 💡 ĐÍNH KÈM CHỮ CHỜ VÀO ĐẦU KẾT QUẢ ĐỂ SẴN SÀNG TÀNG HÌNH CHO LẦN SAU (Nối chuỗi an toàn tuyệt đối)
+                let tempText = getToolLoadingText(lockedTool);
+                if (tempText) {
+                  let themeColor =
+                    document.body.getAttribute("data-theme") === "light"
+                      ? "#1f1f1f"
+                      : "#e3e3e3";
+                  res.h =
+                    "<span class='tng-saved-status' style='display:none !important; font-weight: 400 !important; font-size: 16px !important; color: " +
+                    themeColor +
+                    ' !important; font-family: "Google Sans", system-ui, sans-serif !important; letter-spacing: normal !important; margin-bottom: 10px;\'>' +
+                    tempText +
+                    "</span>" +
+                    res.h;
+                }
               } catch (err) {}
             }
+
+            window._tngWaitingToolTimer = false;
+
             _origSetTimeout.call(
               window,
               function () {
                 syncAiCopyButtonsToUserIcon(document);
+                window.tngFinishGeneratingState(false);
               },
               80,
             );
