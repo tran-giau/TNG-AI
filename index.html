@@ -27771,7 +27771,7 @@
           .ai-msg > audio,
           .ai-msg > .tng-ios-music-card {
             margin-top: 8px !important;
-            margin-bottom: 2px !important;
+            margin-bottom: 3px !important;
             display: block;
           }
           .ai-msg:has(> img.chat-img) .ai-actions-bar,
@@ -27813,7 +27813,7 @@
             animation: iosViewEnter 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
           }
 
-          /* 5. Hiệu ứng PHÁT SÁNG + LÚN NẢY lò xo chuẩn iOS 27 cho Bong bóng chat (.user-msg) */
+          /* 5. Hiệu ứng PHÁT SÁNG + LÚN NẢY lò xo chuẩn iOS 27 cho Bong bóng chat */
           .user-msg {
             will-change: transform, background-color, border-color, box-shadow;
             transform-origin: center center;
@@ -27860,7 +27860,7 @@
               inset 0 1px 2px rgba(255, 255, 255, 0.85) !important;
           }
 
-          /* 6. Vòng sáng tròn 32px chuẩn Gemini + Hiệu ứng lún lò xo iOS 27 cho các nút icon */
+          /* 6. Vòng sáng tròn 32px chuẩn Gemini */
           .ai-action-btn,
           .tng-u-act-btn {
             background: transparent !important;
@@ -27888,7 +27888,7 @@
               color 0.2s ease !important;
           }
 
-          /* 7. Cân chỉnh kích thước & trục dọc đồng đều 100% giữa tất cả các biểu tượng */
+          /* 7. Cân chỉnh kích thước & trục dọc đồng đều */
           .ai-action-btn svg,
           .tng-u-act-btn svg {
             width: 16.5px !important;
@@ -27967,7 +27967,7 @@
             color: #102a43 !important;
           }
 
-          /* 8. Hiệu ứng lún lò xo iOS 27 cho 2 nút Tìm kiếm trên Google & YouTube */
+          /* 8. Hiệu ứng lún lò xo iOS 27 cho nút Tìm kiếm */
           .ai-msg a[href*="google.com/search"],
           .ai-msg a[href*="youtube.com/results"] {
             will-change: transform, background-color, box-shadow;
@@ -28033,7 +28033,7 @@
             transform: scale(0.5) rotate(90deg) !important;
           }
 
-          /* 10. Bong bóng tin nhắn khi đang được chỉnh sửa trực tiếp */
+          /* 10. Bong bóng tin nhắn khi đang chỉnh sửa */
           .user-msg.is-editing-inline {
             outline: none !important;
             border-color: var(--btn-blue) !important;
@@ -28066,6 +28066,24 @@
             0% { opacity: 0.6; }
             50% { opacity: 1; }
             100% { opacity: 0.6; }
+          }
+
+          /* 12. HIỆU ỨNG HIỂN THỊ ĐÁP ÁN MƯỢT MÀ CHỈ DÀNH CHO CÔNG CỤ (CẢ LẦN ĐẦU VÀ TRẢ LỜI LẠI) */
+          @keyframes iosAiMsgReveal {
+            0% { opacity: 0; transform: translateY(12px) scale(0.97); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+          }
+          
+          /* Kích hoạt tự động khi khối tin nhắn chứa cấu trúc riêng biệt của Công Cụ */
+          .ai-msg:not(.is-mocking):has(.tng-report-list) > *:not(.tng-saved-status):not(style),
+          .ai-msg:not(.is-mocking):has(.tng-learn-list) > *:not(.tng-saved-status):not(style),
+          .ai-msg:not(.is-mocking):has(.slide-page) > *:not(.tng-saved-status):not(style),
+          .ai-msg:not(.is-mocking):has(.tng-canvas-wrapper) > *:not(.tng-saved-status):not(style),
+          .ai-msg:not(.is-mocking):has(> img.chat-img) > *:not(.tng-saved-status):not(style),
+          .ai-msg:not(.is-mocking):has(> video) > *:not(.tng-saved-status):not(style),
+          .ai-msg:not(.is-mocking):has(> audio) > *:not(.tng-saved-status):not(style),
+          .ai-msg:not(.is-mocking):has(> .tng-ios-music-card) > *:not(.tng-saved-status):not(style) {
+            animation: iosAiMsgReveal 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
           }
         `;
         document.head.appendChild(st);
@@ -29121,14 +29139,14 @@
             aiRow &&
             (aiRow.classList.contains("tng-ai-msg-loading") || isStillLoading)
           ) {
-            // Nếu đang trong chế độ Tàng hình (is-mocking), chỉ thoát chế độ đó, CẤM XÓA CÂU TRẢ LỜI ĐÃ XONG
             let aMsg = aiRow.querySelector(".ai-msg");
             if (aMsg && aMsg.classList.contains("is-mocking")) {
+              // Đang tàng hình trả lời lại -> Hủy tàng hình, CẤM XÓA DÒNG
               aMsg.classList.remove("is-mocking");
               aiRow.classList.remove("tng-ai-msg-loading");
               aMsg.classList.remove("tng-ai-msg-loading");
             } else {
-              // Đang tải thật sự từ server mới cho phép xóa
+              // Đang load mới hoàn toàn từ server -> Xóa luôn
               aiRow.dataset.abortedRow = "1";
               aiRow.remove();
             }
@@ -29138,6 +29156,7 @@
 
           if (userRow) {
             if (detectedStoppedTool && detectedStoppedTool.trim() !== "") {
+              // 💡 LÀ CÔNG CỤ -> CHỈ NGẮT, KHÔNG CHO CHỈNH SỬA
               if (typeof clearTool === "function") clearTool();
               if (typeof currentActiveTool !== "undefined")
                 currentActiveTool = null;
@@ -29149,6 +29168,7 @@
 
               window.tngFinishGeneratingState(false);
             } else {
+              // 💡 LÀ VĂN BẢN -> BẬT CHẾ ĐỘ CHỈNH SỬA
               if (activeCtx && activeCtx.lockedToolUIState) {
                 try {
                   userRow.dataset.lockedToolState = JSON.stringify(
@@ -29516,7 +29536,6 @@
               window._tngActiveReqCtx = null;
             }
 
-            // BẬT TRẠNG THÁI NGAY LẬP TỨC ĐỂ ĐẢM BẢO THEO DÕI ĐƯỢC NHỮNG KẾT QUẢ ĐƯỢC TRẢ VỀ SIÊU TỐC
             window.tngStartGeneratingState(null, null);
 
             let res = _origSendMsg.apply(this, arguments);
@@ -29580,6 +29599,26 @@
                     let aMsgInit = lastARow.querySelector(".ai-msg");
                     if (aMsgInit) {
                       aMsgInit.classList.add("tng-ai-msg-loading");
+                      if (lockedTool) {
+                        let initTxt = (aMsgInit.textContent || "").trim();
+                        if (initTxt === "Đang xử lý..." || initTxt === "") {
+                          // 💡 GẮN SẴN CHỮ TRẠNG THÁI VÀO CÙNG DOM TỪ LẦN ĐẦU TIÊN ĐỂ NÓ KHÔNG THỂ BỊ IN ĐẬM
+                          let tempText = getToolLoadingText(lockedTool);
+                          if (tempText) {
+                            let themeColor =
+                              document.body.getAttribute("data-theme") ===
+                              "light"
+                                ? "#1f1f1f"
+                                : "#e3e3e3";
+                            aMsgInit.innerHTML =
+                              "<span class='tng-saved-status' style='display:block; font-weight: 400 !important; font-size: 16px !important; color: " +
+                              themeColor +
+                              ' !important; font-family: "Google Sans", system-ui, sans-serif !important; letter-spacing: normal !important;\'>' +
+                              tempText +
+                              "</span>";
+                          }
+                        }
+                      }
                     }
                   }
                 }
@@ -29648,7 +29687,6 @@
                       return;
                     }
 
-                    // Tải dữ liệu dự phòng an toàn ngay lập tức, không để hệ thống chờ đợi Promise bị kẹt
                     let readyPayload = getImmediateFallbackPayload(
                       boundCtx.lockedTool,
                       boundCtx.lockedTopic,
@@ -29744,7 +29782,6 @@
               }
             }
 
-            // CHÌA KHÓA FIX KẸT: TRẢ VỀ normTid CHUẨN XÁC ĐỂ TRÌNH GÕ CHỮ TIẾP TỤC CHẠY
             let normTid = _origSetTimeout.apply(window, arguments);
             if (window._tngIsGenerating && delay >= 20 && delay <= 12000) {
               window._tngGenTimers.add(normTid);
@@ -29842,7 +29879,7 @@
                   );
                 }
 
-                // 💡 ĐÍNH KÈM CHỮ CHỜ VÀO ĐẦU KẾT QUẢ ĐỂ SẴN SÀNG TÀNG HÌNH CHO LẦN SAU (Nối chuỗi an toàn tuyệt đối)
+                // 💡 ĐÍNH KÈM CHỮ CHỜ VÀO ĐẦU KẾT QUẢ ĐỂ SẴN SÀNG TÀNG HÌNH CHO LẦN SAU (Nối chuỗi an toàn)
                 let tempText = getToolLoadingText(lockedTool);
                 if (tempText) {
                   let themeColor =
