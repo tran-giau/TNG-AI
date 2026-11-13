@@ -27715,7 +27715,7 @@
 
         // =========================================================================
         // 9. HỆ THỐNG KHÓA SNAPSHOT (CÔNG CỤ + ẢNH/FILE) + CHUYỂN ĐỔI MŨI TÊN ↔ VUÔNG
-        //    + TÀNG HÌNH LUÂN PHIÊN CHỐNG ĐẬM & ĐỌC VĂN BẢN TTS CHUẨN XÁC
+        //    + NHẤP NHÁY ĐỒNG BỘ TOÀN HỆ THỐNG + TÀNG HÌNH CHỐNG GIẬT + NẢY IOS
         // =========================================================================
         let oldSt = document.getElementById("tng-stop-edit-styles");
         if (oldSt) oldSt.remove();
@@ -27771,7 +27771,7 @@
           .ai-msg > audio,
           .ai-msg > .tng-ios-music-card {
             margin-top: 8px !important;
-            margin-bottom: 3px !important;
+            margin-bottom: 2px !important;
             display: block;
           }
           .ai-msg:has(> img.chat-img) .ai-actions-bar,
@@ -28049,34 +28049,54 @@
             min-width: 20px;
           }
 
-          /* 11. CSS TÀNG HÌNH LUÂN PHIÊN BẢO VỆ CHỮ CHỜ (NHẤP NHÁY CHỐNG ĐẬM MÀU) */
+          /* 11. CSS TÀNG HÌNH & NHẤP NHÁY TOÀN HỆ THỐNG */
+          /* Mặc định chữ chờ bị ẩn */
           .ai-msg > .tng-saved-status {
             display: none !important;
           }
           
-          /* Khi vào trạng thái is-mocking: Tàng hình tất cả nội dung cũ, HIỆN chữ chờ nhấp nháy */
+          /* Chế độ tàng hình trả lời lại Công cụ (is-mocking): Ẩn nội dung cũ, HIỆN chữ chờ nhấp nháy */
           .ai-msg.is-mocking > *:not(.tng-saved-status) {
             display: none !important;
           }
           .ai-msg.is-mocking > .tng-saved-status {
             display: block !important;
-            animation: tng-pulse-loading 1.5s infinite;
-          }
-          @keyframes tng-pulse-loading {
-            0% { opacity: 0.6; }
-            50% { opacity: 1; }
-            100% { opacity: 0.6; }
+            animation: tng-pulse-loading 1.5s ease-in-out infinite !important;
           }
 
-          /* 12. HIỆU ỨNG HIỂN THỊ ĐÁP ÁN MƯỢT MÀ CHỈ DÀNH CHO CÔNG CỤ (CHỈ CÓ TÁC DỤNG KHI THOÁT TÀNG HÌNH) */
+          /* Nhấp nháy toàn bộ khung cho Lần đầu tạo (Công cụ & Văn bản) và Trả lời lại Văn bản */
+          /* LOẠI TRỪ .is-mocking để không bị lỗi treo trắng màn hình */
+          .ai-msg.tng-ai-msg-loading:not(.is-mocking) {
+            animation: tng-pulse-loading 1.5s ease-in-out infinite !important;
+            will-change: opacity;
+          }
+
+          /* ĐỒNG BỘ MẬT ĐỘ NHẤP NHÁY (Opacity từ 0.5 lên 1 thật êm ái, rõ ràng) */
+          @keyframes tng-pulse-loading {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+          }
+
+          /* 12. HIỆU ỨNG HIỂN THỊ ĐÁP ÁN MƯỢT MÀ CHỈ DÀNH CHO CÔNG CỤ */
           @keyframes iosAiMsgReveal {
-            0% { opacity: 0; transform: translateY(12px) scale(0.97); }
+            0% { opacity: 0; transform: translateY(45px) scale(0.9); }
             100% { opacity: 1; transform: translateY(0) scale(1); }
           }
           
-          /* Kích hoạt tự động thông qua class .tng-regen-revealed */
-          .ai-msg.tng-regen-revealed > *:not(.tng-saved-status):not(style) {
-            animation: iosAiMsgReveal 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+          /* Áp dụng nguyên khối cho .ai-msg khi đã tải xong và không còn tàng hình */
+          .ai-msg:not(.tng-ai-msg-loading):not(.is-mocking):has(.tng-report-list),
+          .ai-msg:not(.tng-ai-msg-loading):not(.is-mocking):has(.tng-learn-list),
+          .ai-msg:not(.tng-ai-msg-loading):not(.is-mocking):has(.slide-page),
+          .ai-msg:not(.tng-ai-msg-loading):not(.is-mocking):has(.tng-canvas-wrapper),
+          .ai-msg:not(.tng-ai-msg-loading):not(.is-mocking):has(> img.chat-img),
+          .ai-msg:not(.tng-ai-msg-loading):not(.is-mocking):has(> video),
+          .ai-msg:not(.tng-ai-msg-loading):not(.is-mocking):has(> audio),
+          .ai-msg:not(.tng-ai-msg-loading):not(.is-mocking):has(> .tng-ios-music-card),
+          .ai-msg.tng-regen-revealed {
+            transform-origin: center bottom !important;
+            animation: iosAiMsgReveal 0.85s cubic-bezier(0.34, 1.56, 0.64, 1) both !important;
+            display: block; /* Tránh lỗi collapse layout của flex */
           }
         `;
         document.head.appendChild(st);
@@ -28383,7 +28403,7 @@
         }
         ensureStopButtonsMounted();
 
-        // 💡 TRẠM KIỂM SOÁT YÊU CẦU: Nhìn trực tiếp vào khung chat, nếu không có cái Tag xanh lè thì 100% là gõ văn bản!
+        // 💡 TRẠM KIỂM SOÁT YÊU CẦU
         function detectActiveToolName() {
           let cInd = document.getElementById("active-tool-chat");
           if (cInd && cInd.classList.contains("show")) {
@@ -28399,7 +28419,7 @@
           if (window._tngForcedResendTool) {
             return window._tngForcedResendTool.trim();
           }
-          return ""; // ĐÃ XÓA SẠCH BIẾN NHỚ NGẦM LÀM KẸT HỆ THỐNG
+          return "";
         }
 
         function captureInputToolUIState() {
@@ -28796,7 +28816,7 @@
           btn.classList.add("btn-spin");
           let regenTool = inferToolFromTurn(aiRow);
 
-          // 💡 CƠ CHẾ TÀNG HÌNH LUÂN PHIÊN - NHẤP NHÁY MÀ KHÔNG BỊ ĐẬM CSS
+          // 💡 CƠ CHẾ TÀNG HÌNH BẢO VỆ CHỮ CHỜ (NHẤP NHÁY MÀ KHÔNG BỊ ĐẬM CSS)
           if (regenTool && regenTool.trim() !== "") {
             let aMsg = aiRow.querySelector(".ai-msg");
             if (!aMsg) return;
@@ -28810,7 +28830,7 @@
             if (userRow.classList.contains("is-stopped-msg"))
               userRow.classList.remove("is-stopped-msg");
 
-            // Truy xuất thẻ tàng hình. Nếu chưa có thì chèn thêm vào.
+            // Giữ cấu trúc span chuẩn mực, cấm dán style hiển thị trực tiếp vào HTML
             let savedStatus = aMsg.querySelector(".tng-saved-status");
             if (!savedStatus) {
               let tempText = getToolLoadingText(regenTool) || "Đang xử lý...";
@@ -28829,7 +28849,7 @@
               aMsg.prepend(savedStatus);
             }
 
-            // Mật mã Tàng hình: Kích hoạt is-mocking sẽ luân phiên tắt nội dung và hiện chữ chờ nhấp nháy
+            // Mật mã Tàng hình: Che toàn bộ khối cũ lộn xộn, chỉ chừa lại chữ đang tải
             aMsg.classList.add("is-mocking");
             // Xóa trạng thái tng-regen-revealed cũ (nếu có) để chuẩn bị cho lần nảy trượt mới
             aMsg.classList.remove("tng-regen-revealed");
@@ -28890,7 +28910,7 @@
                   if (typeof syncChatHistorySessionsEverywhere === "function")
                     syncChatHistorySessionsEverywhere();
 
-                  // 💡 TẠO GIỌNG ĐỌC MỚI CHUẨN XÁC THEO ĐÚNG LOGIC CỦA BẠN (Tốc độ 1.1x)
+                  // 💡 TẠO GIỌNG ĐỌC MỚI CHUẨN XÁC ĐÚNG LOGIC (Tốc độ 1.1x)
                   let soundMsg = "";
                   if (
                     tLowStr.indexOf("research") !== -1 ||
@@ -29197,12 +29217,13 @@
               if (window._tngInStopObserver) return;
               window._tngInStopObserver = true;
               try {
-                // 💡 FIX CHÍ MẠNG: TỰ ĐỘNG NGẮT TIẾN TRÌNH KHI ẢNH/CÔNG CỤ XUẤT HIỆN LẦN ĐẦU (TẢI NGẦM)
+                // 💡 FIX CHÍ MẠNG: TỰ ĐỘNG NGẮT TIẾN TRÌNH KHI ẢNH/CÔNG CỤ XUẤT HIỆN LẦN ĐẦU
                 if (window._tngIsGenerating && !window._tngWaitingToolTimer) {
                   let aiRows = cbWatch.querySelectorAll(".msg-row.ai-row");
                   if (aiRows.length > 0) {
                     let lastAiRow = aiRows[aiRows.length - 1];
                     let aMsg = lastAiRow.querySelector(".ai-msg");
+                    // Kiểm tra: Phải không còn trong chế độ tàng hình và đã hiện đủ content
                     if (
                       aMsg &&
                       !aMsg.classList.contains("is-mocking") &&
@@ -29615,10 +29636,11 @@
                     let aMsgInit = lastARow.querySelector(".ai-msg");
                     if (aMsgInit) {
                       aMsgInit.classList.add("tng-ai-msg-loading");
+
+                      // 💡 ÉP TÀNG HÌNH LẦN ĐẦU KHI TẠO CÔNG CỤ (CHỐNG GIẬT MÀN HÌNH DO RENDER LỘN XỘN)
                       if (lockedTool) {
                         let initTxt = (aMsgInit.textContent || "").trim();
                         if (initTxt === "Đang xử lý..." || initTxt === "") {
-                          // 💡 GẮN SẴN CHỮ TRẠNG THÁI VÀO CÙNG DOM TỪ LẦN ĐẦU TIÊN ĐỂ NÓ KHÔNG THỂ BỊ IN ĐẬM
                           let tempText = getToolLoadingText(lockedTool);
                           if (tempText) {
                             let themeColor =
@@ -29629,9 +29651,10 @@
                             aMsgInit.innerHTML =
                               "<span class='tng-saved-status' style='display:block; font-weight: 400 !important; font-size: 16px !important; color: " +
                               themeColor +
-                              ' !important; font-family: "Google Sans", system-ui, sans-serif !important; letter-spacing: normal !important;\'>' +
+                              ' !important; font-family: "Google Sans", system-ui, sans-serif !important; letter-spacing: normal !important; margin-bottom: 10px;\'>' +
                               tempText +
                               "</span>";
+                            aMsgInit.classList.add("is-mocking");
                           }
                         }
                       }
@@ -29770,11 +29793,18 @@
                           /viewMediaById\(['"]([^'"]+)['"]/,
                         );
                         let fId = idMatch ? idMatch[1] : null;
+
                         targetMsg.innerHTML = upgradeHtmlWithPreparedPayload(
                           targetMsg.innerHTML,
                           readyPayload,
                           fId,
                         );
+
+                        // 💡 ĐẢM BẢO XÓA TÀNG HÌNH ĐỂ KẾT QUẢ ĐƯỢC BUNG RA KHI TIMEOUT FALLBACK
+                        if (targetMsg.classList.contains("is-mocking")) {
+                          targetMsg.classList.remove("is-mocking");
+                        }
+
                         syncAiCopyButtonsToUserIcon(targetMsg);
                         syncFileEverywhere(
                           fId,
@@ -29892,7 +29922,7 @@
                   );
                 }
 
-                // 💡 ĐÍNH KÈM CHỮ CHỜ VÀO ĐẦU KẾT QUẢ ĐỂ SẴN SÀNG TÀNG HÌNH CHO LẦN SAU (Nối chuỗi an toàn)
+                // 💡 ĐÍNH KÈM CHỮ CHỜ VÀO ĐẦU KẾT QUẢ ĐỂ SẴN SÀNG TÀNG HÌNH LUÂN PHIÊN SAU NÀY
                 let tempText = getToolLoadingText(lockedTool);
                 if (tempText) {
                   let themeColor =
@@ -29900,7 +29930,7 @@
                       ? "#1f1f1f"
                       : "#e3e3e3";
                   res.h =
-                    "<span class='tng-saved-status' style='display:none !important; font-weight: 400 !important; font-size: 16px !important; color: " +
+                    "<span class='tng-saved-status' style='font-weight: 400 !important; font-size: 16px !important; color: " +
                     themeColor +
                     ' !important; font-family: "Google Sans", system-ui, sans-serif !important; letter-spacing: normal !important; margin-bottom: 10px;\'>' +
                     tempText +
@@ -29915,6 +29945,18 @@
             _origSetTimeout.call(
               window,
               function () {
+                // Gỡ bỏ is-mocking để nội dung thật bùng nổ cùng hiệu ứng iOS
+                let cb = document.getElementById("cb");
+                if (cb) {
+                  let aiRows = cb.querySelectorAll(".msg-row.ai-row");
+                  if (aiRows.length > 0) {
+                    let lastAiRow = aiRows[aiRows.length - 1];
+                    let aMsg = lastAiRow.querySelector(".ai-msg");
+                    if (aMsg && aMsg.classList.contains("is-mocking")) {
+                      aMsg.classList.remove("is-mocking");
+                    }
+                  }
+                }
                 syncAiCopyButtonsToUserIcon(document);
                 window.tngFinishGeneratingState(false);
               },
