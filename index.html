@@ -28089,6 +28089,8 @@
           .ai-msg:not(.tng-ai-msg-loading):not(.is-mocking):has(.tng-learn-list),
           .ai-msg:not(.tng-ai-msg-loading):not(.is-mocking):has(.slide-page),
           .ai-msg:not(.tng-ai-msg-loading):not(.is-mocking):has(.tng-canvas-wrapper),
+          .ai-msg:not(.tng-ai-msg-loading):not(.is-mocking):has(iframe),
+          .ai-msg:not(.tng-ai-msg-loading):not(.is-mocking):has(canvas),
           .ai-msg:not(.tng-ai-msg-loading):not(.is-mocking):has(> img.chat-img),
           .ai-msg:not(.tng-ai-msg-loading):not(.is-mocking):has(> video),
           .ai-msg:not(.tng-ai-msg-loading):not(.is-mocking):has(> audio),
@@ -28127,7 +28129,7 @@
             });
           let hasRichContent =
             clone.querySelectorAll(
-              "img, video, audio, table, ul, ol, pre, .tng-report-list, .tng-learn-list, .slide-page, button, a[href]",
+              "img, video, audio, table, ul, ol, pre, .tng-report-list, .tng-learn-list, .slide-page, .tng-canvas-wrapper, iframe, canvas, button, a[href]",
             ).length > 0;
           if (hasRichContent) return false;
 
@@ -28787,12 +28789,24 @@
           if (!aiRow) return "";
           if (aiRow.querySelector(".tng-report-list")) return "Deep Research";
           if (aiRow.querySelector(".tng-learn-list")) return "Học có hướng dẫn";
-          if (aiRow.querySelector(".tng-canvas-wrapper, .slide-page"))
+          if (
+            aiRow.querySelector(
+              ".tng-canvas-wrapper, .slide-page, iframe, canvas",
+            )
+          )
             return "Canvas";
           if (aiRow.querySelector("audio, .tng-ios-music-card"))
             return "Tạo nhạc";
           if (aiRow.querySelector("video")) return "Tạo video";
           if (aiRow.querySelector("img.chat-img")) return "Tạo hình ảnh";
+
+          let txt = aiRow.textContent || "";
+          if (
+            txt.indexOf("Bản trình bày tự động") !== -1 ||
+            txt.indexOf("Mở Slide") !== -1
+          )
+            return "Canvas";
+
           return "";
         }
 
@@ -28814,7 +28828,8 @@
           if (!userText && savedFiles.length === 0) return;
 
           btn.classList.add("btn-spin");
-          let regenTool = inferToolFromTurn(aiRow);
+          let regenTool =
+            inferToolFromTurn(aiRow) || userRow.dataset.lockedTool || "";
 
           // 💡 CƠ CHẾ TÀNG HÌNH BẢO VỆ CHỮ CHỜ (NHẤP NHÁY MÀ KHÔNG BỊ ĐẬM CSS)
           if (regenTool && regenTool.trim() !== "") {
@@ -28880,75 +28895,88 @@
                   window._tngIsGenerating &&
                   window._tngActiveAiRow === aiRow
                 ) {
-                  // Hủy Tàng hình: Luân phiên trở lại mở câu trả lời cũ
-                  aMsg.classList.remove("is-mocking");
-                  // 💡 GẮN CLASS NÀY ĐỂ KÍCH HOẠT HIỆU ỨNG TRƯỢT MƯỢT MÀ KHI TÀNG HÌNH XONG
-                  aMsg.classList.add("tng-regen-revealed");
+                  // Hủy Tàng hình: Luân phiên trở lại mở câu trả lời cũ sau 500ms chống giật
+                  _origSetTimeout.call(
+                    window,
+                    function () {
+                      aMsg.classList.remove("is-mocking");
+                      // 💡 GẮN CLASS NÀY ĐỂ KÍCH HOẠT HIỆU ỨNG TRƯỢT MƯỢT MÀ KHI TÀNG HÌNH XONG
+                      aMsg.classList.add("tng-regen-revealed");
 
-                  aiRow.classList.remove("tng-ai-msg-loading");
-                  aMsg.classList.remove("tng-ai-msg-loading");
+                      aiRow.classList.remove("tng-ai-msg-loading");
+                      aMsg.classList.remove("tng-ai-msg-loading");
 
-                  aMsg
-                    .querySelectorAll("[data-tng-copy-synced]")
-                    .forEach((el) =>
-                      el.removeAttribute("data-tng-copy-synced"),
-                    );
-                  aMsg
-                    .querySelectorAll("[data-tng-squish-bound]")
-                    .forEach((el) =>
-                      el.removeAttribute("data-tng-squish-bound"),
-                    );
-                  aMsg
-                    .querySelectorAll("[data-tng-compact-fixed]")
-                    .forEach((el) =>
-                      el.removeAttribute("data-tng-compact-fixed"),
-                    );
+                      aMsg
+                        .querySelectorAll("[data-tng-copy-synced]")
+                        .forEach((el) =>
+                          el.removeAttribute("data-tng-copy-synced"),
+                        );
+                      aMsg
+                        .querySelectorAll("[data-tng-squish-bound]")
+                        .forEach((el) =>
+                          el.removeAttribute("data-tng-squish-bound"),
+                        );
+                      aMsg
+                        .querySelectorAll("[data-tng-compact-fixed]")
+                        .forEach((el) =>
+                          el.removeAttribute("data-tng-compact-fixed"),
+                        );
 
-                  syncAiCopyButtonsToUserIcon(aMsg);
-                  window._tngWaitingToolTimer = false;
-                  window.tngFinishGeneratingState(false);
-                  if (typeof syncChatHistorySessionsEverywhere === "function")
-                    syncChatHistorySessionsEverywhere();
+                      syncAiCopyButtonsToUserIcon(aMsg);
+                      window._tngWaitingToolTimer = false;
+                      window.tngFinishGeneratingState(false);
+                      if (
+                        typeof syncChatHistorySessionsEverywhere === "function"
+                      )
+                        syncChatHistorySessionsEverywhere();
 
-                  // 💡 TẠO GIỌNG ĐỌC MỚI CHUẨN XÁC ĐÚNG LOGIC (Tốc độ 1.1x)
-                  let soundMsg = "";
-                  if (
-                    tLowStr.indexOf("research") !== -1 ||
-                    tLowStr.indexOf("nghiên cứu") !== -1
-                  ) {
-                    soundMsg = "Báo cáo nghiên cứu của bạn đã sẵn sàng.";
-                  } else if (
-                    tLowStr.indexOf("học") !== -1 ||
-                    tLowStr.indexOf("learn") !== -1
-                  ) {
-                    soundMsg = "Tài liệu học tập của bạn đã sẵn sàng.";
-                  } else {
-                    // Nếu là Ảnh, Video, Canvas, Nhạc: Sao chép y đúc văn bản trả lời của AI để đọc
-                    let clone = aMsg.cloneNode(true);
-                    let toRemove = clone.querySelectorAll(
-                      ".ai-actions-bar, .tng-saved-status, style, audio, video, img, table, .tng-report-list, .tng-learn-list, .slide-page, .tng-canvas-wrapper",
-                    );
-                    toRemove.forEach((el) => el.remove());
-                    soundMsg = (clone.textContent || "")
-                      .replace(/\s+/g, " ")
-                      .trim();
-                  }
+                      // 💡 TẠO GIỌNG ĐỌC MỚI CHUẨN XÁC ĐÚNG LOGIC CỦA BẠN (Tốc độ 1.1x)
+                      let soundMsg = "";
+                      if (
+                        tLowStr.indexOf("research") !== -1 ||
+                        tLowStr.indexOf("nghiên cứu") !== -1
+                      ) {
+                        soundMsg = "Báo cáo nghiên cứu của bạn đã sẵn sàng.";
+                      } else if (
+                        tLowStr.indexOf("học") !== -1 ||
+                        tLowStr.indexOf("learn") !== -1
+                      ) {
+                        soundMsg = "Tài liệu học tập của bạn đã sẵn sàng.";
+                      } else if (
+                        tLowStr.indexOf("canvas") !== -1 ||
+                        tLowStr.indexOf("slide") !== -1
+                      ) {
+                        soundMsg = "Canvas của bạn đã sẵn sàng!";
+                      } else {
+                        // Nếu là Ảnh, Video, Nhạc: Sao chép y đúc văn bản trả lời của AI để đọc
+                        let clone = aMsg.cloneNode(true);
+                        let toRemove = clone.querySelectorAll(
+                          ".ai-actions-bar, .tng-saved-status, style, audio, video, img, table, .tng-report-list, .tng-learn-list, .slide-page, .tng-canvas-wrapper, iframe, canvas",
+                        );
+                        toRemove.forEach((el) => el.remove());
+                        soundMsg = (clone.textContent || "")
+                          .replace(/\s+/g, " ")
+                          .trim();
+                      }
 
-                  if (soundMsg) {
-                    if (typeof window.speak === "function") {
-                      try {
-                        window.speak(soundMsg);
-                      } catch (e) {}
-                    } else if (window.speechSynthesis) {
-                      try {
-                        window.speechSynthesis.cancel(); // Dừng dòng đọc cũ nếu kẹt
-                        let ut = new SpeechSynthesisUtterance(soundMsg);
-                        ut.lang = "vi-VN";
-                        ut.rate = 1.1; // Tốc độ chuẩn 1.1x
-                        window.speechSynthesis.speak(ut);
-                      } catch (e) {}
-                    }
-                  }
+                      if (soundMsg) {
+                        if (typeof window.speak === "function") {
+                          try {
+                            window.speak(soundMsg);
+                          } catch (e) {}
+                        } else if (window.speechSynthesis) {
+                          try {
+                            window.speechSynthesis.cancel(); // Dừng dòng đọc cũ nếu kẹt
+                            let ut = new SpeechSynthesisUtterance(soundMsg);
+                            ut.lang = "vi-VN";
+                            ut.rate = 1.1; // Tốc độ chuẩn 1.1x
+                            window.speechSynthesis.speak(ut);
+                          } catch (e) {}
+                        }
+                      }
+                    },
+                    500,
+                  );
                 }
               },
               delayTime,
@@ -29637,7 +29665,7 @@
                     if (aMsgInit) {
                       aMsgInit.classList.add("tng-ai-msg-loading");
 
-                      // 💡 ÉP TÀNG HÌNH LẦN ĐẦU KHI TẠO CÔNG CỤ (CHỐNG GIẬT MÀN HÌNH DO RENDER LỘN XỘN)
+                      // 💡 ÉP TÀNG HÌNH LẦN ĐẦU KHI TẠO CÔNG CỤ ĐỂ GOM KHỐI MƯỢT MÀ TỪ LẦN ĐẦU
                       if (lockedTool) {
                         let initTxt = (aMsgInit.textContent || "").trim();
                         if (initTxt === "Đang xử lý..." || initTxt === "") {
@@ -29800,9 +29828,66 @@
                           fId,
                         );
 
-                        // 💡 ĐẢM BẢO XÓA TÀNG HÌNH ĐỂ KẾT QUẢ ĐƯỢC BUNG RA KHI TIMEOUT FALLBACK
+                        // 💡 THÁO TÀNG HÌNH KHI TIMEOUT FALLBACK VÀ ĐỒNG BỘ HIỆU ỨNG TRƯỢT 500MS CÙNG ĐỌC TTS
                         if (targetMsg.classList.contains("is-mocking")) {
-                          targetMsg.classList.remove("is-mocking");
+                          if (!targetMsg.dataset.mockRevealing) {
+                            targetMsg.dataset.mockRevealing = "1";
+                            _origSetTimeout.call(
+                              window,
+                              function () {
+                                targetMsg.classList.remove("is-mocking");
+                                targetMsg.classList.add("tng-regen-revealed");
+                                let pRow = targetMsg.closest(".msg-row.ai-row");
+                                if (pRow)
+                                  pRow.classList.remove("tng-ai-msg-loading");
+                                targetMsg.classList.remove(
+                                  "tng-ai-msg-loading",
+                                );
+
+                                // Bổ sung đọc TTS nếu có cho phần fallback này
+                                let tLowStr = (
+                                  boundCtx.lockedTool || ""
+                                ).toLowerCase();
+                                let soundMsg = "";
+                                if (
+                                  tLowStr.indexOf("research") !== -1 ||
+                                  tLowStr.indexOf("nghiên cứu") !== -1
+                                ) {
+                                  soundMsg =
+                                    "Báo cáo nghiên cứu của bạn đã sẵn sàng.";
+                                } else if (
+                                  tLowStr.indexOf("học") !== -1 ||
+                                  tLowStr.indexOf("learn") !== -1
+                                ) {
+                                  soundMsg =
+                                    "Tài liệu học tập của bạn đã sẵn sàng.";
+                                } else if (
+                                  tLowStr.indexOf("canvas") !== -1 ||
+                                  tLowStr.indexOf("slide") !== -1
+                                ) {
+                                  soundMsg = "Canvas của bạn đã sẵn sàng!";
+                                }
+                                if (soundMsg) {
+                                  if (typeof window.speak === "function") {
+                                    try {
+                                      window.speak(soundMsg);
+                                    } catch (e) {}
+                                  } else if (window.speechSynthesis) {
+                                    try {
+                                      window.speechSynthesis.cancel();
+                                      let ut = new SpeechSynthesisUtterance(
+                                        soundMsg,
+                                      );
+                                      ut.lang = "vi-VN";
+                                      ut.rate = 1.1;
+                                      window.speechSynthesis.speak(ut);
+                                    } catch (e) {}
+                                  }
+                                }
+                              },
+                              500,
+                            );
+                          }
                         }
 
                         syncAiCopyButtonsToUserIcon(targetMsg);
@@ -29922,7 +30007,7 @@
                   );
                 }
 
-                // 💡 ĐÍNH KÈM CHỮ CHỜ VÀO ĐẦU KẾT QUẢ ĐỂ SẴN SÀNG TÀNG HÌNH LUÂN PHIÊN SAU NÀY
+                // 💡 ĐÍNH KÈM CHỮ CHỜ VÀO ĐẦU KẾT QUẢ ĐỂ SẴN SÀNG TÀNG HÌNH SAU NÀY
                 let tempText = getToolLoadingText(lockedTool);
                 if (tempText) {
                   let themeColor =
@@ -29930,7 +30015,7 @@
                       ? "#1f1f1f"
                       : "#e3e3e3";
                   res.h =
-                    "<span class='tng-saved-status' style='font-weight: 400 !important; font-size: 16px !important; color: " +
+                    "<span class='tng-saved-status' style='display:none !important; font-weight: 400 !important; font-size: 16px !important; color: " +
                     themeColor +
                     ' !important; font-family: "Google Sans", system-ui, sans-serif !important; letter-spacing: normal !important; margin-bottom: 10px;\'>' +
                     tempText +
@@ -29945,20 +30030,89 @@
             _origSetTimeout.call(
               window,
               function () {
-                // Gỡ bỏ is-mocking để nội dung thật bùng nổ cùng hiệu ứng iOS
                 let cb = document.getElementById("cb");
+                let aMsgToReveal = null;
+                let aiRowToReveal = null;
+                let tLowStr = (lockedTool || "").toLowerCase();
+
                 if (cb) {
                   let aiRows = cb.querySelectorAll(".msg-row.ai-row");
                   if (aiRows.length > 0) {
-                    let lastAiRow = aiRows[aiRows.length - 1];
-                    let aMsg = lastAiRow.querySelector(".ai-msg");
-                    if (aMsg && aMsg.classList.contains("is-mocking")) {
-                      aMsg.classList.remove("is-mocking");
-                    }
+                    aiRowToReveal = aiRows[aiRows.length - 1];
+                    aMsgToReveal = aiRowToReveal.querySelector(".ai-msg");
                   }
                 }
-                syncAiCopyButtonsToUserIcon(document);
-                window.tngFinishGeneratingState(false);
+
+                if (
+                  aMsgToReveal &&
+                  aMsgToReveal.classList.contains("is-mocking")
+                ) {
+                  // 💡 ĐỒNG BỘ HIỆU ỨNG TRƯỢT 500MS VÀ ĐỌC TTS CHO MỌI CÔNG CỤ DÙNG GENANS (BÁO CÁO, HỌC TẬP, CANVAS)
+                  if (!aMsgToReveal.dataset.mockRevealing) {
+                    aMsgToReveal.dataset.mockRevealing = "1";
+                    _origSetTimeout.call(
+                      window,
+                      function () {
+                        aMsgToReveal.classList.remove("is-mocking");
+                        aMsgToReveal.classList.add("tng-regen-revealed");
+
+                        if (aiRowToReveal)
+                          aiRowToReveal.classList.remove("tng-ai-msg-loading");
+                        aMsgToReveal.classList.remove("tng-ai-msg-loading");
+
+                        syncAiCopyButtonsToUserIcon(document);
+                        window.tngFinishGeneratingState(false);
+
+                        let soundMsg = "";
+                        if (
+                          tLowStr.indexOf("research") !== -1 ||
+                          tLowStr.indexOf("nghiên cứu") !== -1
+                        ) {
+                          soundMsg = "Báo cáo nghiên cứu của bạn đã sẵn sàng.";
+                        } else if (
+                          tLowStr.indexOf("học") !== -1 ||
+                          tLowStr.indexOf("learn") !== -1
+                        ) {
+                          soundMsg = "Tài liệu học tập của bạn đã sẵn sàng.";
+                        } else if (
+                          tLowStr.indexOf("canvas") !== -1 ||
+                          tLowStr.indexOf("slide") !== -1
+                        ) {
+                          soundMsg = "Canvas của bạn đã sẵn sàng!";
+                        } else if (tLowStr) {
+                          let clone = aMsgToReveal.cloneNode(true);
+                          let toRemove = clone.querySelectorAll(
+                            ".ai-actions-bar, .tng-saved-status, style, audio, video, img, table, .tng-report-list, .tng-learn-list, .slide-page, .tng-canvas-wrapper, iframe, canvas",
+                          );
+                          toRemove.forEach((el) => el.remove());
+                          soundMsg = (clone.textContent || "")
+                            .replace(/\s+/g, " ")
+                            .trim();
+                        }
+
+                        if (soundMsg) {
+                          if (typeof window.speak === "function") {
+                            try {
+                              window.speak(soundMsg);
+                            } catch (e) {}
+                          } else if (window.speechSynthesis) {
+                            try {
+                              window.speechSynthesis.cancel();
+                              let ut = new SpeechSynthesisUtterance(soundMsg);
+                              ut.lang = "vi-VN";
+                              ut.rate = 1.1;
+                              window.speechSynthesis.speak(ut);
+                            } catch (e) {}
+                          }
+                        }
+                      },
+                      500,
+                    );
+                  }
+                } else {
+                  syncAiCopyButtonsToUserIcon(document);
+                  window.tngFinishGeneratingState(false);
+                }
               },
               80,
             );
