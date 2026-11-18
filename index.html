@@ -3476,18 +3476,10 @@
       .sv-item,
       .qa-item,
       .am-item,
-      .acc-wrap-box,
-      .acc-item-row,
       .acc-row-btn {
         -webkit-user-select: none;
         user-select: none;
         touch-action: manipulation;
-      }
-
-      /* Bo góc và thêm con trỏ chuột cho dòng tài khoản mặc định */
-      .acc-item-row {
-        border-radius: 15px;
-        cursor: pointer;
       }
 
       /* 1. CHUYỂN ĐỘNG NỀN TẢNG (GIA TỐC LÒ XO APPLE) */
@@ -3504,7 +3496,6 @@
       .sv-item > *:not(.sub-menu),
       .qa-item > *:not(.sub-menu),
       .am-item > *:not(.sub-menu),
-      .acc-item-row > *,
       .acc-row-btn > *,
       button[style*="width"] > span,
       button[style*="flex"] > span {
@@ -3534,12 +3525,10 @@
         .sv-item:hover,
         .qa-item:hover,
         .am-item:hover,
-        .acc-wrap-box:hover,
-        .acc-item-row:hover,
         .acc-row-btn:hover {
           background-color: var(--glass-hover) !important;
         }
-        /* Lõi chữ & icon lún nhẹ khi lướt chuột qua */
+        /* Lõi chữ lún mạnh hơn khi lướt qua */
         .sb-item:hover > *:not(.sub-menu),
         .d-item:hover > *:not(.sub-menu),
         .m-item:hover > *:not(.sub-menu),
@@ -3547,7 +3536,6 @@
         .sv-item:hover > *:not(.sub-menu),
         .qa-item:hover > *:not(.sub-menu),
         .am-item:hover > *:not(.sub-menu),
-        .acc-item-row:hover > *,
         .acc-row-btn:hover > *,
         button[style*="width: 100%"]:hover:not([disabled]) > span,
         button[style*="width:100%"]:hover:not([disabled]) > span,
@@ -3579,8 +3567,6 @@
       .sv-item:active,
       .qa-item:active,
       .am-item:active,
-      .acc-wrap-box:active,
-      .acc-item-row:active,
       .sb-item:active > *:not(.sub-menu),
       .d-item:active > *:not(.sub-menu),
       .m-item:active > *:not(.sub-menu),
@@ -3588,7 +3574,6 @@
       .sv-item:active > *:not(.sub-menu),
       .qa-item:active > *:not(.sub-menu),
       .am-item:active > *:not(.sub-menu),
-      .acc-item-row:active > *,
       .acc-row-btn:active > *,
       button[style*="width"] > span,
       button[style*="flex"] > span {
@@ -3623,8 +3608,6 @@
       .sv-item,
       .qa-item,
       .am-item,
-      .acc-wrap-box,
-      .acc-item-row,
       button[style*="width: 100%"],
       button[style*="width:100%"],
       button[style*="flex: 1"],
@@ -3632,7 +3615,6 @@
         transition: background-color 0.2s ease !important;
         transform: scale(1) !important;
       }
-      /* Khóa vỏ .acc-row-btn nhưng giữ nguyên transition padding-bottom nảy của nút Đăng xuất */
       .acc-row-btn {
         transform: scale(1) !important;
       }
@@ -3645,8 +3627,6 @@
       .sv-item:active,
       .qa-item:active,
       .am-item:active,
-      .acc-wrap-box:active,
-      .acc-item-row:active,
       .acc-row-btn:active,
       button[style*="width: 100%"]:active:not([disabled]),
       button[style*="width:100%"]:active:not([disabled]),
@@ -3662,8 +3642,6 @@
       [data-theme="light"] .sv-item:active,
       [data-theme="light"] .qa-item:active,
       [data-theme="light"] .am-item:active,
-      [data-theme="light"] .acc-wrap-box:active,
-      [data-theme="light"] .acc-item-row:active,
       [data-theme="light"] .acc-row-btn:active,
       [data-theme="light"] button[style*="width: 100%"]:active:not([disabled]),
       [data-theme="light"] button[style*="width:100%"]:active:not([disabled]),
@@ -3680,7 +3658,6 @@
       .sv-item:active > *:not(.sub-menu),
       .qa-item:active > *:not(.sub-menu),
       .am-item:active > *:not(.sub-menu),
-      .acc-item-row:active > *,
       .acc-row-btn:active > *,
       button[style*="width: 100%"]:active:not([disabled]) > span,
       button[style*="width:100%"]:active:not([disabled]) > span {
@@ -3819,21 +3796,17 @@
         display: inline-block !important;
       }
 
-      /* Tinh chỉnh tâm lún: Chữ lún từ mép trái để không bị giật lùi, Icon/Avatar lún tại giữa tâm */
+      /* Tinh chỉnh tâm lún: Chữ lún từ mép trái để không bị giật lùi, Icon lún tại giữa tâm */
       .sb-text,
       .qa-item > b,
       .sv-item > span:first-child,
       .am-item > span:not(.am-arrow),
-      .acc-item-info,
       .acc-row-btn > span:not(.si-ic) {
         transform-origin: left center !important;
       }
       .sb-icon,
       .si-ic,
-      .am-arrow,
-      .acc-item-avt,
-      .badge-default,
-      .badge-logout {
+      .am-arrow {
         transform-origin: center center !important;
       }
 
