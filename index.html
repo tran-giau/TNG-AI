@@ -1875,23 +1875,40 @@
         background: var(--glass-border);
         white-space: nowrap;
       }
+      /* TRẠNG THÁI ĐÓNG (CUỘN LÊN): Nhún lấy đà rồi rút gọn về 0 */
       .acc-action-btns {
         display: flex;
         gap: 10px;
         padding: 0 15px 0 65px;
         max-height: 0;
-        opacity: 0;
-        overflow: hidden;
-        border-bottom: 1px solid transparent;
-        /* Áp dụng nhịp thở/trượt chuẩn Apple */
-        transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-      }
-      .acc-action-btns.show {
-        max-height: 80px; /* Điều chỉnh chiều cao phù hợp */
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-bottom: 0;
         opacity: 1;
+        overflow: hidden;
+        border-bottom: 0px solid transparent;
+        transition:
+          max-height 0.7s cubic-bezier(0.34, -1.43, 0.64, 1),
+          padding-top 0.7s cubic-bezier(0.34, -1.43, 0.64, 1),
+          padding-bottom 0.7s cubic-bezier(0.34, -1.43, 0.64, 1),
+          margin-bottom 0.7s cubic-bezier(0.34, -1.43, 0.64, 1),
+          border-bottom-color 0.2s ease;
+      }
+
+      /* TRẠNG THÁI MỞ (XỔ XUỐNG): Bung nảy lố rồi thu về vị trí cân bằng */
+      .acc-action-btns.show {
+        max-height: 55px;
+        padding-top: 2px;
         padding-bottom: 15px;
         margin-bottom: 5px;
-        border-bottom-color: var(--glass-border);
+        opacity: 1;
+        border-bottom: 1px solid var(--glass-border);
+        transition:
+          max-height 0.7s cubic-bezier(0.34, 2.43, 0.64, 1),
+          padding-top 0.7s cubic-bezier(0.34, 2.43, 0.64, 1),
+          padding-bottom 0.7s cubic-bezier(0.34, 2.43, 0.64, 1),
+          margin-bottom 0.7s cubic-bezier(0.34, 2.43, 0.64, 1),
+          border-bottom-color 0.3s ease;
       }
       /* Bọc toàn bộ khối tài khoản để bôi nền chung */
       .acc-wrap-box {
@@ -5383,9 +5400,123 @@
                   scrollbar-width: none;
                 }
 
-                .dropdown-opt:hover {
-                  background: var(--glass-hover);
+                /* 1. Khóa cố định bề ngang 120px cho nút chọn để không đẩy các nút bên cạnh */
+                .tool-select-btn {
+                  width: 120px !important;
+                  min-width: 120px !important;
+                  max-width: 120px !important;
+                  justify-content: space-between !important;
+                  white-space: nowrap !important;
+                  flex-shrink: 0 !important;
+                  box-sizing: border-box !important;
                 }
+
+                /* Xoay mũi tên nút Văn bản mượt mà khi mở/đóng menu */
+                .tool-select-btn svg {
+                  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+                  flex-shrink: 0;
+                }
+                .custom-dropdown:has(
+                    #custom-dropdown-menu[style*="display: block"]
+                  )
+                  .tool-select-btn
+                  svg,
+                .custom-dropdown:has(
+                    #custom-dropdown-menu[style*="display:block"]
+                  )
+                  .tool-select-btn
+                  svg,
+                .custom-dropdown:has(#custom-dropdown-menu.show)
+                  .tool-select-btn
+                  svg {
+                  transform: rotate(180deg);
+                }
+
+                /* 2. TRẠNG THÁI ĐÓNG (CUỘN LÊN): Giảm nhẹ lực nhún về -2.4 (từ -3.2) */
+                #custom-dropdown-menu {
+                  display: flex !important;
+                  flex-direction: column;
+                  width: 120px !important;
+                  min-width: 120px !important;
+                  max-width: 120px !important;
+                  box-sizing: border-box !important;
+                  overflow: hidden !important;
+                  max-height: 0 !important;
+                  padding: 0 5px !important;
+                  row-gap: 0px !important;
+                  opacity: 0 !important;
+                  visibility: hidden !important;
+                  pointer-events: none !important;
+                  border-width: 0px !important;
+                  transition:
+                    max-height 0.72s cubic-bezier(0.34, -2.1, 0.64, 1),
+                    padding-top 0.72s cubic-bezier(0.34, -2.4, 0.64, 1),
+                    padding-bottom 0.72s cubic-bezier(0.34, -2.4, 0.64, 1),
+                    row-gap 0.72s cubic-bezier(0.34, -2.4, 0.64, 1),
+                    opacity 0.15s ease 0.55s,
+                    border-width 0s linear 0.68s,
+                    visibility 0s linear 0.72s !important;
+                }
+
+                /* 3. TRẠNG THÁI MỞ (XỔ XUỐNG): Giảm nhẹ lực bung về 3.3 (từ 4.2) */
+                #custom-dropdown-menu[style*="display: block"],
+                #custom-dropdown-menu[style*="display:block"],
+                #custom-dropdown-menu.show {
+                  max-height: 165px !important;
+                  padding: 6px 5px 10px 5px !important;
+                  row-gap: 1.5px !important;
+                  opacity: 1 !important;
+                  visibility: visible !important;
+                  pointer-events: auto !important;
+                  border-width: 1px !important;
+                  transition:
+                    max-height 0.72s cubic-bezier(0.34, 3.1, 0.64, 1),
+                    padding-top 0.72s cubic-bezier(0.34, 3.3, 0.64, 1),
+                    padding-bottom 0.72s cubic-bezier(0.34, 3.3, 0.64, 1),
+                    row-gap 0.72s cubic-bezier(0.34, 3.3, 0.64, 1),
+                    opacity 0.1s ease 0s,
+                    border-width 0s linear 0s,
+                    visibility 0s linear 0s !important;
+                }
+
+                /* Bù trừ đệm đáy ở trạng thái nghỉ để viền trên/dưới vẫn cân đối */
+                #custom-dropdown-menu .dropdown-opt:last-child {
+                  margin-bottom: -4px !important;
+                }
+
+                /* 4. HIỆU ỨNG LÚN NẢY VẬT LÝ IOS 27 CHO CÁC NÚT TRONG MENU */
+                #custom-dropdown-menu .dropdown-opt {
+                  flex-shrink: 0 !important;
+                  white-space: nowrap !important;
+                  padding: 8px 8px !important;
+                  font-size: 13.5px !important;
+                  border-radius: 8px !important;
+                  user-select: none !important;
+                  -webkit-user-select: none !important;
+                  touch-action: manipulation !important;
+                  transform-origin: center center !important;
+                  will-change: transform, background-color !important;
+                  transition:
+                    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                    background-color 0.2s ease !important;
+                }
+
+                /* Lún nhẹ khi di chuột qua trên máy tính */
+                @media (hover: hover) {
+                  #custom-dropdown-menu .dropdown-opt:hover {
+                    background: var(--glass-hover) !important;
+                    transform: scale(0.95) !important;
+                  }
+                }
+
+                /* Lún sâu và nảy lò xo khi nhấn chọn */
+                #custom-dropdown-menu .dropdown-opt:active {
+                  transition-duration: 0.05s !important;
+                  transform: scale(0.88) !important;
+                  background: var(--glass-hover) !important;
+                  opacity: 0.85 !important;
+                }
+
                 /* Đảm bảo các viên nang không bị bóp méo khi vuốt ngang */
                 .tool-group-box {
                   display: flex;
@@ -5398,7 +5529,7 @@
                   flex-shrink: 0;
                 }
 
-                /* Kích thước gọn gàng trên mobile */
+                /* Đồng bộ bề ngang 110px trên điện thoại */
                 @media (max-width: 768px) {
                   #note-toolbar-scroll {
                     padding: 10px !important;
@@ -5407,6 +5538,12 @@
                   .note-toolbar .icon-btn {
                     width: 32px;
                     height: 32px;
+                  }
+                  .tool-select-btn,
+                  #custom-dropdown-menu {
+                    width: 110px !important;
+                    min-width: 110px !important;
+                    max-width: 110px !important;
                   }
                   .tool-select-btn {
                     font-size: 13px !important;
@@ -20830,7 +20967,7 @@
                         </div>
                         
                         <div style="display: flex; align-items: center; gap: 12px;">
-                            <div onclick="toggleHanhDongActive('${item.id}', this, event)" style="width: 44px; height: 24px; background: ${item.active ? "#1a73e8" : "rgba(255,255,255,0.15)"}; border-radius: 12px; position: relative; cursor: pointer; transition: background 0.3s ease;">
+                            <div onclick="toggleHanhDongActive('${item.id}', this, event)" style="width: 44px; height: 24px; background: ${item.active ? "#a8c7fa" : "rgba(255,255,255,0.15)"}; border-radius: 12px; position: relative; cursor: pointer; transition: background 0.3s ease;">
                                 <div style="width: 20px; height: 20px; background: #fff; border-radius: 50%; position: absolute; top: 2px; left: 2px; transform: ${item.active ? "translateX(20px)" : "translateX(0)"}; transition: transform 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"></div>
                             </div>
                             
@@ -20847,7 +20984,7 @@
                     <div style="min-height: 65vh; display: flex; flex-direction: column;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; font-family: 'Google Sans', sans-serif;">
                             <div style="font-size: 14px; font-weight: 500; color: #8e918f;">Các quy trình của bạn</div>
-                            <div class="tng-ultimate-btn" onclick="openHanhDongForm(null, event)" style="width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; cursor: pointer; color: #1a73e8; transition: background 0.2s;">
+                            <div class="tng-ultimate-btn" onclick="openHanhDongForm(null, event)" style="width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; cursor: pointer; color: #a8c7fa; transition: background 0.2s;">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                             </div>
                         </div>
