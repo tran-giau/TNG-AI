@@ -3466,6 +3466,7 @@
       button,
       .avatar,
       .chip,
+      .tool-chip,
       .mc-item-wrap,
       .note-card,
       .sb-item,
@@ -3475,16 +3476,25 @@
       .sv-item,
       .qa-item,
       .am-item,
-      .acc-wrap-box {
+      .acc-wrap-box,
+      .acc-item-row,
+      .acc-row-btn {
         -webkit-user-select: none;
         user-select: none;
         touch-action: manipulation;
+      }
+
+      /* Bo góc và thêm con trỏ chuột cho dòng tài khoản mặc định */
+      .acc-item-row {
+        border-radius: 15px;
+        cursor: pointer;
       }
 
       /* 1. CHUYỂN ĐỘNG NỀN TẢNG (GIA TỐC LÒ XO APPLE) */
       button,
       .avatar,
       .chip,
+      .tool-chip,
       .mc-item-wrap,
       .note-card,
       .sb-item > *:not(.sub-menu),
@@ -3494,7 +3504,8 @@
       .sv-item > *:not(.sub-menu),
       .qa-item > *:not(.sub-menu),
       .am-item > *:not(.sub-menu),
-      .acc-wrap-box > *:not(.sub-menu),
+      .acc-item-row > *,
+      .acc-row-btn > *,
       button[style*="width"] > span,
       button[style*="flex"] > span {
         will-change: transform, background-color, box-shadow;
@@ -3508,12 +3519,13 @@
       @media (hover: hover) {
         button:hover:not([disabled]),
         .avatar:hover,
-        .chip:hover {
-          transform: scale(0.96) !important; /* Tăng lún nhẹ từ 0.98 -> 0.96 */
+        .chip:hover,
+        .tool-chip:hover {
+          transform: scale(0.96) !important;
         }
         .mc-item-wrap:hover:not(.select-mode),
         .note-card:hover:not(.select-mode) {
-          transform: scale(0.96) translateY(1px) !important; /* Tăng lún từ 0.98 -> 0.96 */
+          transform: scale(0.96) translateY(1px) !important;
         }
         .sb-item:hover,
         .d-item:hover,
@@ -3522,10 +3534,12 @@
         .sv-item:hover,
         .qa-item:hover,
         .am-item:hover,
-        .acc-wrap-box:hover {
+        .acc-wrap-box:hover,
+        .acc-item-row:hover,
+        .acc-row-btn:hover {
           background-color: var(--glass-hover) !important;
         }
-        /* Lõi chữ lún mạnh hơn khi lướt qua */
+        /* Lõi chữ & icon lún nhẹ khi lướt chuột qua */
         .sb-item:hover > *:not(.sub-menu),
         .d-item:hover > *:not(.sub-menu),
         .m-item:hover > *:not(.sub-menu),
@@ -3533,18 +3547,20 @@
         .sv-item:hover > *:not(.sub-menu),
         .qa-item:hover > *:not(.sub-menu),
         .am-item:hover > *:not(.sub-menu),
-        .acc-wrap-box:hover > *:not(.sub-menu),
+        .acc-item-row:hover > *,
+        .acc-row-btn:hover > *,
         button[style*="width: 100%"]:hover:not([disabled]) > span,
         button[style*="width:100%"]:hover:not([disabled]) > span,
         button[style*="flex: 1"]:hover:not([disabled]) > span,
         button[style*="flex:1"]:hover:not([disabled]) > span {
-          transform: scale(0.965) !important; /* Tăng từ 0.985 -> 0.965 */
+          transform: scale(0.965) !important;
         }
       }
       @media (hover: none) {
         button:hover,
         .avatar:hover,
-        .chip:hover {
+        .chip:hover,
+        .tool-chip:hover {
           filter: none !important;
         }
       }
@@ -3553,6 +3569,7 @@
       button:active,
       .avatar:active,
       .chip:active,
+      .tool-chip:active,
       .mc-item-wrap:active:not(.select-mode),
       .note-card:active:not(.select-mode),
       .sb-item:active,
@@ -3563,6 +3580,7 @@
       .qa-item:active,
       .am-item:active,
       .acc-wrap-box:active,
+      .acc-item-row:active,
       .sb-item:active > *:not(.sub-menu),
       .d-item:active > *:not(.sub-menu),
       .m-item:active > *:not(.sub-menu),
@@ -3570,7 +3588,8 @@
       .sv-item:active > *:not(.sub-menu),
       .qa-item:active > *:not(.sub-menu),
       .am-item:active > *:not(.sub-menu),
-      .acc-wrap-box:active > *:not(.sub-menu),
+      .acc-item-row:active > *,
+      .acc-row-btn:active > *,
       button[style*="width"] > span,
       button[style*="flex"] > span {
         transition-duration: 0.05s !important;
@@ -3583,13 +3602,14 @@
       /* MỨC 1: Nút độc lập, Avatar, Chip (Bóp lún toàn bộ khối sâu hơn) */
       button:active:not([disabled]),
       .avatar:active,
-      .chip:active {
-        transform: scale(0.88) !important; /* Lún sâu từ 0.92 -> 0.88 */
+      .chip:active,
+      .tool-chip:active {
+        transform: scale(0.88) !important;
         opacity: 0.8 !important;
       }
       .mc-item-wrap:active:not(.select-mode),
       .note-card:active:not(.select-mode) {
-        transform: scale(0.92) translateY(2px) !important; /* Từ 0.96 -> 0.92 */
+        transform: scale(0.92) translateY(2px) !important;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
       }
 
@@ -3604,11 +3624,16 @@
       .qa-item,
       .am-item,
       .acc-wrap-box,
+      .acc-item-row,
       button[style*="width: 100%"],
       button[style*="width:100%"],
       button[style*="flex: 1"],
       button[style*="flex:1"] {
         transition: background-color 0.2s ease !important;
+        transform: scale(1) !important;
+      }
+      /* Khóa vỏ .acc-row-btn nhưng giữ nguyên transition padding-bottom nảy của nút Đăng xuất */
+      .acc-row-btn {
         transform: scale(1) !important;
       }
 
@@ -3621,6 +3646,8 @@
       .qa-item:active,
       .am-item:active,
       .acc-wrap-box:active,
+      .acc-item-row:active,
+      .acc-row-btn:active,
       button[style*="width: 100%"]:active:not([disabled]),
       button[style*="width:100%"]:active:not([disabled]),
       button[style*="flex: 1"]:active:not([disabled]),
@@ -3636,6 +3663,8 @@
       [data-theme="light"] .qa-item:active,
       [data-theme="light"] .am-item:active,
       [data-theme="light"] .acc-wrap-box:active,
+      [data-theme="light"] .acc-item-row:active,
+      [data-theme="light"] .acc-row-btn:active,
       [data-theme="light"] button[style*="width: 100%"]:active:not([disabled]),
       [data-theme="light"] button[style*="width:100%"]:active:not([disabled]),
       [data-theme="light"] button[style*="flex: 1"]:active:not([disabled]),
@@ -3651,10 +3680,11 @@
       .sv-item:active > *:not(.sub-menu),
       .qa-item:active > *:not(.sub-menu),
       .am-item:active > *:not(.sub-menu),
-      .acc-wrap-box:active > *:not(.sub-menu),
+      .acc-item-row:active > *,
+      .acc-row-btn:active > *,
       button[style*="width: 100%"]:active:not([disabled]) > span,
       button[style*="width:100%"]:active:not([disabled]) > span {
-        transform: scale(0.88) !important; /* Lún sâu từ 0.92 -> 0.88 */
+        transform: scale(0.88) !important;
       }
 
       /* ============================================================ */
@@ -3778,26 +3808,32 @@
       /* (Thanh bên Sidebar, Câu hỏi thường gặp, Cài đặt, Tài khoản)  */
       /* ============================================================ */
 
-      .sb-item > span, /* Mở khóa cho Icon và Chữ ở Menu trái */
-      .s-item > span,  /* Mở khóa cho Icon ở bảng Cài đặt */
+      .sb-item > span,
+      .s-item > span,
       .qa-item > b,
       .qa-item > span,
       .sv-item > span,
       .am-item > span,
+      .acc-row-btn > span,
       .d-item > span:not(.switch):not(.chk-light):not(.chk-dark) {
-        display: inline-block !important; /* Mở khóa khả năng co giãn (scale) cho các thẻ inline */
+        display: inline-block !important;
       }
 
-      /* Tinh chỉnh tâm lún: Chữ lún từ mép trái để không bị giật lùi, Icon lún tại giữa tâm */
+      /* Tinh chỉnh tâm lún: Chữ lún từ mép trái để không bị giật lùi, Icon/Avatar lún tại giữa tâm */
       .sb-text,
       .qa-item > b,
       .sv-item > span:first-child,
-      .am-item > span:not(.am-arrow) {
+      .am-item > span:not(.am-arrow),
+      .acc-item-info,
+      .acc-row-btn > span:not(.si-ic) {
         transform-origin: left center !important;
       }
       .sb-icon,
       .si-ic,
-      .am-arrow {
+      .am-arrow,
+      .acc-item-avt,
+      .badge-default,
+      .badge-logout {
         transform-origin: center center !important;
       }
 
