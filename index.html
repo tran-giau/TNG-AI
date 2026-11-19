@@ -1731,7 +1731,7 @@
         min-height: 54px;
       }
 
-      /* 1. HIỆU ỨNG TRƯỢT MỜ ĐỔI CHỮ ĐỒNG BỘ 0.7S: Hiện thêm tài khoản <-> Ẩn bớt tài khoản */
+      /* 1. HIỆU ỨNG TRƯỢT MỜ ĐỔI CHỮ ĐỒNG BỘ 0.55S: Hiện thêm tài khoản <-> Ẩn bớt tài khoản */
       .acc-toggle-label {
         position: relative;
         display: inline-grid;
@@ -1743,15 +1743,15 @@
         white-space: nowrap;
         will-change: transform, opacity, filter;
       }
-      /* Khi danh sách ĐÓNG (0.7s): nhún lấy đà nhẹ (-0.4) khớp mũi tên & danh sách */
+      /* Khi danh sách ĐÓNG (0.55s) */
       .acc-lbl-show {
         opacity: 1;
         transform: translateY(0);
         filter: blur(0px);
         transition:
-          transform 0.7s cubic-bezier(0.34, -0.4, 0.64, 1),
-          opacity 0.45s ease 0.12s,
-          filter 0.45s ease 0.12s;
+          transform 0.55s cubic-bezier(0.34, -0.4, 0.64, 1),
+          opacity 0.35s ease 0.07s,
+          filter 0.35s ease 0.07s;
       }
       .acc-lbl-hide {
         opacity: 0;
@@ -1759,20 +1759,20 @@
         filter: blur(2px);
         pointer-events: none;
         transition:
-          transform 0.7s cubic-bezier(0.34, -0.4, 0.64, 1),
-          opacity 0.35s ease 0.05s,
-          filter 0.35s ease 0.05s;
+          transform 0.55s cubic-bezier(0.34, -0.4, 0.64, 1),
+          opacity 0.28s ease 0.04s,
+          filter 0.28s ease 0.04s;
       }
-      /* Khi danh sách MỞ (.show - 0.7s): trượt nảy lò xo (1.56) khớp nhịp bung xuống */
+      /* Khi danh sách MỞ (.show - 0.55s) */
       .acc-wrap-container:has(.acc-expanded-list.show) .acc-lbl-show {
         opacity: 0;
         transform: translateY(-10px);
         filter: blur(2px);
         pointer-events: none;
         transition:
-          transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1),
-          opacity 0.35s ease,
-          filter 0.35s ease;
+          transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1),
+          opacity 0.28s ease,
+          filter 0.28s ease;
       }
       .acc-wrap-container:has(.acc-expanded-list.show) .acc-lbl-hide {
         opacity: 1;
@@ -1780,12 +1780,12 @@
         filter: blur(0px);
         pointer-events: auto;
         transition:
-          transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1),
-          opacity 0.45s ease 0.08s,
-          filter 0.45s ease 0.08s;
+          transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1),
+          opacity 0.35s ease 0.05s,
+          filter 0.35s ease 0.05s;
       }
 
-      /* 2. HIỆU ỨNG THU PHÓNG & MỜ DẦN CHO CỤM AVATAR NHỎ ĐỒNG BỘ 0.7S */
+      /* 2. HIỆU ỨNG THU PHÓNG & MỜ DẦN CHO CỤM AVATAR NHỎ ĐỒNG BỘ 0.55S */
       .acc-header-right {
         display: flex;
         align-items: center;
@@ -1797,22 +1797,22 @@
         transform: scale(1) translateX(0);
         transform-origin: right center;
         will-change: transform, opacity;
-        /* Khi đóng: chờ 0.12s cho danh sách nhún lấy đà xong rồi bung nảy 0.58s (tổng 0.7s) */
+        /* Khi đóng: chờ 0.08s rồi bung nảy 0.47s (tổng đúng 0.55s) */
         transition:
-          transform 0.58s cubic-bezier(0.34, 1.56, 0.64, 1) 0.12s,
-          opacity 0.42s ease 0.12s;
+          transform 0.47s cubic-bezier(0.34, 1.56, 0.64, 1) 0.08s,
+          opacity 0.32s ease 0.08s;
       }
       .acc-wrap-container:has(.acc-expanded-list.show) .mini-avt-group {
         opacity: 0;
         transform: scale(0.35) translateX(10px);
         pointer-events: none;
-        /* Khi mở: thu gọn mượt theo trục 0.7s và tan mờ gọn ở 0.42s để không bị bóng mờ */
+        /* Khi mở: thu gọn trong 0.55s và tan mờ gọn ở 0.32s */
         transition:
-          transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-          opacity 0.42s ease;
+          transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+          opacity 0.32s ease;
       }
 
-      /* 3. HIỆU ỨNG XOAY MƯỢT & ĐỒNG BỘ 0.7S VỚI DANH SÁCH TÀI KHOẢN */
+      /* 3. HIỆU ỨNG XOAY MƯỢT & ĐỒNG BỘ 0.55S */
       .arrow-icon {
         border: solid var(--text-sub);
         border-width: 0 2px 2px 0;
@@ -1821,8 +1821,7 @@
         margin-left: 10px;
         transform-origin: center center;
         will-change: transform;
-        /* Khi đóng: nhún lấy đà nhẹ rồi rút về khớp 0.7s */
-        transition: transform 0.7s cubic-bezier(0.34, -0.4, 0.64, 1);
+        transition: transform 0.55s cubic-bezier(0.34, -0.4, 0.64, 1);
       }
       .arrow-down {
         transform: translateY(-2px) rotate(45deg);
@@ -1838,8 +1837,7 @@
         .acc-collapse-header
         .arrow-icon {
         transform: translateY(2px) rotate(-135deg) !important;
-        /* Khi mở: xoay sang phải và nảy nhẹ khớp 0.7s */
-        transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+        transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
       }
 
       /* 1. THẺ VỎ BỌC NGUYÊN KHỐI: Đảm nhận màu nền duy nhất cho toàn bộ bảng */
@@ -5575,13 +5573,12 @@
                   box-sizing: border-box !important;
                 }
 
-                /* Xoay mũi tên nút Văn bản sang phải, đồng bộ 0.75s theo nhịp cuộn menu */
+                /* Xoay mũi tên nút Văn bản sang phải, đồng bộ 0.55s */
                 .tool-select-btn svg {
                   transform: rotate(0deg);
                   transform-origin: center center;
                   will-change: transform;
-                  /* Khi đóng: nhún lấy đà nhẹ rồi rút về cùng lúc với menu (0.75s) */
-                  transition: transform 0.75s cubic-bezier(0.34, -0.4, 0.64, 1);
+                  transition: transform 0.55s cubic-bezier(0.34, -0.4, 0.64, 1);
                   flex-shrink: 0;
                 }
                 .custom-dropdown:has(
@@ -5598,8 +5595,7 @@
                   .tool-select-btn
                   svg {
                   transform: rotate(-180deg);
-                  /* Khi mở: xoay sang phải và nảy nhẹ khớp nhịp bung menu (0.75s) */
-                  transition: transform 0.75s cubic-bezier(0.34, 1.56, 0.64, 1);
+                  transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
                 }
 
                 /* 2. TRẠNG THÁI ĐÓNG (CUỘN LÊN): Nhún sâu lấy đà (-3.2) rồi cuộn rút lên */
