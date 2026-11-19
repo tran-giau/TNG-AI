@@ -1717,22 +1717,131 @@
         font-weight: 700;
         border: 2px solid var(--modal-bg);
         margin-left: -8px;
+        flex-shrink: 0;
+        background-color: #3a3d4a;
+        overflow: hidden;
         background-size: cover;
         background-position: center;
       }
+      .mini-avt:first-child {
+        margin-left: 0;
+      }
+      /* Khóa chiều cao thanh tiêu đề để không bị nhảy độ cao khi avatar nhỏ ẩn/hiện */
+      .acc-collapse-header {
+        min-height: 54px;
+      }
+
+      /* 1. HIỆU ỨNG TRƯỢT MỜ ĐỔI CHỮ ĐỒNG BỘ 0.7S: Hiện thêm tài khoản <-> Ẩn bớt tài khoản */
+      .acc-toggle-label {
+        position: relative;
+        display: inline-grid;
+        align-items: center;
+        overflow: hidden;
+      }
+      .acc-toggle-label > span {
+        grid-area: 1 / 1;
+        white-space: nowrap;
+        will-change: transform, opacity, filter;
+      }
+      /* Khi danh sách ĐÓNG (0.7s): nhún lấy đà nhẹ (-0.4) khớp mũi tên & danh sách */
+      .acc-lbl-show {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0px);
+        transition:
+          transform 0.7s cubic-bezier(0.34, -0.4, 0.64, 1),
+          opacity 0.45s ease 0.12s,
+          filter 0.45s ease 0.12s;
+      }
+      .acc-lbl-hide {
+        opacity: 0;
+        transform: translateY(10px);
+        filter: blur(2px);
+        pointer-events: none;
+        transition:
+          transform 0.7s cubic-bezier(0.34, -0.4, 0.64, 1),
+          opacity 0.35s ease 0.05s,
+          filter 0.35s ease 0.05s;
+      }
+      /* Khi danh sách MỞ (.show - 0.7s): trượt nảy lò xo (1.56) khớp nhịp bung xuống */
+      .acc-wrap-container:has(.acc-expanded-list.show) .acc-lbl-show {
+        opacity: 0;
+        transform: translateY(-10px);
+        filter: blur(2px);
+        pointer-events: none;
+        transition:
+          transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1),
+          opacity 0.35s ease,
+          filter 0.35s ease;
+      }
+      .acc-wrap-container:has(.acc-expanded-list.show) .acc-lbl-hide {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0px);
+        pointer-events: auto;
+        transition:
+          transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1),
+          opacity 0.45s ease 0.08s,
+          filter 0.45s ease 0.08s;
+      }
+
+      /* 2. HIỆU ỨNG THU PHÓNG & MỜ DẦN CHO CỤM AVATAR NHỎ ĐỒNG BỘ 0.7S */
+      .acc-header-right {
+        display: flex;
+        align-items: center;
+      }
+      .mini-avt-group {
+        display: flex;
+        align-items: center;
+        opacity: 1;
+        transform: scale(1) translateX(0);
+        transform-origin: right center;
+        will-change: transform, opacity;
+        /* Khi đóng: chờ 0.12s cho danh sách nhún lấy đà xong rồi bung nảy 0.58s (tổng 0.7s) */
+        transition:
+          transform 0.58s cubic-bezier(0.34, 1.56, 0.64, 1) 0.12s,
+          opacity 0.42s ease 0.12s;
+      }
+      .acc-wrap-container:has(.acc-expanded-list.show) .mini-avt-group {
+        opacity: 0;
+        transform: scale(0.35) translateX(10px);
+        pointer-events: none;
+        /* Khi mở: thu gọn mượt theo trục 0.7s và tan mờ gọn ở 0.42s để không bị bóng mờ */
+        transition:
+          transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+          opacity 0.42s ease;
+      }
+
+      /* 3. HIỆU ỨNG XOAY MƯỢT & ĐỒNG BỘ 0.7S VỚI DANH SÁCH TÀI KHOẢN */
       .arrow-icon {
         border: solid var(--text-sub);
         border-width: 0 2px 2px 0;
         display: inline-block;
         padding: 3px;
         margin-left: 10px;
+        transform-origin: center center;
+        will-change: transform;
+        /* Khi đóng: nhún lấy đà nhẹ rồi rút về khớp 0.7s */
+        transition: transform 0.7s cubic-bezier(0.34, -0.4, 0.64, 1);
       }
       .arrow-down {
-        transform: rotate(45deg);
+        transform: translateY(-2px) rotate(45deg);
       }
       .arrow-up {
-        transform: rotate(-135deg);
+        transform: translateY(2px) rotate(-135deg);
       }
+      /* Tự động xoay mũi tên đồng bộ theo trạng thái .acc-expanded-list.show */
+      .acc-collapse-header .arrow-icon {
+        transform: translateY(-2px) rotate(45deg) !important;
+      }
+      .acc-wrap-container:has(.acc-expanded-list.show)
+        .acc-collapse-header
+        .arrow-icon {
+        transform: translateY(2px) rotate(-135deg) !important;
+        /* Khi mở: xoay sang phải và nảy nhẹ khớp 0.7s */
+        transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
       /* 1. THẺ VỎ BỌC NGUYÊN KHỐI: Đảm nhận màu nền duy nhất cho toàn bộ bảng */
       .acc-wrap-container {
         background: var(--inner-card-bg) !important;
@@ -5362,31 +5471,48 @@
             <div
               style="
                 padding: 15px 25px;
-                display: flex;
-                justify-content: space-between;
+                display: grid;
+                grid-template-columns: 1fr minmax(0, auto) 1fr;
                 align-items: center;
+                gap: 10px;
                 border-bottom: 1px solid var(--glass-border);
                 background: rgba(20, 20, 25, 0.8);
                 backdrop-filter: blur(20px);
               "
             >
-              <div style="display: flex; align-items: center; gap: 15px">
+              <div
+                style="
+                  display: flex;
+                  align-items: center;
+                  justify-content: flex-start;
+                "
+              >
                 <button class="sp-back-btn" onclick="closeNoteEditor()">
                   ❮ Thoát
                 </button>
-                <span style="font-size: 24px">📓</span>
-                <div
-                  id="notebook-name-display"
-                  style="
-                    font-size: 18px;
-                    font-weight: 600;
-                    color: var(--text-main);
-                  "
-                >
-                  Tên sổ
-                </div>
               </div>
-              <div style="display: flex; gap: 10px; align-items: center">
+              <div
+                id="notebook-name-display"
+                style="
+                  font-size: 18px;
+                  font-weight: 600;
+                  color: var(--text-main);
+                  text-align: center;
+                  white-space: nowrap;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                "
+              >
+                Tên sổ
+              </div>
+              <div
+                style="
+                  display: flex;
+                  gap: 10px;
+                  align-items: center;
+                  justify-content: flex-end;
+                "
+              >
                 <span
                   id="note-save-status"
                   style="
@@ -5449,9 +5575,13 @@
                   box-sizing: border-box !important;
                 }
 
-                /* Xoay mũi tên nút Văn bản mượt mà khi mở/đóng menu */
+                /* Xoay mũi tên nút Văn bản sang phải, đồng bộ 0.75s theo nhịp cuộn menu */
                 .tool-select-btn svg {
-                  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+                  transform: rotate(0deg);
+                  transform-origin: center center;
+                  will-change: transform;
+                  /* Khi đóng: nhún lấy đà nhẹ rồi rút về cùng lúc với menu (0.75s) */
+                  transition: transform 0.75s cubic-bezier(0.34, -0.4, 0.64, 1);
                   flex-shrink: 0;
                 }
                 .custom-dropdown:has(
@@ -5467,7 +5597,9 @@
                 .custom-dropdown:has(#custom-dropdown-menu.show)
                   .tool-select-btn
                   svg {
-                  transform: rotate(180deg);
+                  transform: rotate(-180deg);
+                  /* Khi mở: xoay sang phải và nảy nhẹ khớp nhịp bung menu (0.75s) */
+                  transition: transform 0.75s cubic-bezier(0.34, 1.56, 0.64, 1);
                 }
 
                 /* 2. TRẠNG THÁI ĐÓNG (CUỘN LÊN): Nhún sâu lấy đà (-3.2) rồi cuộn rút lên */
@@ -11243,16 +11375,25 @@
 
         if (fieldKey === "avatar") {
           // XỬ LÝ RIÊNG CHO BẢNG "CHI TIẾT HÌNH ẢNH HỒ SƠ"
-          let avtSrc = curA.avatar ? curA.avatar : "";
+          let activeObj =
+            (typeof accounts !== "undefined" &&
+              accounts.find((a) => a.active)) ||
+            curA;
+          let rawAvt = (activeObj && activeObj.avatar) || curA.avatar;
+          let avtSrc =
+            rawAvt && rawAvt !== "null" && rawAvt !== "undefined" ? rawAvt : "";
 
-          // Đồng bộ logic màu nền và chữ cái
+          // Đồng bộ logic màu nền và chữ cái theo đúng tài khoản hiện tại
           let initial = "K";
-          let currentName = curA.name || "Khách";
+          let currentName =
+            (activeObj && activeObj.name) || curA.name || "Khách";
           if (currentName !== "Chưa đặt" && currentName !== "Khách") {
             initial = currentName.charAt(0).toUpperCase();
           }
           let colors = ["#ff3b30", "#ff9500", "#34c759", "#007aff", "#af52de"];
-          let bg = colors[initial.charCodeAt(0) % colors.length] || "#ff3b30";
+          let fallbackBg =
+            colors[initial.charCodeAt(0) % colors.length] || "#ff3b30";
+          let bg = (activeObj && activeObj.color) || curA.color || fallbackBg;
 
           if (avtSrc) {
             // Đã xóa dải hào quang (glow) phía sau
@@ -11274,12 +11415,22 @@
           let iconHtml = "";
 
           if (fieldKey === "name") {
-            let hasRealAvatar = curA && curA.avatar && curA.avatar.length > 10;
+            let activeObj =
+              (typeof accounts !== "undefined" &&
+                accounts.find((a) => a.active)) ||
+              curA;
+            let rawAvt =
+              (activeObj && activeObj.avatar) || (curA && curA.avatar);
+            let hasRealAvatar =
+              rawAvt &&
+              rawAvt !== "null" &&
+              rawAvt !== "undefined" &&
+              rawAvt.length > 10;
 
             if (hasRealAvatar) {
               let avtContent =
                 '<img src="' +
-                curA.avatar +
+                rawAvt +
                 '" style="width: 100%; height: 100%; object-fit: cover;" />';
               iconHtml =
                 '<div style="width: 74px; height: 74px; border-radius: 50%; background: var(--glass-bg); margin-bottom: 15px; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 16px rgba(0,0,0,0.25); overflow: hidden;">' +
@@ -11302,8 +11453,12 @@
                 "#007aff",
                 "#af52de",
               ];
-              let bgColor =
+              let fallbackBg =
                 colors[initial.charCodeAt(0) % colors.length] || "#ff3b30";
+              let bgColor =
+                (activeObj && activeObj.color) ||
+                (curA && curA.color) ||
+                fallbackBg;
 
               let avtContent =
                 '<span style="font-size: 32px; font-weight: 600; color: #fff;">' +
@@ -11394,19 +11549,26 @@
 
       // 6. Giao diện Quản lý Tài khoản Chính
       window.getAccountManageContent = function () {
+        let activeObj =
+          (typeof accounts !== "undefined" && accounts.find((a) => a.active)) ||
+          curA;
         let initial = "K";
-        let currentName = curA.name || "Khách";
+        let currentName = (activeObj && activeObj.name) || curA.name || "Khách";
         if (currentName !== "Chưa đặt" && currentName !== "Khách") {
           initial = currentName.charAt(0).toUpperCase();
         }
         let colors = ["#ff3b30", "#ff9500", "#34c759", "#007aff", "#af52de"];
-        let dynamicColor =
+        let fallbackColor =
           colors[initial.charCodeAt(0) % colors.length] || "#ff3b30";
+        let accColor =
+          (activeObj && activeObj.color) || curA.color || fallbackColor;
 
-        let avatarHtml = curA.avatar
-          ? `<img src="${curA.avatar}" style="width:34px;height:34px;border-radius:50%;object-fit:cover;box-shadow:0 2px 5px rgba(0,0,0,0.2);">`
-          : // Thay curA.color bằng dynamicColor
-            `<div style="width:34px;height:34px;border-radius:50%;background:${dynamicColor};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:15px;box-shadow:0 2px 5px rgba(0,0,0,0.2);">${initial}</div>`;
+        let curAvt = (activeObj && activeObj.avatar) || curA.avatar;
+        let hasAvt = curAvt && curAvt !== "null" && curAvt !== "undefined";
+
+        let avatarHtml = hasAvt
+          ? `<img src="${curAvt}" style="width:34px;height:34px;border-radius:50%;object-fit:cover;box-shadow:0 2px 5px rgba(0,0,0,0.2);">`
+          : `<div style="width:34px;height:34px;border-radius:50%;background:${accColor};color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:15px;box-shadow:0 2px 5px rgba(0,0,0,0.2);">${initial}</div>`;
 
         // Đếm thông minh đa liên kết
         let cChild = syncArr("childAcc", true).length;
@@ -13222,52 +13384,114 @@
         let activeA = accounts.find((a) => a.active);
 
         // 1. Dựng sẵn chuỗi HTML cho các Mini Avatars (Khi thu gọn)
-        let miniAvatars = inactiveAccs
-          .map((a) => {
-            let abg = a.avatar ? `url(${a.avatar}) center/cover` : a.color;
-            let atxt = a.avatar ? "" : a.name.charAt(0).toUpperCase();
-            return `<div class="mini-avt" style="background:${abg}">${atxt}</div>`;
+        // Sắp xếp đúng thứ tự danh sách: tài khoản đang dùng trước, các tài khoản khác sau
+        let _needSaveAccColor = false;
+        accounts.forEach((a, idx) => {
+          let _palette = [
+            "#1a73e8",
+            "#34a853",
+            "#9334e6",
+            "#e37400",
+            "#e53935",
+            "#00897b",
+          ];
+          let _c = (a.color || "").trim();
+          let _badColor =
+            !_c ||
+            _c === "transparent" ||
+            _c.startsWith("rgba") ||
+            _c.startsWith("hsla") ||
+            _c.includes("var(--glass") ||
+            _c.includes("var(--inner") ||
+            /^#([0-9a-f]{4}|[0-9a-f]{8})$/i.test(_c);
+          if (_badColor) {
+            a.color = _palette[idx % _palette.length];
+            _needSaveAccColor = true;
+          }
+        });
+        if (_needSaveAccColor) {
+          localStorage.setItem("tng_accounts", JSON.stringify(accounts));
+        }
+
+        // Sau đó mới tới phần tạo miniAvatars...
+        let miniAvatars = [
+          ...accounts.filter((a) => a.active),
+          ...accounts.filter((a) => !a.active),
+        ]
+          .map((a, idx, arr) => {
+            let hasAvt =
+              a.avatar && a.avatar !== "null" && a.avatar !== "undefined";
+            let abg = hasAvt
+              ? `#2b2d38 url(${a.avatar}) center/cover no-repeat`
+              : a.color;
+            let atxt = hasAvt ? "" : (a.name || "K").charAt(0).toUpperCase();
+            let zIdx = arr.length - idx;
+            return `<div class="mini-avt" style="background:${abg}; position:relative; z-index:${zIdx};">${atxt}</div>`;
           })
           .join("");
 
         // 2. Dựng sẵn HTML cho Danh sách mở rộng
+        let hasMainAvt =
+          activeA &&
+          activeA.avatar &&
+          activeA.avatar !== "null" &&
+          activeA.avatar !== "undefined";
         let abgMain = activeA
-          ? activeA.avatar
-            ? `url(${activeA.avatar}) center/cover`
+          ? hasMainAvt
+            ? `#2b2d38 url(${activeA.avatar}) center/cover no-repeat`
             : activeA.color
-          : "";
+          : "#1a73e8";
         let atxtMain = activeA
-          ? activeA.avatar
+          ? hasMainAvt
             ? ""
-            : activeA.name.charAt(0).toUpperCase()
+            : (activeA.name || "K").charAt(0).toUpperCase()
           : "K";
         let activeName = activeA ? activeA.name : "Khách";
         let activeEmail = activeA ? activeA.email : "";
 
+        // Đồng bộ màu & ảnh lên avatar góc phải (#avt) và avatar lớn (#m-avt) khớp 100% với danh sách
+        if (activeA) {
+          if (typeof curA === "object" && curA) curA.color = activeA.color;
+          let _topAvt = document.getElementById("avt");
+          let _mainAvt = document.getElementById("m-avt");
+          if (_topAvt) {
+            _topAvt.style.background = abgMain;
+            _topAvt.innerText = atxtMain;
+          }
+          if (_mainAvt) {
+            _mainAvt.style.background = abgMain;
+            _mainAvt.innerText = atxtMain;
+          }
+        }
+
         let listHtml = `<div class="acc-item-row"><div class="acc-item-avt" style="background:${abgMain}">${atxtMain}</div><div class="acc-item-info"><div class="acc-item-name">${activeName}</div><div class="acc-item-mail">${activeEmail}</div></div><span class="badge-default">Mặc định</span></div>`;
 
         inactiveAccs.forEach((a) => {
-          let abg = a.avatar ? `url(${a.avatar}) center/cover` : a.color;
-          let atxt = a.avatar ? "" : a.name.charAt(0).toUpperCase();
+          let hasAvt =
+            a.avatar && a.avatar !== "null" && a.avatar !== "undefined";
+          let abg = hasAvt
+            ? `#2b2d38 url(${a.avatar}) center/cover no-repeat`
+            : a.color;
+          let atxt = hasAvt ? "" : (a.name || "K").charAt(0).toUpperCase();
           listHtml += `<div class="acc-wrap-box" id="acc-box-${a.id}" onclick="toggleAccActions('${a.id}', event)"><div class="acc-item-row inactive-row" style="padding-bottom:5px;"><div class="acc-item-avt" style="background:${abg}">${atxt}</div><div class="acc-item-info"><div class="acc-item-name">${a.name}</div><div class="acc-item-mail">${a.email}</div></div><span class="badge-logout">Đã đăng xuất</span></div><div class="acc-action-btns" id="acc-actions-${a.id}"><button class="acc-btn-login" onclick="switchAcc('${a.id}', event)">Đăng nhập</button><button class="acc-btn-del" onclick="deleteAcc('${a.id}', event)">Xóa</button></div></div>`;
         });
         listHtml += `<div class="acc-row-btn" onclick="addAccFlow(event)"><span style="font-size:20px; font-weight:400; width:24px; text-align:center;">+</span> <span>Thêm tài khoản khác</span></div><div class="acc-row-btn" onclick="promptConfirm('Xóa toàn bộ dữ liệu?', logoutAll)"><span style="font-size:18px; width:24px; text-align:center;">⎗</span> <span>Đăng xuất khỏi tất cả các tài khoản</span></div>`;
 
-        // 3. Kiểm tra trạng thái hiện tại để set giao diện tiêu đề
-        let headerText = isAccExpanded
-          ? "Ẩn bớt tài khoản"
-          : "Hiện thêm tài khoản";
-        let headerIcon = isAccExpanded
-          ? `<div class="arrow-icon arrow-up"></div>`
-          : `<div style="display:flex;align-items:center;gap:5px;">${miniAvatars}<div class="arrow-icon arrow-down"></div></div>`;
+        // 3. Giữ cố định khung HTML để CSS tự chạy hiệu ứng chuyển chữ, avatar và xoay mũi tên
         let showClass = isAccExpanded ? "show" : "";
 
         // 4. BỌC TRONG VỎ NGUYÊN KHỐI (.acc-wrap-container)
         area.innerHTML = `
           <div class="acc-wrap-container">
             <div class="acc-collapse-header" id="acc-toggle-header" onclick="toggleAccListAnim(event)">
-                <span id="acc-toggle-text">${headerText}</span>
-                <div id="acc-toggle-icon">${headerIcon}</div>
+                <span class="acc-toggle-label">
+                  <span class="acc-lbl-show">Hiện thêm tài khoản</span>
+                  <span class="acc-lbl-hide">Ẩn bớt tài khoản</span>
+                </span>
+                <div class="acc-header-right">
+                  <div class="mini-avt-group">${miniAvatars}</div>
+                  <div class="arrow-icon"></div>
+                </div>
             </div>
             <div class="acc-expanded-list ${showClass}" id="acc-expandable-list">
                 ${listHtml}
@@ -13281,34 +13505,18 @@
         if (e) e.stopPropagation();
         let list = document.getElementById("acc-expandable-list");
         let header = document.getElementById("acc-toggle-header");
-        let text = document.getElementById("acc-toggle-text");
-        let iconDiv = document.getElementById("acc-toggle-icon");
         if (!list || !header) return;
 
         isAccExpanded = !isAccExpanded;
 
         if (isAccExpanded) {
-          // Mở danh sách ra
+          // Mở danh sách (CSS tự trượt chữ, thu nhỏ mờ avatar và xoay mũi tên)
           list.classList.add("show");
           header.style.borderRadius = "20px 20px 0 0";
-          text.innerText = "Ẩn bớt tài khoản";
-          iconDiv.innerHTML = '<div class="arrow-icon arrow-up"></div>';
         } else {
           // Thu danh sách lại
           list.classList.remove("show");
           header.style.borderRadius = "20px";
-          text.innerText = "Hiện thêm tài khoản";
-
-          // Lấy lại Mini Avatars
-          let inactiveAccs = accounts.filter((a) => !a.active);
-          let miniAvatars = inactiveAccs
-            .map((a) => {
-              let abg = a.avatar ? `url(${a.avatar}) center/cover` : a.color;
-              let atxt = a.avatar ? "" : a.name.charAt(0).toUpperCase();
-              return `<div class="mini-avt" style="background:${abg}">${atxt}</div>`;
-            })
-            .join("");
-          iconDiv.innerHTML = `<div style="display:flex;align-items:center;gap:5px;">${miniAvatars}<div class="arrow-icon arrow-down"></div></div>`;
         }
       };
       function toggleAccActions(id, e) {
