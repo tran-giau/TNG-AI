@@ -3758,8 +3758,12 @@
       .qa-item:active,
       .am-item:active,
       .acc-row-btn:active,
-      button[style*="width: 100%"]:active:not([disabled]),
-      button[style*="width:100%"]:active:not([disabled]),
+      button[style*="width: 100%"]:active:not([disabled]):not(
+          [onclick*="verifyMockPayment"]
+        ),
+      button[style*="width:100%"]:active:not([disabled]):not(
+          [onclick*="verifyMockPayment"]
+        ),
       button[style*="flex: 1"]:active:not([disabled]),
       button[style*="flex:1"]:active:not([disabled]) {
         background-color: rgba(255, 255, 255, 0.08) !important;
@@ -3773,8 +3777,14 @@
       [data-theme="light"] .qa-item:active,
       [data-theme="light"] .am-item:active,
       [data-theme="light"] .acc-row-btn:active,
-      [data-theme="light"] button[style*="width: 100%"]:active:not([disabled]),
-      [data-theme="light"] button[style*="width:100%"]:active:not([disabled]),
+      [data-theme="light"]
+        button[style*="width: 100%"]:active:not([disabled]):not(
+          [onclick*="verifyMockPayment"]
+        ),
+      [data-theme="light"]
+        button[style*="width:100%"]:active:not([disabled]):not(
+          [onclick*="verifyMockPayment"]
+        ),
       [data-theme="light"] button[style*="flex: 1"]:active:not([disabled]),
       [data-theme="light"] button[style*="flex:1"]:active:not([disabled]) {
         background-color: rgba(0, 0, 0, 0.06) !important;
@@ -4545,6 +4555,202 @@
         height: auto !important;
         overflow: visible !important;
         padding-bottom: 25px !important;
+      }
+
+      /* ============================================================ */
+      /* BẢNG THÔNG BÁO LƯU SỔ CHUẨN IOS LIQUID GLASS ĐỒNG BỘ HỆ THỐNG */
+      /* ============================================================ */
+      .tng-saved-overlay {
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        background: rgba(0, 0, 0, 0.45);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        z-index: 9999999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .tng-saved-card {
+        width: 290px;
+        max-width: 84vw;
+        padding: 22px 18px 18px;
+        border-radius: 28px;
+        background: var(--glass-bg);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        backdrop-filter: blur(40px) saturate(180%);
+        -webkit-backdrop-filter: blur(40px) saturate(180%);
+        box-shadow:
+          0 24px 60px rgba(0, 0, 0, 0.55),
+          inset 0 1px 0 rgba(255, 255, 255, 0.16);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        transform: scale(0.02);
+        opacity: 0;
+        transition:
+          transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+          opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+        will-change: transform, opacity;
+      }
+      .tng-saved-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: var(--chat-user-bg);
+        border: 1px solid var(--chat-user-border);
+        color: var(--btn-blue);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 12px;
+      }
+      .tng-saved-icon svg {
+        width: 22px;
+        height: 22px;
+        stroke: currentColor;
+        stroke-width: 2.6;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      .tng-saved-title {
+        font-size: 17px;
+        font-weight: 600;
+        color: var(--text-main);
+        letter-spacing: -0.2px;
+        margin-bottom: 6px;
+      }
+      .tng-saved-msg {
+        font-size: 14px;
+        line-height: 1.45;
+        color: var(--text-sub);
+        margin-bottom: 18px;
+        padding: 0 4px;
+        word-break: break-word;
+      }
+      .tng-saved-name {
+        color: var(--text-main);
+        font-weight: 600;
+      }
+      .tng-saved-btn {
+        width: 100%;
+        padding: 11px 16px;
+        border-radius: 999px;
+        border: 1px solid var(--chat-user-border);
+        background: var(--chat-user-bg);
+        color: var(--btn-blue);
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .tng-saved-btn:hover {
+        filter: brightness(1.08);
+      }
+
+      /* Đồng bộ Giao diện Sáng chuẩn iOS */
+      [data-theme="light"] .tng-saved-card {
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow:
+          0 20px 50px rgba(0, 0, 0, 0.16),
+          inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      }
+
+      /* ============================================================ */
+      /* FIX MƯỢT NÚT THANH TOÁN GÓI THUÊ BAO (CHỐNG GIẬT & ĐỒNG BỘ 0.6S) */
+      /* ============================================================ */
+      #sp-body > div:not(.sub-panel) > button:last-child,
+      #sp-body button[onclick*="verifyMockPayment"] {
+        transform: scale(1) translateZ(0) !important;
+        opacity: 1 !important;
+        will-change: transform, background, box-shadow, opacity, filter;
+        transition:
+          transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+          background 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+          background-color 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+          color 0.6s ease,
+          border-color 0.6s ease,
+          box-shadow 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+          opacity 0.5s ease,
+          filter 0.35s ease !important;
+      }
+
+      /* Chỉ khóa lún kép cho chữ, KHÔNG chặn animation xoay của icon ↻ */
+      #sp-body
+        > div:not(.sub-panel)
+        > button:last-child
+        > span:not([style*="animation"]),
+      #sp-body
+        button[onclick*="verifyMockPayment"]
+        > span:not([style*="animation"]) {
+        transform: none !important;
+        transition: opacity 0.35s ease !important;
+      }
+
+      /* Hiệu ứng load tuần tự cho dấu ... ở cuối */
+      .tng-load-dots {
+        display: inline-flex;
+        margin-left: 1px;
+      }
+      .tng-load-dots span {
+        display: inline-block;
+        animation: tngDotPulse 1.4s infinite ease-in-out both;
+      }
+      .tng-load-dots span:nth-child(1) {
+        animation-delay: 0s;
+      }
+      .tng-load-dots span:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .tng-load-dots span:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+      @keyframes tngDotPulse {
+        0%,
+        80%,
+        100% {
+          opacity: 0.2;
+          transform: translateY(0);
+        }
+        40% {
+          opacity: 1;
+          transform: translateY(-2.5px);
+        }
+      }
+
+      /* Rê chuột (PC): hạ nhẹ tinh tế, không giật co sâu */
+      @media (hover: hover) {
+        #sp-body
+          button[onclick*="verifyMockPayment"]:not(
+            [style*="pointer-events"]
+          ):not([disabled]):hover {
+          transform: scale(0.988) translateZ(0) !important;
+          filter: brightness(1.07);
+        }
+      }
+
+      /* Nhấn giữ: lún êm chuẩn nút dài iOS, thả ra bung mượt không khựng */
+      #sp-body
+        button[onclick*="verifyMockPayment"]:not([style*="pointer-events"]):not(
+          [disabled]
+        ):active {
+        transition-duration: 0.14s !important;
+        transition-timing-function: cubic-bezier(
+          0.25,
+          0.46,
+          0.45,
+          0.94
+        ) !important;
+        transform: scale(0.965) translateZ(0) !important;
+        filter: brightness(0.93);
+        opacity: 0.96 !important;
       }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -5517,14 +5723,6 @@
                   justify-content: flex-end;
                 "
               >
-                <span
-                  id="note-save-status"
-                  style="
-                    font-size: 13px;
-                    color: var(--text-sub);
-                    margin-right: 10px;
-                  "
-                ></span>
                 <button
                   class="upgrade-btn"
                   id="save-note-btn"
@@ -5535,7 +5733,7 @@
                     color: #000;
                     border: none;
                   "
-                  onclick="saveNote()"
+                  onclick="saveNote(event, this)"
                 >
                   Lưu
                 </button>
@@ -5579,12 +5777,12 @@
                   box-sizing: border-box !important;
                 }
 
-                /* Xoay mũi tên nút Văn bản sang phải, gọn gàng 0.6s */
+                /* Xoay mũi tên nút Văn bản sang phải, đồng bộ 0.55s */
                 .tool-select-btn svg {
                   transform: rotate(0deg);
                   transform-origin: center center;
                   will-change: transform;
-                  transition: transform 0.6s cubic-bezier(0.34, -0.4, 0.64, 1);
+                  transition: transform 0.55s cubic-bezier(0.34, -0.4, 0.64, 1);
                   flex-shrink: 0;
                 }
                 .custom-dropdown:has(
@@ -5601,7 +5799,7 @@
                   .tool-select-btn
                   svg {
                   transform: rotate(-180deg);
-                  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+                  transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
                 }
 
                 /* 2. TRẠNG THÁI ĐÓNG (CUỘN LÊN): Nhún sâu lấy đà (-3.2) rồi cuộn rút lên */
@@ -5729,34 +5927,6 @@
                   background-origin: border-box !important;
                   background-clip: border-box !important;
                   background-repeat: no-repeat !important;
-                }
-
-                /* Hiệu ứng trượt mờ lò xo 0.6s: hiện trắng sáng rồi dịu mờ dần */
-                #note-save-status {
-                  display: inline-flex;
-                  align-items: center;
-                  white-space: nowrap;
-                  opacity: 0;
-                  transform: translateX(14px) scale(0.92);
-                  filter: blur(4px);
-                  will-change: transform, opacity, filter, color;
-                  transition:
-                    transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
-                    opacity 0.6s ease,
-                    filter 0.42s ease,
-                    color 0.8s ease;
-                }
-                #note-save-status.show {
-                  opacity: 0.7;
-                  transform: translateX(0) scale(1);
-                  filter: blur(0px);
-                }
-                #note-save-status.just-saved {
-                  opacity: 1;
-                  color: #ffffff !important;
-                }
-                [data-theme="light"] #note-save-status.just-saved {
-                  color: var(--text-main) !important;
                 }
               </style>
 
@@ -13637,8 +13807,20 @@
       }
       function openHistMenu(e, id) {
         e.stopPropagation();
-        targetHistId = id;
         let m = document.getElementById("hist-options-menu");
+        if (
+          m.classList.contains("show") &&
+          String(targetHistId) === String(id)
+        ) {
+          m.classList.remove("show");
+          return;
+        }
+        document
+          .querySelectorAll(".hist-options-menu, .ai-options-menu")
+          .forEach((el) => {
+            if (el !== m) el.classList.remove("show");
+          });
+        targetHistId = id;
         m.style.left = Math.min(e.clientX, window.innerWidth - 260) + "px";
         m.style.top = Math.min(e.clientY, window.innerHeight - 200) + "px";
         showWithOrigin("hist-options-menu");
@@ -17818,11 +18000,15 @@
         }
         document.getElementById("note-content").innerHTML = loadContent;
 
-        document.getElementById("note-save-status").innerText = "";
-
         if (window.innerWidth <= 768) {
           sb.classList.remove("open");
           ovlSb.classList.remove("show");
+        }
+
+        if (typeof showWithOrigin === "function") {
+          showWithOrigin("notebook-overlay", "notebook-anim-wrapper");
+        } else {
+          document.getElementById("notebook-overlay").classList.add("show");
         }
 
         // =========================================================
@@ -17860,19 +18046,44 @@
         renderHist();
       }
 
+      function showNoteSavedPopup(notebookName, e, elem) {
+        let old = document.getElementById("note-saved-modal");
+        if (old) old.remove();
+
+        let html = `
+          <div id="note-saved-modal" class="tng-saved-overlay" onclick="if (event.target === this) closeCustomPopup('note-saved-modal')">
+            <div class="tng-saved-card">
+              <div class="tng-saved-icon">
+                <svg viewBox="0 0 24 24">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </div>
+              <div class="tng-saved-title">Đã lưu ghi chú</div>
+              <div class="tng-saved-msg">
+                Đã lưu thành công quyển sổ <span id="note-saved-name" class="tng-saved-name"></span>
+              </div>
+              <button type="button" class="tng-saved-btn" onclick="closeCustomPopup('note-saved-modal')">
+                Đóng
+              </button>
+            </div>
+          </div>
+        `;
+        document.body.insertAdjacentHTML("beforeend", html);
+        document.getElementById("note-saved-name").textContent = notebookName;
+        openCustomPopup(
+          "note-saved-modal",
+          e,
+          elem || document.getElementById("save-note-btn"),
+        );
+      }
+
       function closeNoteEditor() {
         currentNoteId = null;
-        let status = document.getElementById("note-save-status");
-        if (status) {
-          clearTimeout(status._fadeTimer);
-          status.classList.remove("show", "just-saved");
-          status.innerText = "";
-        }
         renderSidebarNotes();
         document.getElementById("notebook-overlay").classList.remove("show");
       }
 
-      function saveNote() {
+      function saveNote(e, elem) {
         if (!currentNoteId) return;
         let title = document.getElementById("note-title").value;
         let content = document.getElementById("note-content").innerHTML;
@@ -17896,31 +18107,11 @@
           notes[idx].content = content;
           localStorage.setItem("tng_notes_" + curA.id, JSON.stringify(notes));
 
-          let status = document.getElementById("note-save-status");
-          if (status) {
-            let d = new Date();
-            let timeStr =
-              "Đã lưu lúc " +
-              d.getHours() +
-              ":" +
-              (d.getMinutes() < 10 ? "0" : "") +
-              d.getMinutes();
-
-            // Reset tức thì để hiệu ứng chạy lại mượt mà mỗi lần bấm Lưu
-            status.style.transition = "none";
-            status.classList.remove("show", "just-saved");
-            status.innerText = timeStr;
-            void status.offsetWidth;
-
-            status.style.transition = "";
-            status.classList.add("show", "just-saved");
-
-            // Dịu màu từ xanh điểm nhấn về màu chữ phụ sau 0.9s
-            clearTimeout(status._fadeTimer);
-            status._fadeTimer = setTimeout(() => {
-              status.classList.remove("just-saved");
-            }, 900);
-          }
+          let notebookName =
+            notes[idx].name ||
+            document.getElementById("notebook-name-display").innerText ||
+            "Chưa đặt tên";
+          showNoteSavedPopup(notebookName, e, elem);
 
           renderSidebarNotes();
           let allNotesView = document.getElementById("all-notes-view");
@@ -18026,8 +18217,20 @@
       let targetNoteId = null;
       function openNoteMenu(e, id) {
         e.stopPropagation();
-        targetNoteId = id;
         let m = document.getElementById("note-options-menu");
+        if (
+          m.classList.contains("show") &&
+          String(targetNoteId) === String(id)
+        ) {
+          m.classList.remove("show");
+          return;
+        }
+        document
+          .querySelectorAll(".hist-options-menu, .ai-options-menu")
+          .forEach((el) => {
+            if (el !== m) el.classList.remove("show");
+          });
+        targetNoteId = id;
         m.style.left = Math.min(e.clientX, window.innerWidth - 260) + "px";
         m.style.top = Math.min(e.clientY, window.innerHeight - 200) + "px";
         showWithOrigin("note-options-menu");
@@ -18093,8 +18296,20 @@
       let targetFileId = null;
       window.openFileMenu = function (e, id, hideRename) {
         e.stopPropagation();
-        targetFileId = id.toString();
         let m = document.getElementById("file-options-menu");
+        if (
+          m.classList.contains("show") &&
+          String(targetFileId) === String(id)
+        ) {
+          m.classList.remove("show");
+          return;
+        }
+        document
+          .querySelectorAll(".hist-options-menu, .ai-options-menu")
+          .forEach((el) => {
+            if (el !== m) el.classList.remove("show");
+          });
+        targetFileId = id.toString();
         let rBtn = document.getElementById("file-rename-btn");
         if (hideRename) rBtn.style.display = "none";
         else rBtn.style.display = "flex";
@@ -31031,6 +31246,78 @@
             return res;
           };
         }
+      })();
+
+      // Giữ nguyên hiệu ứng co lún nảy của thẻ, tự bắt chuẩn click cho mọi nút 3 chấm
+      (function () {
+        let pressedDotBtn = null;
+        let downX = 0,
+          downY = 0;
+        let clearTimer = null;
+
+        document.addEventListener(
+          "pointerdown",
+          (e) => {
+            clearTimeout(clearTimer);
+            let btn = e.target.closest(
+              '[onclick*="openFileMenu"], [onclick*="openNoteMenu"], [onclick*="openHistMenu"], .hist-dots',
+            );
+            if (!btn || btn.closest(".select-mode")) {
+              pressedDotBtn = null;
+              return;
+            }
+            pressedDotBtn = btn;
+            downX = e.clientX;
+            downY = e.clientY;
+          },
+          true,
+        );
+
+        document.addEventListener(
+          "pointerup",
+          () => {
+            if (!pressedDotBtn) return;
+            clearTimer = setTimeout(() => {
+              pressedDotBtn = null;
+            }, 120);
+          },
+          true,
+        );
+
+        document.addEventListener(
+          "pointercancel",
+          () => {
+            pressedDotBtn = null;
+          },
+          true,
+        );
+
+        document.addEventListener(
+          "click",
+          (e) => {
+            if (!pressedDotBtn) return;
+            let btn = pressedDotBtn;
+            pressedDotBtn = null;
+            clearTimeout(clearTimer);
+
+            if (!btn.isConnected || btn.contains(e.target)) return;
+
+            // Chuột/tay gần như đứng yên nhưng bị trượt khỏi nút 3 chấm do thẻ đang co lún
+            if (Math.hypot(e.clientX - downX, e.clientY - downY) <= 12) {
+              e.stopImmediatePropagation();
+              e.preventDefault();
+              btn.dispatchEvent(
+                new MouseEvent("click", {
+                  bubbles: true,
+                  cancelable: true,
+                  clientX: e.clientX,
+                  clientY: e.clientY,
+                }),
+              );
+            }
+          },
+          true,
+        );
       })();
     </script>
   </body>
