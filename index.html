@@ -5631,6 +5631,125 @@
           will-change: transform, opacity;
         }
       }
+
+      /* ============================================================ */
+      /* TỐI ƯU MENU TRƯỢT GIAO DIỆN & TRỢ GIÚP TRÊN ĐIỆN THOẠI       */
+      /* (Chống tràn màn hình, gọn thẻ con & khớp giọt nước 100%)     */
+      /* ============================================================ */
+      @media (max-width: 768px) {
+        /* 1. Khóa chiều cao tối đa & bật cuộn mượt để không bao giờ cắt mất mục trên cùng */
+        #set-menu.set-menu {
+          max-height: calc(100dvh - 86px) !important;
+          overflow-y: auto !important;
+          overflow-x: hidden !important;
+          -webkit-overflow-scrolling: touch;
+          overscroll-behavior: contain;
+          scrollbar-width: none !important;
+        }
+        #set-menu.set-menu::-webkit-scrollbar {
+          display: none !important;
+          width: 0 !important;
+        }
+
+        /* 2. Giữ dòng tiêu đề mục cha ổn định, không bị kéo giãn đệm khi mở menu con */
+        #set-menu .d-item.flex-between {
+          flex-wrap: wrap !important;
+          align-items: center !important;
+          height: auto !important;
+          row-gap: 0 !important;
+        }
+
+        /* Xoay mũi tên ▶ xuống 90 độ mượt mà khi mở trượt */
+        #set-menu .d-item.flex-between > span:not(.sub-menu) {
+          display: inline-flex !important;
+          align-items: center;
+          justify-content: center;
+          transform-origin: center center !important;
+          transition:
+            transform 0.42s cubic-bezier(0.34, 1.56, 0.64, 1),
+            color 0.25s ease !important;
+        }
+        #set-menu
+          .d-item.flex-between:has(> .sub-menu.show)
+          > span:not(.sub-menu) {
+          transform: rotate(90deg) !important;
+          color: var(--btn-blue) !important;
+        }
+
+        /* Không làm lún nhầm tiêu đề cha khi chạm vào mục con bên trong */
+        #set-menu
+          .d-item.flex-between:has(.sub-menu:active)
+          > *:not(.sub-menu) {
+          transform: scale(1) !important;
+        }
+
+        /* 3. Khung menu con dạng thẻ kính chìm gọn gàng, tốc độ trượt sát chiều cao thật */
+        #set-menu .sub-menu {
+          position: relative !important;
+          width: 100% !important;
+          min-width: 0 !important;
+          left: 0 !important;
+          top: 0 !important;
+          bottom: auto !important;
+          margin: 0 !important;
+          padding: 0 6px !important;
+          border-radius: 12px !important;
+          background: rgba(255, 255, 255, 0.04) !important;
+          border: 1px solid transparent !important;
+          box-shadow: none !important;
+          backdrop-filter: none !important;
+          -webkit-backdrop-filter: none !important;
+          transform: none !important;
+          max-height: 0 !important;
+          opacity: 0 !important;
+          visibility: hidden !important;
+          overflow: hidden !important;
+          pointer-events: none !important;
+          transition:
+            max-height 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+            margin-top 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+            padding-top 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+            padding-bottom 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+            opacity 0.22s ease,
+            border-color 0.22s ease,
+            visibility 0s linear 0.42s !important;
+        }
+
+        #set-menu .sub-menu.show {
+          max-height: 195px !important;
+          margin-top: 8px !important;
+          padding-top: 6px !important;
+          padding-bottom: 6px !important;
+          opacity: 1 !important;
+          visibility: visible !important;
+          pointer-events: auto !important;
+          border-color: var(--glass-border) !important;
+          transition:
+            max-height 0.48s cubic-bezier(0.16, 1, 0.3, 1),
+            margin-top 0.48s cubic-bezier(0.16, 1, 0.3, 1),
+            padding-top 0.48s cubic-bezier(0.16, 1, 0.3, 1),
+            padding-bottom 0.48s cubic-bezier(0.16, 1, 0.3, 1),
+            opacity 0.26s ease 0.04s,
+            border-color 0.26s ease,
+            visibility 0s linear 0s !important;
+        }
+
+        [data-theme="light"] #set-menu .sub-menu {
+          background: rgba(0, 0, 0, 0.035) !important;
+        }
+
+        #set-menu .sub-menu > .d-item {
+          padding: 8px 12px !important;
+          font-size: 13.5px !important;
+          border-radius: 9px !important;
+        }
+
+        /* Ẩn ngay giọt nước bên trong khi menu con bắt đầu đóng để không còn bóng mờ kẹt lại */
+        #set-menu .sub-menu:not(.show) > .tng-glow-pill {
+          opacity: 0 !important;
+          transition: opacity 0.14s ease !important;
+        }
+      }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
@@ -33075,7 +33194,7 @@
 
       // ============================================================
       // BỘ MÁY PHÁT SÁNG TRÔI NHƯ NƯỚC CHUẨN IOS 27 LIQUID GLASS
-      // Khóa chặt giọt nước tại mục đang mở menu 3 chấm & chỉ trả về khi đóng
+      // Khóa chặt giọt nước + bám khít menu trượt trên điện thoại
       // ============================================================
       (function () {
         const canHover = window.matchMedia("(hover: hover)").matches;
@@ -33124,7 +33243,6 @@
           );
         };
 
-        // Vùng đệm hẹp nối giữa nút 3 chấm và bảng menu để khi di chuột sang menu không bị đóng nhầm
         const isInDotToPopupBridge = (ev, ownerEl, popupEl) => {
           if (!ownerEl || !popupEl) return false;
           const dotEl = ownerEl.querySelector(".hist-dots") || ownerEl;
@@ -33185,13 +33303,17 @@
             left -= p.scrollLeft || 0;
             p = p.parentElement;
           }
+
           let height = el.offsetHeight;
-          const openSub = el.querySelector(":scope > .sub-menu.show");
-          if (
-            openSub &&
-            window.getComputedStyle(openSub).position === "relative"
-          ) {
-            height = Math.max(36, height - openSub.offsetHeight - 10);
+          // Trên điện thoại, .sub-menu trượt bên trong .d-item (position: relative):
+          // luôn đo trực tiếp chiều cao dòng tiêu đề để giọt nước không bao giờ bị phồng/lệch lúc mở hay đóng
+          const sub = el.querySelector(":scope > .sub-menu");
+          if (sub && window.getComputedStyle(sub).position === "relative") {
+            const cs = window.getComputedStyle(el);
+            const pt = parseFloat(cs.paddingTop) || 9;
+            const head = el.firstElementChild;
+            const headH = head && head !== sub ? head.offsetHeight : 26;
+            height = Math.max(36, Math.round(headH + pt * 2));
           }
           return { top, left, width: el.offsetWidth, height };
         };
@@ -33222,6 +33344,7 @@
             visible: false,
             leaveTimer: null,
             bounceRaf: null,
+            layoutSyncRaf: null,
             rafId: null,
             lastTs: 0,
             x: 0,
@@ -33245,6 +33368,13 @@
             if (state.bounceRaf) {
               cancelAnimationFrame(state.bounceRaf);
               state.bounceRaf = null;
+            }
+          };
+
+          const stopLayoutSync = () => {
+            if (state.layoutSyncRaf) {
+              cancelAnimationFrame(state.layoutSyncRaf);
+              state.layoutSyncRaf = null;
             }
           };
 
@@ -33512,6 +33642,37 @@
             state.bounceRaf = requestAnimationFrame(step);
           };
 
+          // Bám tọa độ liên tục khi menu con trong #set-menu trượt đóng/mở trên điện thoại
+          const syncDuringSubToggle = (ms = 520, focusItem = null) => {
+            stopLayoutSync();
+            const start = performance.now();
+            const tick = (now) => {
+              const tgt = focusItem || state.currentTarget;
+              if (tgt && isElVisible(tgt) && state.visible) {
+                const box = getBoxInMenu(tgt, container);
+                if (box.width && box.height) {
+                  state.tx = box.left;
+                  state.ty = box.top;
+                  state.tw = box.width;
+                  state.th = box.height;
+                  if (!state.rafId) {
+                    state.x = box.left;
+                    state.y = box.top;
+                    state.w = box.width;
+                    state.h = box.height;
+                    renderPill(1, 1, 0, 0.42);
+                  }
+                }
+              }
+              if (now - start < ms) {
+                state.layoutSyncRaf = requestAnimationFrame(tick);
+              } else {
+                state.layoutSyncRaf = null;
+              }
+            };
+            state.layoutSyncRaf = requestAnimationFrame(tick);
+          };
+
           const resolveItem = (rawTarget, allowDots = false) => {
             if (!rawTarget || !(rawTarget instanceof Element)) return null;
             if (config.ignoreNestedSub && rawTarget.closest(".sub-menu"))
@@ -33530,7 +33691,6 @@
             return null;
           };
 
-          // Khóa mục vừa bấm dấu 3 chấm (chống bị xóa mất khóa trước khi sự kiện click mở menu)
           if (config.isSidebar) {
             const lockContextOwner = (owner) => {
               if (!owner || !isElVisible(owner)) return;
@@ -33613,7 +33773,6 @@
 
                 if (activeCtxMenu) {
                   const hasEntered = enteredPopups.has(activeCtxMenu);
-                  // Đang đứng trên mục mở 3 chấm hoặc đi qua cầu nối sang bảng menu -> giữ nguyên khóa
                   if (!hasEntered && item === state.contextTarget) return;
                   if (
                     !hasEntered &&
@@ -33623,7 +33782,6 @@
                   }
                   if (!hasEntered && now - state.contextOpenedAt < 140) return;
 
-                  // Trượt sang mục khác trên thanh bên -> đóng menu 3 chấm & chảy nước sang mục mới
                   state.contextTarget = null;
                   state.contextOpeningUntil = 0;
                   setSingleClass("ctxOpenEl", "tng-ctx-open", null);
@@ -33748,7 +33906,6 @@
               });
             };
 
-            // Chỉ đồng bộ khi danh sách thay đổi hoặc mục .active đổi (bỏ qua class hiệu ứng tự gắn)
             const sbObs = new MutationObserver((mutations) => {
               let shouldSync = false;
               for (const m of mutations) {
@@ -33779,7 +33936,6 @@
               attributeFilter: ["class"],
             });
 
-            // Theo dõi chính xác thời điểm đóng/mở các menu con để trả giọt nước về đúng chỗ cũ
             [
               "note-options-menu",
               "hist-options-menu",
@@ -33855,15 +34011,58 @@
               if (tgt && isElVisible(tgt)) moveTo(tgt, { instant: true });
             });
           } else {
+            // Đồng bộ khi menu con (Giao diện / Trợ giúp) trượt đóng/mở bên trong #set-menu trên điện thoại
+            if (container.id === "set-menu") {
+              container.querySelectorAll(".sub-menu").forEach((sub) => {
+                const subObs = new MutationObserver(() => {
+                  if (window.getComputedStyle(sub).position !== "relative") {
+                    return;
+                  }
+                  const parentItem = sub.closest(".d-item");
+                  syncDuringSubToggle(520, parentItem);
+                  // Cuộn êm nếu menu con vừa mở bị chạm đáy vùng cuộn trên điện thoại
+                  if (sub.classList.contains("show") && parentItem) {
+                    setTimeout(() => {
+                      const itemBottom =
+                        parentItem.offsetTop + parentItem.offsetHeight;
+                      const viewBottom =
+                        container.scrollTop + container.clientHeight;
+                      if (itemBottom > viewBottom - 12) {
+                        container.scrollTo({
+                          top: Math.max(
+                            0,
+                            itemBottom - container.clientHeight + 16,
+                          ),
+                          behavior: "smooth",
+                        });
+                      }
+                    }, 180);
+                  }
+                });
+                subObs.observe(sub, {
+                  attributes: true,
+                  attributeFilter: ["class"],
+                });
+              });
+            }
+
             const menuObs = new MutationObserver(() => {
               const isOpen =
                 container.classList.contains("show") ||
                 container.style.display === "block";
+              const isMobileAccordionSub =
+                container.classList.contains("sub-menu") &&
+                window.getComputedStyle(container).position === "relative";
+
               if (isOpen) {
                 enteredPopups.delete(container);
-                if (config.bounceSync) {
-                  syncSelected(true);
-                  syncDuringBounce(780);
+                if (config.bounceSync || isMobileAccordionSub) {
+                  if (config.persistent) {
+                    syncSelected(true);
+                    syncDuringBounce(isMobileAccordionSub ? 520 : 780);
+                  } else {
+                    hidePill();
+                  }
                 } else if (config.persistent) {
                   requestAnimationFrame(() => syncSelected(true));
                 } else {
@@ -33872,7 +34071,10 @@
               } else {
                 enteredPopups.delete(container);
                 stopBounceSync();
-                if (!config.persistent) hidePill();
+                stopLayoutSync();
+                if (!config.persistent || isMobileAccordionSub) {
+                  hidePill();
+                }
               }
             });
             menuObs.observe(container, {
