@@ -6996,12 +6996,17 @@
       }
 
       /* ============================================================ */
-      /* GIỌT NƯỚC THỰC GPU: PHÁT QUANG + VA CHẠM 4 MÉP + NHẤN NẢY   */
-      /* + DÒNG CHẢY DAO ĐỘNG NHẸ (TỰ NGỦ KHI ĐÓNG MENU -> 0% LAG)    */
+      /* GIỌT NƯỚC TRONG VEO NỔI KHỐI 3D (KHÔNG ĐỤC, KHÔNG KẺ VIỀN)   */
+      /* Bám sát viền menu + Phản chiếu quang học + Va chạm + Nhấn nảy */
       /* ============================================================ */
 
-      /* 1. Vỏ định vị ngoài trong suốt khi đã gắn màng kính .tng-lg-drop */
+      /* 1. Vỏ định vị ngoài trong suốt khi đã gắn màng nước .tng-lg-drop */
       html body .tng-glow-pill.tng-lg-mounted,
+      html
+        body
+        #sp-body
+        .tng-sub-tabs
+        > span.tng-glow-pill.is-horizontal.tng-lg-mounted,
       html body .tng-rp-list > .tng-rp-glass-pill.tng-lg-mounted,
       html body #set-menu > .tng-set-glass-pill.tng-lg-mounted,
       html body #theme-menu > .tng-tm-glass-pill.tng-lg-mounted {
@@ -7017,6 +7022,16 @@
 
       html body .tng-glow-pill.tng-lg-mounted::before,
       html body .tng-glow-pill.tng-lg-mounted::after,
+      html
+        body
+        #sp-body
+        .tng-sub-tabs
+        > span.tng-glow-pill.is-horizontal.tng-lg-mounted::before,
+      html
+        body
+        #sp-body
+        .tng-sub-tabs
+        > span.tng-glow-pill.is-horizontal.tng-lg-mounted::after,
       html body .tng-rp-list > .tng-rp-glass-pill.tng-lg-mounted::before,
       html body .tng-rp-list > .tng-rp-glass-pill.tng-lg-mounted::after,
       html body #set-menu > .tng-set-glass-pill.tng-lg-mounted::before,
@@ -7027,12 +7042,44 @@
         content: none !important;
       }
 
-      /* 2. Màng kính giọt nước + dao động sức căng bề mặt lặp cường độ thấp */
+      /* 2. Giữ Cài đặt, Giao diện & Lặp lại bám sát 2 viền menu như các menu khác */
+      @media (min-width: 769px) {
+        html body #set-menu > .tng-set-glass-pill,
+        html body #theme-menu > .tng-tm-glass-pill {
+          transition:
+            transform 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+            height 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+            border-radius 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+            opacity 0.2s ease !important;
+        }
+        html body #set-menu.returning > .tng-set-glass-pill,
+        html body #theme-menu.returning > .tng-tm-glass-pill {
+          transition:
+            transform 0.44s cubic-bezier(0.22, 1, 0.36, 1),
+            height 0.36s cubic-bezier(0.22, 1, 0.36, 1),
+            border-radius 0.36s cubic-bezier(0.22, 1, 0.36, 1),
+            opacity 0.22s ease !important;
+        }
+        html body #set-menu > .tng-set-glass-pill.is-instant,
+        html body #theme-menu > .tng-tm-glass-pill.is-instant {
+          transition: none !important;
+        }
+        html body #set-menu > .tng-set-glass-pill.is-snap,
+        html body #theme-menu > .tng-tm-glass-pill.is-snap {
+          transition: opacity 0.2s ease !important;
+        }
+      }
+
+      /* 3. MÀNG NƯỚC TRONG VEO NỔI KHỐI 3D (Ruột trong ~97%, nổi khối bằng bóng & độ cong mềm) */
       html body .tng-lg-drop {
         --hit-sx: 1;
         --hit-rx: 0.992;
-        --idle-sx-a: 0.992;
+        --hit-sy-x: 1.045;
+        --press-sx: 1;
+        --idle-sx-a: 0.995;
         --idle-sx-b: 1;
+        --idle-sy-a: 1;
+        --idle-sy-b: 0.988;
         position: absolute !important;
         inset: 0 !important;
         border-radius: inherit !important;
@@ -7042,29 +7089,45 @@
         isolation: isolate !important;
         transform-origin: center center;
         backface-visibility: hidden !important;
+        transition: box-shadow 0.2s ease;
+        /* Ruột gần như trong suốt hoàn toàn để không bị đục */
         background: linear-gradient(
-          145deg,
-          rgba(255, 255, 255, 0.088) 0%,
-          rgba(255, 255, 255, 0.022) 48%,
-          rgba(205, 228, 255, 0.056) 100%
+          168deg,
+          rgba(255, 255, 255, 0.036) 0%,
+          rgba(255, 255, 255, 0.004) 48%,
+          rgba(210, 235, 255, 0.026) 100%
         ) !important;
+        /* Nổi khối 3D bằng bóng đổ tách nền + độ cong ánh sáng khuếch tán mềm (không kẻ viền cứng) */
         box-shadow:
-          0 8px 22px rgba(0, 0, 0, 0.26),
-          inset 0 1px 2.5px rgba(255, 255, 255, 0.16),
-          inset 0 -1px 3px rgba(0, 0, 0, 0.22) !important;
-        animation: tngLgIdle 4.8s ease-in-out infinite;
+          0 12px 24px -6px rgba(0, 0, 0, 0.5),
+          0 3px 8px -2px rgba(0, 0, 0, 0.32),
+          0 2px 10px -3px rgba(190, 225, 255, 0.09),
+          inset 0 7px 14px -8px rgba(255, 255, 255, 0.22),
+          inset 0 -7px 14px -8px rgba(190, 228, 255, 0.2),
+          inset 0 -2px 5px -2px rgba(0, 0, 0, 0.32),
+          inset 6px 0 12px -9px rgba(255, 255, 255, 0.12),
+          inset -6px 0 12px -9px rgba(0, 0, 0, 0.24) !important;
+        animation: tngLgIdle 5s ease-in-out infinite;
         animation-play-state: paused;
       }
 
-      /* Sidebar có khoảng hở 2 bên nên cho phép phồng nhẹ tự nhiên hơn */
+      /* Sidebar có khoảng trống 2 bên nên cho phép phồng nhẹ tự nhiên */
       html body #sidebar > .tng-glow-pill > .tng-lg-drop {
-        --hit-sx: 1.028;
-        --hit-rx: 0.986;
-        --idle-sx-a: 0.993;
-        --idle-sx-b: 1.008;
+        --hit-sx: 1.035;
+        --hit-rx: 0.985;
+        --press-sx: 1.028;
+        --idle-sx-a: 0.994;
+        --idle-sx-b: 1.006;
+        --idle-sy-a: 1.012;
+        --idle-sy-b: 0.988;
       }
 
-      /* Dòng chảy ánh sáng mềm lặp chậm bên trong lòng nước (thuần GPU transform) */
+      /* Tab Quản lý gói thuê bao giữ viền trên/dưới sạch không bị cắt */
+      html body #sp-body .tng-sub-tabs .tng-lg-drop {
+        --hit-sy-x: 1;
+      }
+
+      /* Dòng chảy ánh sáng cực mảnh bên trong nước trong suốt */
       html body .tng-lg-flow {
         position: absolute !important;
         top: -45% !important;
@@ -7076,21 +7139,20 @@
         backface-visibility: hidden !important;
         background:
           radial-gradient(
-            42% 38% at 32% 42%,
-            rgba(255, 255, 255, 0.065) 0%,
-            rgba(192, 228, 255, 0.03) 45%,
-            transparent 76%
+            42% 36% at 32% 42%,
+            rgba(255, 255, 255, 0.045) 0%,
+            rgba(195, 230, 255, 0.02) 45%,
+            transparent 74%
           ),
           radial-gradient(
-            40% 36% at 72% 62%,
-            rgba(186, 222, 255, 0.05) 0%,
-            transparent 74%
+            38% 34% at 72% 62%,
+            rgba(190, 225, 255, 0.035) 0%,
+            transparent 72%
           ) !important;
-        animation: tngLgFlow 6.2s ease-in-out infinite alternate;
+        animation: tngLgFlow 6.4s ease-in-out infinite alternate;
         animation-play-state: paused;
       }
 
-      /* Chỉ chạy dòng chảy & dao động trên đúng menu đang mở (đóng menu = 0% GPU/CPU) */
       html body #sidebar:not(.collapsed) .tng-lg-drop,
       html body #sidebar.open .tng-lg-drop,
       html body .show .tng-lg-drop,
@@ -7106,7 +7168,7 @@
         animation-play-state: running;
       }
 
-      /* Khung mặt nạ viền 1px: các đốm phát quang bên trong trượt thuần GPU */
+      /* Viền khúc xạ 1px SIÊU MẢNH: nền viền gần như vô hình, chỉ sáng đúng chỗ có ánh phản chiếu */
       html body .tng-lg-rim {
         position: absolute !important;
         inset: 0 !important;
@@ -7117,12 +7179,12 @@
         pointer-events: none !important;
         z-index: 3 !important;
         background: linear-gradient(
-          142deg,
-          rgba(255, 255, 255, 0.26) 0%,
-          rgba(255, 255, 255, 0.055) 28%,
-          rgba(255, 255, 255, 0.025) 52%,
-          rgba(210, 232, 255, 0.07) 78%,
-          rgba(255, 255, 255, 0.2) 100%
+          145deg,
+          rgba(255, 255, 255, 0.14) 0%,
+          rgba(255, 255, 255, 0.02) 30%,
+          rgba(255, 255, 255, 0.01) 55%,
+          rgba(205, 232, 255, 0.03) 78%,
+          rgba(255, 255, 255, 0.1) 100%
         ) !important;
         -webkit-mask:
           linear-gradient(#fff 0 0) content-box,
@@ -7134,7 +7196,7 @@
         mask-composite: exclude !important;
       }
 
-      /* Các lớp phát quang phản chiếu chạy theo chuột (GPU transition mượt) */
+      /* Điểm phản chiếu quang học chạy theo chuột dọc theo mép cong */
       html body .tng-lg-r1,
       html body .tng-lg-r2,
       html body .tng-lg-in {
@@ -7144,7 +7206,7 @@
         pointer-events: none !important;
         border-radius: 50% !important;
         backface-visibility: hidden !important;
-        transition: transform 0.16s cubic-bezier(0.22, 1, 0.36, 1) !important;
+        transition: transform 0.15s cubic-bezier(0.22, 1, 0.36, 1) !important;
       }
 
       html body .tng-lg-lit .tng-lg-r1,
@@ -7153,57 +7215,55 @@
         will-change: transform !important;
       }
 
-      /* Điểm phát quang chính trên viền 1px */
       html body .tng-lg-r1 {
-        width: 240px !important;
-        height: 240px !important;
-        margin: -120px 0 0 -120px !important;
-        transform: translate3d(36px, 6px, 0);
-        background: radial-gradient(
-          circle,
-          rgba(255, 255, 255, 0.9) 0%,
-          rgba(204, 232, 255, 0.36) 34%,
-          transparent 70%
-        ) !important;
-      }
-
-      /* Vệt khúc xạ đối xứng trên viền 1px */
-      html body .tng-lg-r2 {
         width: 220px !important;
         height: 220px !important;
         margin: -110px 0 0 -110px !important;
-        transform: translate3d(170px, 38px, 0);
+        transform: translate3d(36px, 6px, 0);
         background: radial-gradient(
           circle,
-          rgba(196, 226, 255, 0.48) 0%,
-          rgba(232, 218, 255, 0.18) 38%,
-          transparent 72%
+          rgba(255, 255, 255, 0.85) 0%,
+          rgba(204, 232, 255, 0.32) 30%,
+          transparent 66%
         ) !important;
       }
 
-      /* Gợn sáng phản chiếu mềm trong lòng giọt nước */
+      html body .tng-lg-r2 {
+        width: 200px !important;
+        height: 200px !important;
+        margin: -100px 0 0 -100px !important;
+        transform: translate3d(170px, 38px, 0);
+        background: radial-gradient(
+          circle,
+          rgba(196, 226, 255, 0.42) 0%,
+          rgba(232, 218, 255, 0.14) 36%,
+          transparent 68%
+        ) !important;
+      }
+
+      /* Gợn sáng lòng nước cực dịu để giữ độ trong suốt */
       html body .tng-lg-in {
-        width: 230px !important;
-        height: 114px !important;
-        margin: -57px 0 0 -115px !important;
+        width: 200px !important;
+        height: 96px !important;
+        margin: -48px 0 0 -100px !important;
         z-index: 1 !important;
         transform: translate3d(36px, 6px, 0);
         background: radial-gradient(
           ellipse 50% 50% at 50% 50%,
-          rgba(255, 255, 255, 0.15) 0%,
-          rgba(205, 232, 255, 0.055) 46%,
-          transparent 78%
+          rgba(255, 255, 255, 0.085) 0%,
+          rgba(205, 232, 255, 0.03) 46%,
+          transparent 76%
         ) !important;
       }
 
-      /* Vòng gợn mặt nước mảnh lan ra ngay tại điểm nhấn */
+      /* Vòng gợn mặt nước mảnh lan ra tại điểm nhấn */
       html body .tng-lg-rip {
         position: absolute !important;
         top: 50%;
         left: 50%;
-        width: 110px !important;
-        height: 110px !important;
-        margin: -55px 0 0 -55px !important;
+        width: 116px !important;
+        height: 116px !important;
+        margin: -58px 0 0 -58px !important;
         border-radius: 50% !important;
         pointer-events: none !important;
         z-index: 2 !important;
@@ -7211,16 +7271,16 @@
         backface-visibility: hidden !important;
         background: radial-gradient(
           circle,
-          transparent 44%,
-          rgba(255, 255, 255, 0.28) 62%,
-          rgba(192, 228, 255, 0.14) 70%,
-          transparent 78%
+          transparent 42%,
+          rgba(255, 255, 255, 0.34) 60%,
+          rgba(192, 228, 255, 0.16) 68%,
+          transparent 76%
         ) !important;
       }
 
       html body .tng-lg-rip.tng-rip-go {
         will-change: transform, opacity !important;
-        animation: tngLgRipple 0.54s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+        animation: tngLgRipple 0.56s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
         animation-play-state: running !important;
       }
 
@@ -7232,195 +7292,184 @@
         border-radius: 50% !important;
         background: radial-gradient(
           ellipse 50% 50% at 50% 50%,
-          rgba(255, 255, 255, 0.94) 0%,
-          rgba(192, 228, 255, 0.46) 44%,
-          transparent 76%
+          rgba(255, 255, 255, 0.96) 0%,
+          rgba(192, 228, 255, 0.44) 42%,
+          transparent 74%
         ) !important;
       }
 
-      /* 3. Đồng bộ Giao diện Sáng (Light Mode) */
+      /* 4. Đồng bộ Giao diện Sáng (Light Mode): nước pha lê trong suốt nổi khối bằng bóng */
       html body[data-theme="light"] .tng-lg-drop {
         background: linear-gradient(
-          145deg,
-          rgba(255, 255, 255, 0.72) 0%,
-          rgba(255, 255, 255, 0.28) 50%,
-          rgba(240, 247, 255, 0.54) 100%
+          168deg,
+          rgba(255, 255, 255, 0.38) 0%,
+          rgba(255, 255, 255, 0.06) 48%,
+          rgba(225, 240, 255, 0.22) 100%
         ) !important;
         box-shadow:
-          0 6px 18px rgba(15, 23, 42, 0.085),
-          0 1px 3px rgba(15, 23, 42, 0.045),
-          inset 0 1px 2px rgba(255, 255, 255, 0.95),
-          inset 0 -1px 2.5px rgba(15, 23, 42, 0.06) !important;
+          0 10px 22px -6px rgba(15, 23, 42, 0.14),
+          0 2px 6px -1px rgba(15, 23, 42, 0.08),
+          inset 0 7px 14px -7px rgba(255, 255, 255, 0.95),
+          inset 0 -6px 12px -7px rgba(15, 23, 42, 0.14),
+          inset 5px 0 10px -8px rgba(255, 255, 255, 0.8),
+          inset -5px 0 10px -8px rgba(15, 23, 42, 0.08) !important;
       }
       html body[data-theme="light"] .tng-lg-flow {
         background:
           radial-gradient(
-            42% 38% at 32% 42%,
-            rgba(255, 255, 255, 0.44) 0%,
-            rgba(56, 139, 253, 0.045) 48%,
-            transparent 76%
+            42% 36% at 32% 42%,
+            rgba(255, 255, 255, 0.35) 0%,
+            rgba(56, 139, 253, 0.03) 48%,
+            transparent 74%
           ),
           radial-gradient(
-            40% 36% at 72% 62%,
-            rgba(255, 255, 255, 0.34) 0%,
-            transparent 74%
+            38% 34% at 72% 62%,
+            rgba(255, 255, 255, 0.26) 0%,
+            transparent 72%
           ) !important;
       }
       html body[data-theme="light"] .tng-lg-rim {
         background: linear-gradient(
-          142deg,
-          rgba(255, 255, 255, 0.95) 0%,
-          rgba(15, 23, 42, 0.09) 46%,
-          rgba(15, 23, 42, 0.06) 58%,
-          rgba(255, 255, 255, 0.82) 100%
+          145deg,
+          rgba(255, 255, 255, 0.85) 0%,
+          rgba(15, 23, 42, 0.07) 44%,
+          rgba(15, 23, 42, 0.04) 58%,
+          rgba(255, 255, 255, 0.72) 100%
         ) !important;
       }
       html body[data-theme="light"] .tng-lg-r1 {
         background: radial-gradient(
           circle,
           rgba(255, 255, 255, 1) 0%,
-          rgba(186, 220, 255, 0.6) 38%,
-          transparent 72%
+          rgba(186, 220, 255, 0.5) 34%,
+          transparent 68%
         ) !important;
       }
       html body[data-theme="light"] .tng-lg-r2 {
         background: radial-gradient(
           circle,
-          rgba(15, 23, 42, 0.24) 0%,
-          rgba(56, 139, 253, 0.22) 42%,
-          transparent 74%
+          rgba(15, 23, 42, 0.18) 0%,
+          rgba(56, 139, 253, 0.16) 40%,
+          transparent 70%
         ) !important;
       }
       html body[data-theme="light"] .tng-lg-in {
         background: radial-gradient(
           ellipse 50% 50% at 50% 50%,
-          rgba(255, 255, 255, 0.68) 0%,
-          rgba(56, 139, 253, 0.06) 50%,
-          transparent 76%
+          rgba(255, 255, 255, 0.42) 0%,
+          rgba(56, 139, 253, 0.04) 50%,
+          transparent 74%
         ) !important;
       }
       html body[data-theme="light"] .tng-lg-rip {
         background: radial-gradient(
           circle,
-          transparent 44%,
-          rgba(56, 139, 253, 0.22) 62%,
-          rgba(255, 255, 255, 0.55) 70%,
-          transparent 78%
+          transparent 42%,
+          rgba(56, 139, 253, 0.24) 60%,
+          rgba(255, 255, 255, 0.65) 68%,
+          transparent 76%
         ) !important;
       }
       html body[data-theme="light"] .tng-lg-rs {
         background: radial-gradient(
           ellipse 50% 50% at 50% 50%,
           rgba(255, 255, 255, 1) 0%,
-          rgba(56, 139, 253, 0.36) 46%,
-          transparent 78%
+          rgba(56, 139, 253, 0.36) 44%,
+          transparent 76%
         ) !important;
       }
 
-      /* 4. Nút Xóa (.is-danger): giọt kính ruby */
+      /* 5. Nút Xóa (.is-danger): giọt nước ánh đỏ trong suốt */
       html body .tng-glow-pill.is-danger > .tng-lg-drop {
         background: linear-gradient(
-          145deg,
-          rgba(255, 69, 58, 0.17) 0%,
-          rgba(255, 69, 58, 0.05) 50%,
-          rgba(255, 110, 100, 0.12) 100%
+          168deg,
+          rgba(255, 80, 70, 0.09) 0%,
+          rgba(255, 69, 58, 0.02) 48%,
+          rgba(255, 110, 100, 0.07) 100%
         ) !important;
         box-shadow:
-          0 8px 22px rgba(255, 59, 48, 0.2),
-          inset 0 1px 2.5px rgba(255, 210, 205, 0.24),
-          inset 0 -1px 3px rgba(120, 12, 10, 0.22) !important;
+          0 12px 24px -6px rgba(255, 59, 48, 0.24),
+          0 3px 8px -2px rgba(0, 0, 0, 0.32),
+          inset 0 7px 14px -8px rgba(255, 210, 205, 0.28),
+          inset 0 -7px 14px -8px rgba(255, 100, 92, 0.24),
+          inset 0 -2px 5px -2px rgba(95, 8, 6, 0.34) !important;
       }
       html body .tng-glow-pill.is-danger .tng-lg-flow {
         background: radial-gradient(
-          42% 38% at 38% 45%,
-          rgba(255, 185, 178, 0.1) 0%,
-          transparent 76%
+          42% 36% at 38% 45%,
+          rgba(255, 185, 178, 0.07) 0%,
+          transparent 74%
         ) !important;
       }
       html body .tng-glow-pill.is-danger .tng-lg-rim {
         background: linear-gradient(
-          142deg,
-          rgba(255, 190, 184, 0.34) 0%,
-          rgba(255, 69, 58, 0.1) 45%,
-          rgba(255, 155, 148, 0.24) 100%
+          145deg,
+          rgba(255, 195, 190, 0.24) 0%,
+          rgba(255, 69, 58, 0.05) 44%,
+          rgba(255, 155, 148, 0.16) 100%
         ) !important;
       }
       html body .tng-glow-pill.is-danger .tng-lg-r1 {
         background: radial-gradient(
           circle,
-          rgba(255, 224, 220, 0.92) 0%,
-          rgba(255, 110, 100, 0.42) 38%,
-          transparent 72%
+          rgba(255, 230, 226, 0.88) 0%,
+          rgba(255, 110, 100, 0.36) 34%,
+          transparent 68%
         ) !important;
       }
       html body .tng-glow-pill.is-danger .tng-lg-r2 {
         background: radial-gradient(
           circle,
-          rgba(255, 88, 78, 0.5) 0%,
-          transparent 74%
+          rgba(255, 88, 78, 0.44) 0%,
+          transparent 70%
         ) !important;
       }
       html body .tng-glow-pill.is-danger .tng-lg-in {
         background: radial-gradient(
           ellipse 50% 50% at 50% 50%,
-          rgba(255, 185, 178, 0.2) 0%,
-          transparent 76%
+          rgba(255, 185, 178, 0.11) 0%,
+          transparent 74%
         ) !important;
       }
       html body .tng-glow-pill.is-danger .tng-lg-rip {
         background: radial-gradient(
           circle,
-          transparent 44%,
-          rgba(255, 150, 142, 0.36) 62%,
-          transparent 78%
+          transparent 42%,
+          rgba(255, 150, 142, 0.4) 60%,
+          transparent 76%
         ) !important;
       }
       html body .tng-glow-pill.is-danger .tng-lg-rs {
         background: radial-gradient(
           ellipse 50% 50% at 50% 50%,
-          rgba(255, 232, 228, 0.94) 0%,
-          rgba(255, 92, 82, 0.46) 44%,
-          transparent 78%
+          rgba(255, 236, 232, 0.94) 0%,
+          rgba(255, 92, 82, 0.44) 42%,
+          transparent 74%
         ) !important;
       }
       html body[data-theme="light"] .tng-glow-pill.is-danger .tng-lg-rim {
         background: linear-gradient(
-          142deg,
-          rgba(255, 160, 152, 0.6) 0%,
-          rgba(255, 59, 48, 0.14) 50%,
-          rgba(255, 130, 122, 0.45) 100%
-        ) !important;
-      }
-      html body[data-theme="light"] .tng-glow-pill.is-danger .tng-lg-r1 {
-        background: radial-gradient(
-          circle,
-          rgba(255, 255, 255, 0.98) 0%,
-          rgba(255, 120, 110, 0.58) 40%,
-          transparent 72%
-        ) !important;
-      }
-      html body[data-theme="light"] .tng-glow-pill.is-danger .tng-lg-r2 {
-        background: radial-gradient(
-          circle,
-          rgba(217, 48, 37, 0.34) 0%,
-          transparent 74%
+          145deg,
+          rgba(255, 150, 142, 0.5) 0%,
+          rgba(255, 59, 48, 0.1) 50%,
+          rgba(255, 120, 112, 0.36) 100%
         ) !important;
       }
 
-      /* 5. KEYFRAMES THUẦN GPU: DÒNG CHẢY NHẸ + NHẤN NẢY + VA CHẠM 4 MÉP */
+      /* 6. KEYFRAMES THUẦN GPU: DÒNG CHẢY NHẸ + LƯỚT BÁM VIỀN + CHẠM NẢY + VA CHẠM 4 MÉP */
       @keyframes tngLgIdle {
         0%,
         100% {
           transform: scale3d(1, 1, 1);
         }
         25% {
-          transform: scale3d(var(--idle-sx-a, 0.992), 1.015, 1);
+          transform: scale3d(var(--idle-sx-a, 0.995), var(--idle-sy-a, 1), 1);
         }
         50% {
-          transform: scale3d(var(--idle-sx-b, 1), 0.987, 1);
+          transform: scale3d(var(--idle-sx-b, 1), var(--idle-sy-b, 0.988), 1);
         }
         75% {
-          transform: scale3d(0.994, 1.011, 1);
+          transform: scale3d(0.996, 0.996, 1);
         }
       }
 
@@ -7440,18 +7489,42 @@
         }
       }
 
+      /* Nhịp nhún cực khẽ khi trượt trong Cài đặt/Giao diện/Lặp lại — vẫn bám sát 2 viền */
+      @keyframes tngLgSlideHugging {
+        0% {
+          transform: scale3d(1, 1, 1);
+        }
+        35% {
+          transform: scale3d(0.982, 1.045, 1);
+        }
+        72% {
+          transform: scale3d(1, 0.982, 1);
+        }
+        100% {
+          transform: scale3d(1, 1, 1);
+        }
+      }
+
+      html body .tng-lg-drop.tng-lg-sliding {
+        transform-origin: center center !important;
+        will-change: transform !important;
+        animation: tngLgSlideHugging 0.34s cubic-bezier(0.22, 1, 0.36, 1)
+          forwards !important;
+        animation-play-state: running !important;
+      }
+
       @keyframes tngLgRelease {
         0% {
-          transform: scale3d(0.964, 0.905, 1);
+          transform: scale3d(0.955, 0.865, 1);
         }
-        30% {
-          transform: scale3d(var(--hit-sx, 1), 1.052, 1);
+        28% {
+          transform: scale3d(var(--press-sx, 1), 1.068, 1);
         }
-        58% {
-          transform: scale3d(0.99, 0.978, 1);
+        56% {
+          transform: scale3d(0.988, 0.972, 1);
         }
-        80% {
-          transform: scale3d(1, 1.011, 1);
+        78% {
+          transform: scale3d(1, 1.012, 1);
         }
         100% {
           transform: scale3d(1, 1, 1);
@@ -7460,12 +7533,12 @@
 
       @keyframes tngLgRipple {
         0% {
-          opacity: 0.85;
-          transform: scale3d(0.16, 0.16, 1);
+          opacity: 0.9;
+          transform: scale3d(0.14, 0.14, 1);
         }
         100% {
           opacity: 0;
-          transform: scale3d(2.25, 1.65, 1);
+          transform: scale3d(2.45, 1.75, 1);
         }
       }
 
@@ -7473,14 +7546,14 @@
         0% {
           transform: scale3d(1, 1, 1);
         }
-        26% {
-          transform: scale3d(var(--hit-sx, 1), 0.895, 1);
+        24% {
+          transform: scale3d(var(--hit-sx, 1), 0.845, 1);
         }
-        58% {
-          transform: scale3d(var(--hit-rx, 0.992), 1.032, 1);
+        52% {
+          transform: scale3d(var(--hit-rx, 0.992), 1.052, 1);
         }
-        80% {
-          transform: scale3d(1, 0.992, 1);
+        76% {
+          transform: scale3d(1, 0.986, 1);
         }
         100% {
           transform: scale3d(1, 1, 1);
@@ -7491,14 +7564,14 @@
         0% {
           transform: scale3d(1, 1, 1);
         }
-        26% {
-          transform: scale3d(0.91, 1.045, 1);
+        24% {
+          transform: scale3d(0.87, var(--hit-sy-x, 1.045), 1);
         }
-        58% {
-          transform: scale3d(1.028, 0.986, 1);
+        52% {
+          transform: scale3d(1.04, 0.985, 1);
         }
-        80% {
-          transform: scale3d(0.994, 1.004, 1);
+        76% {
+          transform: scale3d(0.992, 1.004, 1);
         }
         100% {
           transform: scale3d(1, 1, 1);
@@ -7508,47 +7581,60 @@
       @keyframes tngLgSplashY {
         0% {
           opacity: 0;
-          transform: translateX(-50%) scale3d(0.6, 0.7, 1);
+          transform: translateX(-50%) scale3d(0.55, 0.7, 1);
         }
-        24% {
-          opacity: 0.95;
-          transform: translateX(-50%) scale3d(1.12, 1, 1);
+        22% {
+          opacity: 1;
+          transform: translateX(-50%) scale3d(1.18, 1.05, 1);
         }
         100% {
           opacity: 0;
-          transform: translateX(-50%) scale3d(1.28, 0.85, 1);
+          transform: translateX(-50%) scale3d(1.36, 0.86, 1);
         }
       }
 
       @keyframes tngLgSplashX {
         0% {
           opacity: 0;
-          transform: translateY(-50%) scale3d(0.7, 0.6, 1);
+          transform: translateY(-50%) scale3d(0.7, 0.55, 1);
         }
-        24% {
-          opacity: 0.95;
-          transform: translateY(-50%) scale3d(1, 1.12, 1);
+        22% {
+          opacity: 1;
+          transform: translateY(-50%) scale3d(1.05, 1.18, 1);
         }
         100% {
           opacity: 0;
-          transform: translateY(-50%) scale3d(0.85, 1.28, 1);
+          transform: translateY(-50%) scale3d(0.86, 1.36, 1);
         }
       }
 
-      /* Nhấn giữ giọt nước: nén lún êm ngay lập tức */
+      /* Nhấn giữ giọt nước: nén lún rõ + hạ bóng sát xuống nền tạo cảm giác ấn 3D */
       html body .tng-lg-drop.tng-lg-pressing {
         animation: none !important;
         transform-origin: center center !important;
         will-change: transform !important;
-        transition: transform 0.1s cubic-bezier(0.22, 1, 0.36, 1) !important;
-        transform: scale3d(0.964, 0.905, 1) !important;
+        transition:
+          transform 0.095s cubic-bezier(0.22, 1, 0.36, 1),
+          box-shadow 0.095s ease !important;
+        transform: scale3d(0.955, 0.865, 1) !important;
+        box-shadow:
+          0 2px 6px rgba(0, 0, 0, 0.36),
+          inset 0 4px 10px -4px rgba(0, 0, 0, 0.24),
+          inset 0 -5px 12px -6px rgba(190, 228, 255, 0.24) !important;
       }
 
-      /* Thả tay: bung nảy đàn hồi như giọt nước thật */
+      html body[data-theme="light"] .tng-lg-drop.tng-lg-pressing {
+        box-shadow:
+          0 2px 6px rgba(15, 23, 42, 0.1),
+          inset 0 4px 8px -4px rgba(15, 23, 42, 0.12),
+          inset 0 -4px 10px -6px rgba(255, 255, 255, 0.9) !important;
+      }
+
+      /* Thả tay: bung nảy đàn hồi rõ ràng */
       html body .tng-lg-drop.tng-lg-release {
         transform-origin: center center !important;
         will-change: transform !important;
-        animation: tngLgRelease 0.54s cubic-bezier(0.22, 1, 0.36, 1) forwards !important;
+        animation: tngLgRelease 0.56s cubic-bezier(0.22, 1, 0.36, 1) forwards !important;
         animation-play-state: running !important;
       }
 
@@ -7556,60 +7642,60 @@
       html body .tng-lg-drop.tng-hit-bottom {
         transform-origin: center bottom !important;
         will-change: transform !important;
-        animation: tngLgHitY 0.42s cubic-bezier(0.22, 1, 0.36, 1) forwards !important;
+        animation: tngLgHitY 0.48s cubic-bezier(0.22, 1, 0.36, 1) forwards !important;
         animation-play-state: running !important;
       }
       html body .tng-lg-drop.tng-hit-bottom .tng-lg-rs {
         left: 50%;
-        bottom: -24px;
-        width: 82%;
-        height: 48px;
-        animation: tngLgSplashY 0.42s ease-out forwards !important;
+        bottom: -27px;
+        width: 88%;
+        height: 54px;
+        animation: tngLgSplashY 0.48s ease-out forwards !important;
       }
 
       /* Đụng trên đầu */
       html body .tng-lg-drop.tng-hit-top {
         transform-origin: center top !important;
         will-change: transform !important;
-        animation: tngLgHitY 0.42s cubic-bezier(0.22, 1, 0.36, 1) forwards !important;
+        animation: tngLgHitY 0.48s cubic-bezier(0.22, 1, 0.36, 1) forwards !important;
         animation-play-state: running !important;
       }
       html body .tng-lg-drop.tng-hit-top .tng-lg-rs {
         left: 50%;
-        top: -24px;
-        width: 82%;
-        height: 48px;
-        animation: tngLgSplashY 0.42s ease-out forwards !important;
+        top: -27px;
+        width: 88%;
+        height: 54px;
+        animation: tngLgSplashY 0.48s ease-out forwards !important;
       }
 
       /* Đụng sát phải */
       html body .tng-lg-drop.tng-hit-right {
         transform-origin: right center !important;
         will-change: transform !important;
-        animation: tngLgHitX 0.42s cubic-bezier(0.22, 1, 0.36, 1) forwards !important;
+        animation: tngLgHitX 0.48s cubic-bezier(0.22, 1, 0.36, 1) forwards !important;
         animation-play-state: running !important;
       }
       html body .tng-lg-drop.tng-hit-right .tng-lg-rs {
         top: 50%;
-        right: -24px;
-        width: 48px;
-        height: 86%;
-        animation: tngLgSplashX 0.42s ease-out forwards !important;
+        right: -27px;
+        width: 54px;
+        height: 90%;
+        animation: tngLgSplashX 0.48s ease-out forwards !important;
       }
 
       /* Đụng sát trái */
       html body .tng-lg-drop.tng-hit-left {
         transform-origin: left center !important;
         will-change: transform !important;
-        animation: tngLgHitX 0.42s cubic-bezier(0.22, 1, 0.36, 1) forwards !important;
+        animation: tngLgHitX 0.48s cubic-bezier(0.22, 1, 0.36, 1) forwards !important;
         animation-play-state: running !important;
       }
       html body .tng-lg-drop.tng-hit-left .tng-lg-rs {
         top: 50%;
-        left: -24px;
-        width: 48px;
-        height: 86%;
-        animation: tngLgSplashX 0.42s ease-out forwards !important;
+        left: -27px;
+        width: 54px;
+        height: 90%;
+        animation: tngLgSplashX 0.48s ease-out forwards !important;
       }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -38135,12 +38221,12 @@
       })();
 
       // ============================================================
-      // GIỌT NƯỚC TƯƠNG TÁC GPU: PHÁT QUANG + VA CHẠM 4 MÉP + NHẤN NẢY
-      // Không vòng lặp chạy nền, 0% CPU khi đứng yên
+      // GIỌT NƯỚC TRONG VEO 3D: BÁM SÁT VIỀN + PHÁT QUANG + VA CHẠM
+      // + CHẠM TAY NẢY GỢN SÓNG (0 RAF KHI TRƯỢT -> SIÊU MƯỢT)
       // ============================================================
       (function () {
-        if (window.__tngLiquidInteractV6) return;
-        window.__tngLiquidInteractV6 = true;
+        if (window.__tngLiquidInteractV9) return;
+        window.__tngLiquidInteractV9 = true;
 
         const PILL_SEL =
           ".tng-glow-pill, .tng-rp-glass-pill, .tng-set-glass-pill, .tng-tm-glass-pill";
@@ -38149,9 +38235,9 @@
         const CSS_MOVE_SEL =
           ".tng-set-glass-pill, .tng-tm-glass-pill, .tng-rp-glass-pill";
         const MENU_SEL =
-          ".tng-glow-menu, #set-menu, #theme-menu, .tng-rp-list, .tng-sub-tabs, .account-modal, .acc-expanded-list";
+          ".tng-glow-menu, #sidebar, #set-menu, #theme-menu, .drop-menu, .sub-menu, .hist-options-menu, .ai-options-menu, #custom-dropdown-menu, .tng-rp-list, .tng-sub-tabs";
         const ITEM_SEL =
-          ".sb-item, .d-item, .m-item, .dropdown-opt, .ai-option-item, .tng-hd-opt, .tng-rp-opt, .tng-sub-tab, .acc-row-btn, .acc-wrap-box";
+          ".sb-item, .d-item, .m-item, .dropdown-opt, .ai-option-item, .tng-hd-opt, .tng-rp-opt, .tng-sub-tab";
         const HIT_CLASSES = [
           "tng-hit-top",
           "tng-hit-bottom",
@@ -38230,7 +38316,11 @@
 
           drop.addEventListener("animationend", (e) => {
             if (e.target !== drop) return;
-            drop.classList.remove(...HIT_CLASSES, "tng-lg-release");
+            drop.classList.remove(
+              ...HIT_CLASSES,
+              "tng-lg-release",
+              "tng-lg-sliding",
+            );
           });
 
           ripEl.addEventListener("animationend", () => {
@@ -38250,9 +38340,9 @@
           };
           pillInfo.set(pill, info);
 
-          // Bắt va chạm đầu/đáy cho Cài đặt, Giao diện, Lặp lại bằng transitionend (0 RAF)
-          if (pill.matches(CSS_MOVE_SEL) && !pill.dataset.tngEdgeBoundV6) {
-            pill.dataset.tngEdgeBoundV6 = "1";
+          // Cài đặt, Giao diện & Lặp lại: bám sát viền 2 bên (chỉ nhún lỏng cực khẽ, không thụt lề) + va chạm đầu/đáy
+          if (pill.matches(CSS_MOVE_SEL) && !pill.dataset.tngEdgeBoundV9) {
+            pill.dataset.tngEdgeBoundV9 = "1";
 
             new MutationObserver(() => {
               const y = parseY(pill.style.transform);
@@ -38264,12 +38354,27 @@
               ) {
                 info.lastY = y;
                 info.pendingDir = 0;
+                info.drop.classList.remove("tng-lg-sliding");
                 return;
               }
+
               const prev = info.lastY !== null ? info.lastY : y;
               info.lastY = y;
               const dy = y - prev;
-              if (Math.abs(dy) >= 8) info.pendingDir = dy > 0 ? 1 : -1;
+              const dist = Math.abs(dy);
+              if (dist < 4) return;
+
+              info.pendingDir = dy > 0 ? 1 : -1;
+
+              if (!info.drop.classList.contains("tng-lg-pressing")) {
+                info.drop.classList.remove(
+                  ...HIT_CLASSES,
+                  "tng-lg-release",
+                  "tng-lg-sliding",
+                );
+                void info.drop.offsetWidth;
+                info.drop.classList.add("tng-lg-sliding");
+              }
             }).observe(pill, {
               attributes: true,
               attributeFilter: ["style"],
@@ -38353,12 +38458,15 @@
           info.lastHitTime = now;
 
           const drop = info.drop;
-          drop.classList.remove(...HIT_CLASSES, "tng-lg-release");
+          drop.classList.remove(
+            ...HIT_CLASSES,
+            "tng-lg-release",
+            "tng-lg-sliding",
+          );
           void drop.offsetWidth;
           drop.classList.add("tng-hit-" + side);
         };
 
-        // Nảy tương tác + vòng gợn mặt nước khi nhấn vào giọt nước
         const pressPill = (pill, clientX, clientY) => {
           const info = ensureDrop(pill);
           const drop = info.drop;
@@ -38366,7 +38474,11 @@
           if (pressedPill && pressedPill !== pill) releasePressedPill();
           pressedPill = pill;
 
-          drop.classList.remove(...HIT_CLASSES, "tng-lg-release");
+          drop.classList.remove(
+            ...HIT_CLASSES,
+            "tng-lg-release",
+            "tng-lg-sliding",
+          );
           drop.classList.add("tng-lg-pressing");
 
           const pos = updateLightAt(pill, clientX, clientY);
@@ -38393,6 +38505,7 @@
             "tng-lg-pressing",
             ...HIT_CLASSES,
             "tng-lg-release",
+            "tng-lg-sliding",
           );
           void drop.offsetWidth;
           drop.classList.add("tng-lg-release");
@@ -38558,6 +38671,16 @@
               e.target && e.target.closest ? e.target.closest(ITEM_SEL) : null;
             if (item) handleItemEnter(item, e.clientX, e.clientY);
             requestAnimationFrame(mountExisting);
+          },
+          true,
+        );
+
+        document.addEventListener(
+          "transitionrun",
+          (e) => {
+            if (e.target && e.target.matches && e.target.matches(PILL_SEL)) {
+              ensureDrop(e.target);
+            }
           },
           true,
         );
