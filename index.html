@@ -5585,6 +5585,52 @@
         transition-duration: 0.05s !important;
         transform: scale(0.88) !important;
       }
+
+      /* ============================================================ */
+      /* FIX GIẬT THANH CHAT CUỘC TRÒ CHUYỆN MỚI TRÊN ĐIỆN THOẠI     */
+      /* ============================================================ */
+      /* 1. Ẩn thanh cuộn 8px ở màn hình chính để không làm co giãn bề ngang gây giật */
+      #home.home-view {
+        scrollbar-width: none !important;
+        -ms-overflow-style: none !important;
+      }
+      #home.home-view::-webkit-scrollbar {
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+      }
+
+      @media (max-width: 768px) {
+        /* 2. Chặn #home tạo containing-block tạm làm nhảy vị trí position: fixed của thanh chat */
+        #home.home-view {
+          will-change: auto !important;
+          transform: none !important;
+          perspective: none !important;
+          filter: none !important;
+          overscroll-behavior-y: contain;
+        }
+
+        /* 3. Neo cố định khung bọc thanh chat theo màn hình thật, bỏ lệ thuộc translateX(-50%) */
+        #iw-home.input-wrapper.centered {
+          position: fixed !important;
+          left: 0 !important;
+          right: 0 !important;
+          width: 95% !important;
+          max-width: 800px;
+          margin: 0 auto !important;
+          bottom: max(15px, env(safe-area-inset-bottom)) !important;
+          transform: none;
+          z-index: 50;
+        }
+
+        /* 4. Giữ lớp GPU cố định cho hộp chat để khi hết hiệu ứng không nháy/giật kính mờ */
+        #iw-home .input-box {
+          transform: translate3d(0, 0, 0);
+          backface-visibility: hidden;
+          -webkit-backface-visibility: hidden;
+          will-change: transform, opacity;
+        }
+      }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
@@ -34424,6 +34470,162 @@
         const bodyObs = new MutationObserver(() => initHorizontalLiquidTabs());
         bodyObs.observe(spBody, { childList: true, subtree: true });
         initHorizontalLiquidTabs();
+      })();
+
+      // ============================================================
+      // ĐẶT LẠI HIỆU ỨNG KHỞI ĐỘNG KHI NHẤN NOTEBOOKLM -> TẤT CẢ SỔ GHI CHÚ
+      // ============================================================
+      (function () {
+        let replayTimers = [];
+
+        const clearReplayTimers = () => {
+          replayTimers.forEach((id) => clearTimeout(id));
+          replayTimers = [];
+        };
+
+        const isAllNotesVisible = (view) =>
+          !!view && window.getComputedStyle(view).display !== "none";
+
+        const isSilkAlreadyRunning = (view) => {
+          if (!view) return false;
+          if (view.querySelector(".tng-silk-anim")) return true;
+          const sample =
+            view.querySelector("#all-notes-grid .note-card") ||
+            view.querySelector("h1");
+          if (!sample) return false;
+          if (
+            typeof sample.getAnimations === "function" &&
+            sample.getAnimations().length > 0
+          ) {
+            return true;
+          }
+          const op = parseFloat(sample.style.opacity);
+          return !Number.isNaN(op) && op < 0.99;
+        };
+
+        const playAllNotesEntrance = (view) => {
+          if (!isAllNotesVisible(view)) return;
+          clearReplayTimers();
+          view.scrollTop = 0;
+
+          const grid = document.getElementById("all-notes-grid");
+          const targets = [];
+
+          // Lấy tiêu đề/thanh trên cùng của Tất cả sổ ghi chú
+          Array.from(view.children).forEach((ch) => {
+            if (
+              ch === grid ||
+              ch.tagName === "STYLE" ||
+              ch.tagName === "SCRIPT"
+            ) {
+              return;
+            }
+            if (window.getComputedStyle(ch).display !== "none") {
+              targets.push(ch);
+            }
+          });
+
+          // Lấy từng thẻ sổ ghi chú trong lưới
+          if (grid) {
+            Array.from(grid.children).forEach((card) => {
+              if (
+                card.tagName !== "STYLE" &&
+                card.tagName !== "SCRIPT" &&
+                window.getComputedStyle(card).display !== "none"
+              ) {
+                targets.push(card);
+              }
+            });
+          }
+
+          if (!targets.length) return;
+
+          // Đưa về trạng thái khởi đầu (trước khi trình duyệt vẽ khung hình)
+          targets.forEach((el) => {
+            el.classList.add("tng-silk-anim");
+            el.style.setProperty("transition", "none", "important");
+            el.style.setProperty("opacity", "0", "important");
+            el.style.setProperty(
+              "transform",
+              "translate3d(0, 26px, 0) scale(0.95)",
+              "important",
+            );
+            el.style.setProperty("filter", "blur(6px)", "important");
+            el.style.willChange = "transform, opacity, filter";
+          });
+
+          // Ép trình duyệt cập nhật trạng thái đầu rồi chạy hiệu ứng nổi mượt theo nhịp
+          void view.offsetWidth;
+
+          let maxEndMs = 0;
+          targets.forEach((el, idx) => {
+            const delay = Math.min(idx * 55, 380);
+            const dur = 680;
+            maxEndMs = Math.max(maxEndMs, delay + dur);
+
+            el.style.setProperty(
+              "transition",
+              `transform ${dur}ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, opacity ${Math.round(dur * 0.78)}ms ease ${delay}ms, filter ${Math.round(dur * 0.82)}ms ease ${delay}ms`,
+              "important",
+            );
+            el.style.setProperty("opacity", "1", "important");
+            el.style.setProperty(
+              "transform",
+              "translate3d(0, 0, 0) scale(1)",
+              "important",
+            );
+            el.style.setProperty("filter", "blur(0px)", "important");
+          });
+
+          // Dọn sạch style tạm sau khi hoàn tất để giữ nguyên hover & chế độ chọn thẻ
+          const cleanTimer = setTimeout(() => {
+            targets.forEach((el) => {
+              el.classList.remove("tng-silk-anim");
+              el.style.removeProperty("transition");
+              el.style.removeProperty("opacity");
+              el.style.removeProperty("transform");
+              el.style.removeProperty("filter");
+              el.style.willChange = "";
+            });
+          }, maxEndMs + 80);
+          replayTimers.push(cleanTimer);
+        };
+
+        // Bắt sự kiện nhấn vào mục NotebookLM (trong Cài đặt #set-menu hoặc menu Đính kèm +)
+        document.addEventListener("click", (ev) => {
+          if (!(ev.target instanceof Element)) return;
+          const item = ev.target.closest(".d-item, .s-item, .sb-item");
+          if (!item) return;
+
+          const text = (item.textContent || "").trim().toLowerCase();
+          const oc = (item.getAttribute("onclick") || "").toLowerCase();
+          const isNotebookLM =
+            text.includes("notebooklm") || oc.includes("notebooklm");
+          if (!isNotebookLM) return;
+
+          const triggerIfAllNotes = () => {
+            const view = document.getElementById("all-notes-view");
+            const settingsOverlay = document.getElementById(
+              "settings-page-overlay",
+            );
+            if (settingsOverlay && settingsOverlay.classList.contains("show")) {
+              return false;
+            }
+            if (!isAllNotesVisible(view)) return false;
+            if (!isSilkAlreadyRunning(view)) {
+              playAllNotesEntrance(view);
+            }
+            return true;
+          };
+
+          // Chạy trong microtask ngay sau onclick (trước khi vẽ khung hình để không bị chớp)
+          queueMicrotask(() => {
+            if (!triggerIfAllNotes()) {
+              const fallback = setTimeout(triggerIfAllNotes, 45);
+              replayTimers.push(fallback);
+            }
+          });
+        });
       })();
     </script>
   </body>
