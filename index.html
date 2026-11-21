@@ -5634,7 +5634,7 @@
 
       /* ============================================================ */
       /* TỐI ƯU MENU TRƯỢT GIAO DIỆN & TRỢ GIÚP TRÊN ĐIỆN THOẠI       */
-      /* Kéo bảng giãn nảy lên trên, thoáng đáy 16px & thanh sáng ✓   */
+      /* Kéo bảng giãn nảy lên trên, bo 11.5px khớp nước, đáy 12px    */
       /* ============================================================ */
       @media (max-width: 768px) {
         /* 1. Neo chặt đáy, bỏ giới hạn max-height để bảng tự kéo cao & nảy lên trên hiển thị đủ */
@@ -5651,20 +5651,25 @@
           flex-shrink: 0 !important;
         }
 
+        /* Đồng bộ độ bo 11.5px khớp với giọt nước cho mọi mục trong Cài đặt */
+        html body #set-menu > .d-item {
+          border-radius: 11.5px !important;
+        }
+
         /* Tạm ẩn giọt kính ngoài khi đang mở khối gộp để không chồng 2 lớp viền */
         html body #set-menu.tng-has-sub-open > .tng-glow-pill {
           opacity: 0 !important;
           transition: opacity 0.14s ease !important;
         }
 
-        /* 2. Bọc cả mục Giao diện / Trợ giúp + menu con thành 1 khối bo 4 góc 10px đồng bộ */
+        /* 2. Bọc cả mục Giao diện / Trợ giúp + menu con thành 1 khối bo 4 góc 11.5px khớp giọt nước */
         html body #set-menu .d-item.flex-between {
           position: relative !important;
           flex-wrap: wrap !important;
           align-items: center !important;
           height: auto !important;
           row-gap: 0 !important;
-          border-radius: 10px !important;
+          border-radius: 11.5px !important;
           overflow: hidden !important;
           transition:
             background-color 0.24s ease,
@@ -5701,7 +5706,7 @@
           left: 0;
           right: 0;
           height: var(--sub-hdr-h, 44px);
-          border-radius: 10px 10px 0 0;
+          border-radius: 11.5px 11.5px 0 0;
           background: linear-gradient(
             145deg,
             rgba(168, 199, 250, 0.22) 0%,
@@ -5764,7 +5769,7 @@
           transform: scale(1) !important;
         }
 
-        /* 3. Khung chứa tùy chọn con: mở khóa padding trên/dưới (thoáng đáy 16px) */
+        /* 3. Khung chứa tùy chọn con: mở khóa padding trên/dưới (thoáng đáy 12px) */
         html body #set-menu .d-item.flex-between > .sub-menu {
           position: relative !important;
           display: flex !important;
@@ -35008,14 +35013,14 @@
 
       // ============================================================
       // BỘ MÁY XỔ LÒ XO NẢY LÊN TRÊN CHO MENU CON TRÊN ĐIỆN THOẠI
-      // Tự do kéo giãn lên trên + kéo thoáng phần đáy menu (16px)
+      // Tự do kéo giãn lên trên + kéo thoáng phần đáy menu (12px)
       // ============================================================
       (function () {
         const setMenu = document.getElementById("set-menu");
         if (!setMenu) return;
 
         const BASE_PAD_TOP = 6;
-        const BASE_PAD_BOTTOM = 16; // Độ dài phần đáy menu (có thể tăng lên 18–20 nếu muốn thoáng hơn nữa)
+        const BASE_PAD_BOTTOM = 12;
 
         const isMobile = () => window.innerWidth <= 768;
         const subs = Array.from(setMenu.querySelectorAll(".sub-menu"));
