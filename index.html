@@ -5108,9 +5108,482 @@
         overflow-x: hidden !important;
       }
 
+      /* Khóa lớp GPU vĩnh viễn cho thanh chat: triệt tiêu 100% lỗi giật/nháy kính mờ khi kết thúc hiệu ứng */
+      #iw-home .input-box {
+        transform: translate3d(0, 0, 0);
+        backface-visibility: hidden;
+        will-change: transform, opacity;
+      }
+
       /* Nhường quyền chuyển động cho bộ máy 3D trong Thư viện */
       .my-content-view .mc-item-wrap {
         animation: none !important;
+      }
+
+      /* ============================================================ */
+      /* 1. KHOẢNG CÁCH THANH MENU BÊN TRÁI (GIỮ NGUYÊN ĐIỂM GIỮA)    */
+      /* ============================================================ */
+      @media (min-width: 769px) {
+        #sidebar {
+          position: relative;
+        }
+      }
+
+      #sidebar .sb-item {
+        margin: 2.75px 13px !important;
+        padding: 9px 14px !important;
+        gap: 12.5px !important;
+        border-radius: 11.5px !important;
+        font-size: 13.9px !important;
+      }
+
+      #sidebar .sb-item:not(.gear-item) {
+        border: 1px solid transparent !important;
+      }
+
+      #sidebar .sb-item .ios27-art {
+        width: 24px !important;
+        height: 24px !important;
+        min-width: 24px !important;
+      }
+
+      #sidebar .sb-title {
+        margin: 11.5px 18.5px 3.75px 18.5px !important;
+        font-size: 12.5px !important;
+      }
+
+      #sidebar .sb-item.gear-item {
+        margin-top: auto !important;
+        padding: 10.5px 14px !important;
+      }
+
+      /* ============================================================ */
+      /* 2. GIỌT KÍNH LỎNG TRÔI NHƯ NƯỚC & ĐỒNG BỘ DẤU 3 CHẤM IOS 27  */
+      /* ============================================================ */
+      .tng-glow-pill {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 0;
+        border-radius: 11.5px;
+        pointer-events: none;
+        z-index: 0;
+        opacity: 0;
+        overflow: hidden;
+        box-sizing: border-box;
+        transform-origin: center center;
+        background: linear-gradient(
+          145deg,
+          rgba(168, 199, 250, 0.24) 0%,
+          rgba(168, 199, 250, 0.12) 55%,
+          rgba(168, 199, 250, 0.18) 100%
+        );
+        border: 1px solid rgba(168, 199, 250, 0.28);
+        box-shadow:
+          0 4px 20px rgba(168, 199, 250, 0.2),
+          inset 0 1px 1px rgba(255, 255, 255, 0.26),
+          inset 0 -1px 1px rgba(0, 0, 0, 0.14);
+        will-change: transform, width, height, opacity;
+        transition:
+          opacity 0.22s ease,
+          background 0.28s ease,
+          border-color 0.28s ease,
+          box-shadow 0.28s ease,
+          border-radius 0.22s ease;
+      }
+
+      /* Vệt phản chiếu nước trượt bên trong giọt kính theo hướng di chuyển */
+      .tng-glow-pill::after {
+        content: "";
+        position: absolute;
+        inset: -35% -15%;
+        background: radial-gradient(
+          ellipse 75% 42% at 50% 50%,
+          rgba(255, 255, 255, 0.22) 0%,
+          rgba(168, 199, 250, 0.08) 48%,
+          transparent 75%
+        );
+        transform: translate3d(0, var(--sheen-y, 0px), 0);
+        opacity: var(--sheen-op, 0.45);
+        pointer-events: none;
+        will-change: transform, opacity;
+      }
+
+      [data-theme="light"] .tng-glow-pill {
+        background: linear-gradient(
+          145deg,
+          rgba(0, 118, 210, 0.16) 0%,
+          rgba(0, 118, 210, 0.08) 55%,
+          rgba(0, 118, 210, 0.12) 100%
+        );
+        border: 1px solid rgba(0, 118, 210, 0.26);
+        box-shadow:
+          0 4px 16px rgba(0, 118, 210, 0.13),
+          inset 0 1px 1px rgba(255, 255, 255, 0.85),
+          inset 0 -1px 1px rgba(0, 118, 210, 0.08);
+      }
+
+      [data-theme="light"] .tng-glow-pill::after {
+        background: radial-gradient(
+          ellipse 75% 42% at 50% 50%,
+          rgba(255, 255, 255, 0.65) 0%,
+          rgba(0, 118, 210, 0.06) 50%,
+          transparent 75%
+        );
+      }
+
+      /* Chuyển sang ánh đỏ lỏng khi trôi vào nút Xóa */
+      .tng-glow-pill.is-danger {
+        background: linear-gradient(
+          145deg,
+          rgba(255, 69, 58, 0.25) 0%,
+          rgba(255, 69, 58, 0.13) 55%,
+          rgba(255, 69, 58, 0.2) 100%
+        );
+        border: 1px solid rgba(255, 69, 58, 0.38);
+        box-shadow:
+          0 4px 20px rgba(255, 69, 58, 0.24),
+          inset 0 1px 1px rgba(255, 255, 255, 0.2),
+          inset 0 -1px 1px rgba(0, 0, 0, 0.14);
+      }
+      .tng-glow-pill.is-danger::after {
+        background: radial-gradient(
+          ellipse 75% 42% at 50% 50%,
+          rgba(255, 160, 150, 0.28) 0%,
+          rgba(255, 69, 58, 0.08) 50%,
+          transparent 75%
+        );
+      }
+
+      [data-theme="light"] .tng-glow-pill.is-danger {
+        background: linear-gradient(
+          145deg,
+          rgba(255, 59, 48, 0.17) 0%,
+          rgba(255, 59, 48, 0.09) 60%,
+          rgba(255, 59, 48, 0.14) 100%
+        );
+        border: 1px solid rgba(255, 59, 48, 0.3);
+        box-shadow: 0 4px 16px rgba(255, 59, 48, 0.14);
+      }
+
+      .tng-glow-menu > :not(.tng-glow-pill) {
+        position: relative;
+        z-index: 1;
+      }
+      .tng-glow-menu .d-item:has(.sub-menu.show) {
+        z-index: 100 !important;
+      }
+
+      .tng-glow-menu .sb-item,
+      .tng-glow-menu .sb-item:hover,
+      .tng-glow-menu .sb-item:active,
+      .tng-glow-menu .sb-item.active,
+      .tng-glow-menu .d-item:hover,
+      .tng-glow-menu .d-item:active,
+      .tng-glow-menu .m-item:hover,
+      .tng-glow-menu .m-item:active,
+      .tng-glow-menu .dropdown-opt:hover,
+      .tng-glow-menu .dropdown-opt:active,
+      .tng-glow-menu button.ai-option-item:hover,
+      .tng-glow-menu button.ai-option-item:active,
+      .tng-glow-menu button.ai-option-item.tng-ios-active,
+      .tng-glow-menu .ai-option-item:hover,
+      .tng-glow-menu .ai-option-item:active,
+      .tng-glow-menu .ai-option-item.tng-ios-active,
+      #tng-hd-menu-overlay-v37 .tng-glow-menu .tng-hd-opt:hover,
+      #tng-hd-menu-overlay-v37 .tng-glow-menu .tng-hd-opt:active,
+      #tng-hd-menu-overlay-v37 .tng-glow-menu .tng-hd-opt.tng-ios-active {
+        background: transparent !important;
+        background-color: transparent !important;
+      }
+
+      .tng-glow-menu .sb-item.active {
+        border-color: transparent !important;
+      }
+
+      #sidebar .sb-item {
+        color: var(--text-main);
+        transition: color 0.24s ease !important;
+      }
+      #sidebar .sb-item.active:not(.tng-pill-focus) {
+        color: var(--text-main);
+      }
+      #sidebar .sb-item.tng-pill-focus,
+      #custom-dropdown-menu .dropdown-opt.tng-pill-focus,
+      #theme-menu .d-item.tng-pill-focus {
+        color: var(--btn-blue) !important;
+      }
+
+      /* ============================================================ */
+      /* ĐỒNG BỘ DẤU 3 CHẤM (.hist-dots) TINH TẾ CHUẨN IOS 27         */
+      /* ============================================================ */
+      #sidebar .sb-item > .hist-dots,
+      #sidebar .sb-item:hover > .hist-dots,
+      #sidebar .sb-item:active > .hist-dots {
+        --dot-c: rgba(214, 228, 252, 0.86);
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        right: 7px;
+        width: 26px;
+        height: 26px;
+        padding: 0;
+        border-radius: 50%;
+        font-size: 0 !important;
+        line-height: 0 !important;
+        color: transparent !important;
+        text-shadow: none !important;
+        background: transparent !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        transform-origin: center center !important;
+        transform: scale(0.6) translateX(4px) !important;
+        will-change: transform, opacity;
+        transition:
+          opacity 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+          transform 0.34s cubic-bezier(0.34, 1.56, 0.64, 1),
+          background-color 0.2s ease,
+          visibility 0s linear 0.22s !important;
+      }
+
+      /* Vẽ 3 chấm tròn sắc nét thay cho ký tự font thô */
+      #sidebar .sb-item > .hist-dots::before {
+        content: "";
+        display: block;
+        width: 3px;
+        height: 3px;
+        border-radius: 50%;
+        background: var(--dot-c);
+        box-shadow:
+          0 -5px 0 var(--dot-c),
+          0 5px 0 var(--dot-c);
+        transition:
+          background-color 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+
+      [data-theme="light"] #sidebar .sb-item > .hist-dots,
+      [data-theme="light"] #sidebar .sb-item:hover > .hist-dots,
+      [data-theme="light"] #sidebar .sb-item:active > .hist-dots {
+        --dot-c: rgba(16, 42, 67, 0.72);
+      }
+
+      /* Chỉ nở ra khi giọt nước thực sự chạm tới mục (hoặc menu 3 chấm đang mở) */
+      #sidebar:hover .sb-item.tng-pill-arrived > .hist-dots,
+      #sidebar:hover .sb-item.tng-pill-arrived:active > .hist-dots,
+      #sidebar .sb-item.tng-ctx-open > .hist-dots,
+      #sidebar .sb-item.tng-ctx-open:active > .hist-dots {
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        transform: scale(1) translateX(0) !important;
+        transition:
+          opacity 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+          transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1),
+          background-color 0.2s ease,
+          visibility 0s linear 0s !important;
+      }
+
+      /* Giữ vòng sáng nhẹ khi menu 3 chấm đang mở */
+      #sidebar .sb-item.tng-ctx-open > .hist-dots {
+        --dot-c: var(--btn-blue);
+        background: rgba(168, 199, 250, 0.16) !important;
+      }
+      [data-theme="light"] #sidebar .sb-item.tng-ctx-open > .hist-dots {
+        background: rgba(0, 118, 210, 0.12) !important;
+      }
+
+      /* Chừa nhẹ khoảng trống bên phải cho chữ dài khi dấu 3 chấm xuất hiện */
+      #sidebar .sb-item .sb-text {
+        transition:
+          padding-right 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+          transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+      }
+      #sidebar:hover .sb-item.tng-pill-arrived:has(.hist-dots) .sb-text,
+      #sidebar .sb-item.tng-ctx-open:has(.hist-dots) .sb-text {
+        padding-right: 28px;
+      }
+
+      /* Phản hồi rê chuột & nhấn giữ trực tiếp trên nút 3 chấm tròn */
+      @media (hover: hover) {
+        #sidebar:hover .sb-item.tng-pill-arrived > .hist-dots:hover,
+        #sidebar .sb-item.tng-ctx-open > .hist-dots:hover {
+          --dot-c: var(--btn-blue);
+          background: rgba(168, 199, 250, 0.16) !important;
+          transform: scale(1.06) translateX(0) !important;
+        }
+        [data-theme="light"]
+          #sidebar:hover
+          .sb-item.tng-pill-arrived
+          > .hist-dots:hover,
+        [data-theme="light"] #sidebar .sb-item.tng-ctx-open > .hist-dots:hover {
+          --dot-c: var(--btn-blue);
+          background: rgba(0, 118, 210, 0.12) !important;
+        }
+      }
+
+      #sidebar:hover .sb-item.tng-pill-arrived > .hist-dots:active,
+      #sidebar .sb-item.tng-ctx-open > .hist-dots:active {
+        transition-duration: 0.06s !important;
+        transform: scale(0.86) translateX(0) !important;
+      }
+
+      /* Đồng bộ trên điện thoại/cảm ứng */
+      @media (hover: none) {
+        #sidebar .sb-item.tng-pill-arrived > .hist-dots {
+          opacity: 1 !important;
+          visibility: visible !important;
+          pointer-events: auto !important;
+          transform: scale(1) translateX(0) !important;
+          transition:
+            opacity 0.22s ease,
+            transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1),
+            visibility 0s linear 0s !important;
+        }
+        #sidebar .sb-item.tng-pill-arrived:has(.hist-dots) .sb-text {
+          padding-right: 28px;
+        }
+      }
+
+      /* ============================================================ */
+      /* GIỌT NƯỚC TRƯỢT NGANG CHO TAB QUẢN LÝ GÓI THUÊ BAO (IOS 27)  */
+      /* ============================================================ */
+      #sp-body .tng-sub-tabs {
+        position: relative !important;
+        isolation: isolate;
+      }
+
+      /* Ẩn triệt để thẻ nền trượt cũ của bảng để không chiếm cột đẩy lệch 3 mục */
+      #sp-body .tng-sub-tabs > .tng-sub-old-glider {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        position: absolute !important;
+        width: 0 !important;
+        height: 0 !important;
+        flex: none !important;
+      }
+
+      /* Chỉ nâng đúng 3 nút tab lên trên lớp giọt nước */
+      #sp-body .tng-sub-tabs > .tng-sub-tab {
+        position: relative !important;
+        z-index: 1 !important;
+      }
+
+      /* Giọt nước kính lỏng trượt ngang (khóa thoát khỏi bố cục flex/grid) */
+      #sp-body .tng-sub-tabs > span.tng-glow-pill.is-horizontal {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: auto !important;
+        bottom: auto !important;
+        flex: none !important;
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        z-index: 0 !important;
+        pointer-events: none !important;
+        border-radius: 11.5px;
+      }
+
+      /* Vệt phản chiếu ánh sáng chảy ngang bên trong giọt nước */
+      #sp-body .tng-sub-tabs > span.tng-glow-pill.is-horizontal::after {
+        inset: -18% -38%;
+        background: radial-gradient(
+          ellipse 46% 85% at 50% 50%,
+          rgba(255, 255, 255, 0.28) 0%,
+          rgba(168, 199, 250, 0.1) 48%,
+          transparent 75%
+        );
+        transform: translate3d(var(--sheen-x, 0px), 0, 0);
+        opacity: var(--sheen-op, 0.45);
+      }
+
+      [data-theme="light"]
+        #sp-body
+        .tng-sub-tabs
+        > span.tng-glow-pill.is-horizontal::after {
+        background: radial-gradient(
+          ellipse 46% 85% at 50% 50%,
+          rgba(255, 255, 255, 0.78) 0%,
+          rgba(0, 118, 210, 0.08) 50%,
+          transparent 75%
+        );
+      }
+
+      /* Tắt nền đặc cũ của 3 nút tab (cả Dark & Light Mode) để nhường cho giọt nước */
+      #sp-body .tng-sub-tabs > .tng-sub-tab,
+      #sp-body .tng-sub-tabs > .tng-sub-tab:hover,
+      #sp-body .tng-sub-tabs > .tng-sub-tab:active,
+      #sp-body .tng-sub-tabs > .tng-sub-tab.active,
+      #sp-body .tng-sub-tabs > button.tng-sub-tab,
+      #sp-body .tng-sub-tabs > button.tng-sub-tab:hover,
+      #sp-body .tng-sub-tabs > button.tng-sub-tab:active,
+      [data-theme="light"] #sp-body .tng-sub-tabs > .tng-sub-tab,
+      [data-theme="light"] #sp-body .tng-sub-tabs > .tng-sub-tab:hover,
+      [data-theme="light"] #sp-body .tng-sub-tabs > .tng-sub-tab:active,
+      [data-theme="light"] #sp-body .tng-sub-tabs > .tng-sub-tab.active {
+        background: transparent !important;
+        background-color: transparent !important;
+        border-color: transparent !important;
+        box-shadow: none !important;
+        transform: scale(1) !important;
+        opacity: 1 !important;
+      }
+
+      /* Chuyển màu chữ dịu theo đúng thời điểm giọt nước trôi vào */
+      #sp-body .tng-sub-tabs > .tng-sub-tab,
+      #sp-body .tng-sub-tabs > .tng-sub-tab * {
+        color: var(--text-sub) !important;
+        transition: color 0.24s ease !important;
+      }
+
+      [data-theme="light"] #sp-body .tng-sub-tabs > .tng-sub-tab,
+      [data-theme="light"] #sp-body .tng-sub-tabs > .tng-sub-tab * {
+        color: #5f6368 !important;
+      }
+
+      @media (hover: hover) {
+        #sp-body .tng-sub-tabs > .tng-sub-tab:hover:not(.tng-pill-focus),
+        #sp-body .tng-sub-tabs > .tng-sub-tab:hover:not(.tng-pill-focus) * {
+          color: var(--text-main) !important;
+        }
+      }
+
+      #sp-body .tng-sub-tabs > .tng-sub-tab.tng-pill-focus,
+      #sp-body .tng-sub-tabs > .tng-sub-tab.tng-pill-focus *,
+      [data-theme="light"] #sp-body .tng-sub-tabs > .tng-sub-tab.tng-pill-focus,
+      [data-theme="light"]
+        #sp-body
+        .tng-sub-tabs
+        > .tng-sub-tab.tng-pill-focus
+        * {
+        color: var(--btn-blue) !important;
+        font-weight: 600 !important;
+      }
+
+      /* Lún nhẹ lõi chữ chuẩn iOS 27 khi rê/nhấn trên tab */
+      #sp-body .tng-sub-tabs > .tng-sub-tab > .tng-sub-tab-lbl {
+        display: inline-block;
+        transform-origin: center center;
+        will-change: transform;
+        transition:
+          transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+          color 0.24s ease !important;
+      }
+
+      @media (hover: hover) {
+        #sp-body .tng-sub-tabs > .tng-sub-tab:hover > .tng-sub-tab-lbl {
+          transform: scale(0.965) !important;
+        }
+      }
+
+      #sp-body .tng-sub-tabs > .tng-sub-tab:active > .tng-sub-tab-lbl {
+        transition-duration: 0.05s !important;
+        transform: scale(0.88) !important;
       }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -22932,7 +23405,7 @@
               let toggleDot = el.querySelector(".tng-toggle-dot");
               if (toggleBg && toggleDot) {
                 toggleBg.style.background = isActive
-                  ? "#1a73e8"
+                  ? "#a8c7fa"
                   : "rgba(255,255,255,0.15)";
                 toggleDot.style.transform = isActive
                   ? "translateX(20px)"
@@ -23092,11 +23565,11 @@
             let html = `
                 <div class="tng-subpage-box" style="width: 90%; max-width: 450px; height: auto; max-height: 85dvh; background: rgba(30, 31, 38, 0.98); border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; padding: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); transform: scale(0.02); opacity: 0; transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1); display: flex; flex-direction: column;">
                     <div style="font-size: 18px; font-weight: 600; color: #fff; margin-bottom: 16px; font-family: 'Google Sans', sans-serif;">Bạn muốn TNG AI ghi nhớ điều gì?</div>
-                    <textarea id="tng-ins-input" placeholder="Ví dụ: 'Tôi thích những câu trả lời ngắn gọn, súc tích'" style="width: 100%; height: 120px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px; color: #fff; font-size: 15px; font-family: inherit; resize: none; outline: none; margin-bottom: 24px; transition: border 0.2s;" onfocus="this.style.borderColor='#1a73e8'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'"></textarea>
+                    <textarea id="tng-ins-input" placeholder="Ví dụ: 'Tôi thích những câu trả lời ngắn gọn, súc tích'" style="width: 100%; height: 120px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px; color: #fff; font-size: 15px; font-family: inherit; resize: none; outline: none; margin-bottom: 24px; transition: border 0.2s;" onfocus="this.style.borderColor='#a8c7fa'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'"></textarea>
                     
                     <div style="display: flex; gap: 12px; justify-content: flex-end;">
                         <button id="btn-cancel-ins" style="padding: 10px 24px; border-radius: 12px; border: none; background: transparent; color: #a8c7fa; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='rgba(168,199,250,0.1)'" onmouseout="this.style.background='transparent'">Hủy</button>
-                        <button id="btn-submit-ins" style="padding: 10px 24px; border-radius: 12px; border: none; background: #1a73e8; color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; transition: filter 0.2s;" onmouseover="this.style.filter='brightness(1.1)'" onmouseout="this.style.filter='brightness(1)'">Gửi</button>
+                        <button id="btn-submit-ins" style="padding: 10px 24px; border-radius: 12px; border: none; background: #a8c7fa; color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; transition: filter 0.2s;" onmouseover="this.style.filter='brightness(1.1)'" onmouseout="this.style.filter='brightness(1)'">Gửi</button>
                     </div>
                 </div>
             `;
@@ -32138,7 +32611,7 @@
       })();
 
       // ============================================================
-      // BỘ MÁY CHUYỂN MỤC IOS 27 SILK 3D FLY-IN (HÃM ÊM TUYỆT ĐỐI)
+      // BỘ MÁY CHUYỂN MỤC IOS 27 SILK 3D FLY-IN (TẦM BAY XA & ÊM MƯỢT)
       // ============================================================
       (function () {
         // Không áp dụng cho Lịch sử trò chuyện (#chat_container)
@@ -32150,11 +32623,12 @@
         ];
 
         const activeAnims = new WeakMap();
+        const lastRunTime = new WeakMap();
         const isVisible = (el) =>
           !!el && window.getComputedStyle(el).display !== "none";
         const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
 
-        const stopExistingAnim = (el) => {
+        const stopExistingAnim = (el, keepLayer = false) => {
           const prev = activeAnims.get(el);
           if (prev) {
             try {
@@ -32163,14 +32637,14 @@
             activeAnims.delete(el);
           }
           el.classList.remove("tng-silk-anim");
-          el.style.willChange = "";
+          if (!keepLayer) el.style.willChange = "";
         };
 
-        // Lò xo lụa 60 mốc: đáp êm với độ nhún nhẹ 2%, hãm mượt về 0.00px ở 15% cuối (chống giật tuyệt đối)
-        const buildSilkFrames = (dx, dy, dz, rx, ry, flatText = false) => {
+        // Lò xo lụa 60 mốc: quỹ đạo xa, trôi dài 1.28s, hãm êm tuyệt đối về 0.00px ở 16% cuối
+        const buildSilkFrames = (dx, dy, dz, rx, ry, flat2D = false) => {
           const steps = 60;
-          const zeta = 0.78;
-          const omega = 9.8;
+          const zeta = 0.77;
+          const omega = 8.4;
           const wd = omega * Math.sqrt(1 - zeta * zeta);
           const dampingTerm = zeta / Math.sqrt(1 - zeta * zeta);
           const frames = [];
@@ -32186,9 +32660,8 @@
               const decay = Math.exp(-zeta * omega * t);
               p =
                 1 - decay * (Math.cos(wd * t) + dampingTerm * Math.sin(wd * t));
-              // Hòa tan nốt 0.1% dư thừa ở chặng cuối để vận tốc về 0 hoàn hảo, không nhảy khung
-              if (t > 0.85) {
-                const u = (t - 0.85) / 0.15;
+              if (t > 0.84) {
+                const u = (t - 0.84) / 0.16;
                 const blend = u * u * (3 - 2 * u);
                 p = p + (1 - p) * blend;
               }
@@ -32197,13 +32670,13 @@
             const inv = 1 - p;
             const x = dx * inv;
             const y = dy * inv;
-            const opT = Math.min(1, t / 0.18);
+            const opT = Math.min(1, t / 0.16);
             const opacity = 1 - Math.pow(1 - opT, 3);
 
             let transform;
-            if (flatText) {
-              // Giữ chữ gradient sắc nét, không bị khựng răng cưa khi nhả lớp 3D
-              const s = 1 + (dz / 1100) * inv;
+            if (flat2D) {
+              // Thuần 2D + GPU: giữ kính mờ backdrop-filter và chữ gradient không bị giật lúc kết thúc
+              const s = 1 + (dz / 1000) * inv;
               transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0) scale(${s.toFixed(4)})`;
             } else {
               const z = dz * inv;
@@ -32282,31 +32755,38 @@
               items.push({
                 el: h1,
                 delay: 0,
-                depth: 135,
-                lift: -16,
-                flatText: true,
+                depth: isMobile ? 190 : 230,
+                lift: -72,
+                flat2D: true,
               });
             if (h2)
               items.push({
                 el: h2,
-                delay: 40,
-                depth: 145,
-                lift: -8,
-                flatText: true,
+                delay: 55,
+                depth: isMobile ? 210 : 250,
+                lift: -36,
+                flat2D: true,
               });
             if (inputBox)
-              items.push({ el: inputBox, delay: 78, depth: 185, lift: 28 });
+              items.push({
+                el: inputBox,
+                delay: 105,
+                depth: isMobile ? 145 : 180,
+                lift: isMobile ? 125 : 110,
+                flat2D: true,
+                keepLayer: true,
+              });
 
             const mid = (chips.length - 1) / 2;
             chips.forEach((chip, i) => {
-              const dist = !isMobile ? Math.abs(i - mid) : i * 0.75;
+              const dist = !isMobile ? Math.abs(i - mid) : i * 0.78;
               items.push({
                 el: chip,
-                delay: 115 + Math.round(dist * 46),
-                depth: (isMobile ? 165 : 205) + dist * 20,
-                lift: 44,
-                spreadX: 0.4,
-                tiltX: 12,
+                delay: 155 + Math.round(dist * 62),
+                depth: (isMobile ? 235 : 320) + dist * 35,
+                lift: isMobile ? 135 : 120,
+                spreadX: 0.72,
+                tiltX: 16,
               });
             });
             return items;
@@ -32323,35 +32803,35 @@
               items.push({
                 el: title,
                 delay: 0,
-                depth: isMobile ? 130 : 170,
-                lift: 40,
-                tiltX: 10,
+                depth: isMobile ? 190 : 240,
+                lift: -45,
+                tiltX: 12,
               });
             if (inp)
               items.push({
                 el: inp,
-                delay: 48,
-                depth: isMobile ? 155 : 210,
-                lift: 62,
-                tiltX: 14,
+                delay: 60,
+                depth: isMobile ? 225 : 290,
+                lift: 105,
+                tiltX: 17,
               });
             if (sec)
               items.push({
                 el: sec,
-                delay: 92,
-                depth: isMobile ? 140 : 185,
-                lift: 68,
-                tiltX: 12,
+                delay: 115,
+                depth: isMobile ? 210 : 260,
+                lift: 120,
+                tiltX: 15,
               });
 
             rows.forEach((row, i) => {
               const step = Math.min(i, 12);
               items.push({
                 el: row,
-                delay: 128 + step * 52,
-                depth: (isMobile ? 165 : 230) + Math.min(i, 5) * 10,
-                lift: 90 + Math.min(i, 6) * 10,
-                tiltX: 17,
+                delay: 160 + step * 62,
+                depth: (isMobile ? 235 : 330) + Math.min(i, 6) * 14,
+                lift: 155 + Math.min(i, 6) * 18,
+                tiltX: 21,
               });
             });
             return items;
@@ -32371,14 +32851,15 @@
                 el.tagName === "H3";
               return {
                 el,
-                delay: i === 0 ? 0 : 45 + step * 50,
+                delay: i === 0 ? 0 : 58 + step * 60,
                 depth: isHeading
                   ? isMobile
-                    ? 135
-                    : 180
-                  : (isMobile ? 170 : 235) + Math.min(i, 5) * 8,
-                lift: isHeading ? 50 : 86 + Math.min(i, 6) * 8,
-                tiltX: isHeading ? 11 : 17,
+                    ? 200
+                    : 260
+                  : (isMobile ? 240 : 340) + Math.min(i, 6) * 14,
+                lift: isHeading ? 88 : 150 + Math.min(i, 6) * 16,
+                spreadX: 0.58,
+                tiltX: isHeading ? 12 : 21,
                 radialDelay: el.classList.contains("mc-item-wrap"),
               };
             });
@@ -32394,10 +32875,11 @@
             raw.push(...cards);
             return raw.map((el, i) => ({
               el,
-              delay: i === 0 ? 0 : 50 + Math.floor((i - 1) / 3) * 65,
-              depth: i === 0 ? 150 : isMobile ? 175 : 235,
-              lift: i === 0 ? 44 : 84,
-              tiltX: i === 0 ? 10 : 17,
+              delay: i === 0 ? 0 : 65 + Math.floor((i - 1) / 3) * 80,
+              depth: i === 0 ? 225 : isMobile ? 245 : 345,
+              lift: i === 0 ? -40 : 155,
+              spreadX: 0.6,
+              tiltX: i === 0 ? 12 : 21,
               radialDelay: i > 0,
             }));
           }
@@ -32405,8 +32887,13 @@
           return [];
         };
 
-        const playSilkEnter = (view) => {
+        const playSilkEnter = (view, force = false) => {
           if (!isVisible(view)) return;
+
+          const now = performance.now();
+          const last = lastRunTime.get(view) || 0;
+          if (!force && now - last < 120) return;
+          lastRunTime.set(view, now);
 
           const targets = collectTargets(view);
           if (!targets.length) return;
@@ -32415,14 +32902,14 @@
           const cx = viewRect.left + viewRect.width / 2;
           const cy = viewRect.top + viewRect.height * 0.42;
 
-          // Đo tọa độ 1 lượt trước khi gắn class/animation
+          // Đo tọa độ 1 lượt trước khi gắn animation
           const measured = [];
           targets.forEach((item, idx) => {
             const el = item.el;
             if (!el || !el.isConnected) return;
-            stopExistingAnim(el);
+            stopExistingAnim(el, Boolean(item.keepLayer));
             const r = el.getBoundingClientRect();
-            if (idx > 20 && r.top > window.innerHeight + 240) return;
+            if (idx > 20 && r.top > window.innerHeight + 280) return;
             measured.push({ item, el, r });
           });
 
@@ -32434,19 +32921,19 @@
             const radialFactor =
               Math.hypot(relX, relY) / Math.max(viewRect.width, 400);
 
-            const spreadX = item.spreadX || 0.3;
-            const dx = clamp(relX * spreadX, -115, 115);
-            const dy = clamp(relY * 0.16 + (item.lift || 40), -70, 150);
-            const dz = clamp((item.depth || 180) + radialFactor * 50, 120, 275);
+            const spreadX = item.spreadX || 0.42;
+            const dx = item.flat2D ? 0 : clamp(relX * spreadX, -260, 260);
+            const dy = clamp(relY * 0.2 + (item.lift || 60), -130, 240);
+            const dz = clamp((item.depth || 240) + radialFactor * 75, 145, 420);
 
-            const rx = clamp((item.tiltX || 12) + relY * 0.012, -8, 20);
-            const ry = clamp(-relX * 0.02, -9, 9);
+            const rx = clamp((item.tiltX || 14) + relY * 0.015, -10, 24);
+            const ry = clamp(-relX * 0.028, -13, 13);
 
             const extraRadialDelay = item.radialDelay
-              ? Math.round(Math.abs(relX) * 0.09)
+              ? Math.round(Math.abs(relX) * 0.1)
               : 0;
             const delay = (item.delay || 0) + extraRadialDelay;
-            const duration = 960;
+            const duration = 1280;
 
             const frames = buildSilkFrames(
               dx,
@@ -32454,12 +32941,11 @@
               dz,
               rx,
               ry,
-              Boolean(item.flatText),
+              Boolean(item.flat2D),
             );
 
-            // Gắn class mở khóa cho .sv-item trong suốt quá trình bay vào
             el.classList.add("tng-silk-anim");
-            el.style.willChange = "transform, opacity";
+            if (!item.keepLayer) el.style.willChange = "transform, opacity";
 
             const anim = el.animate(frames, {
               duration,
@@ -32473,9 +32959,11 @@
               if (activeAnims.get(el) === anim) {
                 activeAnims.delete(el);
                 el.classList.remove("tng-silk-anim");
-                requestAnimationFrame(() => {
-                  if (!activeAnims.has(el)) el.style.willChange = "";
-                });
+                if (!item.keepLayer) {
+                  requestAnimationFrame(() => {
+                    if (!activeAnims.has(el)) el.style.willChange = "";
+                  });
+                }
               }
             };
             anim.onfinish = cleanup;
@@ -32483,6 +32971,7 @@
           });
         };
 
+        // 1. Tự động chạy khi chuyển sang mục khác
         VIEW_IDS.forEach((id) => {
           const view = document.getElementById(id);
           if (!view) return;
@@ -32503,10 +32992,1438 @@
           });
         });
 
-        const initialHome = document.getElementById("home");
-        if (initialHome && isVisible(initialHome)) {
-          playSilkEnter(initialHome);
+        // 2. Kích hoạt lại hiệu ứng ngay cả khi bấm vào mục đang đứng sẵn
+        const NAV_MAP = [
+          { match: "newChat", target: "home" },
+          { match: "showSearch", target: "search-view" },
+          { match: "showMyContent", target: "my-content-view" },
+          { match: "showAllNotes", target: "all-notes-view" },
+          { match: "toggleAllNotes", target: "all-notes-view" },
+        ];
+
+        document.addEventListener("click", (ev) => {
+          const item = ev.target.closest(".sb-item[onclick]");
+          if (!item) return;
+          const attr = item.getAttribute("onclick") || "";
+          const found = NAV_MAP.find((entry) => attr.includes(entry.match));
+          if (!found) return;
+          const view = document.getElementById(found.target);
+          if (view && isVisible(view)) {
+            playSilkEnter(view);
+          }
+        });
+
+        // 3. Kích hoạt hiệu ứng mỗi khi tải lại trang (kể cả khi quay lại từ bộ nhớ đệm)
+        const triggerCurrentView = () => {
+          VIEW_IDS.forEach((id) => {
+            const view = document.getElementById(id);
+            if (view && isVisible(view)) playSilkEnter(view, true);
+          });
+        };
+
+        requestAnimationFrame(() => triggerCurrentView());
+        window.addEventListener("pageshow", (ev) => {
+          if (ev.persisted) requestAnimationFrame(() => triggerCurrentView());
+        });
+      })();
+
+      // ============================================================
+      // BỘ MÁY PHÁT SÁNG TRÔI NHƯ NƯỚC CHUẨN IOS 27 LIQUID GLASS
+      // Khóa chặt giọt nước tại mục đang mở menu 3 chấm & chỉ trả về khi đóng
+      // ============================================================
+      (function () {
+        const canHover = window.matchMedia("(hover: hover)").matches;
+        const boundMenus = new WeakMap();
+        const enteredPopups = new WeakSet();
+
+        const FLOATING_MENU_IDS = [
+          "note-options-menu",
+          "hist-options-menu",
+          "file-options-menu",
+          "set-menu",
+          "theme-menu",
+          "help-menu",
+          "m-att-h",
+          "m-att-c",
+          "m-tool-h",
+          "m-tool-c",
+          "m-mod-h",
+          "m-mod-c",
+        ];
+
+        const isElVisible = (el) => {
+          if (!el || !el.isConnected) return false;
+          const cs = window.getComputedStyle(el);
+          return (
+            cs.display !== "none" &&
+            cs.visibility !== "hidden" &&
+            el.offsetHeight > 0
+          );
+        };
+
+        const isShown = (id) => {
+          const el = document.getElementById(id);
+          return !!el && el.classList.contains("show");
+        };
+
+        const isDangerItem = (el) => {
+          if (!el) return false;
+          if (el.classList.contains("is-danger")) return true;
+          const inlineStyle = (el.getAttribute("style") || "").toLowerCase();
+          return (
+            inlineStyle.includes("var(--danger)") ||
+            inlineStyle.includes("#ff453a") ||
+            inlineStyle.includes("#ff3b30") ||
+            inlineStyle.includes("#ff4b2b")
+          );
+        };
+
+        // Vùng đệm hẹp nối giữa nút 3 chấm và bảng menu để khi di chuột sang menu không bị đóng nhầm
+        const isInDotToPopupBridge = (ev, ownerEl, popupEl) => {
+          if (!ownerEl || !popupEl) return false;
+          const dotEl = ownerEl.querySelector(".hist-dots") || ownerEl;
+          const d = dotEl.getBoundingClientRect();
+          const m = popupEl.getBoundingClientRect();
+          if (!d.width || !m.width) return false;
+          const minX = Math.min(d.left, m.left) - 10;
+          const maxX = Math.max(d.right, m.right) + 10;
+          const minY = Math.min(d.top, m.top) - 6;
+          const maxY = Math.max(d.bottom, m.bottom) + 6;
+          return (
+            ev.clientX >= minX &&
+            ev.clientX <= maxX &&
+            ev.clientY >= minY &&
+            ev.clientY <= maxY
+          );
+        };
+
+        const closeOtherFloatingMenus = (activeContainer) => {
+          let closedAny = false;
+          const menus = [
+            ...FLOATING_MENU_IDS.map((id) =>
+              document.getElementById(id),
+            ).filter(Boolean),
+            ...Array.from(document.querySelectorAll(".ai-options-menu.show")),
+          ];
+
+          menus.forEach((m) => {
+            if (!m.classList.contains("show")) return;
+            if (m === activeContainer || m.contains(activeContainer)) return;
+            if (activeContainer.contains(m)) return;
+
+            m.classList.remove("show");
+            enteredPopups.delete(m);
+            closedAny = true;
+
+            if (m.id === "set-menu") {
+              document
+                .querySelectorAll(".gear-item.menu-open")
+                .forEach((g) => g.classList.remove("menu-open"));
+            }
+          });
+          return closedAny;
+        };
+
+        const getBoxInMenu = (el, container) => {
+          let top = 0;
+          let left = 0;
+          let cur = el;
+          while (cur && cur !== container) {
+            top += cur.offsetTop;
+            left += cur.offsetLeft;
+            cur = cur.offsetParent;
+          }
+          let p = el.parentElement;
+          while (p && p !== container) {
+            top -= p.scrollTop || 0;
+            left -= p.scrollLeft || 0;
+            p = p.parentElement;
+          }
+          let height = el.offsetHeight;
+          const openSub = el.querySelector(":scope > .sub-menu.show");
+          if (
+            openSub &&
+            window.getComputedStyle(openSub).position === "relative"
+          ) {
+            height = Math.max(36, height - openSub.offsetHeight - 10);
+          }
+          return { top, left, width: el.offsetWidth, height };
+        };
+
+        const attachGlowMenu = (container, config) => {
+          if (!container || boundMenus.has(container)) return;
+
+          container.classList.add("tng-glow-menu");
+          const pill = document.createElement("div");
+          pill.className = "tng-glow-pill";
+          container.insertBefore(pill, container.firstChild);
+
+          const state = {
+            pill,
+            currentTarget: null,
+            selectedTarget: null,
+            contextTarget: null,
+            contextOpenedAt: 0,
+            contextOpeningUntil: 0,
+            gearOpenedAt: 0,
+            notebookTarget: null,
+            lastActiveEl: config.isSidebar
+              ? container.querySelector(".sb-item.active")
+              : null,
+            focusEl: null,
+            arrivedEl: null,
+            ctxOpenEl: null,
+            visible: false,
+            leaveTimer: null,
+            bounceRaf: null,
+            rafId: null,
+            lastTs: 0,
+            x: 0,
+            y: 0,
+            w: 0,
+            h: 0,
+            tx: 0,
+            ty: 0,
+            tw: 0,
+            th: 0,
+            vx: 0,
+            vy: 0,
+            vw: 0,
+            vh: 0,
+            stiffness: 340,
+            damping: 24.5,
+          };
+          boundMenus.set(container, state);
+
+          const stopBounceSync = () => {
+            if (state.bounceRaf) {
+              cancelAnimationFrame(state.bounceRaf);
+              state.bounceRaf = null;
+            }
+          };
+
+          const stopPhysics = () => {
+            if (state.rafId) {
+              cancelAnimationFrame(state.rafId);
+              state.rafId = null;
+            }
+            state.vx = state.vy = state.vw = state.vh = 0;
+          };
+
+          const setSingleClass = (propKey, clsName, nextEl) => {
+            if (state[propKey] === nextEl) return;
+            if (state[propKey]) state[propKey].classList.remove(clsName);
+            state[propKey] = nextEl || null;
+            if (nextEl) nextEl.classList.add(clsName);
+          };
+
+          const syncCtxOpenClass = () => {
+            if (!config.isSidebar) return;
+            const ctxMenuOpen =
+              isShown("note-options-menu") || isShown("hist-options-menu");
+            const ctxGrace = performance.now() < state.contextOpeningUntil;
+            const ctxActive =
+              (ctxMenuOpen || ctxGrace) &&
+              state.contextTarget &&
+              isElVisible(state.contextTarget)
+                ? state.contextTarget
+                : null;
+            setSingleClass("ctxOpenEl", "tng-ctx-open", ctxActive);
+          };
+
+          const updateWaterArrival = (insideView = true) => {
+            const target = state.currentTarget;
+            if (!target || !state.visible || !insideView || state.th <= 0) {
+              setSingleClass("focusEl", "tng-pill-focus", null);
+              setSingleClass("arrivedEl", "tng-pill-arrived", null);
+              return;
+            }
+
+            const overlapTop = Math.max(state.y, state.ty);
+            const overlapBottom = Math.min(
+              state.y + state.h,
+              state.ty + state.th,
+            );
+            const overlapRatio =
+              Math.max(0, overlapBottom - overlapTop) / Math.max(1, state.th);
+
+            setSingleClass(
+              "focusEl",
+              "tng-pill-focus",
+              overlapRatio >= 0.48 ? target : null,
+            );
+            setSingleClass(
+              "arrivedEl",
+              "tng-pill-arrived",
+              overlapRatio >= 0.62 ? target : null,
+            );
+          };
+
+          const applySidebarClip = (target, top, height) => {
+            if (!config.isSidebar) {
+              pill.style.clipPath = "";
+              return true;
+            }
+            const histList = document.getElementById("history-list");
+            if (!histList || !histList.contains(target)) {
+              pill.style.clipPath = "";
+              return true;
+            }
+            const listTop = histList.offsetTop;
+            const listBottom = listTop + histList.clientHeight;
+            const topClip = Math.max(0, listTop - top);
+            const bottomClip = Math.max(0, top + height - listBottom);
+            if (topClip + bottomClip >= height - 2) return false;
+            pill.style.clipPath =
+              topClip > 0 || bottomClip > 0
+                ? `inset(${topClip.toFixed(1)}px 0px ${bottomClip.toFixed(1)}px 0px round 11.5px)`
+                : "";
+            return true;
+          };
+
+          const renderPill = (
+            stretchY = 1,
+            stretchX = 1,
+            sheenY = 0,
+            sheenOp = 0.42,
+          ) => {
+            pill.style.transform = `translate3d(${state.x.toFixed(2)}px, ${state.y.toFixed(2)}px, 0) scale(${stretchX.toFixed(4)}, ${stretchY.toFixed(4)})`;
+            pill.style.width = Math.max(0, state.w).toFixed(2) + "px";
+            pill.style.height = Math.max(0, state.h).toFixed(2) + "px";
+            pill.style.setProperty("--sheen-y", sheenY.toFixed(2) + "px");
+            pill.style.setProperty("--sheen-op", sheenOp.toFixed(3));
+          };
+
+          const stepPhysics = (ts) => {
+            const dt = state.lastTs
+              ? Math.min(0.032, Math.max(0.004, (ts - state.lastTs) / 1000))
+              : 0.016;
+            state.lastTs = ts;
+
+            const k = state.stiffness;
+            const c = state.damping;
+
+            const subDt = dt * 0.5;
+            for (let step = 0; step < 2; step++) {
+              const ax = (state.tx - state.x) * k - state.vx * c;
+              const ay = (state.ty - state.y) * k - state.vy * c;
+              const aw = (state.tw - state.w) * k - state.vw * c;
+              const ah = (state.th - state.h) * k - state.vh * c;
+
+              state.vx += ax * subDt;
+              state.vy += ay * subDt;
+              state.vw += aw * subDt;
+              state.vh += ah * subDt;
+
+              state.x += state.vx * subDt;
+              state.y += state.vy * subDt;
+              state.w += state.vw * subDt;
+              state.h += state.vh * subDt;
+            }
+
+            const speedY = Math.abs(state.vy);
+            const stretch = Math.min(0.15, speedY * 0.000145);
+            const stretchY = 1 + stretch;
+            const stretchX = 1 / Math.sqrt(stretchY);
+            const sheenY = Math.max(-14, Math.min(14, state.vy * 0.016));
+            const sheenOp = Math.min(0.88, 0.42 + stretch * 3.1);
+
+            let inside = true;
+            if (state.currentTarget) {
+              inside = applySidebarClip(state.currentTarget, state.y, state.h);
+              pill.style.opacity = inside && state.visible ? "1" : "0";
+            }
+
+            renderPill(stretchY, stretchX, sheenY, sheenOp);
+            updateWaterArrival(inside);
+
+            const settled =
+              Math.abs(state.tx - state.x) < 0.06 &&
+              Math.abs(state.ty - state.y) < 0.06 &&
+              Math.abs(state.tw - state.w) < 0.06 &&
+              Math.abs(state.th - state.h) < 0.06 &&
+              Math.abs(state.vx) < 0.35 &&
+              Math.abs(state.vy) < 0.35;
+
+            if (settled) {
+              state.x = state.tx;
+              state.y = state.ty;
+              state.w = state.tw;
+              state.h = state.th;
+              state.vx = state.vy = state.vw = state.vh = 0;
+              renderPill(1, 1, 0, 0.42);
+              updateWaterArrival(inside);
+              state.rafId = null;
+              state.lastTs = 0;
+              return;
+            }
+
+            state.rafId = requestAnimationFrame(stepPhysics);
+          };
+
+          const hidePill = () => {
+            state.currentTarget = null;
+            state.visible = false;
+            setSingleClass("focusEl", "tng-pill-focus", null);
+            setSingleClass("arrivedEl", "tng-pill-arrived", null);
+            pill.style.opacity = "0";
+            stopPhysics();
+          };
+
+          const moveTo = (target, opts = {}) => {
+            const { instant = false, isReturn = false, isTap = false } = opts;
+            if (!target || !isElVisible(target)) {
+              hidePill();
+              return;
+            }
+
+            const box = getBoxInMenu(target, container);
+            if (!box.width || !box.height) return;
+
+            const insideView = applySidebarClip(target, box.top, box.height);
+            const radius =
+              window.getComputedStyle(target).borderRadius || "11.5px";
+
+            pill.classList.toggle("is-danger", isDangerItem(target));
+            pill.style.borderRadius = radius;
+
+            state.currentTarget = target;
+            state.tx = box.left;
+            state.ty = box.top;
+            state.tw = box.width;
+            state.th = box.height;
+
+            const shouldSnap = instant || !state.visible;
+            state.visible = insideView;
+
+            if (shouldSnap) {
+              stopPhysics();
+              state.x = box.left;
+              state.y = box.top;
+              state.w = box.width;
+              state.h = box.height;
+              renderPill(1, 1, 0, 0.42);
+              pill.style.opacity = insideView ? "1" : "0";
+              updateWaterArrival(insideView);
+              return;
+            }
+
+            if (isReturn) {
+              state.stiffness = 195;
+              state.damping = 21;
+            } else if (isTap) {
+              state.stiffness = 390;
+              state.damping = 25.5;
+            } else {
+              state.stiffness = 340;
+              state.damping = 24.5;
+            }
+
+            pill.style.opacity = insideView ? "1" : "0";
+            updateWaterArrival(insideView);
+
+            if (!state.rafId) {
+              state.lastTs = 0;
+              state.rafId = requestAnimationFrame(stepPhysics);
+            }
+          };
+
+          const getLockedTarget = () =>
+            config.getLocked ? config.getLocked(state) : null;
+
+          const syncSelected = (instant = false, isReturn = false) => {
+            syncCtxOpenClass();
+            const locked = getLockedTarget();
+            if (locked && isElVisible(locked)) {
+              moveTo(locked, { instant, isReturn });
+              return;
+            }
+            if (!config.persistent) {
+              if (!state.currentTarget) hidePill();
+              return;
+            }
+            const sel = config.getSelected(state);
+            state.selectedTarget = sel;
+            if (sel && isElVisible(sel)) {
+              moveTo(sel, { instant, isReturn });
+            } else {
+              hidePill();
+            }
+          };
+
+          const syncDuringBounce = (ms = 780) => {
+            stopBounceSync();
+            const start = performance.now();
+            const step = (now) => {
+              const tgt = state.currentTarget || config.getSelected(state);
+              if (tgt && isElVisible(tgt)) moveTo(tgt, { instant: true });
+              if (now - start < ms) {
+                state.bounceRaf = requestAnimationFrame(step);
+              } else {
+                state.bounceRaf = null;
+              }
+            };
+            state.bounceRaf = requestAnimationFrame(step);
+          };
+
+          const resolveItem = (rawTarget, allowDots = false) => {
+            if (!rawTarget || !(rawTarget instanceof Element)) return null;
+            if (config.ignoreNestedSub && rawTarget.closest(".sub-menu"))
+              return null;
+            if (
+              !allowDots &&
+              config.isSidebar &&
+              rawTarget.closest(".hist-dots")
+            ) {
+              return null;
+            }
+            const items = config.getItems();
+            for (const item of items) {
+              if (item === rawTarget || item.contains(rawTarget)) return item;
+            }
+            return null;
+          };
+
+          // Khóa mục vừa bấm dấu 3 chấm (chống bị xóa mất khóa trước khi sự kiện click mở menu)
+          if (config.isSidebar) {
+            const lockContextOwner = (owner) => {
+              if (!owner || !isElVisible(owner)) return;
+              const wasSameOpen =
+                (isShown("note-options-menu") ||
+                  isShown("hist-options-menu")) &&
+                state.contextTarget === owner;
+
+              if (wasSameOpen) {
+                state.contextOpeningUntil = 0;
+                return;
+              }
+
+              state.contextTarget = owner;
+              state.contextOpenedAt = performance.now();
+              state.contextOpeningUntil = performance.now() + 450;
+              setSingleClass("ctxOpenEl", "tng-ctx-open", owner);
+              clearTimeout(state.leaveTimer);
+              moveTo(owner, { instant: false, isTap: true });
+            };
+
+            container.addEventListener(
+              "pointerdown",
+              (ev) => {
+                if (!(ev.target instanceof Element)) return;
+                const dots = ev.target.closest(".hist-dots");
+                if (dots) {
+                  lockContextOwner(dots.closest(".sb-item"));
+                  return;
+                }
+                const gear = ev.target.closest(".gear-item");
+                if (gear) {
+                  state.gearOpenedAt = performance.now();
+                }
+              },
+              true,
+            );
+
+            container.addEventListener(
+              "click",
+              (ev) => {
+                if (!(ev.target instanceof Element)) return;
+                const dots = ev.target.closest(".hist-dots");
+                if (!dots) return;
+                const owner = dots.closest(".sb-item");
+                if (owner && state.contextTarget !== owner) {
+                  lockContextOwner(owner);
+                }
+              },
+              true,
+            );
+          }
+
+          if (canHover) {
+            container.addEventListener("pointermove", (ev) => {
+              if (ev.pointerType === "touch") return;
+
+              if (!config.isSidebar) {
+                enteredPopups.add(container);
+                closeOtherFloatingMenus(container);
+              }
+
+              const item = resolveItem(ev.target, true);
+              if (!item) return;
+
+              if (config.isSidebar) {
+                const now = performance.now();
+                const openNote = document.getElementById("note-options-menu");
+                const openHist = document.getElementById("hist-options-menu");
+                const openSet = document.getElementById("set-menu");
+
+                const activeCtxMenu =
+                  (openNote &&
+                    openNote.classList.contains("show") &&
+                    openNote) ||
+                  (openHist &&
+                    openHist.classList.contains("show") &&
+                    openHist) ||
+                  null;
+
+                if (activeCtxMenu) {
+                  const hasEntered = enteredPopups.has(activeCtxMenu);
+                  // Đang đứng trên mục mở 3 chấm hoặc đi qua cầu nối sang bảng menu -> giữ nguyên khóa
+                  if (!hasEntered && item === state.contextTarget) return;
+                  if (
+                    !hasEntered &&
+                    isInDotToPopupBridge(ev, state.contextTarget, activeCtxMenu)
+                  ) {
+                    return;
+                  }
+                  if (!hasEntered && now - state.contextOpenedAt < 140) return;
+
+                  // Trượt sang mục khác trên thanh bên -> đóng menu 3 chấm & chảy nước sang mục mới
+                  state.contextTarget = null;
+                  state.contextOpeningUntil = 0;
+                  setSingleClass("ctxOpenEl", "tng-ctx-open", null);
+                  closeOtherFloatingMenus(container);
+                } else if (openSet && openSet.classList.contains("show")) {
+                  const hasEnteredSet = enteredPopups.has(openSet);
+                  const isGear = item.classList.contains("gear-item");
+                  if (!hasEnteredSet && isGear) return;
+                  if (!hasEnteredSet && now - state.gearOpenedAt < 180) return;
+
+                  closeOtherFloatingMenus(container);
+                } else if (now >= state.contextOpeningUntil) {
+                  closeOtherFloatingMenus(container);
+                }
+              } else if (container.id === "set-menu") {
+                ["theme-menu", "help-menu"].forEach((subId) => {
+                  const sub = document.getElementById(subId);
+                  if (
+                    sub &&
+                    sub.classList.contains("show") &&
+                    !item.contains(sub)
+                  ) {
+                    sub.classList.remove("show");
+                    enteredPopups.delete(sub);
+                  }
+                });
+              }
+
+              clearTimeout(state.leaveTimer);
+              if (item !== state.currentTarget || !state.visible) {
+                moveTo(item, { instant: false, isReturn: false });
+              }
+            });
+
+            container.addEventListener("mouseleave", () => {
+              clearTimeout(state.leaveTimer);
+              state.leaveTimer = setTimeout(() => {
+                syncCtxOpenClass();
+                const locked = getLockedTarget();
+                if (locked && isElVisible(locked)) {
+                  moveTo(locked, { instant: false, isReturn: false });
+                  return;
+                }
+                if (config.persistent) {
+                  const sel = config.getSelected(state) || state.selectedTarget;
+                  if (sel && isElVisible(sel)) {
+                    moveTo(sel, { instant: false, isReturn: true });
+                  } else {
+                    hidePill();
+                  }
+                } else {
+                  hidePill();
+                }
+              }, 60);
+            });
+          }
+
+          container.addEventListener("pointerdown", (ev) => {
+            const item = resolveItem(ev.target, false);
+            if (!item) return;
+            clearTimeout(state.leaveTimer);
+            moveTo(item, { instant: false, isTap: true });
+          });
+
+          container.addEventListener("click", (ev) => {
+            const item = resolveItem(ev.target, false);
+            if (!item) return;
+            if (config.isSidebar) {
+              const inNotes = !!item.closest("#sidebar-notes-list");
+              if (inNotes) {
+                state.notebookTarget = item;
+                moveTo(item, { instant: false, isTap: true });
+                return;
+              }
+            }
+            if (
+              config.persistent &&
+              (!config.canSelect || config.canSelect(item))
+            ) {
+              state.selectedTarget = item;
+              moveTo(item, { instant: false, isTap: true });
+            }
+          });
+
+          if (config.isSidebar) {
+            const histList = document.getElementById("history-list");
+            if (histList) {
+              histList.addEventListener(
+                "scroll",
+                () => {
+                  const tgt = state.currentTarget || state.selectedTarget;
+                  if (tgt && isElVisible(tgt)) moveTo(tgt, { instant: true });
+                },
+                { passive: true },
+              );
+            }
+
+            let syncQueued = false;
+            const queueSidebarSync = (isReturn = false) => {
+              if (syncQueued) return;
+              syncQueued = true;
+              requestAnimationFrame(() => {
+                syncQueued = false;
+                if (
+                  !isShown("note-options-menu") &&
+                  !isShown("hist-options-menu") &&
+                  performance.now() >= state.contextOpeningUntil
+                ) {
+                  state.contextTarget = null;
+                }
+                syncCtxOpenClass();
+                if (!isShown("notebook-overlay")) {
+                  state.notebookTarget = null;
+                }
+                const locked = getLockedTarget();
+                if (locked && isElVisible(locked)) {
+                  moveTo(locked, { instant: false, isReturn: false });
+                  return;
+                }
+                if (canHover && container.matches(":hover")) return;
+                syncSelected(false, isReturn);
+              });
+            };
+
+            // Chỉ đồng bộ khi danh sách thay đổi hoặc mục .active đổi (bỏ qua class hiệu ứng tự gắn)
+            const sbObs = new MutationObserver((mutations) => {
+              let shouldSync = false;
+              for (const m of mutations) {
+                if (m.target === pill) continue;
+                if (m.type === "childList") {
+                  shouldSync = true;
+                  break;
+                }
+                if (
+                  m.type === "attributes" &&
+                  m.attributeName === "class" &&
+                  m.target.classList.contains("sb-item")
+                ) {
+                  const curActive = container.querySelector(".sb-item.active");
+                  if (curActive !== state.lastActiveEl) {
+                    state.lastActiveEl = curActive;
+                    shouldSync = true;
+                    break;
+                  }
+                }
+              }
+              if (shouldSync) queueSidebarSync(false);
+            });
+            sbObs.observe(container, {
+              subtree: true,
+              childList: true,
+              attributes: true,
+              attributeFilter: ["class"],
+            });
+
+            // Theo dõi chính xác thời điểm đóng/mở các menu con để trả giọt nước về đúng chỗ cũ
+            [
+              "note-options-menu",
+              "hist-options-menu",
+              "set-menu",
+              "notebook-overlay",
+            ].forEach((id) => {
+              const pop = document.getElementById(id);
+              if (!pop) return;
+              let wasShown = pop.classList.contains("show");
+              const pObs = new MutationObserver(() => {
+                const nowShown = pop.classList.contains("show");
+                if (nowShown && !wasShown) {
+                  wasShown = true;
+                  enteredPopups.delete(pop);
+                  if (
+                    id === "note-options-menu" ||
+                    id === "hist-options-menu"
+                  ) {
+                    state.contextOpeningUntil = 0;
+                    syncCtxOpenClass();
+                    if (
+                      state.contextTarget &&
+                      isElVisible(state.contextTarget)
+                    ) {
+                      moveTo(state.contextTarget, {
+                        instant: false,
+                        isReturn: false,
+                      });
+                    }
+                  } else {
+                    queueSidebarSync(false);
+                  }
+                } else if (!nowShown && wasShown) {
+                  wasShown = false;
+                  enteredPopups.delete(pop);
+                  if (
+                    (id === "note-options-menu" ||
+                      id === "hist-options-menu") &&
+                    !isShown("note-options-menu") &&
+                    !isShown("hist-options-menu") &&
+                    performance.now() >= state.contextOpeningUntil
+                  ) {
+                    state.contextTarget = null;
+                    state.contextOpeningUntil = 0;
+                  }
+                  queueSidebarSync(true);
+                }
+              });
+              pObs.observe(pop, {
+                attributes: true,
+                attributeFilter: ["class"],
+              });
+            });
+
+            [
+              "home",
+              "search-view",
+              "my-content-view",
+              "all-notes-view",
+              "chat_container",
+            ].forEach((id) => {
+              const vw = document.getElementById(id);
+              if (!vw) return;
+              const vObs = new MutationObserver(() => queueSidebarSync(false));
+              vObs.observe(vw, {
+                attributes: true,
+                attributeFilter: ["style", "class"],
+              });
+            });
+
+            window.addEventListener("resize", () => {
+              const tgt = getLockedTarget() || config.getSelected(state);
+              if (tgt && isElVisible(tgt)) moveTo(tgt, { instant: true });
+            });
+          } else {
+            const menuObs = new MutationObserver(() => {
+              const isOpen =
+                container.classList.contains("show") ||
+                container.style.display === "block";
+              if (isOpen) {
+                enteredPopups.delete(container);
+                if (config.bounceSync) {
+                  syncSelected(true);
+                  syncDuringBounce(780);
+                } else if (config.persistent) {
+                  requestAnimationFrame(() => syncSelected(true));
+                } else {
+                  hidePill();
+                }
+              } else {
+                enteredPopups.delete(container);
+                stopBounceSync();
+                if (!config.persistent) hidePill();
+              }
+            });
+            menuObs.observe(container, {
+              attributes: true,
+              attributeFilter: ["class", "style"],
+            });
+          }
+
+          requestAnimationFrame(() => syncSelected(true));
+        };
+
+        // 1. Thanh menu chính ở màn hình chính (#sidebar)
+        const sidebar = document.getElementById("sidebar");
+        if (sidebar) {
+          attachGlowMenu(sidebar, {
+            isSidebar: true,
+            persistent: true,
+            getItems: () =>
+              Array.from(sidebar.querySelectorAll(".sb-item")).filter(
+                isElVisible,
+              ),
+            canSelect: (item) => {
+              const oc = item.getAttribute("onclick") || "";
+              return (
+                !item.classList.contains("gear-item") &&
+                !oc.includes("createNewNote") &&
+                !item.closest("#sidebar-notes-list")
+              );
+            },
+            getLocked: (state) => {
+              const ctxMenuOpen =
+                isShown("note-options-menu") || isShown("hist-options-menu");
+              const ctxGrace = performance.now() < state.contextOpeningUntil;
+              if (
+                (ctxMenuOpen || ctxGrace) &&
+                state.contextTarget &&
+                isElVisible(state.contextTarget)
+              ) {
+                return state.contextTarget;
+              }
+              if (isShown("set-menu")) {
+                return sidebar.querySelector(".sb-item.gear-item");
+              }
+              if (
+                isShown("notebook-overlay") &&
+                state.notebookTarget &&
+                isElVisible(state.notebookTarget)
+              ) {
+                return state.notebookTarget;
+              }
+              return null;
+            },
+            getSelected: (state) => {
+              const isViewShown = (id) => {
+                const v = document.getElementById(id);
+                return !!v && window.getComputedStyle(v).display !== "none";
+              };
+              if (isViewShown("chat_container")) {
+                const histActive = sidebar.querySelector(
+                  "#history-list .sb-item.active",
+                );
+                if (histActive && isElVisible(histActive)) return histActive;
+              }
+              if (isViewShown("search-view")) {
+                return sidebar.querySelector('.sb-item[onclick*="showSearch"]');
+              }
+              if (isViewShown("my-content-view")) {
+                return sidebar.querySelector(
+                  '.sb-item[onclick*="showMyContent"]',
+                );
+              }
+              if (isViewShown("all-notes-view")) {
+                const allBtn = sidebar.querySelector("#btn-all-notes");
+                if (allBtn && isElVisible(allBtn)) return allBtn;
+              }
+              if (isViewShown("home")) {
+                return sidebar.querySelector('.sb-item[onclick*="newChat"]');
+              }
+              const active = sidebar.querySelector(".sb-item.active");
+              if (active && isElVisible(active)) return active;
+              if (
+                state.selectedTarget &&
+                state.selectedTarget.isConnected &&
+                isElVisible(state.selectedTarget)
+              ) {
+                return state.selectedTarget;
+              }
+              return sidebar.querySelector('.sb-item[onclick*="newChat"]');
+            },
+          });
         }
+
+        // 2. Menu Chọn mô hình AI (Nhanh / Tư duy / Pro / Ultra)
+        ["m-mod-h", "m-mod-c"].forEach((id) => {
+          const el = document.getElementById(id);
+          if (!el) return;
+          attachGlowMenu(el, {
+            persistent: true,
+            getItems: () =>
+              Array.from(el.querySelectorAll(".m-item")).filter(isElVisible),
+            getSelected: () =>
+              el.querySelector(".m-item:has(.m-check)") ||
+              el.querySelector(".m-item.active") ||
+              el.querySelector(".m-item"),
+          });
+        });
+
+        // 3. Sub-menu Giao diện (Sáng / Tối)
+        const themeMenu = document.getElementById("theme-menu");
+        if (themeMenu) {
+          attachGlowMenu(themeMenu, {
+            persistent: true,
+            getItems: () =>
+              Array.from(themeMenu.querySelectorAll(".d-item")).filter(
+                (it) =>
+                  isElVisible(it) &&
+                  window.getComputedStyle(it).pointerEvents !== "none",
+              ),
+            getSelected: () => {
+              const curTheme =
+                document.body.getAttribute("data-theme") || "dark";
+              return themeMenu.querySelector(
+                `.d-item[onclick*="'${curTheme}'"]`,
+              );
+            },
+          });
+        }
+
+        // 4. Menu Văn bản trong Sổ ghi chú
+        const noteDropdown = document.getElementById("custom-dropdown-menu");
+        if (noteDropdown) {
+          attachGlowMenu(noteDropdown, {
+            persistent: true,
+            bounceSync: true,
+            getItems: () =>
+              Array.from(noteDropdown.querySelectorAll(".dropdown-opt")).filter(
+                isElVisible,
+              ),
+            getSelected: () => {
+              const curText = (
+                document.getElementById("dropdown-current-val")?.textContent ||
+                ""
+              ).trim();
+              return (
+                Array.from(noteDropdown.querySelectorAll(".dropdown-opt")).find(
+                  (opt) => opt.textContent.trim() === curText,
+                ) || noteDropdown.querySelector(".dropdown-opt")
+              );
+            },
+          });
+        }
+
+        // 5. Menu Cài đặt và trợ giúp (#set-menu)
+        const setMenu = document.getElementById("set-menu");
+        if (setMenu) {
+          attachGlowMenu(setMenu, {
+            persistent: false,
+            ignoreNestedSub: true,
+            getItems: () =>
+              Array.from(setMenu.children).filter(
+                (ch) => ch.classList.contains("d-item") && isElVisible(ch),
+              ),
+          });
+        }
+
+        // 6. Các menu thả / pop-up khác (Đính kèm +, Công cụ, Trợ giúp, Menu 3 chấm)
+        [
+          "m-att-h",
+          "m-att-c",
+          "m-tool-h",
+          "m-tool-c",
+          "help-menu",
+          "hist-options-menu",
+          "note-options-menu",
+          "file-options-menu",
+        ].forEach((id) => {
+          const el = document.getElementById(id);
+          if (!el) return;
+          attachGlowMenu(el, {
+            persistent: false,
+            getItems: () =>
+              Array.from(el.querySelectorAll(":scope > .d-item")).filter(
+                (it) =>
+                  isElVisible(it) &&
+                  !it.querySelector(".switch") &&
+                  window.getComputedStyle(it).pointerEvents !== "none",
+              ),
+          });
+        });
+
+        // 7. Các menu sinh động (Menu 3 chấm tin nhắn AI & Hành động đã lên lịch)
+        const bindDynamicMenus = (root) => {
+          if (!root || !(root instanceof Element)) return;
+
+          const aiMenus = root.matches(".ai-options-menu")
+            ? [root]
+            : Array.from(root.querySelectorAll(".ai-options-menu"));
+          aiMenus.forEach((m) => {
+            attachGlowMenu(m, {
+              persistent: false,
+              getItems: () =>
+                Array.from(m.querySelectorAll(".ai-option-item")).filter(
+                  isElVisible,
+                ),
+            });
+          });
+
+          const hdMenus =
+            root.id === "tng-hd-menu-overlay-v37"
+              ? Array.from(root.querySelectorAll(".tng-rp-menu"))
+              : Array.from(
+                  root.querySelectorAll(
+                    "#tng-hd-menu-overlay-v37 .tng-rp-menu",
+                  ),
+                );
+          hdMenus.forEach((m) => {
+            attachGlowMenu(m, {
+              persistent: false,
+              getItems: () =>
+                Array.from(m.querySelectorAll(".tng-hd-opt")).filter(
+                  isElVisible,
+                ),
+            });
+          });
+        };
+
+        bindDynamicMenus(document.body);
+        const bodyObs = new MutationObserver((mutations) => {
+          mutations.forEach((m) => {
+            m.addedNodes.forEach((node) => {
+              if (node instanceof Element) bindDynamicMenus(node);
+            });
+          });
+        });
+        bodyObs.observe(document.body, { childList: true, subtree: true });
+      })();
+
+      // ============================================================
+      // BỘ MÁY GIỌT NƯỚC TRƯỢT NGANG CHO TAB QUẢN LÝ GÓI THUÊ BAO
+      // Tách riêng 3 tab, ẩn nền trượt cũ + lò xo nước 60/120fps iOS 27
+      // ============================================================
+      (function () {
+        const spBody = document.getElementById("sp-body");
+        if (!spBody) return;
+
+        const canHover = window.matchMedia("(hover: hover)").matches;
+        const TAB_LABELS = ["cá nhân", "gia đình", "doanh nghiệp"];
+        const boundBars = new WeakSet();
+        let lastSnapshot = null;
+
+        const normalizeText = (el) =>
+          (el.textContent || "").replace(/\s+/g, " ").trim().toLowerCase();
+
+        const isTabInitiallyActive = (tab) => {
+          if (tab.classList.contains("active")) return true;
+          const rawStyle = (tab.getAttribute("style") || "").toLowerCase();
+          if (
+            rawStyle.includes("#a8c7fa") ||
+            rawStyle.includes("var(--btn-blue)") ||
+            rawStyle.includes("#1a73e8") ||
+            rawStyle.includes("#005bb5") ||
+            rawStyle.includes("color: #000") ||
+            rawStyle.includes("color:#000")
+          ) {
+            return true;
+          }
+          const cs = window.getComputedStyle(tab);
+          if (
+            cs.backgroundColor &&
+            cs.backgroundColor !== "rgba(0, 0, 0, 0)" &&
+            cs.backgroundColor !== "transparent" &&
+            !cs.backgroundColor.startsWith("rgba(255, 255, 255, 0.0")
+          ) {
+            return true;
+          }
+          return false;
+        };
+
+        // Chỉ gom đúng 3 nút Cá nhân / Gia đình / Doanh nghiệp; tách mọi thẻ nền trượt cũ ra extras
+        const findSubscriptionTabBar = () => {
+          const containers = spBody.querySelectorAll("div, nav");
+          for (const box of containers) {
+            const allKids = Array.from(box.children).filter(
+              (ch) =>
+                !ch.classList.contains("tng-glow-pill") &&
+                ch.tagName !== "STYLE" &&
+                ch.tagName !== "SCRIPT",
+            );
+            const matchedTabs = allKids.filter((ch) =>
+              TAB_LABELS.includes(normalizeText(ch)),
+            );
+            if (matchedTabs.length === 3) {
+              const extras = allKids.filter((ch) => !matchedTabs.includes(ch));
+              return { container: box, tabs: matchedTabs, extras };
+            }
+          }
+          return null;
+        };
+
+        const wrapTabLabel = (tab) => {
+          if (tab.querySelector(":scope > .tng-sub-tab-lbl")) return;
+          const span = document.createElement("span");
+          span.className = "tng-sub-tab-lbl";
+          while (tab.firstChild) span.appendChild(tab.firstChild);
+          tab.appendChild(span);
+        };
+
+        const initHorizontalLiquidTabs = () => {
+          const found = findSubscriptionTabBar();
+          if (!found || boundBars.has(found.container)) return;
+
+          const { container, tabs, extras } = found;
+          boundBars.add(container);
+
+          let activeTab = tabs.find(isTabInitiallyActive) || tabs[0];
+
+          container.classList.add("tng-sub-tabs");
+          extras.forEach((oldEl) => oldEl.classList.add("tng-sub-old-glider"));
+          tabs.forEach((tab) => {
+            tab.classList.add("tng-sub-tab");
+            wrapTabLabel(tab);
+          });
+
+          const pill = document.createElement("span");
+          pill.className = "tng-glow-pill is-horizontal";
+          container.insertBefore(pill, container.firstChild);
+
+          const state = {
+            target: null,
+            focusEl: null,
+            leaveTimer: null,
+            rafId: null,
+            lastTs: 0,
+            x: 0,
+            y: 0,
+            w: 0,
+            h: 0,
+            tx: 0,
+            ty: 0,
+            tw: 0,
+            th: 0,
+            vx: 0,
+            vy: 0,
+            vw: 0,
+            vh: 0,
+            stiffness: 285,
+            damping: 22.5,
+          };
+
+          const setFocusTab = (el) => {
+            if (state.focusEl === el) return;
+            if (state.focusEl) state.focusEl.classList.remove("tng-pill-focus");
+            state.focusEl = el || null;
+            if (el) el.classList.add("tng-pill-focus");
+          };
+
+          const updateWaterArrival = () => {
+            const tgt = state.target;
+            if (!tgt || state.tw <= 0) return;
+            const overlapLeft = Math.max(state.x, state.tx);
+            const overlapRight = Math.min(
+              state.x + state.w,
+              state.tx + state.tw,
+            );
+            const ratio =
+              Math.max(0, overlapRight - overlapLeft) / Math.max(1, state.tw);
+            setFocusTab(ratio >= 0.48 ? tgt : null);
+          };
+
+          const renderPill = (
+            stretchX = 1,
+            stretchY = 1,
+            sheenX = 0,
+            sheenOp = 0.42,
+          ) => {
+            pill.style.transform = `translate3d(${state.x.toFixed(2)}px, ${state.y.toFixed(2)}px, 0) scale(${stretchX.toFixed(4)}, ${stretchY.toFixed(4)})`;
+            pill.style.width = Math.max(0, state.w).toFixed(2) + "px";
+            pill.style.height = Math.max(0, state.h).toFixed(2) + "px";
+            pill.style.setProperty("--sheen-x", sheenX.toFixed(2) + "px");
+            pill.style.setProperty("--sheen-op", sheenOp.toFixed(3));
+          };
+
+          const stopPhysics = () => {
+            if (state.rafId) {
+              cancelAnimationFrame(state.rafId);
+              state.rafId = null;
+            }
+            state.vx = state.vy = state.vw = state.vh = 0;
+          };
+
+          const stepPhysics = (ts) => {
+            if (!container.isConnected) {
+              stopPhysics();
+              return;
+            }
+            const dt = state.lastTs
+              ? Math.min(0.032, Math.max(0.004, (ts - state.lastTs) / 1000))
+              : 0.016;
+            state.lastTs = ts;
+
+            const k = state.stiffness;
+            const c = state.damping;
+
+            const subDt = dt * 0.5;
+            for (let step = 0; step < 2; step++) {
+              const ax = (state.tx - state.x) * k - state.vx * c;
+              const ay = (state.ty - state.y) * k - state.vy * c;
+              const aw = (state.tw - state.w) * k - state.vw * c;
+              const ah = (state.th - state.h) * k - state.vh * c;
+
+              state.vx += ax * subDt;
+              state.vy += ay * subDt;
+              state.vw += aw * subDt;
+              state.vh += ah * subDt;
+
+              state.x += state.vx * subDt;
+              state.y += state.vy * subDt;
+              state.w += state.vw * subDt;
+              state.h += state.vh * subDt;
+            }
+
+            const speedX = Math.abs(state.vx);
+            const stretch = Math.min(0.145, speedX * 0.00008);
+            const stretchX = 1 + stretch;
+            const stretchY = 1 / Math.sqrt(stretchX);
+            const sheenX = Math.max(-44, Math.min(44, state.vx * 0.018));
+            const sheenOp = Math.min(0.9, 0.42 + stretch * 3.3);
+
+            renderPill(stretchX, stretchY, sheenX, sheenOp);
+            updateWaterArrival();
+
+            lastSnapshot = {
+              x: state.x,
+              y: state.y,
+              w: state.w,
+              h: state.h,
+              vx: state.vx,
+              ts: performance.now(),
+            };
+
+            const settled =
+              Math.abs(state.tx - state.x) < 0.06 &&
+              Math.abs(state.ty - state.y) < 0.06 &&
+              Math.abs(state.tw - state.w) < 0.06 &&
+              Math.abs(state.th - state.h) < 0.06 &&
+              Math.abs(state.vx) < 0.35 &&
+              Math.abs(state.vy) < 0.35;
+
+            if (settled) {
+              state.x = state.tx;
+              state.y = state.ty;
+              state.w = state.tw;
+              state.h = state.th;
+              state.vx = state.vy = state.vw = state.vh = 0;
+              renderPill(1, 1, 0, 0.42);
+              updateWaterArrival();
+              state.rafId = null;
+              state.lastTs = 0;
+              return;
+            }
+
+            state.rafId = requestAnimationFrame(stepPhysics);
+          };
+
+          const moveToTab = (tab, opts = {}) => {
+            const { instant = false, isReturn = false, isTap = false } = opts;
+            if (!tab || !tab.isConnected) return;
+            const w = tab.offsetWidth;
+            const h = tab.offsetHeight;
+            if (!w || !h) return;
+
+            const radius = window.getComputedStyle(tab).borderRadius;
+            pill.style.borderRadius =
+              radius && radius !== "0px" ? radius : "11.5px";
+
+            state.target = tab;
+            state.tx = tab.offsetLeft;
+            state.ty = tab.offsetTop;
+            state.tw = w;
+            state.th = h;
+
+            if (instant) {
+              stopPhysics();
+              state.x = state.tx;
+              state.y = state.ty;
+              state.w = state.tw;
+              state.h = state.th;
+              renderPill(1, 1, 0, 0.42);
+              pill.style.opacity = "1";
+              setFocusTab(tab);
+              lastSnapshot = {
+                x: state.x,
+                y: state.y,
+                w: state.w,
+                h: state.h,
+                vx: 0,
+                ts: performance.now(),
+              };
+              return;
+            }
+
+            if (isReturn) {
+              state.stiffness = 185;
+              state.damping = 20.5;
+            } else if (isTap) {
+              state.stiffness = 330;
+              state.damping = 23.5;
+            } else {
+              state.stiffness = 285;
+              state.damping = 22.5;
+            }
+
+            pill.style.opacity = "1";
+            updateWaterArrival();
+            if (!state.rafId) {
+              state.lastTs = 0;
+              state.rafId = requestAnimationFrame(stepPhysics);
+            }
+          };
+
+          const resolveTab = (rawTarget) => {
+            if (!rawTarget || !(rawTarget instanceof Element)) return null;
+            for (const tab of tabs) {
+              if (tab === rawTarget || tab.contains(rawTarget)) return tab;
+            }
+            return null;
+          };
+
+          // Rê chuột ngang qua 3 mục: giọt nước trôi bám mượt theo chuột
+          if (canHover) {
+            container.addEventListener("pointermove", (ev) => {
+              if (ev.pointerType === "touch") return;
+              const tab = resolveTab(ev.target);
+              if (!tab) return;
+              clearTimeout(state.leaveTimer);
+              if (tab !== state.target) {
+                moveToTab(tab, { instant: false, isReturn: false });
+              }
+            });
+
+            container.addEventListener("mouseleave", () => {
+              clearTimeout(state.leaveTimer);
+              state.leaveTimer = setTimeout(() => {
+                if (
+                  activeTab &&
+                  activeTab.isConnected &&
+                  activeTab !== state.target
+                ) {
+                  moveToTab(activeTab, { instant: false, isReturn: true });
+                }
+              }, 60);
+            });
+          }
+
+          tabs.forEach((tab) => {
+            tab.addEventListener("pointerdown", () => {
+              clearTimeout(state.leaveTimer);
+              activeTab = tab;
+              moveToTab(tab, { instant: false, isTap: true });
+            });
+            tab.addEventListener("click", () => {
+              clearTimeout(state.leaveTimer);
+              activeTab = tab;
+              moveToTab(tab, { instant: false, isTap: true });
+            });
+          });
+
+          const startInit = () => {
+            if (!container.isConnected) return;
+            if (lastSnapshot && performance.now() - lastSnapshot.ts < 450) {
+              state.x = lastSnapshot.x;
+              state.y = lastSnapshot.y;
+              state.w = lastSnapshot.w;
+              state.h = lastSnapshot.h;
+              state.vx = lastSnapshot.vx || 0;
+              renderPill(1, 1, 0, 0.42);
+              pill.style.opacity = "1";
+              moveToTab(activeTab, { instant: false, isTap: true });
+            } else {
+              moveToTab(activeTab, { instant: true });
+            }
+          };
+          requestAnimationFrame(startInit);
+
+          if (typeof ResizeObserver === "function") {
+            const ro = new ResizeObserver(() => {
+              if (activeTab && activeTab.isConnected && !state.rafId) {
+                moveToTab(activeTab, { instant: true });
+              }
+            });
+            ro.observe(container);
+          }
+        };
+
+        const bodyObs = new MutationObserver(() => initHorizontalLiquidTabs());
+        bodyObs.observe(spBody, { childList: true, subtree: true });
+        initHorizontalLiquidTabs();
       })();
     </script>
   </body>
