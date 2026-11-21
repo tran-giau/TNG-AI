@@ -5765,7 +5765,7 @@
           transform: scale(1) !important;
         }
 
-        /* 3. Khung chứa tùy chọn con: tràn kín ngang/đáy bên trong khối 10px, điều khiển bằng lò xo JS */
+        /* 3. Khung chứa tùy chọn con: mở khóa padding trên/dưới để kéo thoáng đáy 16px */
         html body #set-menu .d-item.flex-between > .sub-menu {
           position: relative !important;
           display: flex !important;
@@ -5778,7 +5778,10 @@
           top: 0 !important;
           bottom: auto !important;
           margin: 9px -15px -9px -15px !important;
-          padding: 0 !important;
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+          padding-top: 0;
+          padding-bottom: 0;
           height: 0px;
           max-height: none !important;
           border-radius: 0 !important;
@@ -5792,16 +5795,8 @@
           visibility: hidden !important;
           overflow: hidden !important;
           pointer-events: none !important;
-          will-change: height, opacity;
+          will-change: height, opacity, padding-top, padding-bottom;
           transition: none !important;
-        }
-
-        html body #set-menu .d-item.flex-between > .sub-menu.show,
-        html body #set-menu .d-item.flex-between > .sub-menu.tng-sub-animating {
-          visibility: visible !important;
-        }
-        html body #set-menu .d-item.flex-between > .sub-menu.show {
-          pointer-events: auto !important;
         }
 
         /* 4. Tắt hoàn toàn giọt kính lỏng bên trong 2 menu con trên điện thoại */
@@ -34998,11 +34993,14 @@
 
       // ============================================================
       // BỘ MÁY XỔ LÒ XO NẢY LÊN TRÊN CHO MENU CON TRÊN ĐIỆN THOẠI
-      // Bảng neo cố định đáy, tự do kéo giãn & nảy mượt lên trên 60/120fps
+      // Tự do kéo giãn lên trên + kéo thoáng phần đáy menu (16px)
       // ============================================================
       (function () {
         const setMenu = document.getElementById("set-menu");
         if (!setMenu) return;
+
+        const BASE_PAD_TOP = 6;
+        const BASE_PAD_BOTTOM = 16; // Độ dài phần đáy menu (có thể tăng lên 18–20 nếu muốn thoáng hơn nữa)
 
         const isMobile = () => window.innerWidth <= 768;
         const subs = Array.from(setMenu.querySelectorAll(".sub-menu"));
@@ -35032,14 +35030,17 @@
         };
 
         const measureNaturalSubHeight = (sub) => {
-          let total = 0;
+          let contentTotal = 0;
           Array.from(sub.children).forEach((ch) => {
             if (ch.classList.contains("tng-glow-pill")) return;
             const cs = window.getComputedStyle(ch);
             if (cs.display === "none") return;
-            total += ch.getBoundingClientRect().height || ch.offsetHeight;
+            contentTotal +=
+              ch.getBoundingClientRect().height || ch.offsetHeight;
           });
-          return Math.ceil(Math.max(total, sub.scrollHeight, 60));
+          return Math.ceil(
+            Math.max(contentTotal, 40) + BASE_PAD_TOP + BASE_PAD_BOTTOM,
+          );
         };
 
         const stepAllSprings = (ts) => {
@@ -35059,7 +35060,6 @@
           states.forEach((st, sub) => {
             if (!st.running) return;
 
-            // Lò xo iOS 27: mở nảy mềm lên trên (~8% overshoot), đóng thu gọn êm mượt
             const k = st.opening ? 255 : 320;
             const c = st.opening ? 20 : 27.5;
 
@@ -35070,14 +35070,17 @@
             }
 
             const clampedH = Math.max(0, st.h);
+            const denom = st.target > 0 ? st.target : st.lastTarget || 80;
+            const progress = Math.max(0, Math.min(1, clampedH / denom));
             const extra = st.opening ? Math.max(0, clampedH - st.target) : 0;
 
             sub.style.height = clampedH.toFixed(2) + "px";
-            sub.style.paddingTop = (extra * 0.35).toFixed(2) + "px";
-            sub.style.paddingBottom = (extra * 0.65).toFixed(2) + "px";
+            sub.style.paddingTop =
+              (BASE_PAD_TOP * progress + extra * 0.3).toFixed(2) + "px";
+            sub.style.paddingBottom =
+              (BASE_PAD_BOTTOM * progress + extra * 0.7).toFixed(2) + "px";
 
-            const opTarget = st.target > 0 ? st.target : st.lastTarget || 80;
-            const op = Math.max(0, Math.min(1, clampedH / (opTarget * 0.55)));
+            const op = Math.max(0, Math.min(1, clampedH / (denom * 0.55)));
             sub.style.opacity = op.toFixed(3);
 
             const settled =
@@ -35087,15 +35090,17 @@
               st.running = false;
               st.h = st.target;
               st.v = 0;
-              sub.style.paddingTop = "0px";
-              sub.style.paddingBottom = "0px";
 
               if (st.opening) {
+                sub.style.paddingTop = BASE_PAD_TOP + "px";
+                sub.style.paddingBottom = BASE_PAD_BOTTOM + "px";
                 sub.style.height = "auto";
                 sub.style.opacity = "1";
                 sub.classList.remove("tng-sub-animating");
                 if (st.parent) st.parent.classList.remove("tng-sub-animating");
               } else {
+                sub.style.paddingTop = "0px";
+                sub.style.paddingBottom = "0px";
                 sub.style.height = "0px";
                 sub.style.opacity = "0";
                 sub.classList.remove("tng-sub-animating");
@@ -35195,6 +35200,7 @@
               startSpringLoop();
             } else {
               const curH = sub.offsetHeight || st.h || 0;
+              st.lastTarget = Math.max(curH, st.lastTarget || 80);
               st.opening = false;
               st.h = curH;
               st.target = 0;
@@ -35210,6 +35216,8 @@
                 updateSetMenuOpenFlag();
                 startSpringLoop();
               } else {
+                sub.style.paddingTop = "0px";
+                sub.style.paddingBottom = "0px";
                 sub.style.height = "0px";
                 sub.style.opacity = "0";
                 sub.classList.remove("tng-sub-animating");
