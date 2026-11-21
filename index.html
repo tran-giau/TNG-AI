@@ -3735,7 +3735,7 @@
       .d-item,
       .m-item,
       .s-item,
-      .sv-item,
+      .sv-item:not(.tng-silk-anim),
       .qa-item,
       .am-item,
       button[style*="width: 100%"],
@@ -4751,6 +4751,366 @@
         transform: scale(0.965) translateZ(0) !important;
         filter: brightness(0.93);
         opacity: 0.96 !important;
+      }
+
+      /* ============================================================ */
+      /* DROPDOWN LẶP LẠI: NẢY SÂU HƠN & NỀN XANH TRƯỢT MƯỢT          */
+      /* ============================================================ */
+      [onclick*="tngOpenRepeatDropdown"] svg,
+      [onclick*="tngOpenRepeatDropdown"] > span:last-child:not(#hd-repeat-val) {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transform: rotate(0deg);
+        transform-origin: center center;
+        will-change: transform;
+        transition: transform 0.55s cubic-bezier(0.34, -0.4, 0.64, 1) !important;
+      }
+      [onclick*="tngOpenRepeatDropdown"].tng-rp-open svg,
+      [onclick*="tngOpenRepeatDropdown"].tng-rp-open
+        > span:last-child:not(#hd-repeat-val) {
+        transform: rotate(-180deg);
+        transition: transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+      }
+
+      /* Trạng thái ĐÓNG (Nhún lấy đà sâu hơn trước khi rút lên) */
+      .tng-rp-list {
+        position: absolute;
+        display: flex !important;
+        flex-direction: column;
+        box-sizing: border-box;
+        background: rgba(12, 13, 18, 0.98);
+        border: 0px solid rgba(255, 255, 255, 0.12);
+        border-radius: 14px;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        overflow: hidden !important;
+        max-height: 0 !important;
+        padding: 0 6px !important;
+        row-gap: 0px !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        will-change: max-height, padding, row-gap, opacity;
+        transition:
+          max-height 0.78s cubic-bezier(0.34, -3.1, 0.64, 1),
+          padding-top 0.78s cubic-bezier(0.34, -3.8, 0.64, 1),
+          padding-bottom 0.78s cubic-bezier(0.34, -3.8, 0.64, 1),
+          row-gap 0.78s cubic-bezier(0.34, -3.8, 0.64, 1),
+          opacity 0.15s ease 0.62s,
+          border-width 0s linear 0.72s,
+          visibility 0s linear 0.78s !important;
+      }
+
+      /* Đồng bộ Giao diện Sáng */
+      [data-theme="light"] .tng-rp-list {
+        background: rgba(255, 255, 255, 0.98);
+        border-color: #dadce0;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.14);
+      }
+
+      /* Trạng thái MỞ (Tăng độ nảy xuống sâu hơn 1 chút) */
+      .tng-rp-list.show {
+        max-height: 260px !important;
+        padding: 6px 6px 16px 6px !important;
+        row-gap: 2px !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important;
+        border-width: 1px !important;
+        transition:
+          max-height 0.78s cubic-bezier(0.34, 4.5, 0.64, 1),
+          padding-top 0.78s cubic-bezier(0.34, 5.2, 0.64, 1),
+          padding-bottom 0.78s cubic-bezier(0.34, 5.2, 0.64, 1),
+          row-gap 0.78s cubic-bezier(0.34, 5.2, 0.64, 1),
+          opacity 0.1s ease 0s,
+          border-width 0s linear 0s,
+          visibility 0s linear 0s !important;
+      }
+
+      /* Bù trừ đệm đáy để trạng thái nghỉ vẫn cân đối 6px trên/dưới */
+      .tng-rp-list .tng-rp-opt:last-child {
+        margin-bottom: -10px !important;
+      }
+
+      /* Thanh nền xanh trượt độc lập phía sau các lựa chọn */
+      .tng-rp-pill {
+        position: absolute;
+        left: 6px;
+        right: 6px;
+        top: 0;
+        border-radius: 10px;
+        background: var(--chat-user-bg);
+        pointer-events: none;
+        z-index: 0;
+        will-change: transform;
+      }
+
+      /* Từng dòng lựa chọn */
+      .tng-rp-opt {
+        position: relative;
+        z-index: 1;
+        flex-shrink: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 11px 14px;
+        font-size: 14.5px;
+        color: var(--text-main);
+        font-weight: 400;
+        background: transparent !important;
+        border-radius: 10px;
+        cursor: pointer;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+        transform-origin: center center;
+        will-change: transform, color;
+        transition:
+          transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+          color 0.28s ease !important;
+      }
+      .tng-rp-opt .tng-rp-chk {
+        opacity: 0;
+        transform: scale(0.5);
+        flex-shrink: 0;
+        transition:
+          opacity 0.24s ease,
+          transform 0.34s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .tng-rp-opt.active {
+        color: var(--btn-blue);
+        font-weight: 600;
+      }
+      .tng-rp-opt.active .tng-rp-chk {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      /* Làm dịu tốc độ chuyển chữ & dấu tích khi nền xanh trượt về lựa chọn cũ */
+      .tng-rp-list.returning .tng-rp-opt {
+        transition:
+          transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+          color 0.48s ease !important;
+      }
+      .tng-rp-list.returning .tng-rp-chk {
+        transition:
+          opacity 0.42s ease,
+          transform 0.48s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      @media (hover: hover) {
+        .tng-rp-opt:hover {
+          transform: scale(0.97);
+        }
+      }
+      .tng-rp-opt:active {
+        transition-duration: 0.05s !important;
+        transform: scale(0.93) !important;
+        opacity: 0.9;
+      }
+
+      /* Hiệu ứng trượt mờ đổi chữ 0.55s cho ô Lặp lại */
+      #hd-repeat-val.tng-rp-swapping {
+        display: inline-grid !important;
+        align-items: center;
+        overflow: hidden;
+        padding: 3px 0;
+        margin: -3px 0;
+      }
+      #hd-repeat-val.tng-rp-swapping > span {
+        grid-area: 1 / 1;
+        white-space: nowrap;
+        will-change: transform, opacity, filter;
+      }
+      @keyframes tngRpOutUp {
+        0% {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+          filter: blur(0px);
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(-10px) scale(0.96);
+          filter: blur(3px);
+        }
+      }
+      @keyframes tngRpInBottom {
+        0% {
+          opacity: 0;
+          transform: translateY(10px) scale(0.96);
+          filter: blur(3px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+          filter: blur(0px);
+        }
+      }
+      @keyframes tngRpOutDown {
+        0% {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+          filter: blur(0px);
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(10px) scale(0.96);
+          filter: blur(3px);
+        }
+      }
+      @keyframes tngRpInTop {
+        0% {
+          opacity: 0;
+          transform: translateY(-10px) scale(0.96);
+          filter: blur(3px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+          filter: blur(0px);
+        }
+      }
+      .tng-rp-out-up {
+        animation: tngRpOutUp 0.42s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        pointer-events: none;
+      }
+      .tng-rp-in-bottom {
+        animation: tngRpInBottom 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+      .tng-rp-out-down {
+        animation: tngRpOutDown 0.42s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        pointer-events: none;
+      }
+      .tng-rp-in-top {
+        animation: tngRpInTop 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      /* ============================================================ */
+      /* HIỆU ỨNG LÚN CHỮ & PHÁT SÁNG MENU 3 CHẤM (HÀNH ĐỘNG LÊN LỊCH) */
+      /* ============================================================ */
+      #tng-hd-menu-overlay-v37 .tng-hd-opt {
+        position: relative;
+        width: 100%;
+        padding: 14px 16px;
+        font-size: 15px;
+        font-weight: 500;
+        color: var(--text-main);
+        background: transparent !important;
+        cursor: pointer;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+        transform: scale(1) !important;
+        transition: background-color 0.22s ease !important;
+      }
+      #tng-hd-menu-overlay-v37 .tng-hd-opt:not(:last-child) {
+        border-bottom: 1px solid var(--glass-border);
+      }
+      #tng-hd-menu-overlay-v37 .tng-hd-opt.is-danger {
+        color: #ff453a;
+      }
+
+      /* Lõi bọc Icon + Chữ: lún nảy lò xo chuẩn iOS 27 */
+      #tng-hd-menu-overlay-v37 .tng-hd-opt-inner {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transform-origin: left center;
+        will-change: transform, filter;
+        transition:
+          transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+          filter 0.25s ease !important;
+      }
+
+      /* Rê chuột trên máy tính: sáng nền + lún nhẹ + hắt sáng chữ/icon */
+      @media (hover: hover) {
+        #tng-hd-menu-overlay-v37 .tng-hd-opt:hover {
+          background-color: var(--glass-hover) !important;
+        }
+        #tng-hd-menu-overlay-v37 .tng-hd-opt:hover .tng-hd-opt-inner {
+          transform: scale(0.965) !important;
+          filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.35));
+        }
+        #tng-hd-menu-overlay-v37 .tng-hd-opt.is-danger:hover {
+          background-color: rgba(255, 69, 58, 0.14) !important;
+        }
+        #tng-hd-menu-overlay-v37 .tng-hd-opt.is-danger:hover .tng-hd-opt-inner {
+          filter: drop-shadow(0 0 8px rgba(255, 69, 58, 0.55));
+        }
+      }
+
+      /* Nhấn giữ (Chuột & Cảm ứng): sáng nền mạnh hơn + lún sâu 3D tức thì */
+      #tng-hd-menu-overlay-v37 .tng-hd-opt:active,
+      #tng-hd-menu-overlay-v37 .tng-hd-opt.tng-ios-active {
+        background-color: rgba(255, 255, 255, 0.15) !important;
+        transition-duration: 0.05s !important;
+      }
+      #tng-hd-menu-overlay-v37 .tng-hd-opt:active .tng-hd-opt-inner,
+      #tng-hd-menu-overlay-v37 .tng-hd-opt.tng-ios-active .tng-hd-opt-inner {
+        transform: scale(0.88) !important;
+        filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.45));
+        transition-duration: 0.05s !important;
+      }
+      #tng-hd-menu-overlay-v37 .tng-hd-opt.is-danger:active,
+      #tng-hd-menu-overlay-v37 .tng-hd-opt.is-danger.tng-ios-active {
+        background-color: rgba(255, 69, 58, 0.22) !important;
+      }
+      #tng-hd-menu-overlay-v37 .tng-hd-opt.is-danger:active .tng-hd-opt-inner,
+      #tng-hd-menu-overlay-v37
+        .tng-hd-opt.is-danger.tng-ios-active
+        .tng-hd-opt-inner {
+        filter: drop-shadow(0 0 10px rgba(255, 69, 58, 0.65));
+      }
+
+      /* Đồng bộ Giao diện Sáng (chống bị rule :first-child nền trắng đè mất hover) */
+      [data-theme="light"] #tng-hd-menu-overlay-v37 .tng-hd-opt {
+        background-color: transparent !important;
+      }
+      @media (hover: hover) {
+        [data-theme="light"] #tng-hd-menu-overlay-v37 .tng-hd-opt:hover {
+          background-color: rgba(0, 0, 0, 0.06) !important;
+        }
+        [data-theme="light"]
+          #tng-hd-menu-overlay-v37
+          .tng-hd-opt:hover
+          .tng-hd-opt-inner {
+          filter: none;
+        }
+        [data-theme="light"]
+          #tng-hd-menu-overlay-v37
+          .tng-hd-opt.is-danger:hover {
+          background-color: rgba(255, 59, 48, 0.1) !important;
+        }
+      }
+      [data-theme="light"] #tng-hd-menu-overlay-v37 .tng-hd-opt:active,
+      [data-theme="light"] #tng-hd-menu-overlay-v37 .tng-hd-opt.tng-ios-active {
+        background-color: rgba(0, 0, 0, 0.1) !important;
+      }
+      [data-theme="light"]
+        #tng-hd-menu-overlay-v37
+        .tng-hd-opt.is-danger:active,
+      [data-theme="light"]
+        #tng-hd-menu-overlay-v37
+        .tng-hd-opt.is-danger.tng-ios-active {
+        background-color: rgba(255, 59, 48, 0.18) !important;
+      }
+
+      /* ============================================================ */
+      /* HIỆU ỨNG CHUYỂN MỤC IOS 27 SILK DEPTH (CHIỀU SÂU 3D NHƯ LỤA) */
+      /* ============================================================ */
+      .home-view,
+      .search-view,
+      .my-content-view,
+      .all-notes-view {
+        animation: none !important;
+        overflow-x: hidden !important;
+      }
+
+      /* Nhường quyền chuyển động cho bộ máy 3D trong Thư viện */
+      .my-content-view .mc-item-wrap {
+        animation: none !important;
       }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -21323,23 +21683,29 @@
             };
           };
 
-          // --- GIAO DIỆN DROPDOWN MENU XỔ XUỐNG ---
+          // --- GIAO DIỆN DROPDOWN MENU XỔ XUỐNG KIỂU DANH SÁCH LÒ XO ---
           window.tngOpenRepeatDropdown = function (e) {
             let btn = e.currentTarget;
             let rect = btn.getBoundingClientRect();
+            let arrowEl =
+              btn.querySelector("svg") ||
+              Array.from(btn.children).find((c) => c.id !== "hd-repeat-val");
 
-            let overlay = document.getElementById("tng-rp-overlay-v37");
-            if (overlay) overlay.remove();
+            let oldOverlay = document.getElementById("tng-rp-overlay-v37");
+            if (oldOverlay) {
+              clearTimeout(oldOverlay._rmTimer);
+              if (oldOverlay._stopSync) oldOverlay._stopSync();
+              oldOverlay.remove();
+            }
 
-            overlay = document.createElement("div");
+            let overlay = document.createElement("div");
             overlay.id = "tng-rp-overlay-v37";
             overlay.style.cssText =
               "position: fixed; inset: 0; z-index: 99999999; background: transparent; cursor: default;";
 
-            let curVal =
-              document
-                .getElementById("hd-repeat-val")
-                .getAttribute("data-val") || "daily";
+            let repeatEl = document.getElementById("hd-repeat-val");
+            let selectedVal =
+              (repeatEl && repeatEl.getAttribute("data-val")) || "daily";
             const opts = [
               { val: "once", label: "Chỉ một lần" },
               { val: "daily", label: "Hàng ngày" },
@@ -21349,58 +21715,318 @@
 
             let htmlOpts = opts
               .map(
-                (o, idx) => `
-                <div class="tng-ultimate-btn" onclick="tngSelectRepeatDropdown('${o.val}', '${o.label}')" style="padding: 14px 16px; font-size: 15px; color: ${o.val === curVal ? "#a8c7fa" : "#fff"}; font-weight: ${o.val === curVal ? "600" : "400"}; display: flex; justify-content: space-between; align-items: center; border-bottom: ${idx < opts.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none"}; cursor: pointer; transition: background 0.2s;" ontouchstart="this.style.background='rgba(255,255,255,0.08)'" ontouchend="this.style.background='transparent'">
-                    ${o.label}
-                    ${o.val === curVal ? '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a8c7fa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>' : ""}
+                (o) => `
+                <div class="tng-rp-opt ${o.val === selectedVal ? "active" : ""}" data-val="${o.val}" data-label="${o.label}">
+                    <span>${o.label}</span>
+                    <svg class="tng-rp-chk" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                 </div>
             `,
               )
               .join("");
 
-            let dropHeight = 220;
+            let dropHeight = 250;
             let isDropUp = rect.bottom + dropHeight > window.innerHeight;
-            let topPos = isDropUp ? rect.top - dropHeight - 8 : rect.bottom + 8;
-            let origin = isDropUp ? "bottom center" : "top center";
+            let posStyle = isDropUp
+              ? `bottom: ${window.innerHeight - rect.top + 8}px;`
+              : `top: ${rect.bottom + 8}px;`;
 
             overlay.innerHTML = `
-                <div class="tng-rp-menu" style="position: absolute; top: ${topPos}px; left: ${rect.left}px; width: ${rect.width}px; background: rgba(30, 31, 38, 0.95); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; box-shadow: 0 15px 40px rgba(0,0,0,0.5); transform-origin: ${origin}; transform: scale(0.02); opacity: 0; transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1); overflow: hidden; display: flex; flex-direction: column;">
+                <div class="tng-rp-list" style="${posStyle} left: ${rect.left}px; width: ${rect.width}px;">
+                    <div class="tng-rp-pill"></div>
                     ${htmlOpts}
                 </div>
             `;
 
             document.body.appendChild(overlay);
-            void overlay.offsetWidth;
+            let menu = overlay.querySelector(".tng-rp-list");
+            let pill = menu.querySelector(".tng-rp-pill");
+            let optEls = Array.from(menu.querySelectorAll(".tng-rp-opt"));
+            let activeOpt =
+              optEls.find(
+                (el) => el.getAttribute("data-val") === selectedVal,
+              ) || optEls[0];
+            let isClosing = false;
+            let leaveTimer = null;
+            let syncRaf = null;
 
-            let menu = overlay.querySelector(".tng-rp-menu");
-            if (isDropUp) {
-              let actualHeight = menu.getBoundingClientRect().height;
-              menu.style.top = rect.top - actualHeight - 8 + "px";
-            }
-            menu.style.transform = "scale(1)";
-            menu.style.opacity = "1";
-
-            window.tngCloseRepeatDropdown = () => {
-              menu.style.transform = "scale(0.02)";
-              menu.style.opacity = "0";
-              setTimeout(() => overlay.remove(), 850);
+            const stopSync = () => {
+              if (syncRaf) {
+                cancelAnimationFrame(syncRaf);
+                syncRaf = null;
+              }
             };
-            overlay.onclick = (e) => {
-              if (e.target === overlay) tngCloseRepeatDropdown();
-            };
-          };
+            overlay._stopSync = stopSync;
 
-          window.tngSelectRepeatDropdown = function (val, label) {
-            let el = document.getElementById("hd-repeat-val");
-            if (el) {
+            const setArrowOpen = (open) => {
+              btn.classList.toggle("tng-rp-open", open);
+              if (arrowEl) {
+                arrowEl.style.setProperty(
+                  "transform-origin",
+                  "center center",
+                  "important",
+                );
+                arrowEl.style.setProperty(
+                  "transition",
+                  open
+                    ? "transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1)"
+                    : "transform 0.55s cubic-bezier(0.34, -0.4, 0.64, 1)",
+                  "important",
+                );
+                arrowEl.style.setProperty(
+                  "transform",
+                  open ? "rotate(-180deg)" : "rotate(0deg)",
+                  "important",
+                );
+              }
+            };
+
+            const syncPillDuringBounce = (durationMs) => {
+              stopSync();
+              let start = performance.now();
+              const step = (now) => {
+                if (!menu.isConnected || !activeOpt) return;
+                pill.style.top = activeOpt.offsetTop + "px";
+                pill.style.height = activeOpt.offsetHeight + "px";
+                if (now - start < durationMs) {
+                  syncRaf = requestAnimationFrame(step);
+                } else {
+                  syncRaf = null;
+                }
+              };
+              syncRaf = requestAnimationFrame(step);
+            };
+
+            const setHighlight = (val, isReturn = false) => {
+              let targetOpt = optEls.find(
+                (el) => el.getAttribute("data-val") === val,
+              );
+              if (!targetOpt) return;
+
+              menu.classList.toggle("returning", isReturn);
+              optEls.forEach((el) => {
+                el.classList.toggle("active", el === targetOpt);
+              });
+
+              if (targetOpt === activeOpt) return;
+
+              let prevTop = pill.getBoundingClientRect().top;
+              activeOpt = targetOpt;
+
+              pill.style.transition = "none";
+              pill.style.transform = "translateY(0px)";
+              pill.style.top = targetOpt.offsetTop + "px";
+              pill.style.height = targetOpt.offsetHeight + "px";
+
+              let nextTop = pill.getBoundingClientRect().top;
+              let dy = prevTop - nextTop;
+
+              if (Math.abs(dy) > 0.5) {
+                pill.style.transform = `translateY(${dy}px)`;
+                void pill.offsetWidth;
+                let slideDuration = isReturn ? 550 : 320;
+                pill.style.transition = `transform ${slideDuration}ms cubic-bezier(0.22, 1, 0.36, 1)`;
+                pill.style.transform = "translateY(0px)";
+              }
+            };
+
+            const animateRepeatLabel = (val, label) => {
+              let el = document.getElementById("hd-repeat-val");
+              if (!el) return;
+
+              const order = ["once", "daily", "weekly", "monthly"];
+              let oldVal = el.getAttribute("data-val") || "daily";
+              let oldLabel =
+                el.dataset.swapping === "1"
+                  ? el.dataset.curLabel
+                  : el.textContent.trim();
+
+              clearTimeout(el._swapTimer);
               el.setAttribute("data-val", val);
-              el.innerText = label;
+              el.dataset.curLabel = label;
+
+              if (!oldLabel || oldLabel === label) {
+                el.textContent = label;
+                el.style.position = "";
+                el.style.display = "";
+                el.style.alignItems = "";
+                el.style.height = "";
+                el.style.overflow = "";
+                el.style.minWidth = "";
+                btn.style.height = "";
+                delete el.dataset.swapping;
+                delete el.dataset.origH;
+                delete el.dataset.origBtnH;
+                return;
+              }
+
+              // Khóa cứng chiều cao gốc của nút và chữ để bảng không bị nảy dù chỉ 1px
+              let origH =
+                parseFloat(el.dataset.origH) ||
+                el.getBoundingClientRect().height;
+              let origBtnH =
+                parseFloat(el.dataset.origBtnH) ||
+                btn.getBoundingClientRect().height;
+              el.dataset.origH = origH;
+              el.dataset.origBtnH = origBtnH;
+
+              btn.style.boxSizing = "border-box";
+              btn.style.height = origBtnH + "px";
+
+              let isDown = order.indexOf(val) > order.indexOf(oldVal);
+              let outY = isDown ? "-115%" : "115%";
+              let inY = isDown ? "115%" : "-115%";
+
+              el.dataset.swapping = "1";
+              el.style.position = "relative";
+              el.style.display = "inline-flex";
+              el.style.alignItems = "center";
+              el.style.height = origH + "px";
+              el.style.overflow = "hidden";
+
+              let oldSpan = document.createElement("span");
+              oldSpan.textContent = oldLabel;
+              oldSpan.style.cssText =
+                "position: absolute; left: 0; top: 0; height: 100%; display: inline-flex; align-items: center; white-space: nowrap; pointer-events: none; will-change: transform, opacity, filter;";
+
+              let newSpan = document.createElement("span");
+              newSpan.textContent = label;
+              newSpan.style.cssText =
+                "position: relative; height: 100%; display: inline-flex; align-items: center; white-space: nowrap; will-change: transform, opacity, filter;";
+
+              el.textContent = "";
+              el.appendChild(oldSpan);
+              el.appendChild(newSpan);
+
+              let maxW = Math.max(oldSpan.offsetWidth, newSpan.offsetWidth);
+              el.style.minWidth = maxW + "px";
+
+              oldSpan.animate(
+                [
+                  {
+                    transform: "translateY(0%) scale(1)",
+                    opacity: 1,
+                    filter: "blur(0px)",
+                  },
+                  {
+                    transform: `translateY(${outY}) scale(0.95)`,
+                    opacity: 0,
+                    filter: "blur(5px)",
+                  },
+                ],
+                {
+                  duration: 450,
+                  easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+                  fill: "forwards",
+                },
+              );
+
+              newSpan.animate(
+                [
+                  {
+                    transform: `translateY(${inY}) scale(0.95)`,
+                    opacity: 0,
+                    filter: "blur(5px)",
+                  },
+                  {
+                    transform: "translateY(0%) scale(1)",
+                    opacity: 1,
+                    filter: "blur(0px)",
+                  },
+                ],
+                {
+                  duration: 550,
+                  easing: "cubic-bezier(0.16, 1, 0.3, 1)",
+                  fill: "forwards",
+                },
+              );
+
+              el._swapTimer = setTimeout(() => {
+                el.textContent = label;
+                el.style.position = "";
+                el.style.display = "";
+                el.style.alignItems = "";
+                el.style.height = "";
+                el.style.overflow = "";
+                el.style.minWidth = "";
+                btn.style.height = "";
+                delete el.dataset.swapping;
+                delete el.dataset.origH;
+                delete el.dataset.origBtnH;
+              }, 570);
+            };
+
+            const closeMenu = () => {
+              clearTimeout(leaveTimer);
+              isClosing = true;
+              overlay.style.pointerEvents = "none";
+              setArrowOpen(false);
+              menu.classList.remove("show");
+              syncPillDuringBounce(800);
+              clearTimeout(overlay._rmTimer);
+              overlay._rmTimer = setTimeout(() => {
+                stopSync();
+                if (overlay.isConnected) overlay.remove();
+              }, 800);
+            };
+
+            window.tngCloseRepeatDropdown = closeMenu;
+            window.tngSelectRepeatDropdown = (val, label) => {
+              clearTimeout(leaveTimer);
+              selectedVal = val;
+              isClosing = true;
+              setHighlight(val, false);
+              menu.style.pointerEvents = "none";
+              setTimeout(() => {
+                closeMenu();
+                animateRepeatLabel(val, label);
+              }, 70);
+            };
+
+            pill.style.top = activeOpt.offsetTop + "px";
+            pill.style.height = activeOpt.offsetHeight + "px";
+
+            const canHover = window.matchMedia("(hover: hover)").matches;
+            optEls.forEach((optEl) => {
+              let v = optEl.getAttribute("data-val");
+              let lbl = optEl.getAttribute("data-label");
+              if (canHover) {
+                optEl.addEventListener("mouseenter", () => {
+                  clearTimeout(leaveTimer);
+                  if (!isClosing) setHighlight(v, false);
+                });
+              }
+              optEl.addEventListener("pointerdown", () => {
+                clearTimeout(leaveTimer);
+                if (!isClosing) setHighlight(v, false);
+              });
+              optEl.addEventListener("click", (ev) => {
+                ev.stopPropagation();
+                if (isClosing) return;
+                window.tngSelectRepeatDropdown(v, lbl);
+              });
+            });
+
+            if (canHover) {
+              menu.addEventListener("mouseleave", () => {
+                if (isClosing) return;
+                clearTimeout(leaveTimer);
+                leaveTimer = setTimeout(() => {
+                  if (!isClosing) setHighlight(selectedVal, true);
+                }, 70);
+              });
             }
-            if (typeof tngCloseRepeatDropdown === "function")
-              tngCloseRepeatDropdown();
+
+            void menu.offsetWidth;
+            setArrowOpen(true);
+            menu.classList.add("show");
+            syncPillDuringBounce(820);
+
+            overlay.onclick = (ev) => {
+              if (ev.target === overlay) closeMenu();
+            };
           };
 
-          // --- GIAO DIỆN BUNG MENU 3 CHẤM BẰNG OVERLAY (SỬA LỖI TÀNG HÌNH) ---
+          // --- GIAO DIỆN BUNG MENU 3 CHẤM BẰNG OVERLAY (CÓ LÚN CHỮ & PHÁT SÁNG) ---
           window.toggleHanhDongMenu = function (id, e) {
             if (e) e.stopPropagation();
             let btn = e.currentTarget;
@@ -21419,11 +22045,17 @@
 
             overlay.innerHTML = `
                 <div class="tng-rp-menu" style="position: absolute; top: ${topPos}px; right: ${rightPos}px; background: rgba(30, 31, 38, 0.95); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; box-shadow: 0 15px 40px rgba(0,0,0,0.5); transform-origin: top right; transform: scale(0.02); opacity: 0; transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1); overflow: hidden; display: flex; flex-direction: column; min-width: 150px;">
-                    <div class="tng-ultimate-btn" onclick="tngCloseHanhDongMenu(); openHanhDongForm('${id}', event);" style="padding: 14px 16px; font-size: 15px; color: #fff; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 10px; transition: background 0.2s;" ontouchstart="this.style.background='rgba(255,255,255,0.08)'" ontouchend="this.style.background='transparent'">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg> Tùy chỉnh
+                    <div class="tng-hd-opt" onclick="tngCloseHanhDongMenu(); openHanhDongForm('${id}', event);">
+                        <span class="tng-hd-opt-inner">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                            <span>Tùy chỉnh</span>
+                        </span>
                     </div>
-                    <div class="tng-ultimate-btn" onclick="tngCloseHanhDongMenu(); tngConfirmDeleteHanhDong('${id}', event);" style="padding: 14px 16px; font-size: 15px; color: #ff453a; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: background 0.2s;" ontouchstart="this.style.background='rgba(255,59,48,0.1)'" ontouchend="this.style.background='transparent'">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg> Xóa
+                    <div class="tng-hd-opt is-danger" onclick="tngCloseHanhDongMenu(); tngConfirmDeleteHanhDong('${id}', event);">
+                        <span class="tng-hd-opt-inner">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                            <span>Xóa</span>
+                        </span>
                     </div>
                 </div>
             `;
@@ -21432,10 +22064,22 @@
             void overlay.offsetWidth;
 
             let menu = overlay.querySelector(".tng-rp-menu");
+            menu.querySelectorAll(".tng-hd-opt").forEach((item) => {
+              item.addEventListener("pointerdown", () =>
+                item.classList.add("tng-ios-active"),
+              );
+              ["pointerup", "pointercancel", "pointerleave"].forEach((evt) => {
+                item.addEventListener(evt, () =>
+                  item.classList.remove("tng-ios-active"),
+                );
+              });
+            });
+
             menu.style.transform = "scale(1)";
             menu.style.opacity = "1";
 
             window.tngCloseHanhDongMenu = () => {
+              overlay.style.pointerEvents = "none";
               menu.style.transform = "scale(0.02)";
               menu.style.opacity = "0";
               setTimeout(() => overlay.remove(), 850);
@@ -31318,6 +31962,551 @@
           },
           true,
         );
+      })();
+
+      // Hiệu ứng trượt mờ đổi chữ 0.55s cho menu Văn bản trong Sổ ghi chú
+      (function () {
+        const el = document.getElementById("dropdown-current-val");
+        if (!el || el._tngNoteSwapBound) return;
+        el._tngNoteSwapBound = true;
+
+        const btn = el.closest(".tool-select-btn");
+        const order = ["Văn bản", "Tiêu đề lớn", "Tiêu đề vừa", "Tiêu đề nhỏ"];
+
+        const textDesc = Object.getOwnPropertyDescriptor(
+          Node.prototype,
+          "textContent",
+        );
+        const innerDesc = Object.getOwnPropertyDescriptor(
+          HTMLElement.prototype,
+          "innerText",
+        );
+        const htmlDesc = Object.getOwnPropertyDescriptor(
+          Element.prototype,
+          "innerHTML",
+        );
+
+        let currentLabel = textDesc.get.call(el).trim() || "Văn bản";
+
+        const resetStyles = () => {
+          el.style.position = "";
+          el.style.display = "";
+          el.style.alignItems = "";
+          el.style.flex = "";
+          el.style.minWidth = "";
+          el.style.height = "";
+          el.style.overflow = "";
+          if (btn) btn.style.height = "";
+          delete el.dataset.swapping;
+          delete el.dataset.origH;
+          delete el.dataset.origBtnH;
+        };
+
+        const animateDropdownLabel = (rawVal) => {
+          const nextLabel = String(rawVal == null ? "" : rawVal).trim();
+          if (!nextLabel || nextLabel === currentLabel) return;
+
+          const oldLabel = currentLabel;
+          currentLabel = nextLabel;
+          clearTimeout(el._swapTimer);
+
+          const overlay = document.getElementById("notebook-overlay");
+          const isNoteOpen = overlay && overlay.classList.contains("show");
+          const origH = parseFloat(el.dataset.origH) || el.offsetHeight;
+          const origBtnH = btn
+            ? parseFloat(el.dataset.origBtnH) || btn.offsetHeight
+            : 0;
+
+          // Nếu sổ đang đóng thì cập nhật chữ trực tiếp, không chạy hiệu ứng ngầm
+          if (!isNoteOpen || !origH) {
+            resetStyles();
+            textDesc.set.call(el, nextLabel);
+            return;
+          }
+
+          // Khóa cứng chiều cao gốc (dùng offsetHeight để chống giật khung)
+          el.dataset.origH = origH;
+          if (btn && origBtnH) {
+            el.dataset.origBtnH = origBtnH;
+            btn.style.boxSizing = "border-box";
+            btn.style.height = origBtnH + "px";
+          }
+
+          const oldIdx = order.indexOf(oldLabel);
+          const newIdx = order.indexOf(nextLabel);
+          const isDown =
+            oldIdx === -1 || newIdx === -1 ? true : newIdx > oldIdx;
+          const outY = isDown ? "-115%" : "115%";
+          const inY = isDown ? "115%" : "-115%";
+
+          el.dataset.swapping = "1";
+          el.style.position = "relative";
+          el.style.display = "inline-flex";
+          el.style.alignItems = "center";
+          el.style.flex = "1";
+          el.style.minWidth = "0";
+          el.style.height = origH + "px";
+          el.style.overflow = "hidden";
+
+          const oldSpan = document.createElement("span");
+          oldSpan.textContent = oldLabel;
+          oldSpan.style.cssText =
+            "position: absolute; left: 0; top: 0; height: 100%; display: inline-flex; align-items: center; white-space: nowrap; pointer-events: none; will-change: transform, opacity, filter;";
+
+          const newSpan = document.createElement("span");
+          newSpan.textContent = nextLabel;
+          newSpan.style.cssText =
+            "position: relative; height: 100%; display: inline-flex; align-items: center; white-space: nowrap; will-change: transform, opacity, filter;";
+
+          textDesc.set.call(el, "");
+          el.appendChild(oldSpan);
+          el.appendChild(newSpan);
+
+          oldSpan.animate(
+            [
+              {
+                transform: "translateY(0%) scale(1)",
+                opacity: 1,
+                filter: "blur(0px)",
+              },
+              {
+                transform: `translateY(${outY}) scale(0.95)`,
+                opacity: 0,
+                filter: "blur(5px)",
+              },
+            ],
+            {
+              duration: 450,
+              easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+              fill: "forwards",
+            },
+          );
+
+          newSpan.animate(
+            [
+              {
+                transform: `translateY(${inY}) scale(0.95)`,
+                opacity: 0,
+                filter: "blur(5px)",
+              },
+              {
+                transform: "translateY(0%) scale(1)",
+                opacity: 1,
+                filter: "blur(0px)",
+              },
+            ],
+            {
+              duration: 550,
+              easing: "cubic-bezier(0.16, 1, 0.3, 1)",
+              fill: "forwards",
+            },
+          );
+
+          el._swapTimer = setTimeout(() => {
+            textDesc.set.call(el, currentLabel);
+            resetStyles();
+          }, 570);
+        };
+
+        const propHandler = {
+          configurable: true,
+          get() {
+            return currentLabel;
+          },
+          set(val) {
+            animateDropdownLabel(val);
+          },
+        };
+
+        if (innerDesc) Object.defineProperty(el, "innerText", propHandler);
+        if (textDesc) Object.defineProperty(el, "textContent", propHandler);
+        if (htmlDesc) {
+          Object.defineProperty(el, "innerHTML", {
+            configurable: true,
+            get() {
+              return htmlDesc.get.call(el);
+            },
+            set(val) {
+              if (typeof val === "string" && !val.includes("<")) {
+                animateDropdownLabel(val);
+              } else {
+                htmlDesc.set.call(el, val);
+              }
+            },
+          });
+        }
+      })();
+
+      // ============================================================
+      // BỘ MÁY CHUYỂN MỤC IOS 27 SILK 3D FLY-IN (HÃM ÊM TUYỆT ĐỐI)
+      // ============================================================
+      (function () {
+        // Không áp dụng cho Lịch sử trò chuyện (#chat_container)
+        const VIEW_IDS = [
+          "home",
+          "my-content-view",
+          "search-view",
+          "all-notes-view",
+        ];
+
+        const activeAnims = new WeakMap();
+        const isVisible = (el) =>
+          !!el && window.getComputedStyle(el).display !== "none";
+        const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+
+        const stopExistingAnim = (el) => {
+          const prev = activeAnims.get(el);
+          if (prev) {
+            try {
+              prev.cancel();
+            } catch (_) {}
+            activeAnims.delete(el);
+          }
+          el.classList.remove("tng-silk-anim");
+          el.style.willChange = "";
+        };
+
+        // Lò xo lụa 60 mốc: đáp êm với độ nhún nhẹ 2%, hãm mượt về 0.00px ở 15% cuối (chống giật tuyệt đối)
+        const buildSilkFrames = (dx, dy, dz, rx, ry, flatText = false) => {
+          const steps = 60;
+          const zeta = 0.78;
+          const omega = 9.8;
+          const wd = omega * Math.sqrt(1 - zeta * zeta);
+          const dampingTerm = zeta / Math.sqrt(1 - zeta * zeta);
+          const frames = [];
+
+          for (let i = 0; i <= steps; i++) {
+            const t = i / steps;
+            let p;
+            if (i === 0) {
+              p = 0;
+            } else if (i === steps) {
+              p = 1;
+            } else {
+              const decay = Math.exp(-zeta * omega * t);
+              p =
+                1 - decay * (Math.cos(wd * t) + dampingTerm * Math.sin(wd * t));
+              // Hòa tan nốt 0.1% dư thừa ở chặng cuối để vận tốc về 0 hoàn hảo, không nhảy khung
+              if (t > 0.85) {
+                const u = (t - 0.85) / 0.15;
+                const blend = u * u * (3 - 2 * u);
+                p = p + (1 - p) * blend;
+              }
+            }
+
+            const inv = 1 - p;
+            const x = dx * inv;
+            const y = dy * inv;
+            const opT = Math.min(1, t / 0.18);
+            const opacity = 1 - Math.pow(1 - opT, 3);
+
+            let transform;
+            if (flatText) {
+              // Giữ chữ gradient sắc nét, không bị khựng răng cưa khi nhả lớp 3D
+              const s = 1 + (dz / 1100) * inv;
+              transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0) scale(${s.toFixed(4)})`;
+            } else {
+              const z = dz * inv;
+              const rotX = rx * inv;
+              const rotY = ry * inv;
+              transform = `perspective(1100px) translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, ${z.toFixed(2)}px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg)`;
+            }
+
+            frames.push({
+              offset: t,
+              opacity: Number(opacity.toFixed(4)),
+              transform,
+            });
+          }
+          return frames;
+        };
+
+        // Quét sâu tối đa 4 tầng để tách đúng từng tiêu đề & từng thẻ trong Thư viện
+        const collectLibraryItems = (body) => {
+          const list = [];
+          const walk = (container, depth) => {
+            Array.from(container.children).forEach((child) => {
+              const cs = window.getComputedStyle(child);
+              if (cs.display === "none" || cs.visibility === "hidden") return;
+
+              const isLeafClass =
+                child.classList.contains("mc-header") ||
+                child.classList.contains("mc-section-title") ||
+                child.classList.contains("mc-empty-card") ||
+                child.classList.contains("mc-learned-row") ||
+                child.classList.contains("mc-item-wrap") ||
+                child.classList.contains("note-card") ||
+                child.tagName === "H1" ||
+                child.tagName === "H2" ||
+                child.tagName === "H3";
+
+              const hasBg =
+                cs.backgroundColor &&
+                cs.backgroundColor !== "rgba(0, 0, 0, 0)" &&
+                cs.backgroundColor !== "transparent";
+              const hasBorder = parseFloat(cs.borderTopWidth) > 0;
+              const isCardBox =
+                (hasBg || hasBorder) &&
+                !child.querySelector(
+                  ".mc-grid, .mc-item-wrap, .mc-section-title",
+                );
+
+              if (
+                depth < 4 &&
+                !isLeafClass &&
+                !isCardBox &&
+                child.children.length > 0
+              ) {
+                walk(child, depth + 1);
+              } else {
+                list.push(child);
+              }
+            });
+          };
+          walk(body, 0);
+          return list;
+        };
+
+        const collectTargets = (view) => {
+          const id = view.id;
+          const isMobile = window.innerWidth <= 768;
+
+          if (id === "home") {
+            const items = [];
+            const h1 = view.querySelector(".greeting h1");
+            const h2 = view.querySelector(".greeting h2");
+            const inputBox = view.querySelector("#iw-home .input-box");
+            const chips = Array.from(view.querySelectorAll(".chips .chip"));
+
+            if (h1)
+              items.push({
+                el: h1,
+                delay: 0,
+                depth: 135,
+                lift: -16,
+                flatText: true,
+              });
+            if (h2)
+              items.push({
+                el: h2,
+                delay: 40,
+                depth: 145,
+                lift: -8,
+                flatText: true,
+              });
+            if (inputBox)
+              items.push({ el: inputBox, delay: 78, depth: 185, lift: 28 });
+
+            const mid = (chips.length - 1) / 2;
+            chips.forEach((chip, i) => {
+              const dist = !isMobile ? Math.abs(i - mid) : i * 0.75;
+              items.push({
+                el: chip,
+                delay: 115 + Math.round(dist * 46),
+                depth: (isMobile ? 165 : 205) + dist * 20,
+                lift: 44,
+                spreadX: 0.4,
+                tiltX: 12,
+              });
+            });
+            return items;
+          }
+
+          if (id === "search-view") {
+            const items = [];
+            const title = view.querySelector(".sv-title");
+            const inp = view.querySelector(".sv-input-wrapper");
+            const sec = view.querySelector(".sv-section-title");
+            const rows = Array.from(view.querySelectorAll("#sv-list > *"));
+
+            if (title)
+              items.push({
+                el: title,
+                delay: 0,
+                depth: isMobile ? 130 : 170,
+                lift: 40,
+                tiltX: 10,
+              });
+            if (inp)
+              items.push({
+                el: inp,
+                delay: 48,
+                depth: isMobile ? 155 : 210,
+                lift: 62,
+                tiltX: 14,
+              });
+            if (sec)
+              items.push({
+                el: sec,
+                delay: 92,
+                depth: isMobile ? 140 : 185,
+                lift: 68,
+                tiltX: 12,
+              });
+
+            rows.forEach((row, i) => {
+              const step = Math.min(i, 12);
+              items.push({
+                el: row,
+                delay: 128 + step * 52,
+                depth: (isMobile ? 165 : 230) + Math.min(i, 5) * 10,
+                lift: 90 + Math.min(i, 6) * 10,
+                tiltX: 17,
+              });
+            });
+            return items;
+          }
+
+          if (id === "my-content-view") {
+            const body = view.querySelector("#my-content-body");
+            if (!body) return [];
+            const raw = collectLibraryItems(body);
+            return raw.map((el, i) => {
+              const step = Math.min(i, 14);
+              const isHeading =
+                el.classList.contains("mc-header") ||
+                el.classList.contains("mc-section-title") ||
+                el.tagName === "H1" ||
+                el.tagName === "H2" ||
+                el.tagName === "H3";
+              return {
+                el,
+                delay: i === 0 ? 0 : 45 + step * 50,
+                depth: isHeading
+                  ? isMobile
+                    ? 135
+                    : 180
+                  : (isMobile ? 170 : 235) + Math.min(i, 5) * 8,
+                lift: isHeading ? 50 : 86 + Math.min(i, 6) * 8,
+                tiltX: isHeading ? 11 : 17,
+                radialDelay: el.classList.contains("mc-item-wrap"),
+              };
+            });
+          }
+
+          if (id === "all-notes-view") {
+            const raw = [];
+            const h1 = view.querySelector("h1");
+            const cards = Array.from(
+              view.querySelectorAll("#all-notes-grid > *"),
+            );
+            if (h1) raw.push(h1);
+            raw.push(...cards);
+            return raw.map((el, i) => ({
+              el,
+              delay: i === 0 ? 0 : 50 + Math.floor((i - 1) / 3) * 65,
+              depth: i === 0 ? 150 : isMobile ? 175 : 235,
+              lift: i === 0 ? 44 : 84,
+              tiltX: i === 0 ? 10 : 17,
+              radialDelay: i > 0,
+            }));
+          }
+
+          return [];
+        };
+
+        const playSilkEnter = (view) => {
+          if (!isVisible(view)) return;
+
+          const targets = collectTargets(view);
+          if (!targets.length) return;
+
+          const viewRect = view.getBoundingClientRect();
+          const cx = viewRect.left + viewRect.width / 2;
+          const cy = viewRect.top + viewRect.height * 0.42;
+
+          // Đo tọa độ 1 lượt trước khi gắn class/animation
+          const measured = [];
+          targets.forEach((item, idx) => {
+            const el = item.el;
+            if (!el || !el.isConnected) return;
+            stopExistingAnim(el);
+            const r = el.getBoundingClientRect();
+            if (idx > 20 && r.top > window.innerHeight + 240) return;
+            measured.push({ item, el, r });
+          });
+
+          measured.forEach(({ item, el, r }) => {
+            const elCx = r.left + r.width / 2;
+            const elCy = r.top + r.height / 2;
+            const relX = elCx - cx;
+            const relY = elCy - cy;
+            const radialFactor =
+              Math.hypot(relX, relY) / Math.max(viewRect.width, 400);
+
+            const spreadX = item.spreadX || 0.3;
+            const dx = clamp(relX * spreadX, -115, 115);
+            const dy = clamp(relY * 0.16 + (item.lift || 40), -70, 150);
+            const dz = clamp((item.depth || 180) + radialFactor * 50, 120, 275);
+
+            const rx = clamp((item.tiltX || 12) + relY * 0.012, -8, 20);
+            const ry = clamp(-relX * 0.02, -9, 9);
+
+            const extraRadialDelay = item.radialDelay
+              ? Math.round(Math.abs(relX) * 0.09)
+              : 0;
+            const delay = (item.delay || 0) + extraRadialDelay;
+            const duration = 960;
+
+            const frames = buildSilkFrames(
+              dx,
+              dy,
+              dz,
+              rx,
+              ry,
+              Boolean(item.flatText),
+            );
+
+            // Gắn class mở khóa cho .sv-item trong suốt quá trình bay vào
+            el.classList.add("tng-silk-anim");
+            el.style.willChange = "transform, opacity";
+
+            const anim = el.animate(frames, {
+              duration,
+              delay,
+              easing: "linear",
+              fill: "backwards",
+            });
+
+            activeAnims.set(el, anim);
+            const cleanup = () => {
+              if (activeAnims.get(el) === anim) {
+                activeAnims.delete(el);
+                el.classList.remove("tng-silk-anim");
+                requestAnimationFrame(() => {
+                  if (!activeAnims.has(el)) el.style.willChange = "";
+                });
+              }
+            };
+            anim.onfinish = cleanup;
+            anim.oncancel = cleanup;
+          });
+        };
+
+        VIEW_IDS.forEach((id) => {
+          const view = document.getElementById(id);
+          if (!view) return;
+          let wasVisible = isVisible(view);
+
+          const obs = new MutationObserver(() => {
+            const nowVisible = isVisible(view);
+            if (nowVisible && !wasVisible) {
+              wasVisible = true;
+              playSilkEnter(view);
+            } else if (!nowVisible && wasVisible) {
+              wasVisible = false;
+            }
+          });
+          obs.observe(view, {
+            attributes: true,
+            attributeFilter: ["style", "class"],
+          });
+        });
+
+        const initialHome = document.getElementById("home");
+        if (initialHome && isVisible(initialHome)) {
+          playSilkEnter(initialHome);
+        }
       })();
     </script>
   </body>
