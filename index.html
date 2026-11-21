@@ -5634,10 +5634,10 @@
 
       /* ============================================================ */
       /* TỐI ƯU MENU TRƯỢT GIAO DIỆN & TRỢ GIÚP TRÊN ĐIỆN THOẠI       */
-      /* Kéo bảng giãn nảy lên trên, hiển thị đủ 100% & thanh sáng ✓  */
+      /* Kéo bảng giãn nảy lên trên, thoáng đáy 16px & thanh sáng ✓   */
       /* ============================================================ */
       @media (max-width: 768px) {
-        /* 1. Neo chặt đáy, bỏ giới hạn max-height để bảng tự kéo cao & nảy lên trên hiển thị trọn vẹn */
+        /* 1. Neo chặt đáy, bỏ giới hạn max-height để bảng tự kéo cao & nảy lên trên hiển thị đủ */
         html body #set-menu.set-menu {
           top: auto !important;
           bottom: 52px !important;
@@ -5647,12 +5647,11 @@
           overflow: hidden !important;
         }
 
-        /* Khóa không cho flexbox bóp lùn hay cắt mất bất kỳ mục nào khi bảng giãn lên */
         html body #set-menu.set-menu > * {
           flex-shrink: 0 !important;
         }
 
-        /* Tạm ẩn giọt kính ngoài khi đang mở khối gộp để không chồng 2 lớp viền lúc nảy lên */
+        /* Tạm ẩn giọt kính ngoài khi đang mở khối gộp để không chồng 2 lớp viền */
         html body #set-menu.tng-has-sub-open > .tng-glow-pill {
           opacity: 0 !important;
           transition: opacity 0.14s ease !important;
@@ -5694,7 +5693,7 @@
             0 4px 14px rgba(0, 0, 0, 0.07) !important;
         }
 
-        /* Thanh tiêu đề Giao diện / Trợ giúp nằm sát đỉnh & tràn kín viền 2 bên của khối mới */
+        /* Thanh tiêu đề Giao diện / Trợ giúp nằm sát đỉnh & tràn kín viền 2 bên */
         html body #set-menu .d-item.flex-between::before {
           content: "";
           position: absolute;
@@ -5765,7 +5764,7 @@
           transform: scale(1) !important;
         }
 
-        /* 3. Khung chứa tùy chọn con: mở khóa padding trên/dưới để kéo thoáng đáy 16px */
+        /* 3. Khung chứa tùy chọn con: mở khóa padding trên/dưới (thoáng đáy 16px) */
         html body #set-menu .d-item.flex-between > .sub-menu {
           position: relative !important;
           display: flex !important;
@@ -5792,11 +5791,27 @@
           -webkit-backdrop-filter: none !important;
           transform: none !important;
           opacity: 0;
-          visibility: hidden !important;
+          visibility: hidden;
           overflow: hidden !important;
           pointer-events: none !important;
           will-change: height, opacity, padding-top, padding-bottom;
           transition: none !important;
+        }
+
+        /* Đảm bảo chữ luôn hiển thị rõ ngay khi mở hoặc đang trượt lò xo */
+        html body #set-menu .d-item.flex-between > .sub-menu.show,
+        html body #set-menu .d-item.flex-between > .sub-menu.tng-sub-animating {
+          visibility: visible !important;
+        }
+        html body #set-menu .d-item.flex-between > .sub-menu.show {
+          pointer-events: auto !important;
+        }
+        html
+          body
+          #set-menu
+          .d-item.flex-between
+          > .sub-menu.show:not(.tng-sub-animating) {
+          opacity: 1 !important;
         }
 
         /* 4. Tắt hoàn toàn giọt kính lỏng bên trong 2 menu con trên điện thoại */
