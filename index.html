@@ -7697,6 +7697,213 @@
         height: 90%;
         animation: tngLgSplashX 0.48s ease-out forwards !important;
       }
+
+      /* ============================================================ */
+      /* TINH CHỈNH GIỌT NƯỚC TRONG VEO & VIỀN MẢNH CÂN BẰNG          */
+      /* ============================================================ */
+
+      /* 1. Dark Mode: giữ ruột trong suốt, nhích nhẹ độ rõ khối & vệt phản chiếu */
+      html body .tng-lg-drop {
+        background: linear-gradient(
+          168deg,
+          rgba(255, 255, 255, 0.024) 0%,
+          rgba(255, 255, 255, 0.003) 50%,
+          rgba(210, 235, 255, 0.018) 100%
+        ) !important;
+        box-shadow:
+          0 10px 22px -6px rgba(0, 0, 0, 0.45),
+          0 2px 6px -2px rgba(0, 0, 0, 0.28),
+          inset 0 5px 11px -7px rgba(255, 255, 255, 0.15),
+          inset 0 -5px 11px -7px rgba(190, 228, 255, 0.14),
+          inset 0 -1.5px 4px -2px rgba(0, 0, 0, 0.26) !important;
+      }
+
+      html body .tng-lg-flow {
+        background:
+          radial-gradient(
+            42% 36% at 32% 42%,
+            rgba(255, 255, 255, 0.032) 0%,
+            rgba(195, 230, 255, 0.015) 45%,
+            transparent 74%
+          ),
+          radial-gradient(
+            38% 34% at 72% 62%,
+            rgba(190, 225, 255, 0.024) 0%,
+            transparent 72%
+          ) !important;
+      }
+
+      html body .tng-lg-in {
+        width: 190px !important;
+        height: 90px !important;
+        margin: -45px 0 0 -95px !important;
+        background: radial-gradient(
+          ellipse 50% 50% at 50% 50%,
+          rgba(255, 255, 255, 0.06) 0%,
+          rgba(205, 232, 255, 0.022) 46%,
+          transparent 74%
+        ) !important;
+      }
+
+      html body .tng-lg-rim {
+        background: linear-gradient(
+          145deg,
+          rgba(255, 255, 255, 0.095) 0%,
+          rgba(255, 255, 255, 0.015) 30%,
+          rgba(255, 255, 255, 0.006) 55%,
+          rgba(205, 232, 255, 0.022) 78%,
+          rgba(255, 255, 255, 0.068) 100%
+        ) !important;
+      }
+
+      html body .tng-lg-r1 {
+        width: 196px !important;
+        height: 196px !important;
+        margin: -98px 0 0 -98px !important;
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.68) 0%,
+          rgba(204, 232, 255, 0.24) 30%,
+          transparent 65%
+        ) !important;
+      }
+
+      html body .tng-lg-r2 {
+        width: 180px !important;
+        height: 180px !important;
+        margin: -90px 0 0 -90px !important;
+        background: radial-gradient(
+          circle,
+          rgba(196, 226, 255, 0.32) 0%,
+          rgba(232, 218, 255, 0.11) 36%,
+          transparent 67%
+        ) !important;
+      }
+
+      html body .tng-lg-rs {
+        background: radial-gradient(
+          ellipse 50% 50% at 50% 50%,
+          rgba(255, 255, 255, 0.82) 0%,
+          rgba(192, 228, 255, 0.34) 42%,
+          transparent 73%
+        ) !important;
+      }
+
+      /* 2. Light Mode: đủ rõ trên nền sáng mà vẫn trong trẻo */
+      html body[data-theme="light"] .tng-lg-drop {
+        background: linear-gradient(
+          168deg,
+          rgba(255, 255, 255, 0.25) 0%,
+          rgba(255, 255, 255, 0.035) 50%,
+          rgba(225, 240, 255, 0.14) 100%
+        ) !important;
+        box-shadow:
+          0 9px 19px -6px rgba(15, 23, 42, 0.125),
+          0 2px 5px -1px rgba(15, 23, 42, 0.07),
+          inset 0 5px 11px -7px rgba(255, 255, 255, 0.78),
+          inset 0 -5px 11px -7px rgba(15, 23, 42, 0.105) !important;
+      }
+
+      html body[data-theme="light"] .tng-lg-flow {
+        background:
+          radial-gradient(
+            42% 36% at 32% 42%,
+            rgba(255, 255, 255, 0.26) 0%,
+            rgba(56, 139, 253, 0.024) 48%,
+            transparent 74%
+          ),
+          radial-gradient(
+            38% 34% at 72% 62%,
+            rgba(255, 255, 255, 0.19) 0%,
+            transparent 72%
+          ) !important;
+      }
+
+      html body[data-theme="light"] .tng-lg-in {
+        background: radial-gradient(
+          ellipse 50% 50% at 50% 50%,
+          rgba(255, 255, 255, 0.3) 0%,
+          rgba(56, 139, 253, 0.032) 50%,
+          transparent 74%
+        ) !important;
+      }
+
+      html body[data-theme="light"] .tng-lg-rim {
+        background: linear-gradient(
+          145deg,
+          rgba(255, 255, 255, 0.64) 0%,
+          rgba(15, 23, 42, 0.056) 44%,
+          rgba(15, 23, 42, 0.032) 58%,
+          rgba(255, 255, 255, 0.52) 100%
+        ) !important;
+      }
+
+      html body[data-theme="light"] .tng-lg-r1 {
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.88) 0%,
+          rgba(186, 220, 255, 0.38) 34%,
+          transparent 67%
+        ) !important;
+      }
+
+      html body[data-theme="light"] .tng-lg-r2 {
+        background: radial-gradient(
+          circle,
+          rgba(15, 23, 42, 0.14) 0%,
+          rgba(56, 139, 253, 0.13) 40%,
+          transparent 69%
+        ) !important;
+      }
+
+      /* 3. Nút Xóa (.is-danger) */
+      html body .tng-glow-pill.is-danger > .tng-lg-drop {
+        background: linear-gradient(
+          168deg,
+          rgba(255, 80, 70, 0.068) 0%,
+          rgba(255, 69, 58, 0.012) 50%,
+          rgba(255, 110, 100, 0.05) 100%
+        ) !important;
+        box-shadow:
+          0 10px 22px -6px rgba(255, 59, 48, 0.21),
+          0 2px 6px -2px rgba(0, 0, 0, 0.28),
+          inset 0 5px 11px -7px rgba(255, 210, 205, 0.21),
+          inset 0 -5px 11px -7px rgba(255, 100, 92, 0.18) !important;
+      }
+
+      html body .tng-glow-pill.is-danger .tng-lg-rim {
+        background: linear-gradient(
+          145deg,
+          rgba(255, 195, 190, 0.17) 0%,
+          rgba(255, 69, 58, 0.035) 44%,
+          rgba(255, 155, 148, 0.12) 100%
+        ) !important;
+      }
+
+      html body .tng-glow-pill.is-danger .tng-lg-r1 {
+        background: radial-gradient(
+          circle,
+          rgba(255, 230, 226, 0.7) 0%,
+          rgba(255, 110, 100, 0.28) 34%,
+          transparent 67%
+        ) !important;
+      }
+
+      html body .tng-glow-pill.is-danger .tng-lg-r2 {
+        background: radial-gradient(
+          circle,
+          rgba(255, 88, 78, 0.33) 0%,
+          transparent 69%
+        ) !important;
+      }
+
+      html body .tng-glow-pill.is-danger .tng-lg-in {
+        background: radial-gradient(
+          ellipse 50% 50% at 50% 50%,
+          rgba(255, 185, 178, 0.078) 0%,
+          transparent 72%
+        ) !important;
+      }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
