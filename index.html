@@ -6047,6 +6047,953 @@
           background-color: rgba(0, 0, 0, 0.1) !important;
         }
       }
+
+      /* ============================================================ */
+      /* LIQUID GLASS TRONG VEO CHUẨN IOS 27 TOÀN HỆ THỐNG            */
+      /* Ruột kính trong suốt, viền khúc xạ 2 góc chéo sắc nét        */
+      /* ============================================================ */
+
+      /* 1. GIỌT KÍNH LỎNG CHÍNH (Dark Mode - Trong veo, không đục) */
+      body .tng-glow-pill {
+        background: linear-gradient(
+          160deg,
+          rgba(255, 255, 255, 0.065) 0%,
+          rgba(255, 255, 255, 0.018) 50%,
+          rgba(255, 255, 255, 0.048) 100%
+        ) !important;
+        border: none !important;
+        backdrop-filter: blur(10px) saturate(185%) brightness(1.12);
+        -webkit-backdrop-filter: blur(10px) saturate(185%) brightness(1.12);
+        box-shadow:
+          0 8px 24px rgba(0, 0, 0, 0.3),
+          inset 0 0.75px 0 rgba(255, 255, 255, 0.24),
+          inset 0 -0.75px 0 rgba(0, 0, 0, 0.28) !important;
+      }
+
+      /* Viền khúc xạ quang học 1px: sáng sắc ở góc trên-trái & dưới-phải, trong ở 2 cạnh bên */
+      body .tng-glow-pill::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        padding: 1px;
+        background: linear-gradient(
+          140deg,
+          rgba(255, 255, 255, 0.68) 0%,
+          rgba(255, 255, 255, 0.16) 24%,
+          rgba(255, 255, 255, 0.04) 50%,
+          rgba(255, 255, 255, 0.14) 76%,
+          rgba(255, 255, 255, 0.44) 100%
+        );
+        -webkit-mask:
+          linear-gradient(#fff 0 0) content-box,
+          linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask:
+          linear-gradient(#fff 0 0) content-box,
+          linear-gradient(#fff 0 0);
+        mask-composite: exclude;
+        pointer-events: none;
+        z-index: 2;
+      }
+
+      /* Vệt lấp lánh siêu mỏng bên trong giọt kính (không gây mờ đục) */
+      body .tng-glow-pill::after {
+        background: radial-gradient(
+          ellipse 65% 36% at 50% 48%,
+          rgba(255, 255, 255, 0.14) 0%,
+          rgba(255, 255, 255, 0.04) 48%,
+          transparent 76%
+        ) !important;
+      }
+
+      /* Light Mode - Thấu kính pha lê trong trẻo, viền ánh gương nổi trên nền sáng */
+      body[data-theme="light"] .tng-glow-pill {
+        background: linear-gradient(
+          160deg,
+          rgba(255, 255, 255, 0.56) 0%,
+          rgba(255, 255, 255, 0.2) 50%,
+          rgba(255, 255, 255, 0.38) 100%
+        ) !important;
+        border: none !important;
+        backdrop-filter: blur(12px) saturate(190%) brightness(1.04);
+        -webkit-backdrop-filter: blur(12px) saturate(190%) brightness(1.04);
+        box-shadow:
+          0 6px 18px rgba(15, 23, 42, 0.085),
+          0 1px 3px rgba(15, 23, 42, 0.05),
+          inset 0 1px 0 rgba(255, 255, 255, 0.92) !important;
+      }
+
+      body[data-theme="light"] .tng-glow-pill::before {
+        background: linear-gradient(
+          140deg,
+          rgba(255, 255, 255, 0.98) 0%,
+          rgba(15, 23, 42, 0.09) 42%,
+          rgba(15, 23, 42, 0.06) 58%,
+          rgba(255, 255, 255, 0.88) 100%
+        );
+      }
+
+      body[data-theme="light"] .tng-glow-pill::after {
+        background: radial-gradient(
+          ellipse 68% 38% at 50% 48%,
+          rgba(255, 255, 255, 0.62) 0%,
+          rgba(255, 255, 255, 0.16) 50%,
+          transparent 76%
+        ) !important;
+      }
+
+      /* Nút Xóa: Kính ruby trong suốt với viền khúc xạ ánh đỏ */
+      body .tng-glow-pill.is-danger {
+        background: linear-gradient(
+          160deg,
+          rgba(255, 69, 58, 0.16) 0%,
+          rgba(255, 69, 58, 0.05) 52%,
+          rgba(255, 69, 58, 0.11) 100%
+        ) !important;
+        border: none !important;
+        box-shadow:
+          0 8px 22px rgba(255, 59, 48, 0.2),
+          inset 0 0.75px 0 rgba(255, 200, 195, 0.28) !important;
+      }
+      body .tng-glow-pill.is-danger::before {
+        background: linear-gradient(
+          140deg,
+          rgba(255, 165, 158, 0.7) 0%,
+          rgba(255, 69, 58, 0.24) 35%,
+          rgba(255, 69, 58, 0.08) 55%,
+          rgba(255, 145, 138, 0.45) 100%
+        );
+      }
+      body .tng-glow-pill.is-danger::after {
+        background: radial-gradient(
+          ellipse 68% 38% at 50% 48%,
+          rgba(255, 170, 165, 0.18) 0%,
+          rgba(255, 69, 58, 0.05) 50%,
+          transparent 76%
+        ) !important;
+      }
+      body[data-theme="light"] .tng-glow-pill.is-danger {
+        background: linear-gradient(
+          160deg,
+          rgba(255, 59, 48, 0.14) 0%,
+          rgba(255, 59, 48, 0.05) 55%,
+          rgba(255, 59, 48, 0.1) 100%
+        ) !important;
+        box-shadow: 0 5px 14px rgba(255, 59, 48, 0.12) !important;
+      }
+      body[data-theme="light"] .tng-glow-pill.is-danger::before {
+        background: linear-gradient(
+          140deg,
+          rgba(255, 130, 120, 0.72) 0%,
+          rgba(255, 59, 48, 0.22) 50%,
+          rgba(255, 120, 110, 0.55) 100%
+        );
+      }
+
+      /* 2. GIỌT NƯỚC TRƯỢT NGANG TRONG QUẢN LÝ GÓI THUÊ BAO */
+      body #sp-body .tng-sub-tabs > span.tng-glow-pill.is-horizontal::after {
+        background: radial-gradient(
+          ellipse 44% 78% at 50% 50%,
+          rgba(255, 255, 255, 0.18) 0%,
+          rgba(255, 255, 255, 0.05) 48%,
+          transparent 76%
+        ) !important;
+      }
+      body[data-theme="light"]
+        #sp-body
+        .tng-sub-tabs
+        > span.tng-glow-pill.is-horizontal::after {
+        background: radial-gradient(
+          ellipse 44% 78% at 50% 50%,
+          rgba(255, 255, 255, 0.7) 0%,
+          rgba(255, 255, 255, 0.2) 50%,
+          transparent 76%
+        ) !important;
+      }
+
+      body #sp-body .tng-sub-tabs > .tng-sub-tab.tng-pill-focus,
+      body #sp-body .tng-sub-tabs > .tng-sub-tab.tng-pill-focus * {
+        color: #ffffff !important;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.24);
+      }
+      body[data-theme="light"]
+        #sp-body
+        .tng-sub-tabs
+        > .tng-sub-tab.tng-pill-focus,
+      body[data-theme="light"]
+        #sp-body
+        .tng-sub-tabs
+        > .tng-sub-tab.tng-pill-focus
+        * {
+        color: #111827 !important;
+        text-shadow: none;
+      }
+
+      /* 3. ĐỒNG BỘ MÀU CHỮ TRÊN TOÀN BỘ MENU KHI KÍNH PHỦ QUA */
+      body .tng-glow-menu .sb-item,
+      body .tng-glow-menu .d-item,
+      body .tng-glow-menu .m-item .m-name,
+      body .tng-glow-menu .dropdown-opt,
+      body .tng-glow-menu .ai-option-item,
+      body #tng-hd-menu-overlay-v37 .tng-glow-menu .tng-hd-opt {
+        transition:
+          background-color 0.2s ease,
+          color 0.24s ease,
+          text-shadow 0.24s ease !important;
+      }
+
+      body #sidebar .sb-item.tng-pill-focus,
+      body #custom-dropdown-menu .dropdown-opt.tng-pill-focus,
+      body #theme-menu .d-item.tng-pill-focus,
+      body
+        .tng-glow-menu
+        :is(
+          .sb-item,
+          .d-item,
+          .dropdown-opt,
+          .ai-option-item,
+          .tng-hd-opt
+        ).tng-pill-focus:not(.is-danger):not([style*="danger" i]):not(
+          [style*="#ff453a" i]
+        ):not([style*="#ff3b30" i]):not([style*="#ff4b2b" i]),
+      body .tng-glow-menu .m-item.tng-pill-focus .m-name {
+        color: #ffffff !important;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.22);
+      }
+
+      body[data-theme="light"] #sidebar .sb-item.tng-pill-focus,
+      body[data-theme="light"]
+        #custom-dropdown-menu
+        .dropdown-opt.tng-pill-focus,
+      body[data-theme="light"] #theme-menu .d-item.tng-pill-focus,
+      body[data-theme="light"]
+        .tng-glow-menu
+        :is(
+          .sb-item,
+          .d-item,
+          .dropdown-opt,
+          .ai-option-item,
+          .tng-hd-opt
+        ).tng-pill-focus:not(.is-danger):not([style*="danger" i]):not(
+          [style*="#ff453a" i]
+        ):not([style*="#ff3b30" i]):not([style*="#ff4b2b" i]),
+      body[data-theme="light"] .tng-glow-menu .m-item.tng-pill-focus .m-name {
+        color: #111827 !important;
+        text-shadow: none;
+      }
+
+      body
+        .tng-glow-menu
+        :is(.d-item, .ai-option-item, .tng-hd-opt).tng-pill-focus:is(
+          .is-danger,
+          [style*="danger" i],
+          [style*="#ff453a" i],
+          [style*="#ff3b30" i],
+          [style*="#ff4b2b" i]
+        ) {
+        color: #ff6961 !important;
+        text-shadow: 0 0 10px rgba(255, 69, 58, 0.35);
+      }
+      body[data-theme="light"]
+        .tng-glow-menu
+        :is(.d-item, .ai-option-item, .tng-hd-opt).tng-pill-focus:is(
+          .is-danger,
+          [style*="danger" i],
+          [style*="#ff453a" i],
+          [style*="#ff3b30" i],
+          [style*="#ff4b2b" i]
+        ) {
+        color: #d93025 !important;
+        text-shadow: none;
+      }
+
+      /* Chống các mục bên trong bắt nhầm hover khi thanh sidebar đang trượt đóng */
+      #sidebar.collapsed .sb-item {
+        pointer-events: none !important;
+      }
+
+      /* 4. ĐỒNG BỘ THANH TRƯỢT LẶP LẠI (HÀNH ĐỘNG ĐÃ LÊN LỊCH) */
+      body .tng-rp-list .tng-rp-pill {
+        overflow: hidden;
+        background: linear-gradient(
+          160deg,
+          rgba(255, 255, 255, 0.07) 0%,
+          rgba(255, 255, 255, 0.02) 50%,
+          rgba(255, 255, 255, 0.05) 100%
+        ) !important;
+        border: none !important;
+        box-shadow:
+          0 6px 18px rgba(0, 0, 0, 0.28),
+          inset 0 0.75px 0 rgba(255, 255, 255, 0.24) !important;
+      }
+      body .tng-rp-list .tng-rp-pill::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        padding: 1px;
+        background: linear-gradient(
+          140deg,
+          rgba(255, 255, 255, 0.65) 0%,
+          rgba(255, 255, 255, 0.14) 26%,
+          rgba(255, 255, 255, 0.04) 52%,
+          rgba(255, 255, 255, 0.42) 100%
+        );
+        -webkit-mask:
+          linear-gradient(#fff 0 0) content-box,
+          linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask:
+          linear-gradient(#fff 0 0) content-box,
+          linear-gradient(#fff 0 0);
+        mask-composite: exclude;
+        pointer-events: none;
+      }
+      body[data-theme="light"] .tng-rp-list .tng-rp-pill {
+        background: linear-gradient(
+          160deg,
+          rgba(255, 255, 255, 0.58) 0%,
+          rgba(255, 255, 255, 0.22) 52%,
+          rgba(255, 255, 255, 0.4) 100%
+        ) !important;
+        box-shadow:
+          0 4px 12px rgba(15, 23, 42, 0.08),
+          inset 0 1px 0 rgba(255, 255, 255, 0.92) !important;
+      }
+      body[data-theme="light"] .tng-rp-list .tng-rp-pill::before {
+        background: linear-gradient(
+          140deg,
+          rgba(255, 255, 255, 0.98) 0%,
+          rgba(15, 23, 42, 0.08) 48%,
+          rgba(255, 255, 255, 0.88) 100%
+        );
+      }
+      body .tng-rp-list .tng-rp-opt.active {
+        color: #ffffff !important;
+      }
+      body[data-theme="light"] .tng-rp-list .tng-rp-opt.active {
+        color: #111827 !important;
+      }
+
+      /* 5. ĐỒNG BỘ VÒNG TRÒN DẤU 3 CHẤM TRÊN SIDEBAR */
+      body #sidebar .sb-item > .hist-dots,
+      body #sidebar .sb-item:hover > .hist-dots,
+      body #sidebar .sb-item:active > .hist-dots {
+        --dot-c: rgba(255, 255, 255, 0.8);
+      }
+      body[data-theme="light"] #sidebar .sb-item > .hist-dots,
+      body[data-theme="light"] #sidebar .sb-item:hover > .hist-dots,
+      body[data-theme="light"] #sidebar .sb-item:active > .hist-dots {
+        --dot-c: rgba(17, 24, 39, 0.68);
+      }
+      body #sidebar .sb-item.tng-ctx-open > .hist-dots,
+      body #sidebar:hover .sb-item.tng-pill-arrived > .hist-dots:hover {
+        --dot-c: #ffffff;
+        background: rgba(255, 255, 255, 0.09) !important;
+        box-shadow: inset 0 0.75px 0 rgba(255, 255, 255, 0.35);
+      }
+      body[data-theme="light"] #sidebar .sb-item.tng-ctx-open > .hist-dots,
+      body[data-theme="light"]
+        #sidebar:hover
+        .sb-item.tng-pill-arrived
+        > .hist-dots:hover {
+        --dot-c: #111827;
+        background: rgba(255, 255, 255, 0.6) !important;
+        box-shadow:
+          0 0 0 1px rgba(15, 23, 42, 0.08),
+          inset 0 1px 0 rgba(255, 255, 255, 0.95);
+      }
+
+      /* 6. ĐỒNG BỘ KHỐI MENU TRƯỢT GIAO DIỆN / TRỢ GIÚP TRÊN ĐIỆN THOẠI */
+      @media (max-width: 768px) {
+        html body #set-menu .d-item.flex-between::before {
+          background: linear-gradient(
+            160deg,
+            rgba(255, 255, 255, 0.08) 0%,
+            rgba(255, 255, 255, 0.025) 52%,
+            rgba(255, 255, 255, 0.055) 100%
+          ) !important;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.14) !important;
+          box-shadow: inset 0 0.75px 0 rgba(255, 255, 255, 0.32) !important;
+        }
+        html body[data-theme="light"] #set-menu .d-item.flex-between::before {
+          background: linear-gradient(
+            160deg,
+            rgba(255, 255, 255, 0.62) 0%,
+            rgba(255, 255, 255, 0.25) 52%,
+            rgba(255, 255, 255, 0.44) 100%
+          ) !important;
+          border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
+        }
+        html
+          body
+          #set-menu
+          .d-item.flex-between.tng-sub-open:has(> .sub-menu)
+          > span:not(.sub-menu):not(.s-badge)::after {
+          border-color: #ffffff !important;
+        }
+        html
+          body[data-theme="light"]
+          #set-menu
+          .d-item.flex-between.tng-sub-open:has(> .sub-menu)
+          > span:not(.sub-menu):not(.s-badge)::after {
+          border-color: #111827 !important;
+        }
+        html
+          body[data-theme="dark"]
+          #set-menu
+          #theme-menu
+          > .d-item[onclick*="'dark'"],
+        html
+          body[data-theme="dark"]
+          #set-menu
+          #theme-menu
+          > .d-item[onclick*="'dark'"]
+          .chk-dark {
+          color: #ffffff !important;
+        }
+        html
+          body[data-theme="light"]
+          #set-menu
+          #theme-menu
+          > .d-item[onclick*="'light'"],
+        html
+          body[data-theme="light"]
+          #set-menu
+          #theme-menu
+          > .d-item[onclick*="'light'"]
+          .chk-light {
+          color: #111827 !important;
+        }
+      }
+
+      /* ============================================================ */
+      /* GIỌT KÍNH TRÀN SÁT VIỀN + GIỮ NGUYÊN HIỆU ỨNG NẢY CUỘN GỐC   */
+      /* ============================================================ */
+
+      /* 1. Khóa quyền điều khiển bo 4 góc động qua biến CSS */
+      body .tng-glow-pill[data-tng-r] {
+        border-radius: var(--tng-pill-r) !important;
+        transition:
+          opacity 0.22s ease,
+          background 0.28s ease,
+          border-color 0.28s ease,
+          box-shadow 0.28s ease,
+          border-radius 0.24s cubic-bezier(0.22, 1, 0.36, 1) !important;
+      }
+
+      /* 2. Menu nổi: bỏ padding thừa để giọt nước tràn sát 4 viền */
+      body .drop-menu,
+      body .hist-options-menu,
+      body .ai-options-menu {
+        padding: 0 !important;
+        overflow: hidden !important;
+      }
+
+      @media (min-width: 769px) {
+        body .sub-menu {
+          padding: 0 !important;
+          overflow: hidden !important;
+        }
+        body .sub-menu > .d-item {
+          width: 100% !important;
+          margin: 0 !important;
+          border-radius: 0 !important;
+          padding: 12px 18px !important;
+        }
+        body .sub-menu > .d-item:first-of-type {
+          padding-top: 13px !important;
+        }
+        body .sub-menu > .d-item:last-of-type {
+          padding-bottom: 13px !important;
+        }
+        body #set-menu.set-menu {
+          padding-top: 0 !important;
+        }
+        body #set-menu > .d-item {
+          width: 100% !important;
+          margin-left: 0 !important;
+          margin-right: 0 !important;
+          border-radius: 0 !important;
+        }
+      }
+
+      @media (max-width: 768px) {
+        html body #set-menu.set-menu {
+          padding-top: 0 !important;
+        }
+        html
+          body
+          #set-menu
+          > .d-item:not(.tng-sub-open):not(.tng-sub-animating) {
+          border-radius: 0 !important;
+        }
+      }
+
+      body .drop-menu > .d-item,
+      body .hist-options-menu > .d-item {
+        width: 100% !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        padding: 12px 18px !important;
+      }
+      body .drop-menu > .d-item:first-of-type,
+      body .hist-options-menu > .d-item:first-of-type {
+        padding-top: 13px !important;
+      }
+      body .drop-menu > .d-item:last-of-type,
+      body .hist-options-menu > .d-item:last-of-type {
+        padding-bottom: 13px !important;
+      }
+
+      body .drop-menu > .d-divider {
+        margin: 4px 0 !important;
+      }
+      body .drop-menu > div[style*="padding: 10px 15px"],
+      body .drop-menu > div[style*="padding:10px 15px"] {
+        padding: 10px 18px !important;
+      }
+
+      body .drop-menu.model-menu .m-title {
+        padding: 14px 18px 12px !important;
+        margin-bottom: 0 !important;
+      }
+      body .drop-menu.model-menu .m-item {
+        width: 100% !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        padding: 12px 18px !important;
+      }
+      body .drop-menu.model-menu .m-item:last-child {
+        padding-bottom: 14px !important;
+      }
+
+      /* 3. MENU "VĂN BẢN" (SỔ GHI CHÚ): GIỮ 100% NẢY CUỘN LÊN XUỐNG + TRÀN SÁT 4 VIỀN */
+      /* Chỉ bỏ padding trái/phải, giữ nguyên padding-top (6px), padding-bottom (12px), row-gap (2px) để nảy đủ biên độ */
+      html body #notebook-overlay #custom-dropdown-menu {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+      }
+      html body #notebook-overlay #custom-dropdown-menu .dropdown-opt {
+        width: 100% !important;
+        border-radius: 0 !important;
+        padding: 9px 12px !important;
+        margin-top: -6px !important;
+        margin-bottom: -2px !important;
+      }
+      html
+        body
+        #notebook-overlay
+        #custom-dropdown-menu
+        .dropdown-opt
+        ~ .dropdown-opt {
+        margin-top: 0 !important;
+      }
+      html
+        body
+        #notebook-overlay
+        #custom-dropdown-menu
+        .dropdown-opt:not(:has(~ .dropdown-opt)) {
+        margin-bottom: -12px !important;
+      }
+
+      /* 4. DROPDOWN "LẶP LẠI" (HÀNH ĐỘNG MỚI): GIỮ 100% NẢY CUỘN LÊN XUỐNG + TRÀN SÁT 4 VIỀN */
+      /* Chỉ bỏ padding trái/phải, giữ nguyên padding-top (6px), padding-bottom (16px), row-gap (2px) để nảy đủ lực */
+      body .tng-rp-list,
+      body .tng-rp-list.show {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+      }
+      body .tng-rp-list .tng-rp-opt {
+        width: 100% !important;
+        border-radius: 0 !important;
+        padding: 11px 16px !important;
+        margin-top: -6px !important;
+        margin-bottom: -2px !important;
+      }
+      body .tng-rp-list .tng-rp-opt ~ .tng-rp-opt {
+        margin-top: 0 !important;
+      }
+      body .tng-rp-list .tng-rp-opt:not(:has(~ .tng-rp-opt)) {
+        margin-bottom: -16px !important;
+      }
+
+      body .tng-rp-list .tng-rp-opt.tng-rp-hover {
+        color: #ffffff !important;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.22);
+      }
+      body[data-theme="light"] .tng-rp-list .tng-rp-opt.tng-rp-hover {
+        color: #111827 !important;
+        text-shadow: none;
+      }
+
+      /* Vô hiệu hóa pill cũ bên trong Lặp lại */
+      body .tng-rp-list > .tng-rp-pill,
+      body .tng-rp-list > .tng-glow-pill {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+      }
+
+      /* Kính Liquid Glass độc lập mới cho Lặp lại */
+      body .tng-rp-list > .tng-rp-glass-pill {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        z-index: 0 !important;
+        pointer-events: none !important;
+        overflow: hidden !important;
+        box-sizing: border-box !important;
+        border: none !important;
+        border-radius: var(--tng-pill-r, 11.5px) !important;
+        background: linear-gradient(
+          160deg,
+          rgba(255, 255, 255, 0.07) 0%,
+          rgba(255, 255, 255, 0.02) 50%,
+          rgba(255, 255, 255, 0.05) 100%
+        ) !important;
+        backdrop-filter: blur(10px) saturate(185%) brightness(1.12);
+        -webkit-backdrop-filter: blur(10px) saturate(185%) brightness(1.12);
+        box-shadow:
+          0 6px 18px rgba(0, 0, 0, 0.28),
+          inset 0 0.75px 0 rgba(255, 255, 255, 0.24),
+          inset 0 -0.75px 0 rgba(0, 0, 0, 0.24) !important;
+        will-change: transform, height, border-radius;
+        transition:
+          transform 0.36s cubic-bezier(0.22, 1, 0.36, 1),
+          height 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+          border-radius 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+          opacity 0.2s ease !important;
+      }
+      body .tng-rp-list > .tng-rp-glass-pill::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        padding: 1px;
+        background: linear-gradient(
+          140deg,
+          rgba(255, 255, 255, 0.65) 0%,
+          rgba(255, 255, 255, 0.14) 26%,
+          rgba(255, 255, 255, 0.04) 52%,
+          rgba(255, 255, 255, 0.42) 100%
+        );
+        -webkit-mask:
+          linear-gradient(#fff 0 0) content-box,
+          linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask:
+          linear-gradient(#fff 0 0) content-box,
+          linear-gradient(#fff 0 0);
+        mask-composite: exclude;
+        pointer-events: none;
+      }
+      body .tng-rp-list.returning > .tng-rp-glass-pill {
+        transition:
+          transform 0.46s cubic-bezier(0.22, 1, 0.36, 1),
+          height 0.36s cubic-bezier(0.22, 1, 0.36, 1),
+          border-radius 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+          opacity 0.2s ease !important;
+      }
+      body .tng-rp-list > .tng-rp-glass-pill.is-instant,
+      body .tng-rp-list.returning > .tng-rp-glass-pill.is-instant,
+      body .tng-rp-list > .tng-rp-glass-pill.is-tracking,
+      body .tng-rp-list.returning > .tng-rp-glass-pill.is-tracking {
+        transition: none !important;
+      }
+
+      body[data-theme="light"] .tng-rp-list > .tng-rp-glass-pill {
+        background: linear-gradient(
+          160deg,
+          rgba(255, 255, 255, 0.58) 0%,
+          rgba(255, 255, 255, 0.22) 52%,
+          rgba(255, 255, 255, 0.4) 100%
+        ) !important;
+        box-shadow:
+          0 4px 12px rgba(15, 23, 42, 0.08),
+          inset 0 1px 0 rgba(255, 255, 255, 0.92) !important;
+      }
+      body[data-theme="light"] .tng-rp-list > .tng-rp-glass-pill::before {
+        background: linear-gradient(
+          140deg,
+          rgba(255, 255, 255, 0.98) 0%,
+          rgba(15, 23, 42, 0.08) 48%,
+          rgba(255, 255, 255, 0.88) 100%
+        );
+      }
+
+      /* 5. Thanh Tab Quản lý gói thuê bao: giọt nước tràn sát 4 viền */
+      html body #sp-body .tng-sub-tabs {
+        padding: 0 !important;
+        gap: 0 !important;
+        overflow: hidden !important;
+      }
+      html body #sp-body .tng-sub-tabs > .tng-sub-tab {
+        margin: 0 !important;
+        padding: 13px 10px !important;
+        height: 100% !important;
+        border-radius: 0 !important;
+      }
+
+      /* 6. Thanh Sidebar: nới rộng giọt kính ra sát mép hơn */
+      body #sidebar .sb-item {
+        margin: 2px 5px !important;
+        padding: 9px 14px !important;
+        border-radius: 11.5px !important;
+      }
+
+      /* ============================================================ */
+      /* TỐI ƯU HIỆU NĂNG CHỐNG GIẬT + KÍNH MƯỢT GIAO DIỆN & CÀI ĐẶT  */
+      /* ============================================================ */
+
+      /* 1. Bỏ blur lồng nhau bên trong các menu đã có nền mờ để giọt nước trượt 60/120fps không giật */
+      body .drop-menu > .tng-glow-pill,
+      body .sub-menu > .tng-glow-pill,
+      body .set-menu > .tng-glow-pill,
+      body .hist-options-menu > .tng-glow-pill,
+      body .ai-options-menu > .tng-glow-pill,
+      body #custom-dropdown-menu > .tng-glow-pill,
+      body #sidebar > .tng-glow-pill,
+      body .tng-rp-list > .tng-rp-glass-pill {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        background: linear-gradient(
+          160deg,
+          rgba(255, 255, 255, 0.09) 0%,
+          rgba(255, 255, 255, 0.032) 50%,
+          rgba(255, 255, 255, 0.068) 100%
+        ) !important;
+      }
+      body[data-theme="light"] .drop-menu > .tng-glow-pill,
+      body[data-theme="light"] .sub-menu > .tng-glow-pill,
+      body[data-theme="light"] .set-menu > .tng-glow-pill,
+      body[data-theme="light"] .hist-options-menu > .tng-glow-pill,
+      body[data-theme="light"] .ai-options-menu > .tng-glow-pill,
+      body[data-theme="light"] #custom-dropdown-menu > .tng-glow-pill,
+      body[data-theme="light"] #sidebar > .tng-glow-pill,
+      body[data-theme="light"] .tng-rp-list > .tng-rp-glass-pill {
+        background: linear-gradient(
+          160deg,
+          rgba(255, 255, 255, 0.68) 0%,
+          rgba(255, 255, 255, 0.3) 50%,
+          rgba(255, 255, 255, 0.5) 100%
+        ) !important;
+      }
+
+      /* 2. DẤU TÍCH CHUYỂN THEO CHUỘT & TRẢ VỀ VỊ TRÍ CŨ TRONG GIAO DIỆN */
+      html body #theme-menu > .d-item[onclick*="'light'"],
+      html body #theme-menu > .d-item[onclick*="'dark'"] {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+      }
+
+      html body #theme-menu > .d-item .chk-light,
+      html body #theme-menu > .d-item .chk-dark,
+      html body #theme-menu > .d-item:hover .chk-light,
+      html body #theme-menu > .d-item:hover .chk-dark {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin-left: auto !important;
+        flex-shrink: 0 !important;
+        opacity: 0 !important;
+        transform: scale(0.5) !important;
+        transform-origin: center center !important;
+        pointer-events: none !important;
+        font-weight: 700 !important;
+        will-change: transform, opacity !important;
+        transition:
+          opacity 0.24s ease,
+          transform 0.34s cubic-bezier(0.34, 1.56, 0.64, 1),
+          color 0.24s ease !important;
+      }
+
+      html body #theme-menu > .d-item.tng-tm-chk-show .chk-light,
+      html body #theme-menu > .d-item.tng-tm-chk-show .chk-dark,
+      html body #theme-menu > .d-item.tng-tm-chk-show:hover .chk-light,
+      html body #theme-menu > .d-item.tng-tm-chk-show:hover .chk-dark {
+        opacity: 1 !important;
+        transform: scale(1) !important;
+        color: #ffffff !important;
+      }
+
+      html
+        body[data-theme="light"]
+        #theme-menu
+        > .d-item.tng-tm-chk-show
+        .chk-light,
+      html
+        body[data-theme="light"]
+        #theme-menu
+        > .d-item.tng-tm-chk-show
+        .chk-dark,
+      html
+        body[data-theme="light"]
+        #theme-menu
+        > .d-item.tng-tm-chk-show:hover
+        .chk-light,
+      html
+        body[data-theme="light"]
+        #theme-menu
+        > .d-item.tng-tm-chk-show:hover
+        .chk-dark {
+        color: #111827 !important;
+      }
+
+      html body #theme-menu > .d-item.tng-tm-chk-show:active .chk-light,
+      html body #theme-menu > .d-item.tng-tm-chk-show:active .chk-dark {
+        transform: scale(0.88) !important;
+        transition-duration: 0.05s !important;
+      }
+
+      html body #theme-menu.returning > .d-item .chk-light,
+      html body #theme-menu.returning > .d-item .chk-dark {
+        transition:
+          opacity 0.42s ease,
+          transform 0.46s cubic-bezier(0.22, 1, 0.36, 1),
+          color 0.42s ease !important;
+      }
+
+      /* 3. BẢN PC: KÍNH TRƯỢT GPU ĐỘC LẬP CHO #theme-menu & NEO GIỌT NƯỚC #set-menu */
+      @media (max-width: 768px) {
+        html body #set-menu > .tng-set-glass-pill,
+        html body #theme-menu > .tng-tm-glass-pill {
+          display: none !important;
+        }
+      }
+
+      @media (min-width: 769px) {
+        /* Ẩn lớp pill cũ của #set-menu & #theme-menu để tránh xung đột trễ/giật */
+        html body #set-menu > .tng-glow-pill,
+        html body #theme-menu > .tng-glow-pill {
+          display: none !important;
+          opacity: 0 !important;
+          visibility: hidden !important;
+          pointer-events: none !important;
+        }
+
+        /* Kính lỏng GPU mượt cho #set-menu & #theme-menu */
+        html body #set-menu > .tng-set-glass-pill,
+        html body #theme-menu > .tng-tm-glass-pill {
+          position: absolute !important;
+          top: 0 !important;
+          left: 0 !important;
+          width: 100% !important;
+          height: 0;
+          margin: 0 !important;
+          padding: 0 !important;
+          z-index: 0 !important;
+          pointer-events: none !important;
+          overflow: hidden !important;
+          box-sizing: border-box !important;
+          border: none !important;
+          opacity: 0;
+          border-radius: var(--tng-pill-r, 11.5px) !important;
+          background: linear-gradient(
+            160deg,
+            rgba(255, 255, 255, 0.09) 0%,
+            rgba(255, 255, 255, 0.032) 50%,
+            rgba(255, 255, 255, 0.068) 100%
+          ) !important;
+          box-shadow:
+            0 6px 18px rgba(0, 0, 0, 0.28),
+            inset 0 0.75px 0 rgba(255, 255, 255, 0.24),
+            inset 0 -0.75px 0 rgba(0, 0, 0, 0.24) !important;
+          will-change: transform, height, opacity, border-radius;
+          transition:
+            transform 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+            height 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+            border-radius 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+            opacity 0.2s ease !important;
+        }
+
+        html body #set-menu > .tng-set-glass-pill::before,
+        html body #theme-menu > .tng-tm-glass-pill::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          border-radius: inherit;
+          padding: 1px;
+          background: linear-gradient(
+            140deg,
+            rgba(255, 255, 255, 0.68) 0%,
+            rgba(255, 255, 255, 0.16) 26%,
+            rgba(255, 255, 255, 0.04) 52%,
+            rgba(255, 255, 255, 0.44) 100%
+          );
+          -webkit-mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor;
+          mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+          mask-composite: exclude;
+          pointer-events: none;
+        }
+
+        /* Nhịp trả về nút cũ êm dịu, đồng bộ 1:1 với dấu tích ✓ */
+        html body #set-menu.returning > .tng-set-glass-pill,
+        html body #theme-menu.returning > .tng-tm-glass-pill {
+          transition:
+            transform 0.44s cubic-bezier(0.22, 1, 0.36, 1),
+            height 0.36s cubic-bezier(0.22, 1, 0.36, 1),
+            border-radius 0.36s cubic-bezier(0.22, 1, 0.36, 1),
+            opacity 0.22s ease !important;
+        }
+
+        html body #set-menu > .tng-set-glass-pill.is-instant,
+        html body #theme-menu > .tng-tm-glass-pill.is-instant {
+          transition: none !important;
+        }
+
+        html body #set-menu > .tng-set-glass-pill.is-snap,
+        html body #theme-menu > .tng-tm-glass-pill.is-snap {
+          transition: opacity 0.2s ease !important;
+        }
+
+        /* Đồng bộ Giao diện Sáng */
+        html body[data-theme="light"] #set-menu > .tng-set-glass-pill,
+        html body[data-theme="light"] #theme-menu > .tng-tm-glass-pill {
+          background: linear-gradient(
+            160deg,
+            rgba(255, 255, 255, 0.68) 0%,
+            rgba(255, 255, 255, 0.3) 50%,
+            rgba(255, 255, 255, 0.5) 100%
+          ) !important;
+          box-shadow:
+            0 4px 12px rgba(15, 23, 42, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.92) !important;
+        }
+        html body[data-theme="light"] #set-menu > .tng-set-glass-pill::before,
+        html body[data-theme="light"] #theme-menu > .tng-tm-glass-pill::before {
+          background: linear-gradient(
+            140deg,
+            rgba(255, 255, 255, 0.98) 0%,
+            rgba(15, 23, 42, 0.09) 48%,
+            rgba(255, 255, 255, 0.88) 100%
+          );
+        }
+
+        /* Làm sáng chữ khi giọt nước phủ qua trên #set-menu và #theme-menu */
+        html body #set-menu > .d-item.tng-set-focus,
+        html body #theme-menu > .d-item.tng-tm-focus {
+          color: #ffffff !important;
+          text-shadow: 0 0 10px rgba(255, 255, 255, 0.22);
+        }
+        html body[data-theme="light"] #set-menu > .d-item.tng-set-focus,
+        html body[data-theme="light"] #theme-menu > .d-item.tng-tm-focus {
+          color: #111827 !important;
+          text-shadow: none;
+        }
+      }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
@@ -7166,10 +8113,18 @@
                     background-color 0.2s ease !important;
                 }
 
+                /* Tắt hoàn toàn nền đặc phủ đè để chỉ giữ đúng 1 lớp kính Liquid Glass trong veo */
+                #custom-dropdown-menu .dropdown-opt,
+                #custom-dropdown-menu .dropdown-opt:hover,
+                #custom-dropdown-menu .dropdown-opt:active,
+                #custom-dropdown-menu .dropdown-opt.active {
+                  background: transparent !important;
+                  background-color: transparent !important;
+                }
+
                 /* Lún nhẹ khi di chuột qua trên máy tính */
                 @media (hover: hover) {
                   #custom-dropdown-menu .dropdown-opt:hover {
-                    background: var(--glass-hover) !important;
                     transform: scale(0.95) !important;
                   }
                 }
@@ -7178,7 +8133,6 @@
                 #custom-dropdown-menu .dropdown-opt:active {
                   transition-duration: 0.05s !important;
                   transform: scale(0.88) !important;
-                  background: var(--glass-hover) !important;
                   opacity: 0.85 !important;
                 }
 
@@ -30003,7 +30957,7 @@
             align-items: center !important;
             line-height: 1 !important;
           }
-          
+
           /* Cho Báo cáo, Lộ trình học, Canvas: 1.5px */
           .ai-msg:has(.tng-report-list) .ai-actions-bar,
           .ai-msg:has(.tng-learn-list) .ai-actions-bar,
@@ -30301,7 +31255,7 @@
           .ai-msg > .tng-saved-status {
             display: none !important;
           }
-          
+
           /* Chế độ tàng hình trả lời lại Công cụ (is-mocking): Ẩn nội dung cũ, HIỆN chữ chờ nhấp nháy */
           .ai-msg.is-mocking > *:not(.tng-saved-status) {
             display: none !important;
@@ -30330,7 +31284,7 @@
             0% { opacity: 0; transform: translateY(45px) scale(0.9); }
             100% { opacity: 1; transform: translateY(0) scale(1); }
           }
-          
+
           /* Áp dụng nguyên khối cho .ai-msg khi đã tải xong và không còn tàng hình */
           .ai-msg:not(.tng-ai-msg-loading):not(.is-mocking):has(.tng-report-list),
           .ai-msg:not(.tng-ai-msg-loading):not(.is-mocking):has(.tng-learn-list),
@@ -35376,6 +36330,1191 @@
         window.addEventListener("resize", () => {
           if (!isMobile()) clearMobileInlineStyles();
         });
+      })();
+
+      // ============================================================
+      // KHÓA TÂM & BÁM NHỊP NẢY CUỘN LÊN XUỐNG CHO GIỌT KÍNH IOS 27
+      // Khóa bám từng khung hình ngay khi menu mới mở + chốt vị trí sau transitionend
+      // ============================================================
+      (function () {
+        const sidebar = document.getElementById("sidebar");
+        const historyList = document.getElementById("history-list");
+        const ITEM_SELECTOR =
+          ".sb-item, .d-item, .m-item, .dropdown-opt, .ai-option-item, .tng-hd-opt, .tng-sub-tab";
+
+        const getExactLocalRect = (item, container) => {
+          if (!item || !container || !container.contains(item)) return null;
+          let x = 0;
+          let y = 0;
+          let el = item;
+          let reached = false;
+
+          while (el && el !== container) {
+            x += el.offsetLeft;
+            y += el.offsetTop;
+            const op = el.offsetParent;
+            if (op === container) {
+              reached = true;
+              break;
+            }
+            if (!op || !container.contains(op)) break;
+            x += op.clientLeft || 0;
+            y += op.clientTop || 0;
+            el = op;
+          }
+
+          if (reached) {
+            let p = item.parentElement;
+            while (p && p !== container) {
+              x -= p.scrollLeft || 0;
+              y -= p.scrollTop || 0;
+              p = p.parentElement;
+            }
+            return { x, y, w: item.offsetWidth, h: item.offsetHeight };
+          }
+
+          const cr = container.getBoundingClientRect();
+          const ir = item.getBoundingClientRect();
+          const sx = container.offsetWidth
+            ? cr.width / container.offsetWidth
+            : 1;
+          const sy = container.offsetHeight
+            ? cr.height / container.offsetHeight
+            : 1;
+          return {
+            x:
+              (ir.left - cr.left) / (sx || 1) -
+              (container.clientLeft || 0) +
+              (container.scrollLeft || 0),
+            y:
+              (ir.top - cr.top) / (sy || 1) -
+              (container.clientTop || 0) +
+              (container.scrollTop || 0),
+            w: item.offsetWidth,
+            h: item.offsetHeight,
+          };
+        };
+
+        const getContainerInnerRadii = (menu) => {
+          const read = (el) => {
+            const cs = window.getComputedStyle(el);
+            const bL = parseFloat(cs.borderLeftWidth) || 0;
+            const bR = parseFloat(cs.borderRightWidth) || 0;
+            const bT = parseFloat(cs.borderTopWidth) || 0;
+            const bB = parseFloat(cs.borderBottomWidth) || 0;
+            return {
+              tl: Math.max(
+                0,
+                (parseFloat(cs.borderTopLeftRadius) || 0) - Math.max(bT, bL),
+              ),
+              tr: Math.max(
+                0,
+                (parseFloat(cs.borderTopRightRadius) || 0) - Math.max(bT, bR),
+              ),
+              br: Math.max(
+                0,
+                (parseFloat(cs.borderBottomRightRadius) || 0) -
+                  Math.max(bB, bR),
+              ),
+              bl: Math.max(
+                0,
+                (parseFloat(cs.borderBottomLeftRadius) || 0) - Math.max(bB, bL),
+              ),
+            };
+          };
+
+          let r = read(menu);
+          if (
+            r.tl === 0 &&
+            r.tr === 0 &&
+            r.br === 0 &&
+            r.bl === 0 &&
+            menu.parentElement
+          ) {
+            const p = menu.parentElement;
+            if (Math.abs(p.clientWidth - menu.clientWidth) <= 4) {
+              const pr = read(p);
+              if (pr.tl || pr.tr || pr.br || pr.bl) r = pr;
+            }
+          }
+          return r;
+        };
+
+        const applyConcentricRadius = (menu, target, rectOverride) => {
+          if (!menu || !target || !menu.contains(target)) return;
+          const pill = menu.querySelector(":scope > .tng-glow-pill");
+          if (!pill) return;
+
+          const rect = rectOverride || getExactLocalRect(target, menu);
+          if (!rect || rect.w <= 0 || rect.h <= 0) return;
+
+          const W = menu.clientWidth;
+          const H = Math.max(menu.clientHeight, menu.scrollHeight);
+          const cr = getContainerInnerRadii(menu);
+          const maxCorner = Math.min(rect.w, rect.h) / 2;
+
+          const minOuterR = Math.min(
+            cr.tl || 11.5,
+            cr.tr || 11.5,
+            cr.br || 11.5,
+            cr.bl || 11.5,
+          );
+          const baseR = Math.min(maxCorner, Math.min(11.5, minOuterR));
+
+          const gapL = Math.max(0, rect.x);
+          const gapT = Math.max(0, rect.y);
+          const gapR = Math.max(0, W - (rect.x + rect.w));
+          const gapB = Math.max(0, H - (rect.y + rect.h));
+
+          let rTL = baseR,
+            rTR = baseR,
+            rBR = baseR,
+            rBL = baseR;
+
+          if (
+            pill.classList.contains("is-horizontal") ||
+            menu.classList.contains("tng-sub-tabs")
+          ) {
+            const tabR =
+              cr.tl > 0 ? Math.max(10, cr.tl - Math.min(gapT, gapB)) : 11.5;
+            rTL = rTR = rBR = rBL = Math.min(maxCorner, tabR);
+          } else if (menu === sidebar) {
+            const itemR =
+              parseFloat(window.getComputedStyle(target).borderRadius) || 11.5;
+            rTL = rTR = rBR = rBL = Math.min(maxCorner, itemR);
+          } else if (menu.id === "custom-dropdown-menu") {
+            const opts = Array.from(menu.querySelectorAll(".dropdown-opt"));
+            const isFirst = opts[0] === target;
+            const isLast = opts[opts.length - 1] === target;
+            rTL = isFirst ? Math.min(maxCorner, Math.max(baseR, cr.tl)) : baseR;
+            rTR = isFirst ? Math.min(maxCorner, Math.max(baseR, cr.tr)) : baseR;
+            rBR = isLast ? Math.min(maxCorner, Math.max(baseR, cr.br)) : baseR;
+            rBL = isLast ? Math.min(maxCorner, Math.max(baseR, cr.bl)) : baseR;
+          } else if (
+            gapL <= 3 &&
+            gapR <= 3 &&
+            (cr.tl > 0 || cr.tr > 0 || cr.br > 0 || cr.bl > 0)
+          ) {
+            const touchTop = gapT <= 3;
+            const touchBottom = gapB <= 3;
+            rTL = touchTop
+              ? Math.min(maxCorner, Math.max(baseR, cr.tl))
+              : baseR;
+            rTR = touchTop
+              ? Math.min(maxCorner, Math.max(baseR, cr.tr))
+              : baseR;
+            rBR = touchBottom
+              ? Math.min(maxCorner, Math.max(baseR, cr.br))
+              : baseR;
+            rBL = touchBottom
+              ? Math.min(maxCorner, Math.max(baseR, cr.bl))
+              : baseR;
+          } else {
+            const inset = Math.min(gapL, gapR);
+            rTL =
+              gapT <= inset + 4 && cr.tl > 0
+                ? Math.min(
+                    maxCorner,
+                    Math.max(baseR, cr.tl - Math.max(gapT, gapL)),
+                  )
+                : baseR;
+            rTR =
+              gapT <= inset + 4 && cr.tr > 0
+                ? Math.min(
+                    maxCorner,
+                    Math.max(baseR, cr.tr - Math.max(gapT, gapR)),
+                  )
+                : baseR;
+            rBR =
+              gapB <= inset + 4 && cr.br > 0
+                ? Math.min(
+                    maxCorner,
+                    Math.max(baseR, cr.br - Math.max(gapB, gapR)),
+                  )
+                : baseR;
+            rBL =
+              gapB <= inset + 4 && cr.bl > 0
+                ? Math.min(
+                    maxCorner,
+                    Math.max(baseR, cr.bl - Math.max(gapB, gapL)),
+                  )
+                : baseR;
+          }
+
+          const rStr = `${rTL.toFixed(1)}px ${rTR.toFixed(1)}px ${rBR.toFixed(1)}px ${rBL.toFixed(1)}px`;
+          if (pill.dataset.tngLastR !== rStr) {
+            pill.dataset.tngLastR = rStr;
+            pill.setAttribute("data-tng-r", "1");
+            pill.style.setProperty("--tng-pill-r", rStr);
+          }
+        };
+
+        // ============================================================
+        // BỘ MÁY KÍNH ĐỘC LẬP CHO DROPDOWN "LẶP LẠI"
+        // Dán chặt theo từng khung hình lúc nảy mở/đóng, không bao giờ lệch
+        // ============================================================
+        const getCleanOptLabel = (opt) => {
+          if (!opt) return "";
+          const clone = opt.cloneNode(true);
+          clone
+            .querySelectorAll(".tng-rp-chk, svg")
+            .forEach((el) => el.remove());
+          return clone.textContent.replace(/[✓✔]/g, "").trim();
+        };
+
+        const getSelectedRepeatOpt = (list) => {
+          const opts = Array.from(list.querySelectorAll(".tng-rp-opt"));
+          if (!opts.length) return null;
+
+          const valEl = document.getElementById("hd-repeat-val");
+          const inSpan = valEl
+            ? valEl.querySelector(".tng-rp-in-bottom, .tng-rp-in-top")
+            : null;
+          const labelText =
+            inSpan || valEl ? (inSpan || valEl).textContent.trim() : "";
+
+          if (labelText) {
+            const matched = opts.find((o) => getCleanOptLabel(o) === labelText);
+            if (matched) return matched;
+          }
+          if (list.dataset.tngRpSelText) {
+            const saved = opts.find(
+              (o) => getCleanOptLabel(o) === list.dataset.tngRpSelText,
+            );
+            if (saved) return saved;
+          }
+          return list.querySelector(".tng-rp-opt.active") || opts[0];
+        };
+
+        const ensureGlassPill = (list) => {
+          let pill = list.querySelector(":scope > .tng-rp-glass-pill");
+          if (!pill) {
+            pill = document.createElement("span");
+            pill.className = "tng-rp-glass-pill";
+            list.insertBefore(pill, list.firstChild);
+          }
+          return pill;
+        };
+
+        const activeRepeatLists = new Set();
+
+        const moveRepeatGlassPill = (
+          list,
+          targetOpt,
+          instant,
+          keepTracking,
+        ) => {
+          if (!list || !targetOpt) return;
+          const opts = Array.from(list.querySelectorAll(".tng-rp-opt"));
+          if (!opts.length) return;
+
+          const pill = ensureGlassPill(list);
+          const y = targetOpt.offsetTop;
+          const h = targetOpt.offsetHeight;
+          if (h <= 0) return;
+
+          const cr = getContainerInnerRadii(list);
+          const maxCorner = h / 2;
+          const baseR = Math.min(maxCorner, 11.5);
+          const isFirst = targetOpt === opts[0];
+          const isLast = targetOpt === opts[opts.length - 1];
+
+          const rTL = isFirst
+            ? Math.min(maxCorner, Math.max(baseR, cr.tl))
+            : baseR;
+          const rTR = isFirst
+            ? Math.min(maxCorner, Math.max(baseR, cr.tr))
+            : baseR;
+          const rBR = isLast
+            ? Math.min(maxCorner, Math.max(baseR, cr.br))
+            : baseR;
+          const rBL = isLast
+            ? Math.min(maxCorner, Math.max(baseR, cr.bl))
+            : baseR;
+          const rStr = `${rTL.toFixed(1)}px ${rTR.toFixed(1)}px ${rBR.toFixed(1)}px ${rBL.toFixed(1)}px`;
+
+          pill.style.setProperty("--tng-pill-r", rStr);
+
+          if (keepTracking) {
+            pill.classList.add("is-tracking");
+            pill.style.height = h.toFixed(2) + "px";
+            pill.style.transform = `translate3d(0px, ${y.toFixed(2)}px, 0)`;
+            pill.style.opacity = "1";
+          } else if (instant) {
+            pill.classList.remove("is-tracking");
+            pill.classList.add("is-instant");
+            pill.style.height = h.toFixed(2) + "px";
+            pill.style.transform = `translate3d(0px, ${y.toFixed(2)}px, 0)`;
+            pill.style.opacity = "1";
+            void pill.offsetHeight;
+            pill.classList.remove("is-instant");
+          } else {
+            pill.classList.remove("is-tracking", "is-instant");
+            pill.style.height = h.toFixed(2) + "px";
+            pill.style.transform = `translate3d(0px, ${y.toFixed(2)}px, 0)`;
+            pill.style.opacity = "1";
+          }
+
+          list._tngCurrentTarget = targetOpt;
+          list._tngLastY = y;
+        };
+
+        const returnRepeatListToSelected = (list, instant, keepTracking) => {
+          if (!list) return;
+          const selected = getSelectedRepeatOpt(list);
+          if (!selected) return;
+
+          list.dataset.tngRpSelText = getCleanOptLabel(selected);
+          list.querySelectorAll(".tng-rp-opt").forEach((o) => {
+            o.classList.remove("tng-rp-hover");
+            o.classList.toggle("active", o === selected);
+          });
+
+          if (!instant && !keepTracking) list.classList.add("returning");
+          else list.classList.remove("returning");
+
+          moveRepeatGlassPill(list, selected, instant, keepTracking);
+        };
+
+        const bindRepeatDropdown = (list) => {
+          if (!list || list.dataset.tngRpOwned) return;
+          list.dataset.tngRpOwned = "1";
+          activeRepeatLists.add(list);
+
+          ensureGlassPill(list);
+
+          let bounceUntil = 0;
+          let bounceRaf = null;
+          let userHovering = false;
+
+          const stopTracking = () => {
+            bounceRaf = null;
+            list._tngBounceActive = false;
+            const pill = list.querySelector(":scope > .tng-rp-glass-pill");
+            if (pill) {
+              void pill.offsetHeight;
+              pill.classList.remove("is-tracking");
+            }
+          };
+
+          const tickBounce = () => {
+            if (!list.isConnected || userHovering) {
+              stopTracking();
+              return;
+            }
+            const sel = getSelectedRepeatOpt(list);
+            if (sel) moveRepeatGlassPill(list, sel, true, true);
+
+            if (performance.now() < bounceUntil) {
+              bounceRaf = requestAnimationFrame(tickBounce);
+            } else {
+              stopTracking();
+            }
+          };
+
+          const trackBounce = (ms) => {
+            userHovering = false;
+            list._tngBounceActive = true;
+            bounceUntil = Math.max(bounceUntil, performance.now() + ms);
+            const sel = getSelectedRepeatOpt(list);
+            if (sel) {
+              list.classList.remove("returning");
+              moveRepeatGlassPill(list, sel, true, true);
+            }
+            if (!bounceRaf) bounceRaf = requestAnimationFrame(tickBounce);
+          };
+
+          const onInsideMove = (e) => {
+            const opt =
+              e.target && e.target.closest
+                ? e.target.closest(".tng-rp-opt")
+                : null;
+            if (!opt || !list.contains(opt)) return;
+            userHovering = true;
+            bounceUntil = 0;
+            list._tngBounceActive = false;
+            const pill = list.querySelector(":scope > .tng-rp-glass-pill");
+            if (pill) pill.classList.remove("is-tracking");
+            list.classList.remove("returning");
+            list
+              .querySelectorAll(".tng-rp-opt.tng-rp-hover")
+              .forEach((o) => o !== opt && o.classList.remove("tng-rp-hover"));
+            opt.classList.add("tng-rp-hover");
+            if (
+              list._tngCurrentTarget !== opt ||
+              Math.abs((list._tngLastY ?? -999) - opt.offsetTop) > 0.5
+            ) {
+              moveRepeatGlassPill(list, opt, false, false);
+            }
+          };
+
+          list.addEventListener("pointerover", onInsideMove);
+          list.addEventListener("pointermove", onInsideMove);
+
+          const onLeave = () => {
+            userHovering = false;
+            returnRepeatListToSelected(list, false, false);
+          };
+          list.addEventListener("mouseleave", onLeave);
+          list.addEventListener("pointerleave", onLeave);
+
+          list.addEventListener(
+            "click",
+            (e) => {
+              const opt =
+                e.target && e.target.closest
+                  ? e.target.closest(".tng-rp-opt")
+                  : null;
+              if (!opt || !list.contains(opt)) return;
+              userHovering = false;
+              list.dataset.tngRpSelText = getCleanOptLabel(opt);
+              list.classList.remove("returning");
+              list.querySelectorAll(".tng-rp-opt").forEach((o) => {
+                o.classList.remove("tng-rp-hover");
+                o.classList.toggle("active", o === opt);
+              });
+              moveRepeatGlassPill(list, opt, false, false);
+            },
+            true,
+          );
+
+          // Chốt lại đúng vị trí tuyệt đối ngay khoảnh khắc hiệu ứng nảy vừa kết thúc
+          list.addEventListener("transitionend", (e) => {
+            if (e.target !== list || userHovering) return;
+            if (
+              e.propertyName === "padding-top" ||
+              e.propertyName === "row-gap" ||
+              e.propertyName === "max-height"
+            ) {
+              returnRepeatListToSelected(list, true, false);
+            }
+          });
+
+          let wasOpen = list.classList.contains("show");
+          new MutationObserver(() => {
+            const isOpen = list.classList.contains("show");
+            if (isOpen !== wasOpen) {
+              ensureGlassPill(list);
+              returnRepeatListToSelected(list, true, true);
+              trackBounce(950);
+            }
+            wasOpen = isOpen;
+          }).observe(list, {
+            attributes: true,
+            attributeFilter: ["class"],
+          });
+
+          new MutationObserver(() => {
+            if (!list.querySelector(":scope > .tng-rp-glass-pill")) {
+              ensureGlassPill(list);
+              returnRepeatListToSelected(list, true, false);
+              if (list.classList.contains("show")) trackBounce(950);
+            }
+          }).observe(list, { childList: true });
+
+          // Quan trọng: nếu list vừa được tạo đã mang sẵn .show -> bám nhịp nảy ngay lập tức!
+          returnRepeatListToSelected(list, true, wasOpen);
+          if (wasOpen) {
+            trackBounce(950);
+          } else {
+            requestAnimationFrame(() =>
+              returnRepeatListToSelected(list, true, false),
+            );
+          }
+        };
+
+        // Theo dõi chuột toàn trang: chuột ra ngoài khung Lặp lại -> đảm bảo kính đúng tâm lựa chọn
+        document.addEventListener(
+          "pointermove",
+          (e) => {
+            if (!activeRepeatLists.size) return;
+            activeRepeatLists.forEach((list) => {
+              if (!list.isConnected) {
+                activeRepeatLists.delete(list);
+                return;
+              }
+              if (!list.classList.contains("show") || list._tngBounceActive) {
+                return;
+              }
+              const r = list.getBoundingClientRect();
+              const inside =
+                e.clientX >= r.left &&
+                e.clientX <= r.right &&
+                e.clientY >= r.top &&
+                e.clientY <= r.bottom;
+              if (!inside) {
+                const selected = getSelectedRepeatOpt(list);
+                if (!selected) return;
+                const offTarget =
+                  list._tngCurrentTarget !== selected ||
+                  !!list.querySelector(".tng-rp-opt.tng-rp-hover");
+                const offY =
+                  Math.abs((list._tngLastY ?? -999) - selected.offsetTop) > 0.5;
+                if (offTarget) {
+                  returnRepeatListToSelected(list, false, false);
+                } else if (offY) {
+                  returnRepeatListToSelected(list, true, false);
+                }
+              }
+            });
+          },
+          { passive: true },
+        );
+
+        // ============================================================
+        // ĐỒNG BỘ CÁC MENU GIỌT KÍNH CÒN LẠI (SIDEBAR, POPUP, VĂN BẢN, GÓI)
+        // ============================================================
+        const findMenuTarget = (menu, forceActiveOnly) => {
+          if (forceActiveOnly) {
+            return menu.querySelector(
+              ".sb-item.active, .m-item.active, .tng-sub-tab.active, .dropdown-opt.active, .tng-pill-focus",
+            );
+          }
+          return menu.querySelector(
+            ".tng-pill-focus, .sb-item.active, .m-item.active, .tng-sub-tab.active, .dropdown-opt.active",
+          );
+        };
+
+        const syncPillExact = (menu, forceActiveOnly) => {
+          if (!menu || menu.classList.contains("tng-rp-list")) return;
+          const pill = menu.querySelector(":scope > .tng-glow-pill");
+          if (!pill) return;
+
+          const target = findMenuTarget(menu, forceActiveOnly);
+          if (!target) return;
+
+          const rect = getExactLocalRect(target, menu);
+          if (!rect || rect.w <= 0 || rect.h <= 0) return;
+
+          pill.style.width = rect.w.toFixed(2) + "px";
+          pill.style.height = rect.h.toFixed(2) + "px";
+          pill.style.transform = `translate3d(${rect.x.toFixed(2)}px, ${rect.y.toFixed(2)}px, 0)`;
+
+          applyConcentricRadius(menu, target, rect);
+
+          if (menu === sidebar && historyList && historyList.contains(target)) {
+            const hlTop = historyList.offsetTop;
+            const hlBottom = hlTop + historyList.clientHeight;
+            const clipTop = Math.max(0, hlTop - rect.y);
+            const clipBottom = Math.max(0, rect.y + rect.h - hlBottom);
+
+            if (clipTop + clipBottom >= rect.h - 1) {
+              pill.style.clipPath = "inset(50% 0 50% 0 round 11.5px)";
+            } else if (clipTop > 0 || clipBottom > 0) {
+              pill.style.clipPath = `inset(${clipTop.toFixed(1)}px 0px ${clipBottom.toFixed(1)}px 0px round 11.5px)`;
+            } else {
+              pill.style.clipPath = "";
+            }
+          } else {
+            pill.style.clipPath = "";
+          }
+        };
+
+        const onPointerInteract = (e) => {
+          if (!e.target || !e.target.closest) return;
+          const item = e.target.closest(ITEM_SELECTOR);
+          if (!item) return;
+          const menu = item.closest(".tng-glow-menu");
+          if (!menu || menu.classList.contains("tng-rp-list")) return;
+          applyConcentricRadius(menu, item);
+        };
+
+        document.addEventListener("pointerover", onPointerInteract, true);
+        document.addEventListener("pointerdown", onPointerInteract, true);
+        document.addEventListener("click", onPointerInteract, true);
+
+        document.addEventListener(
+          "pointerout",
+          (e) => {
+            if (!e.target || !e.target.closest) return;
+            const menu = e.target.closest(".tng-glow-menu");
+            if (!menu || menu.classList.contains("tng-rp-list")) return;
+            if (e.relatedTarget && menu.contains(e.relatedTarget)) return;
+            const fallback = findMenuTarget(menu, true);
+            if (fallback) applyConcentricRadius(menu, fallback);
+          },
+          true,
+        );
+
+        if (sidebar) {
+          let lockUntil = 0;
+          let lockActive = false;
+          let lockRaf = null;
+
+          const tickLock = () => {
+            syncPillExact(sidebar, lockActive);
+            if (performance.now() < lockUntil) {
+              lockRaf = requestAnimationFrame(tickLock);
+            } else {
+              lockRaf = null;
+              lockActive = false;
+            }
+          };
+
+          const holdSync = (ms, preferActive) => {
+            lockUntil = Math.max(lockUntil, performance.now() + ms);
+            if (preferActive) lockActive = true;
+            syncPillExact(sidebar, lockActive);
+            if (!lockRaf) lockRaf = requestAnimationFrame(tickLock);
+          };
+
+          if (historyList) {
+            historyList.addEventListener("scroll", () => holdSync(140, false), {
+              passive: true,
+            });
+          }
+
+          new MutationObserver(() => holdSync(560, true)).observe(sidebar, {
+            attributes: true,
+            attributeFilter: ["class"],
+          });
+
+          sidebar.addEventListener("transitionend", (e) => {
+            if (e.target === sidebar) syncPillExact(sidebar, false);
+          });
+
+          window.addEventListener("resize", () => holdSync(220, false));
+        }
+
+        const bindMenuWatcher = (menu) => {
+          if (!menu || menu.dataset.tngPillSyncBound) return;
+          if (menu.classList.contains("tng-rp-list")) {
+            bindRepeatDropdown(menu);
+            return;
+          }
+          menu.dataset.tngPillSyncBound = "1";
+
+          let popUntil = 0;
+          let popRaf = null;
+          let hoveringMenu = false;
+
+          const tickPop = () => {
+            if (hoveringMenu) {
+              popRaf = null;
+              return;
+            }
+            syncPillExact(menu, false);
+            if (performance.now() < popUntil && menu.isConnected) {
+              popRaf = requestAnimationFrame(tickPop);
+            } else {
+              popRaf = null;
+            }
+          };
+
+          const triggerSync = (duration) => {
+            hoveringMenu = false;
+            popUntil = Math.max(popUntil, performance.now() + duration);
+            syncPillExact(menu, false);
+            if (!popRaf) popRaf = requestAnimationFrame(tickPop);
+          };
+
+          menu.addEventListener("pointerover", () => {
+            hoveringMenu = true;
+            popUntil = 0;
+          });
+          menu.addEventListener("pointerleave", () => {
+            hoveringMenu = false;
+          });
+          menu.addEventListener("transitionend", (e) => {
+            if (e.target === menu && !hoveringMenu) {
+              syncPillExact(menu, false);
+            }
+          });
+
+          const isTextDropdown = menu.id === "custom-dropdown-menu";
+          let wasShown =
+            menu.classList.contains("show") || menu.style.display === "block";
+
+          new MutationObserver(() => {
+            const isShown =
+              menu.classList.contains("show") || menu.style.display === "block";
+            if (isShown && !wasShown) {
+              triggerSync(950);
+            } else if (!isShown && wasShown && isTextDropdown) {
+              triggerSync(880);
+            }
+            wasShown = isShown;
+          }).observe(menu, {
+            attributes: true,
+            attributeFilter: ["class", "style"],
+          });
+
+          new MutationObserver(() => {
+            const focused = findMenuTarget(menu, false);
+            if (focused) applyConcentricRadius(menu, focused);
+          }).observe(menu, {
+            subtree: true,
+            attributes: true,
+            attributeFilter: ["class"],
+          });
+
+          if (wasShown) {
+            triggerSync(950);
+          } else {
+            requestAnimationFrame(() => {
+              if (menu.classList.contains("tng-sub-tabs")) {
+                syncPillExact(menu, false);
+              } else {
+                const focused = findMenuTarget(menu, false);
+                if (focused) applyConcentricRadius(menu, focused);
+              }
+            });
+          }
+        };
+
+        const scanMenus = () => {
+          document.querySelectorAll(".tng-rp-list").forEach(bindRepeatDropdown);
+          document
+            .querySelectorAll(
+              ".tng-glow-menu, .drop-menu, .sub-menu, .set-menu, .hist-options-menu, .ai-options-menu, #custom-dropdown-menu, #sp-body .tng-sub-tabs",
+            )
+            .forEach(bindMenuWatcher);
+        };
+
+        scanMenus();
+        new MutationObserver(scanMenus).observe(document.body, {
+          childList: true,
+          subtree: true,
+        });
+      })();
+
+      // ============================================================
+      // KÍNH MƯỢT GPU ĐỒNG BỘ DẤU TÍCH (#theme-menu) & NEO GIỌT NƯỚC
+      // TRÊN GIAO DIỆN / TRỢ GIÚP (#set-menu) — ĐÃ CHẶN VÒNG LẶP 100%
+      // ============================================================
+      (function () {
+        const isDesktop = () => window.innerWidth > 768;
+
+        // Chỉ chạm vào classList khi trạng thái thực sự khác để tránh kích hoạt lại MutationObserver
+        const setClass = (el, cls, on) => {
+          if (!el) return;
+          const has = el.classList.contains(cls);
+          if (on && !has) el.classList.add(cls);
+          else if (!on && has) el.classList.remove(cls);
+        };
+
+        const getInnerRadius = (el) => {
+          const cs = window.getComputedStyle(el);
+          const bT = parseFloat(cs.borderTopWidth) || 0;
+          const bB = parseFloat(cs.borderBottomWidth) || 0;
+          const bL = parseFloat(cs.borderLeftWidth) || 0;
+          const bR = parseFloat(cs.borderRightWidth) || 0;
+          return {
+            tl: Math.max(
+              0,
+              (parseFloat(cs.borderTopLeftRadius) || 0) - Math.max(bT, bL),
+            ),
+            tr: Math.max(
+              0,
+              (parseFloat(cs.borderTopRightRadius) || 0) - Math.max(bT, bR),
+            ),
+            br: Math.max(
+              0,
+              (parseFloat(cs.borderBottomRightRadius) || 0) - Math.max(bB, bR),
+            ),
+            bl: Math.max(
+              0,
+              (parseFloat(cs.borderBottomLeftRadius) || 0) - Math.max(bB, bL),
+            ),
+          };
+        };
+
+        const calcRadiusStr = (menu, y, h) => {
+          const H = Math.max(menu.clientHeight, menu.scrollHeight);
+          const cr = getInnerRadius(menu);
+          const maxC = h / 2;
+          const base = Math.min(maxC, 11.5);
+          const touchTop = y <= 3;
+          const touchBottom = H - (y + h) <= 3;
+          const rTL = touchTop ? Math.min(maxC, Math.max(base, cr.tl)) : base;
+          const rTR = touchTop ? Math.min(maxC, Math.max(base, cr.tr)) : base;
+          const rBR = touchBottom
+            ? Math.min(maxC, Math.max(base, cr.br))
+            : base;
+          const rBL = touchBottom
+            ? Math.min(maxC, Math.max(base, cr.bl))
+            : base;
+          return `${rTL.toFixed(1)}px ${rTR.toFixed(1)}px ${rBR.toFixed(1)}px ${rBL.toFixed(1)}px`;
+        };
+
+        // ------------------------------------------------------------
+        // 1. MENU GIAO DIỆN (#theme-menu): NƯỚC & DẤU TÍCH TRƯỢT ĐỒNG BỘ
+        // ------------------------------------------------------------
+        const initThemeMenu = () => {
+          const menu = document.getElementById("theme-menu");
+          if (!menu || menu.dataset.tngTmSmoothBound) return false;
+          menu.dataset.tngTmSmoothBound = "1";
+
+          const SEL_ITEM =
+            ".d-item[onclick*=\"'light'\"], .d-item[onclick*=\"'dark'\"]";
+          const getLightItem = () =>
+            menu.querySelector(".d-item[onclick*=\"'light'\"]");
+          const getDarkItem = () =>
+            menu.querySelector(".d-item[onclick*=\"'dark'\"]");
+          const getSelectableItems = () =>
+            [getLightItem(), getDarkItem()].filter(Boolean);
+
+          const ensurePill = () => {
+            let pill = menu.querySelector(":scope > .tng-tm-glass-pill");
+            if (!pill) {
+              pill = document.createElement("span");
+              pill.className = "tng-tm-glass-pill";
+              menu.insertBefore(pill, menu.firstChild);
+            }
+            return pill;
+          };
+
+          const ensureCheckGlyphs = () => {
+            const lightChk = menu.querySelector(".chk-light");
+            const darkChk = menu.querySelector(".chk-dark");
+            const glyph =
+              (lightChk && lightChk.textContent.trim()) ||
+              (darkChk && darkChk.textContent.trim()) ||
+              "✓";
+            if (lightChk && !lightChk.textContent.trim()) {
+              lightChk.textContent = glyph;
+            }
+            if (darkChk && !darkChk.textContent.trim()) {
+              darkChk.textContent = glyph;
+            }
+          };
+
+          const getActiveThemeItem = () =>
+            document.body.getAttribute("data-theme") === "light"
+              ? getLightItem()
+              : getDarkItem();
+
+          let currentTarget = null;
+
+          const applyThemeTarget = (targetItem, returning, instant) => {
+            if (!targetItem) return;
+            ensureCheckGlyphs();
+            setClass(menu, "returning", !!returning);
+
+            getSelectableItems().forEach((item) => {
+              const isTarget = item === targetItem;
+              setClass(item, "tng-tm-chk-show", isTarget);
+              setClass(item, "tng-tm-focus", isTarget);
+            });
+
+            currentTarget = targetItem;
+            if (!isDesktop()) return;
+
+            const pill = ensurePill();
+            const y = targetItem.offsetTop;
+            const h = targetItem.offsetHeight;
+            if (h <= 0) return;
+
+            pill.style.setProperty("--tng-pill-r", calcRadiusStr(menu, y, h));
+
+            if (instant) {
+              setClass(pill, "is-instant", true);
+              pill.style.height = h.toFixed(2) + "px";
+              pill.style.transform = `translate3d(0px, ${y.toFixed(2)}px, 0)`;
+              pill.style.opacity = "1";
+              void pill.offsetHeight;
+              setClass(pill, "is-instant", false);
+            } else {
+              setClass(pill, "is-instant", false);
+              pill.style.height = h.toFixed(2) + "px";
+              pill.style.transform = `translate3d(0px, ${y.toFixed(2)}px, 0)`;
+              pill.style.opacity = "1";
+            }
+          };
+
+          const syncToCurrentTheme = (returning, instant) => {
+            const activeItem = getActiveThemeItem();
+            if (activeItem) applyThemeTarget(activeItem, returning, instant);
+          };
+
+          const onPointerInside = (e) => {
+            const opt =
+              e.target && e.target.closest ? e.target.closest(SEL_ITEM) : null;
+            if (opt && menu.contains(opt)) {
+              if (
+                currentTarget !== opt ||
+                menu.classList.contains("returning")
+              ) {
+                applyThemeTarget(opt, false, false);
+              }
+            } else {
+              const activeItem = getActiveThemeItem();
+              if (activeItem && currentTarget !== activeItem) {
+                applyThemeTarget(activeItem, true, false);
+              }
+            }
+          };
+
+          menu.addEventListener("pointerover", onPointerInside);
+          menu.addEventListener("pointermove", onPointerInside);
+
+          const onLeave = () => syncToCurrentTheme(true, false);
+          menu.addEventListener("mouseleave", onLeave);
+          menu.addEventListener("pointerleave", onLeave);
+
+          menu.addEventListener(
+            "click",
+            (e) => {
+              const opt =
+                e.target && e.target.closest
+                  ? e.target.closest(SEL_ITEM)
+                  : null;
+              if (!opt || !menu.contains(opt)) return;
+              applyThemeTarget(opt, false, false);
+              requestAnimationFrame(() => syncToCurrentTheme(false, false));
+            },
+            true,
+          );
+
+          new MutationObserver(() => syncToCurrentTheme(false, false)).observe(
+            document.body,
+            { attributes: true, attributeFilter: ["data-theme"] },
+          );
+
+          // Chỉ lắng nghe đúng lúc class .show của #theme-menu bật lên
+          let wasOpen = menu.classList.contains("show");
+          new MutationObserver(() => {
+            const isOpen = menu.classList.contains("show");
+            if (isOpen === wasOpen) return;
+            wasOpen = isOpen;
+            if (isOpen) {
+              syncToCurrentTheme(false, true);
+              requestAnimationFrame(() => syncToCurrentTheme(false, true));
+            }
+          }).observe(menu, { attributes: true, attributeFilter: ["class"] });
+
+          document.addEventListener(
+            "pointermove",
+            (e) => {
+              if (!menu.classList.contains("show")) return;
+              const r = menu.getBoundingClientRect();
+              const inside =
+                e.clientX >= r.left &&
+                e.clientX <= r.right &&
+                e.clientY >= r.top &&
+                e.clientY <= r.bottom;
+              if (!inside) {
+                const activeItem = getActiveThemeItem();
+                if (activeItem && currentTarget !== activeItem) {
+                  syncToCurrentTheme(true, false);
+                }
+              }
+            },
+            { passive: true },
+          );
+
+          syncToCurrentTheme(false, true);
+          return true;
+        };
+
+        // ------------------------------------------------------------
+        // 2. MENU CÀI ĐẶT (#set-menu) TRÊN PC: NEO NƯỚC TRÊN GIAO DIỆN / TRỢ GIÚP
+        //    Không dùng subtree:true để tuyệt đối không gây vòng lặp
+        // ------------------------------------------------------------
+        const initSetMenuPC = () => {
+          const setMenu = document.getElementById("set-menu");
+          if (!setMenu || setMenu.dataset.tngSetPcBound) return false;
+          setMenu.dataset.tngSetPcBound = "1";
+
+          const ensurePill = () => {
+            let pill = setMenu.querySelector(":scope > .tng-set-glass-pill");
+            if (!pill) {
+              pill = document.createElement("span");
+              pill.className = "tng-set-glass-pill";
+              setMenu.insertBefore(pill, setMenu.firstChild);
+            }
+            return pill;
+          };
+
+          const getDirectItems = () =>
+            Array.from(setMenu.querySelectorAll(":scope > .d-item"));
+
+          const getOpenSubParent = () => {
+            const openSub = setMenu.querySelector(
+              ":scope > .d-item > .sub-menu.show",
+            );
+            return openSub ? openSub.parentElement : null;
+          };
+
+          let currentSetTarget = null;
+          let pillVisible = false;
+
+          const clearFocus = () => {
+            getDirectItems().forEach((el) =>
+              setClass(el, "tng-set-focus", false),
+            );
+          };
+
+          const hideSetPill = () => {
+            if (!pillVisible && !currentSetTarget) return;
+            clearFocus();
+            currentSetTarget = null;
+            pillVisible = false;
+            const pill = setMenu.querySelector(":scope > .tng-set-glass-pill");
+            if (pill) pill.style.opacity = "0";
+          };
+
+          const moveSetPill = (targetItem, returning, forceInstant) => {
+            if (!isDesktop()) return;
+            if (!targetItem || targetItem.parentElement !== setMenu) {
+              hideSetPill();
+              return;
+            }
+
+            const pill = ensurePill();
+            const y = targetItem.offsetTop;
+            const h = targetItem.offsetHeight;
+            if (h <= 0) return;
+
+            setClass(setMenu, "returning", !!returning);
+            getDirectItems().forEach((el) =>
+              setClass(el, "tng-set-focus", el === targetItem),
+            );
+
+            pill.style.setProperty(
+              "--tng-pill-r",
+              calcRadiusStr(setMenu, y, h),
+            );
+
+            if (forceInstant || !pillVisible) {
+              setClass(pill, "is-instant", true);
+              pill.style.height = h.toFixed(2) + "px";
+              pill.style.transform = `translate3d(0px, ${y.toFixed(2)}px, 0)`;
+              void pill.offsetHeight;
+              setClass(pill, "is-instant", false);
+              setClass(pill, "is-snap", true);
+              pill.style.opacity = "1";
+              requestAnimationFrame(() => setClass(pill, "is-snap", false));
+            } else {
+              setClass(pill, "is-instant", false);
+              setClass(pill, "is-snap", false);
+              pill.style.height = h.toFixed(2) + "px";
+              pill.style.transform = `translate3d(0px, ${y.toFixed(2)}px, 0)`;
+              pill.style.opacity = "1";
+            }
+
+            currentSetTarget = targetItem;
+            pillVisible = true;
+          };
+
+          const onSetPointer = (e) => {
+            if (!isDesktop()) return;
+            const insideSub =
+              e.target && e.target.closest
+                ? e.target.closest(".sub-menu")
+                : null;
+            if (insideSub && setMenu.contains(insideSub)) {
+              const parentItem =
+                insideSub.parentElement &&
+                insideSub.parentElement.parentElement === setMenu
+                  ? insideSub.parentElement
+                  : getOpenSubParent();
+              if (
+                parentItem &&
+                (currentSetTarget !== parentItem || !pillVisible)
+              ) {
+                moveSetPill(parentItem, true, false);
+              }
+              return;
+            }
+
+            const item =
+              e.target && e.target.closest ? e.target.closest(".d-item") : null;
+            if (item && item.parentElement === setMenu) {
+              if (currentSetTarget !== item || !pillVisible) {
+                moveSetPill(item, false, false);
+              }
+            }
+          };
+
+          setMenu.addEventListener("pointerover", onSetPointer);
+          setMenu.addEventListener("pointermove", onSetPointer);
+
+          const onSetLeave = () => {
+            if (!isDesktop()) return;
+            const openParent = getOpenSubParent();
+            if (openParent) {
+              moveSetPill(openParent, true, false);
+            } else {
+              hideSetPill();
+            }
+          };
+
+          setMenu.addEventListener("mouseleave", onSetLeave);
+          setMenu.addEventListener("pointerleave", onSetLeave);
+
+          // Chỉ theo dõi đúng trạng thái .show của #set-menu (không subtree)
+          let wasSetOpen = setMenu.classList.contains("show");
+          new MutationObserver(() => {
+            const isSetOpen = setMenu.classList.contains("show");
+            if (isSetOpen === wasSetOpen) return;
+            wasSetOpen = isSetOpen;
+            if (!isDesktop()) return;
+            if (!isSetOpen) {
+              hideSetPill();
+            } else {
+              const openParent = getOpenSubParent();
+              if (openParent) moveSetPill(openParent, false, true);
+            }
+          }).observe(setMenu, { attributes: true, attributeFilter: ["class"] });
+
+          // Theo dõi riêng từng .sub-menu (Giao diện / Trợ giúp) khi .show bật/tắt
+          setMenu
+            .querySelectorAll(":scope > .d-item > .sub-menu")
+            .forEach((sub) => {
+              let wasSubOpen = sub.classList.contains("show");
+              new MutationObserver(() => {
+                const isSubOpen = sub.classList.contains("show");
+                if (isSubOpen === wasSubOpen) return;
+                wasSubOpen = isSubOpen;
+                if (!isDesktop() || !setMenu.classList.contains("show")) return;
+                const openParent = getOpenSubParent();
+                if (openParent) {
+                  moveSetPill(openParent, false, !pillVisible);
+                } else if (!setMenu.matches(":hover")) {
+                  hideSetPill();
+                }
+              }).observe(sub, { attributes: true, attributeFilter: ["class"] });
+            });
+
+          // Bám chuột khi băng qua khe 10px giữa #set-menu và menu con
+          document.addEventListener(
+            "pointermove",
+            (e) => {
+              if (!isDesktop() || !setMenu.classList.contains("show")) return;
+              const openParent = getOpenSubParent();
+              const r = setMenu.getBoundingClientRect();
+              const inMain =
+                e.clientX >= r.left &&
+                e.clientX <= r.right &&
+                e.clientY >= r.top &&
+                e.clientY <= r.bottom;
+              if (!inMain) {
+                if (openParent) {
+                  if (currentSetTarget !== openParent || !pillVisible) {
+                    moveSetPill(openParent, true, false);
+                  }
+                } else if (pillVisible) {
+                  hideSetPill();
+                }
+              }
+            },
+            { passive: true },
+          );
+
+          return true;
+        };
+
+        const boot = () => {
+          initThemeMenu();
+          initSetMenuPC();
+        };
+
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", boot, { once: true });
+        } else {
+          boot();
+        }
       })();
     </script>
   </body>
