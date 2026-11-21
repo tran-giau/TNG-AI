@@ -5634,71 +5634,89 @@
 
       /* ============================================================ */
       /* TỐI ƯU MENU TRƯỢT GIAO DIỆN & TRỢ GIÚP TRÊN ĐIỆN THOẠI       */
-      /* (Chống tràn màn hình, gọn thẻ con & khớp giọt nước 100%)     */
+      /* Tràn sát 4 viền, không bo góc & phát sáng thanh thường + ✓   */
       /* ============================================================ */
       @media (max-width: 768px) {
-        /* 1. Khóa chiều cao tối đa & bật cuộn mượt để không bao giờ cắt mất mục trên cùng */
-        #set-menu.set-menu {
-          max-height: calc(100dvh - 86px) !important;
+        /* 1. Khóa chiều cao tối đa & cuộn êm để không bị cắt mất mục trên cùng */
+        html body #set-menu.set-menu {
+          bottom: 54px !important;
+          max-height: calc(100vh - 80px) !important;
+          max-height: calc(100dvh - 80px) !important;
           overflow-y: auto !important;
           overflow-x: hidden !important;
           -webkit-overflow-scrolling: touch;
           overscroll-behavior: contain;
           scrollbar-width: none !important;
         }
-        #set-menu.set-menu::-webkit-scrollbar {
+        html body #set-menu.set-menu::-webkit-scrollbar {
           display: none !important;
           width: 0 !important;
         }
 
-        /* 2. Giữ dòng tiêu đề mục cha ổn định, không bị kéo giãn đệm khi mở menu con */
-        #set-menu .d-item.flex-between {
+        /* 2. Giữ dòng tiêu đề cha ổn định, cho phép menu con tràn sát 2 mép ngoài */
+        html body #set-menu .d-item.flex-between {
           flex-wrap: wrap !important;
           align-items: center !important;
           height: auto !important;
           row-gap: 0 !important;
+          overflow: visible !important;
         }
 
-        /* Xoay mũi tên ▶ xuống 90 độ mượt mà khi mở trượt */
-        #set-menu .d-item.flex-between > span:not(.sub-menu) {
+        /* Xoay mũi tên ▶ xuống 90° khi mở trượt */
+        html body #set-menu .d-item.flex-between > span:not(.sub-menu) {
           display: inline-flex !important;
           align-items: center;
           justify-content: center;
           transform-origin: center center !important;
           transition:
-            transform 0.42s cubic-bezier(0.34, 1.56, 0.64, 1),
-            color 0.25s ease !important;
+            transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1),
+            color 0.22s ease !important;
         }
-        #set-menu
+        html
+          body
+          #set-menu
+          .d-item.flex-between.tng-sub-open
+          > span:not(.sub-menu),
+        html
+          body
+          #set-menu
           .d-item.flex-between:has(> .sub-menu.show)
           > span:not(.sub-menu) {
           transform: rotate(90deg) !important;
           color: var(--btn-blue) !important;
         }
 
-        /* Không làm lún nhầm tiêu đề cha khi chạm vào mục con bên trong */
-        #set-menu
+        /* Không lún nhầm tiêu đề cha khi chạm vào mục con */
+        html
+          body
+          #set-menu
           .d-item.flex-between:has(.sub-menu:active)
           > *:not(.sub-menu) {
           transform: scale(1) !important;
         }
 
-        /* 3. Khung menu con dạng thẻ kính chìm gọn gàng, tốc độ trượt sát chiều cao thật */
-        #set-menu .sub-menu {
+        /* 3. Menu con trượt tràn sát viền 2 bên & trên dưới, bỏ hoàn toàn bo góc */
+        html body #set-menu .d-item.flex-between > .sub-menu {
           position: relative !important;
-          width: 100% !important;
-          min-width: 0 !important;
+          display: flex !important;
+          flex-direction: column !important;
+          flex: 0 0 calc(100% + 30px) !important;
+          width: calc(100% + 30px) !important;
+          min-width: calc(100% + 30px) !important;
+          max-width: none !important;
           left: 0 !important;
           top: 0 !important;
           bottom: auto !important;
-          margin: 0 !important;
-          padding: 0 6px !important;
-          border-radius: 12px !important;
-          background: rgba(255, 255, 255, 0.04) !important;
-          border: 1px solid transparent !important;
+          margin: 0 -15px !important;
+          padding: 0 !important;
+          border-radius: 0 !important;
+          border: none !important;
+          border-top: 0px solid transparent !important;
+          border-bottom: 0px solid transparent !important;
           box-shadow: none !important;
           backdrop-filter: none !important;
           -webkit-backdrop-filter: none !important;
+          background: rgba(255, 255, 255, 0.035) !important;
           transform: none !important;
           max-height: 0 !important;
           opacity: 0 !important;
@@ -5706,48 +5724,156 @@
           overflow: hidden !important;
           pointer-events: none !important;
           transition:
-            max-height 0.42s cubic-bezier(0.22, 1, 0.36, 1),
-            margin-top 0.42s cubic-bezier(0.22, 1, 0.36, 1),
-            padding-top 0.42s cubic-bezier(0.22, 1, 0.36, 1),
-            padding-bottom 0.42s cubic-bezier(0.22, 1, 0.36, 1),
-            opacity 0.22s ease,
-            border-color 0.22s ease,
-            visibility 0s linear 0.42s !important;
+            max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+            margin-top 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+            margin-bottom 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+            opacity 0.2s ease,
+            border-color 0.2s ease,
+            visibility 0s linear 0.4s !important;
         }
 
-        #set-menu .sub-menu.show {
-          max-height: 195px !important;
-          margin-top: 8px !important;
-          padding-top: 6px !important;
-          padding-bottom: 6px !important;
+        /* Bù đúng 9px trên & -9px dưới của .d-item cha để khớp khít hoàn toàn không hở khe */
+        html body #set-menu .d-item.flex-between > .sub-menu.show {
+          max-height: 220px !important;
+          margin-top: 9px !important;
+          margin-bottom: -9px !important;
+          padding: 0 !important;
+          border-top: 1px solid var(--glass-border) !important;
+          border-bottom: 1px solid var(--glass-border) !important;
           opacity: 1 !important;
           visibility: visible !important;
           pointer-events: auto !important;
-          border-color: var(--glass-border) !important;
           transition:
-            max-height 0.48s cubic-bezier(0.16, 1, 0.3, 1),
-            margin-top 0.48s cubic-bezier(0.16, 1, 0.3, 1),
-            padding-top 0.48s cubic-bezier(0.16, 1, 0.3, 1),
-            padding-bottom 0.48s cubic-bezier(0.16, 1, 0.3, 1),
-            opacity 0.26s ease 0.04s,
-            border-color 0.26s ease,
+            max-height 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+            margin-top 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+            margin-bottom 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+            opacity 0.24s ease 0.03s,
+            border-color 0.24s ease,
             visibility 0s linear 0s !important;
         }
 
-        [data-theme="light"] #set-menu .sub-menu {
-          background: rgba(0, 0, 0, 0.035) !important;
+        html
+          body[data-theme="light"]
+          #set-menu
+          .d-item.flex-between
+          > .sub-menu {
+          background: rgba(0, 0, 0, 0.03) !important;
         }
 
-        #set-menu .sub-menu > .d-item {
-          padding: 8px 12px !important;
-          font-size: 13.5px !important;
-          border-radius: 9px !important;
-        }
-
-        /* Ẩn ngay giọt nước bên trong khi menu con bắt đầu đóng để không còn bóng mờ kẹt lại */
-        #set-menu .sub-menu:not(.show) > .tng-glow-pill {
+        /* 4. Tắt hoàn toàn giọt kính lỏng bên trong 2 menu con trên điện thoại */
+        html body #set-menu .d-item.flex-between > .sub-menu > .tng-glow-pill {
+          display: none !important;
           opacity: 0 !important;
-          transition: opacity 0.14s ease !important;
+          visibility: hidden !important;
+        }
+
+        /* 5. Các tùy chọn tràn sát 2 mép, chữ thẳng hàng tiêu đề, bỏ hiệu ứng kính */
+        html body #set-menu .d-item.flex-between > .sub-menu > .d-item {
+          width: 100% !important;
+          border-radius: 0 !important;
+          margin: 0 !important;
+          padding: 11px 20px 11px 53px !important;
+          font-size: 14px !important;
+          font-weight: 500 !important;
+          background: transparent !important;
+          background-color: transparent !important;
+          color: var(--text-main) !important;
+          transition:
+            background-color 0.18s ease,
+            color 0.18s ease !important;
+        }
+
+        /* Nhãn phụ "Hệ thống" giữ chữ xám gọn gàng */
+        html
+          body
+          #set-menu
+          #theme-menu
+          > .d-item[style*="pointer-events: none"],
+        html
+          body
+          #set-menu
+          #theme-menu
+          > .d-item[style*="pointer-events:none"] {
+          padding: 9px 20px 7px 53px !important;
+          font-size: 12.5px !important;
+          color: var(--text-sub) !important;
+        }
+
+        /* Mục đang chọn (Sáng / Tối): thanh phát sáng phẳng thường tràn ngang + dấu tích ✔ */
+        html
+          body[data-theme="dark"]
+          #set-menu
+          #theme-menu
+          > .d-item[onclick*="'dark'"],
+        html
+          body[data-theme="dark"]
+          #set-menu
+          #theme-menu
+          > .d-item[onclick*="'dark'"]:hover,
+        html
+          body[data-theme="dark"]
+          #set-menu
+          #theme-menu
+          > .d-item[onclick*="'dark'"]:active {
+          background-color: rgba(255, 255, 255, 0.1) !important;
+          color: var(--btn-blue) !important;
+          font-weight: 600 !important;
+        }
+        html
+          body[data-theme="light"]
+          #set-menu
+          #theme-menu
+          > .d-item[onclick*="'light'"],
+        html
+          body[data-theme="light"]
+          #set-menu
+          #theme-menu
+          > .d-item[onclick*="'light'"]:hover,
+        html
+          body[data-theme="light"]
+          #set-menu
+          #theme-menu
+          > .d-item[onclick*="'light'"]:active {
+          background-color: rgba(0, 0, 0, 0.07) !important;
+          color: var(--btn-blue) !important;
+          font-weight: 600 !important;
+        }
+
+        html
+          body[data-theme="dark"]
+          #set-menu
+          #theme-menu
+          > .d-item[onclick*="'dark'"]
+          .chk-dark,
+        html
+          body[data-theme="light"]
+          #set-menu
+          #theme-menu
+          > .d-item[onclick*="'light'"]
+          .chk-light {
+          display: inline-flex !important;
+          margin-left: auto !important;
+          color: var(--btn-blue) !important;
+          font-weight: 700 !important;
+        }
+
+        /* Phản hồi phát sáng thanh phẳng thường khi chạm trên cả Giao diện & Trợ giúp */
+        html
+          body
+          #set-menu
+          .d-item.flex-between
+          > .sub-menu.tng-glow-menu
+          > .d-item:active {
+          background-color: rgba(255, 255, 255, 0.15) !important;
+          transition-duration: 0.05s !important;
+        }
+        html
+          body[data-theme="light"]
+          #set-menu
+          .d-item.flex-between
+          > .sub-menu.tng-glow-menu
+          > .d-item:active {
+          background-color: rgba(0, 0, 0, 0.1) !important;
         }
       }
     </style>
@@ -34826,6 +34952,35 @@
               const fallback = setTimeout(triggerIfAllNotes, 45);
               replayTimers.push(fallback);
             }
+          });
+        });
+      })();
+
+      // ============================================================
+      // ĐỒNG BỘ MŨI TÊN & TẮT LỚP KÍNH CHO SUB-MENU TRÊN ĐIỆN THOẠI
+      // ============================================================
+      (function () {
+        const setMenu = document.getElementById("set-menu");
+        if (!setMenu) return;
+
+        const syncSubState = (sub) => {
+          const parent = sub.closest(".d-item.flex-between");
+          const isOpen = sub.classList.contains("show");
+          if (parent) parent.classList.toggle("tng-sub-open", isOpen);
+
+          // Trên điện thoại: xóa class focus của giọt kính để thanh sáng thường & dấu tích hiển thị chuẩn
+          if (window.innerWidth <= 768) {
+            sub
+              .querySelectorAll(".tng-pill-focus")
+              .forEach((el) => el.classList.remove("tng-pill-focus"));
+          }
+        };
+
+        setMenu.querySelectorAll(".sub-menu").forEach((sub) => {
+          syncSubState(sub);
+          new MutationObserver(() => syncSubState(sub)).observe(sub, {
+            attributes: true,
+            attributeFilter: ["class"],
           });
         });
       })();
