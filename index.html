@@ -5634,24 +5634,22 @@
 
       /* ============================================================ */
       /* TỐI ƯU MENU TRƯỢT GIAO DIỆN & TRỢ GIÚP TRÊN ĐIỆN THOẠI       */
-      /* Gộp chung 1 khối bo 4 góc 10px, nảy lên trên & thanh sáng ✓  */
+      /* Kéo bảng giãn nảy lên trên, hiển thị đủ 100% & thanh sáng ✓  */
       /* ============================================================ */
       @media (max-width: 768px) {
-        /* 1. Neo đáy cố định + khóa chiều cao tối đa để bảng nảy giãn lên trên không tràn màn hình */
+        /* 1. Neo chặt đáy, bỏ giới hạn max-height để bảng tự kéo cao & nảy lên trên hiển thị trọn vẹn */
         html body #set-menu.set-menu {
+          top: auto !important;
           bottom: 52px !important;
           padding: 10px 0 !important;
-          max-height: calc(100vh - 76px) !important;
-          max-height: calc(100dvh - 76px) !important;
-          overflow-y: auto !important;
-          overflow-x: hidden !important;
-          -webkit-overflow-scrolling: touch;
-          overscroll-behavior: contain;
-          scrollbar-width: none !important;
+          height: auto !important;
+          max-height: none !important;
+          overflow: hidden !important;
         }
-        html body #set-menu.set-menu::-webkit-scrollbar {
-          display: none !important;
-          width: 0 !important;
+
+        /* Khóa không cho flexbox bóp lùn hay cắt mất bất kỳ mục nào khi bảng giãn lên */
+        html body #set-menu.set-menu > * {
+          flex-shrink: 0 !important;
         }
 
         /* Tạm ẩn giọt kính ngoài khi đang mở khối gộp để không chồng 2 lớp viền lúc nảy lên */
@@ -5734,7 +5732,6 @@
           opacity: 1;
         }
 
-        /* Đẩy icon, chữ tiêu đề, mũi tên và menu con lên trên lớp nền tiêu đề */
         html body #set-menu .d-item.flex-between > * {
           position: relative;
           z-index: 1;
@@ -35001,7 +34998,7 @@
 
       // ============================================================
       // BỘ MÁY XỔ LÒ XO NẢY LÊN TRÊN CHO MENU CON TRÊN ĐIỆN THOẠI
-      // Neo chặt đáy bảng Cài đặt, kéo giãn mượt lên trên 60/120fps
+      // Bảng neo cố định đáy, tự do kéo giãn & nảy mượt lên trên 60/120fps
       // ============================================================
       (function () {
         const setMenu = document.getElementById("set-menu");
@@ -35013,25 +35010,6 @@
 
         let globalRaf = null;
         let lastTs = 0;
-        let userTouchedScroll = false;
-        let anchorRemainingBelow = 0;
-        let activeAnchorParent = null;
-
-        // Nếu người dùng tự vuốt cuộn thì nhường quyền cuộn ngay
-        setMenu.addEventListener(
-          "touchstart",
-          () => {
-            userTouchedScroll = true;
-          },
-          { passive: true },
-        );
-        setMenu.addEventListener(
-          "wheel",
-          () => {
-            userTouchedScroll = true;
-          },
-          { passive: true },
-        );
 
         const updateSetMenuOpenFlag = () => {
           const anyOpen = subs.some(
@@ -35059,33 +35037,9 @@
             if (ch.classList.contains("tng-glow-pill")) return;
             const cs = window.getComputedStyle(ch);
             if (cs.display === "none") return;
-            total += ch.offsetHeight;
+            total += ch.getBoundingClientRect().height || ch.offsetHeight;
           });
-          return Math.max(total, sub.scrollHeight, 60);
-        };
-
-        const captureBottomAnchor = (parent) => {
-          userTouchedScroll = false;
-          activeAnchorParent = parent || null;
-          anchorRemainingBelow = Math.max(
-            0,
-            setMenu.scrollHeight - setMenu.clientHeight - setMenu.scrollTop,
-          );
-        };
-
-        const keepBottomAnchored = () => {
-          if (userTouchedScroll || !isMobile()) return;
-          const maxScroll = Math.max(
-            0,
-            setMenu.scrollHeight - setMenu.clientHeight,
-          );
-          let nextTop = Math.max(0, maxScroll - anchorRemainingBelow);
-          // Đảm bảo dòng tiêu đề Giao diện / Trợ giúp không bị đẩy vượt quá mép trên khung nhìn
-          if (activeAnchorParent) {
-            const maxSafeTop = Math.max(0, activeAnchorParent.offsetTop - 8);
-            if (nextTop > maxSafeTop) nextTop = maxSafeTop;
-          }
-          setMenu.scrollTop = nextTop;
+          return Math.ceil(Math.max(total, sub.scrollHeight, 60));
         };
 
         const stepAllSprings = (ts) => {
@@ -35106,8 +35060,8 @@
             if (!st.running) return;
 
             // Lò xo iOS 27: mở nảy mềm lên trên (~8% overshoot), đóng thu gọn êm mượt
-            const k = st.opening ? 260 : 320;
-            const c = st.opening ? 20.2 : 27.5;
+            const k = st.opening ? 255 : 320;
+            const c = st.opening ? 20 : 27.5;
 
             for (let i = 0; i < 2; i++) {
               const acc = (st.target - st.h) * k - st.v * c;
@@ -35155,7 +35109,6 @@
             }
           });
 
-          keepBottomAnchored();
           updateSetMenuOpenFlag();
 
           if (anyMoving) {
@@ -35216,7 +35169,6 @@
               return;
             }
 
-            // Xóa class focus giọt kính trên điện thoại để hiển thị thanh sáng phẳng + dấu tích ✔
             sub
               .querySelectorAll(".tng-pill-focus")
               .forEach((el) => el.classList.remove("tng-pill-focus"));
@@ -35227,7 +35179,6 @@
             measureHeaderHeight(parent, sub);
 
             if (isOpen) {
-              captureBottomAnchor(parent);
               const naturalH = measureNaturalSubHeight(sub);
               st.lastTarget = naturalH;
               st.opening = true;
@@ -35243,7 +35194,6 @@
               updateSetMenuOpenFlag();
               startSpringLoop();
             } else {
-              captureBottomAnchor(parent);
               const curH = sub.offsetHeight || st.h || 0;
               st.opening = false;
               st.h = curH;
@@ -35277,7 +35227,6 @@
           });
         });
 
-        // Dọn trạng thái gọn gàng khi đóng cả bảng #set-menu
         new MutationObserver(() => {
           if (!setMenu.classList.contains("show") && isMobile()) {
             subs.forEach((sub) => sub.classList.remove("show"));
@@ -35287,7 +35236,6 @@
           attributeFilter: ["class"],
         });
 
-        // Trả lại hiển thị chuẩn nếu xoay ngang/đổi sang màn hình PC
         window.addEventListener("resize", () => {
           if (!isMobile()) clearMobileInlineStyles();
         });
