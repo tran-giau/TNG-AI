@@ -5634,10 +5634,10 @@
 
       /* ============================================================ */
       /* TỐI ƯU MENU TRƯỢT GIAO DIỆN & TRỢ GIÚP TRÊN ĐIỆN THOẠI       */
-      /* Kéo bảng giãn nảy lên trên, bo 11.5px khớp nước, đáy 12px    */
+      /* Hết giật cuối nhịp, xổ mượt iOS 27, bo 11.5px, đáy 12px      */
       /* ============================================================ */
       @media (max-width: 768px) {
-        /* 1. Neo chặt đáy, bỏ giới hạn max-height để bảng tự kéo cao & nảy lên trên hiển thị đủ */
+        /* 1. Neo chặt đáy để bảng tự kéo giãn & nảy êm lên trên, không cắt mất mục con */
         html body #set-menu.set-menu {
           top: auto !important;
           bottom: 52px !important;
@@ -5659,10 +5659,10 @@
         /* Tạm ẩn giọt kính ngoài khi đang mở khối gộp để không chồng 2 lớp viền */
         html body #set-menu.tng-has-sub-open > .tng-glow-pill {
           opacity: 0 !important;
-          transition: opacity 0.14s ease !important;
+          transition: opacity 0.16s ease !important;
         }
 
-        /* 2. Bọc cả mục Giao diện / Trợ giúp + menu con thành 1 khối bo 4 góc 11.5px khớp giọt nước */
+        /* 2. Bọc mục Giao diện / Trợ giúp + menu con thành 1 khối bo 4 góc 11.5px */
         html body #set-menu .d-item.flex-between {
           position: relative !important;
           flex-wrap: wrap !important;
@@ -5672,12 +5672,11 @@
           border-radius: 11.5px !important;
           overflow: hidden !important;
           transition:
-            background-color 0.24s ease,
-            box-shadow 0.26s ease !important;
+            background-color 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+            box-shadow 0.34s cubic-bezier(0.22, 1, 0.36, 1) !important;
         }
 
-        html body #set-menu .d-item.flex-between.tng-sub-open,
-        html body #set-menu .d-item.flex-between.tng-sub-animating {
+        html body #set-menu .d-item.flex-between.tng-sub-open {
           background-color: rgba(255, 255, 255, 0.045) !important;
           box-shadow:
             inset 0 0 0 1px rgba(255, 255, 255, 0.11),
@@ -5687,11 +5686,7 @@
         html
           body[data-theme="light"]
           #set-menu
-          .d-item.flex-between.tng-sub-open,
-        html
-          body[data-theme="light"]
-          #set-menu
-          .d-item.flex-between.tng-sub-animating {
+          .d-item.flex-between.tng-sub-open {
           background-color: rgba(0, 0, 0, 0.03) !important;
           box-shadow:
             inset 0 0 0 1px rgba(0, 0, 0, 0.1),
@@ -5718,7 +5713,7 @@
           opacity: 0;
           pointer-events: none;
           z-index: 0;
-          transition: opacity 0.22s ease;
+          transition: opacity 0.32s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
         html body[data-theme="light"] #set-menu .d-item.flex-between::before {
@@ -5741,23 +5736,50 @@
           z-index: 1;
         }
 
-        /* Xoay mũi tên ▶ xuống 90° đồng bộ khi mở */
-        html body #set-menu .d-item.flex-between > span:not(.sub-menu) {
-          display: inline-flex !important;
-          align-items: center;
-          justify-content: center;
-          transform-origin: center center !important;
-          transition:
-            transform 0.42s cubic-bezier(0.34, 1.56, 0.64, 1),
-            color 0.22s ease !important;
-        }
+        /* Mũi tên chevron chuẩn iOS đúng tâm trục, xoay 90° êm không xung đột :active */
         html
           body
           #set-menu
-          .d-item.flex-between.tng-sub-open
-          > span:not(.sub-menu) {
-          transform: rotate(90deg) !important;
-          color: var(--btn-blue) !important;
+          .d-item.flex-between:has(> .sub-menu)
+          > span:not(.sub-menu):not(.s-badge) {
+          display: inline-flex !important;
+          align-items: center;
+          justify-content: center;
+          width: 20px;
+          height: 20px;
+          font-size: 0 !important;
+          line-height: 0 !important;
+          color: transparent !important;
+          flex-shrink: 0;
+        }
+
+        html
+          body
+          #set-menu
+          .d-item.flex-between:has(> .sub-menu)
+          > span:not(.sub-menu):not(.s-badge)::after {
+          content: "";
+          display: block;
+          width: 6.5px;
+          height: 6.5px;
+          border-right: 1.8px solid var(--text-sub);
+          border-bottom: 1.8px solid var(--text-sub);
+          border-radius: 1px;
+          transform: translateX(-1.5px) rotate(-45deg);
+          transform-origin: center center;
+          will-change: transform, border-color;
+          transition:
+            transform 0.48s cubic-bezier(0.22, 1, 0.36, 1),
+            border-color 0.28s ease;
+        }
+
+        html
+          body
+          #set-menu
+          .d-item.flex-between.tng-sub-open:has(> .sub-menu)
+          > span:not(.sub-menu):not(.s-badge)::after {
+          transform: translateY(-1.5px) rotate(45deg);
+          border-color: var(--btn-blue);
         }
 
         /* Không lún nhầm tiêu đề cha khi chạm vào các tùy chọn con */
@@ -5769,7 +5791,7 @@
           transform: scale(1) !important;
         }
 
-        /* 3. Khung chứa tùy chọn con: mở khóa padding trên/dưới (thoáng đáy 12px) */
+        /* 3. Khung chứa tùy chọn con: không khóa padding bằng !important để JS kiểm soát 0.00px */
         html body #set-menu .d-item.flex-between > .sub-menu {
           position: relative !important;
           display: flex !important;
@@ -5803,7 +5825,6 @@
           transition: none !important;
         }
 
-        /* Đảm bảo chữ luôn hiển thị rõ ngay khi mở hoặc đang trượt lò xo */
         html body #set-menu .d-item.flex-between > .sub-menu.show,
         html body #set-menu .d-item.flex-between > .sub-menu.tng-sub-animating {
           visibility: visible !important;
@@ -5826,7 +5847,7 @@
           visibility: hidden !important;
         }
 
-        /* 5. Tùy chọn con phát sáng thanh phẳng thường + dấu tích ✔ ở cuối */
+        /* 5. Tùy chọn con trượt mờ mượt theo nhịp mở/đóng (iOS 27 Silk Cascade) */
         html body #set-menu .d-item.flex-between > .sub-menu > .d-item {
           width: 100% !important;
           flex-shrink: 0 !important;
@@ -5838,9 +5859,62 @@
           background: transparent !important;
           background-color: transparent !important;
           color: var(--text-main) !important;
+          opacity: 0;
+          transform: translate3d(0, -10px, 0) scale(0.975) !important;
+          filter: blur(2.5px);
+          will-change: transform, opacity, filter;
           transition:
+            transform 0.26s cubic-bezier(0.4, 0, 0.2, 1),
+            opacity 0.2s ease,
+            filter 0.2s ease,
             background-color 0.18s ease,
             color 0.18s ease !important;
+        }
+
+        html body #set-menu .d-item.flex-between > .sub-menu.show > .d-item {
+          opacity: 1;
+          transform: translate3d(0, 0, 0) scale(1) !important;
+          filter: blur(0px);
+          transition:
+            transform 0.52s cubic-bezier(0.16, 1, 0.3, 1),
+            opacity 0.38s ease,
+            filter 0.38s ease,
+            background-color 0.18s ease,
+            color 0.18s ease !important;
+        }
+
+        /* Nhịp xuất hiện nối tiếp tinh tế từng dòng khi xổ ra */
+        html
+          body
+          #set-menu
+          .d-item.flex-between
+          > .sub-menu.show
+          > .d-item:nth-of-type(1) {
+          transition-delay: 0.02s !important;
+        }
+        html
+          body
+          #set-menu
+          .d-item.flex-between
+          > .sub-menu.show
+          > .d-item:nth-of-type(2) {
+          transition-delay: 0.055s !important;
+        }
+        html
+          body
+          #set-menu
+          .d-item.flex-between
+          > .sub-menu.show
+          > .d-item:nth-of-type(3) {
+          transition-delay: 0.09s !important;
+        }
+        html
+          body
+          #set-menu
+          .d-item.flex-between
+          > .sub-menu.show
+          > .d-item:nth-of-type(4) {
+          transition-delay: 0.125s !important;
         }
 
         /* Nhãn phụ "Hệ thống" */
@@ -5917,9 +5991,10 @@
           font-weight: 700 !important;
         }
 
-        /* Phản hồi sáng thanh phẳng khi chạm vào các tùy chọn con */
+        /* Phản hồi sáng thanh phẳng tức thì khi chạm vào tùy chọn con */
         html body #set-menu .d-item.flex-between > .sub-menu > .d-item:active {
           background-color: rgba(255, 255, 255, 0.15) !important;
+          transition-delay: 0s !important;
           transition-duration: 0.05s !important;
         }
         html
@@ -35012,15 +35087,15 @@
       })();
 
       // ============================================================
-      // BỘ MÁY XỔ LÒ XO NẢY LÊN TRÊN CHO MENU CON TRÊN ĐIỆN THOẠI
-      // Tự do kéo giãn lên trên + kéo thoáng phần đáy menu (12px)
+      // BỘ MÁY XỔ LÒ XO NẢY LÊN TRÊN CHUẨN IOS 27 CHO ĐIỆN THOẠI
+      // Đo sub-pixel chống giật kết thúc + đóng mở êm mượt 60/120fps
       // ============================================================
       (function () {
         const setMenu = document.getElementById("set-menu");
         if (!setMenu) return;
 
         const BASE_PAD_TOP = 6;
-        const BASE_PAD_BOTTOM = 8;
+        const BASE_PAD_BOTTOM = 12;
 
         const isMobile = () => window.innerWidth <= 768;
         const subs = Array.from(setMenu.querySelectorAll(".sub-menu"));
@@ -35049,18 +35124,35 @@
           return h;
         };
 
+        // Đo chính xác tuyệt đối chiều cao auto thực tế (kèm padding 6px / 12px) để không bao giờ giật ở cuối nhịp
         const measureNaturalSubHeight = (sub) => {
-          let contentTotal = 0;
-          Array.from(sub.children).forEach((ch) => {
-            if (ch.classList.contains("tng-glow-pill")) return;
-            const cs = window.getComputedStyle(ch);
-            if (cs.display === "none") return;
-            contentTotal +=
-              ch.getBoundingClientRect().height || ch.offsetHeight;
-          });
-          return Math.ceil(
-            Math.max(contentTotal, 40) + BASE_PAD_TOP + BASE_PAD_BOTTOM,
+          const prevH = sub.style.height;
+          const prevPT = sub.style.paddingTop;
+          const prevPB = sub.style.paddingBottom;
+
+          sub.style.setProperty("height", "auto", "important");
+          sub.style.setProperty(
+            "padding-top",
+            BASE_PAD_TOP + "px",
+            "important",
           );
+          sub.style.setProperty(
+            "padding-bottom",
+            BASE_PAD_BOTTOM + "px",
+            "important",
+          );
+
+          const naturalH = sub.getBoundingClientRect().height;
+
+          if (prevH) sub.style.setProperty("height", prevH, "important");
+          else sub.style.removeProperty("height");
+          if (prevPT) sub.style.setProperty("padding-top", prevPT, "important");
+          else sub.style.removeProperty("padding-top");
+          if (prevPB)
+            sub.style.setProperty("padding-bottom", prevPB, "important");
+          else sub.style.removeProperty("padding-bottom");
+
+          return Math.max(naturalH, 40 + BASE_PAD_TOP + BASE_PAD_BOTTOM);
         };
 
         const stepAllSprings = (ts) => {
@@ -35080,8 +35172,11 @@
           states.forEach((st, sub) => {
             if (!st.running) return;
 
-            const k = st.opening ? 255 : 320;
-            const c = st.opening ? 20 : 27.5;
+            // Lò xo iOS 27 tinh chỉnh:
+            // - Mở: êm dẻo, nảy nhẹ lên trên ~5.7% (k=210, c=19.5)
+            // - Đóng: thu mềm có giảm chấn mượt (k=230, c=28)
+            const k = st.opening ? 210 : 230;
+            const c = st.opening ? 19.5 : 28;
 
             for (let i = 0; i < 2; i++) {
               const acc = (st.target - st.h) * k - st.v * c;
@@ -35094,17 +35189,29 @@
             const progress = Math.max(0, Math.min(1, clampedH / denom));
             const extra = st.opening ? Math.max(0, clampedH - st.target) : 0;
 
-            sub.style.height = clampedH.toFixed(2) + "px";
-            sub.style.paddingTop =
-              (BASE_PAD_TOP * progress + extra * 0.3).toFixed(2) + "px";
-            sub.style.paddingBottom =
-              (BASE_PAD_BOTTOM * progress + extra * 0.7).toFixed(2) + "px";
+            sub.style.setProperty(
+              "height",
+              clampedH.toFixed(2) + "px",
+              "important",
+            );
+            sub.style.setProperty(
+              "padding-top",
+              (BASE_PAD_TOP * progress + extra * 0.25).toFixed(2) + "px",
+              "important",
+            );
+            sub.style.setProperty(
+              "padding-bottom",
+              (BASE_PAD_BOTTOM * progress + extra * 0.75).toFixed(2) + "px",
+              "important",
+            );
 
-            const op = Math.max(0, Math.min(1, clampedH / (denom * 0.55)));
-            sub.style.opacity = op.toFixed(3);
+            const op = st.opening
+              ? Math.max(0, Math.min(1, clampedH / (denom * 0.45)))
+              : Math.max(0, Math.min(1, clampedH / (denom * 0.65)));
+            sub.style.setProperty("opacity", op.toFixed(3), "important");
 
             const settled =
-              Math.abs(st.target - st.h) < 0.25 && Math.abs(st.v) < 0.8;
+              Math.abs(st.target - st.h) < 0.18 && Math.abs(st.v) < 0.6;
 
             if (settled) {
               st.running = false;
@@ -35112,17 +35219,26 @@
               st.v = 0;
 
               if (st.opening) {
-                sub.style.paddingTop = BASE_PAD_TOP + "px";
-                sub.style.paddingBottom = BASE_PAD_BOTTOM + "px";
-                sub.style.height = "auto";
-                sub.style.opacity = "1";
+                sub.style.setProperty(
+                  "padding-top",
+                  BASE_PAD_TOP + "px",
+                  "important",
+                );
+                sub.style.setProperty(
+                  "padding-bottom",
+                  BASE_PAD_BOTTOM + "px",
+                  "important",
+                );
+                // Giữ đúng chiều cao đã đo bằng height: auto (trùng khít 0.00px nên hoàn toàn không giật)
+                sub.style.setProperty("height", "auto", "important");
+                sub.style.setProperty("opacity", "1", "important");
                 sub.classList.remove("tng-sub-animating");
                 if (st.parent) st.parent.classList.remove("tng-sub-animating");
               } else {
-                sub.style.paddingTop = "0px";
-                sub.style.paddingBottom = "0px";
-                sub.style.height = "0px";
-                sub.style.opacity = "0";
+                sub.style.setProperty("padding-top", "0px", "important");
+                sub.style.setProperty("padding-bottom", "0px", "important");
+                sub.style.setProperty("height", "0px", "important");
+                sub.style.setProperty("opacity", "0", "important");
                 sub.classList.remove("tng-sub-animating");
                 if (st.parent) {
                   st.parent.classList.remove("tng-sub-animating");
@@ -35161,10 +35277,10 @@
             st.running = false;
             st.h = 0;
             st.v = 0;
-            sub.style.height = "";
-            sub.style.opacity = "";
-            sub.style.paddingTop = "";
-            sub.style.paddingBottom = "";
+            sub.style.removeProperty("height");
+            sub.style.removeProperty("opacity");
+            sub.style.removeProperty("padding-top");
+            sub.style.removeProperty("padding-bottom");
             sub.classList.remove("tng-sub-animating");
             if (st.parent) {
               st.parent.classList.remove("tng-sub-open", "tng-sub-animating");
@@ -35204,22 +35320,27 @@
             measureHeaderHeight(parent, sub);
 
             if (isOpen) {
+              const startH = sub.getBoundingClientRect().height || 0;
               const naturalH = measureNaturalSubHeight(sub);
               st.lastTarget = naturalH;
               st.opening = true;
               st.target = naturalH;
-              st.h = sub.offsetHeight || 0;
+              st.h = startH;
               st.running = true;
 
               sub.classList.add("tng-sub-animating");
               if (parent) {
                 parent.classList.add("tng-sub-open", "tng-sub-animating");
               }
-              sub.style.height = st.h.toFixed(2) + "px";
+              sub.style.setProperty(
+                "height",
+                startH.toFixed(2) + "px",
+                "important",
+              );
               updateSetMenuOpenFlag();
               startSpringLoop();
             } else {
-              const curH = sub.offsetHeight || st.h || 0;
+              const curH = sub.getBoundingClientRect().height || st.h || 0;
               st.lastTarget = Math.max(curH, st.lastTarget || 80);
               st.opening = false;
               st.h = curH;
@@ -35232,14 +35353,18 @@
                   parent.classList.remove("tng-sub-open");
                   parent.classList.add("tng-sub-animating");
                 }
-                sub.style.height = curH.toFixed(2) + "px";
+                sub.style.setProperty(
+                  "height",
+                  curH.toFixed(2) + "px",
+                  "important",
+                );
                 updateSetMenuOpenFlag();
                 startSpringLoop();
               } else {
-                sub.style.paddingTop = "0px";
-                sub.style.paddingBottom = "0px";
-                sub.style.height = "0px";
-                sub.style.opacity = "0";
+                sub.style.setProperty("padding-top", "0px", "important");
+                sub.style.setProperty("padding-bottom", "0px", "important");
+                sub.style.setProperty("height", "0px", "important");
+                sub.style.setProperty("opacity", "0", "important");
                 sub.classList.remove("tng-sub-animating");
                 if (parent) {
                   parent.classList.remove("tng-sub-open", "tng-sub-animating");
