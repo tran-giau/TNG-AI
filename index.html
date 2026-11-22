@@ -5626,22 +5626,32 @@
       }
 
       /* ============================================================ */
-      /* FIX GIẬT THANH CHAT CUỘC TRÒ CHUYỆN MỚI TRÊN ĐIỆN THOẠI     */
+      /* FIX GIẬT HIỆU ỨNG KHỞI ĐỘNG (THANH CUỘN 8PX) CHO CẢ 4 MỤC   */
+      /* (Cuộc trò chuyện mới, Tìm kiếm, Thư viện, Tất cả sổ ghi chú) */
       /* ============================================================ */
-      /* 1. Ẩn thanh cuộn 8px ở màn hình chính để không làm co giãn bề ngang gây giật */
-      #home.home-view {
+      /* 1. Ẩn thanh cuộn 8px ở cả 4 màn hình để không co giãn bề ngang gây giật khi bay 3D */
+      #home.home-view,
+      #search-view.search-view,
+      #my-content-view.my-content-view,
+      #all-notes-view.all-notes-view {
         scrollbar-width: none !important;
         -ms-overflow-style: none !important;
       }
-      #home.home-view::-webkit-scrollbar {
+      #home.home-view::-webkit-scrollbar,
+      #search-view.search-view::-webkit-scrollbar,
+      #my-content-view.my-content-view::-webkit-scrollbar,
+      #all-notes-view.all-notes-view::-webkit-scrollbar {
         display: none !important;
         width: 0 !important;
         height: 0 !important;
       }
 
       @media (max-width: 768px) {
-        /* 2. Chặn #home tạo containing-block tạm làm nhảy vị trí position: fixed của thanh chat */
-        #home.home-view {
+        /* 2. Khóa lớp khung cha của cả 4 mục, bỏ will-change thừa tránh giật/khựng khi chạy hiệu ứng trên điện thoại */
+        #home.home-view,
+        #search-view.search-view,
+        #my-content-view.my-content-view,
+        #all-notes-view.all-notes-view {
           will-change: auto !important;
           transform: none !important;
           perspective: none !important;
@@ -8338,6 +8348,200 @@
           background-color 0.14s ease !important;
         transform: scale(0.8) rotate(0deg) !important;
         opacity: 0.9 !important;
+      }
+
+      /* ============================================================ */
+      /* ĐỒNG BỘ VỊ TRÍ CHIỀU DỌC 3 MỤC TRÊN ĐIỆN THOẠI               */
+      /* (Tìm kiếm - Thư viện - Tất cả sổ ghi chú)                    */
+      /* ============================================================ */
+      @media (max-width: 768px) {
+        /* 1. Khóa cùng 1 khoảng cách đỉnh (28px) và lề trái/phải (20px) */
+        /* Dịch chuyển ở khung cha nên mọi phần tử bên trong tự đi theo, giữ nguyên khoảng cách */
+        html body #search-view.search-view,
+        html body #my-content-view.my-content-view,
+        html body #all-notes-view.all-notes-view {
+          padding: 28px 20px 100px 20px !important;
+        }
+
+        /* 2. Đồng bộ chiều cao hộp tiêu đề về cùng 40px (khớp nút + tròn 40px ở Sổ ghi chú) */
+        html body #search-view .sv-title,
+        html body #my-content-view .mc-header {
+          margin-top: 0 !important;
+          min-height: 40px !important;
+          line-height: 40px !important;
+        }
+
+        html body #all-notes-view > h1 {
+          margin-top: 0 !important;
+          min-height: 40px !important;
+          display: flex !important;
+          align-items: center !important;
+        }
+      }
+
+      /* ============================================================ */
+      /* THÊM HIỆU ỨNG THÓP / PHÌNH TRÊN-DƯỚI KHI TRƯỢT NGANG         */
+      /* (Đồng bộ đảo trục 90° từ hiệu ứng trái-phải của trượt dọc)   */
+      /* ============================================================ */
+
+      /* 1. Mở overflow để viền kính trên/dưới phình đàn hồi không bị cắt mép */
+      html body #sp-body .tng-sub-tabs {
+        overflow: visible !important;
+      }
+
+      /* 2. Mở khóa biên độ phình trên-dưới khi nước đụng mép trái/phải */
+      html body #sp-body .tng-sub-tabs > .tng-sub-glass-pill > .tng-lg-drop {
+        --hit-sy-x: 1.1;
+      }
+
+      /* 3. Khi đang trượt ngang: kéo dài ngang + thóp eo rõ 2 cạnh trên-dưới, rồi phình nhẹ khi hãm phanh */
+      @keyframes tngLgSlideX {
+        0% {
+          transform: scale3d(1, 1, 1);
+        }
+        32% {
+          transform: scale3d(1.065, 0.83, 1);
+        }
+        68% {
+          transform: scale3d(0.975, 1.055, 1);
+        }
+        86% {
+          transform: scale3d(1.008, 0.99, 1);
+        }
+        100% {
+          transform: scale3d(1, 1, 1);
+        }
+      }
+
+      html body #sp-body .tng-sub-tabs .tng-lg-drop.tng-lg-sliding-x {
+        animation: tngLgSlideX 0.42s cubic-bezier(0.22, 1, 0.36, 1) forwards !important;
+      }
+
+      html body #sp-body .tng-sub-tabs.returning .tng-lg-drop.tng-lg-sliding-x {
+        animation: tngLgSlideX 0.48s cubic-bezier(0.22, 1, 0.36, 1) forwards !important;
+      }
+
+      /* 4. Khi đụng 2 đầu Cá nhân / Doanh nghiệp: dẹp ngang + phình nảy trên-dưới rồi hồi êm */
+      @keyframes tngLgHitX {
+        0% {
+          transform: scale3d(1, 1, 1);
+        }
+        24% {
+          transform: scale3d(0.87, var(--hit-sy-x, 1.1), 1);
+        }
+        52% {
+          transform: scale3d(1.035, 0.955, 1);
+        }
+        76% {
+          transform: scale3d(0.992, 1.012, 1);
+        }
+        100% {
+          transform: scale3d(1, 1, 1);
+        }
+      }
+
+      /* ============================================================ */
+      /* ĐỒNG BỘ TÔNG MÀU HỘP THOẠI: VÀNG (SỔ GHI CHÚ) & ĐỎ (XÓA)     */
+      /* ============================================================ */
+
+      /* 1. Tạo sổ mới & Đổi tên quyển sổ: Vàng mật ong chuẩn sắc, giữ nguyên dấu nháy mặc định */
+      html body #custom-modal-overlay .custom-modal.cm-theme-note #cm-input {
+        border-color: rgba(245, 200, 66, 0.26) !important;
+        transition:
+          border-color 0.25s ease,
+          box-shadow 0.25s ease;
+      }
+      html
+        body
+        #custom-modal-overlay
+        .custom-modal.cm-theme-note
+        #cm-input:focus {
+        border-color: rgba(245, 200, 66, 0.58) !important;
+        box-shadow: 0 0 0 3px rgba(245, 200, 66, 0.1) !important;
+      }
+      html
+        body
+        #custom-modal-overlay
+        .custom-modal.cm-theme-note
+        #cm-confirm-btn {
+        background: rgba(255, 255, 255, 0.07) !important;
+        color: #f5c842 !important;
+        box-shadow: inset 0 0 0 1px rgba(245, 200, 66, 0.36) !important;
+      }
+      html
+        body
+        #custom-modal-overlay
+        .custom-modal.cm-theme-note
+        #cm-confirm-btn:hover {
+        background: rgba(245, 200, 66, 0.13) !important;
+        box-shadow: inset 0 0 0 1px rgba(245, 200, 66, 0.55) !important;
+      }
+
+      /* Đồng bộ giao diện Sáng cho hộp thoại Sổ ghi chú */
+      html
+        body[data-theme="light"]
+        #custom-modal-overlay
+        .custom-modal.cm-theme-note
+        #cm-input {
+        border-color: rgba(204, 153, 0, 0.3) !important;
+      }
+      html
+        body[data-theme="light"]
+        #custom-modal-overlay
+        .custom-modal.cm-theme-note
+        #cm-input:focus {
+        border-color: #d49b00 !important;
+        box-shadow: 0 0 0 3px rgba(255, 204, 0, 0.16) !important;
+      }
+      html
+        body[data-theme="light"]
+        #custom-modal-overlay
+        .custom-modal.cm-theme-note
+        #cm-confirm-btn {
+        background: rgba(255, 204, 0, 0.16) !important;
+        color: #9e7100 !important;
+        box-shadow: inset 0 0 0 1px rgba(212, 155, 0, 0.35) !important;
+      }
+      html
+        body[data-theme="light"]
+        #custom-modal-overlay
+        .custom-modal.cm-theme-note
+        #cm-confirm-btn:hover {
+        background: rgba(255, 204, 0, 0.26) !important;
+      }
+
+      /* 2. Hỏi xác nhận xóa toàn hệ thống: Nút Đồng ý tông đỏ */
+      html
+        body
+        #custom-modal-overlay
+        .custom-modal.cm-theme-danger
+        #cm-confirm-btn {
+        background: rgba(255, 69, 58, 0.16) !important;
+        color: #ff6961 !important;
+      }
+      html
+        body
+        #custom-modal-overlay
+        .custom-modal.cm-theme-danger
+        #cm-confirm-btn:hover {
+        background: rgba(255, 69, 58, 0.26) !important;
+      }
+
+      /* Đồng bộ giao diện Sáng cho nút Đồng ý xóa */
+      html
+        body[data-theme="light"]
+        #custom-modal-overlay
+        .custom-modal.cm-theme-danger
+        #cm-confirm-btn {
+        background: rgba(255, 59, 48, 0.12) !important;
+        color: #d93025 !important;
+      }
+      html
+        body[data-theme="light"]
+        #custom-modal-overlay
+        .custom-modal.cm-theme-danger
+        #cm-confirm-btn:hover {
+        background: rgba(255, 59, 48, 0.22) !important;
       }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -14291,7 +14495,87 @@
         style="color: var(--danger)"
         onclick="execHist('delete')"
       >
-        <span class="si-ic">🗑</span> Xoá
+        <span
+          class="si-ic"
+          style="
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+          "
+          ><svg
+            viewBox="0 0 100 100"
+            style="width: 100%; height: 100%; display: block; overflow: visible"
+          >
+            <g filter="url(#ios-extreme-pop)">
+              <path
+                d="M 38 22 V 17 C 38 13.5 40.5 11 44 11 H 56 C 59.5 11 62 13.5 62 17 V 22"
+                fill="none"
+                stroke="#ff6961"
+                stroke-width="6.5"
+                stroke-linecap="round"
+              />
+              <rect
+                x="18"
+                y="21"
+                width="64"
+                height="10"
+                rx="5"
+                fill="#ff5a52"
+              />
+              <rect
+                x="22"
+                y="22.5"
+                width="56"
+                height="3"
+                rx="1.5"
+                fill="rgba(255,255,255,0.42)"
+              />
+              <path
+                d="M 24 34 H 76 L 71.5 82 C 71 86.5 67.5 89 63 89 H 37 C 32.5 89 29 86.5 28.5 82 Z"
+                fill="#ff3b30"
+              />
+              <path
+                d="M 25 34 H 75 L 74.2 42 H 25.8 Z"
+                fill="rgba(0,0,0,0.16)"
+              />
+              <path
+                d="M 24 34 H 76 L 71.5 82 C 71 86.5 67.5 89 63 89 H 37 C 32.5 89 29 86.5 28.5 82 Z"
+                fill="none"
+                stroke="rgba(255,255,255,0.22)"
+                stroke-width="1.5"
+              />
+              <line
+                x1="39"
+                y1="45"
+                x2="40.5"
+                y2="76"
+                stroke="rgba(255,255,255,0.82)"
+                stroke-width="5.2"
+                stroke-linecap="round"
+              />
+              <line
+                x1="50"
+                y1="45"
+                x2="50"
+                y2="76"
+                stroke="rgba(255,255,255,0.82)"
+                stroke-width="5.2"
+                stroke-linecap="round"
+              />
+              <line
+                x1="61"
+                y1="45"
+                x2="59.5"
+                y2="76"
+                stroke="rgba(255,255,255,0.82)"
+                stroke-width="5.2"
+                stroke-linecap="round"
+              />
+            </g></svg
+        ></span>
+        Xoá
       </div>
     </div>
     <div class="hist-options-menu" id="note-options-menu">
@@ -14306,7 +14590,87 @@
         style="color: var(--danger)"
         onclick="execNote('delete')"
       >
-        <span class="si-ic">🗑</span> Xoá
+        <span
+          class="si-ic"
+          style="
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+          "
+          ><svg
+            viewBox="0 0 100 100"
+            style="width: 100%; height: 100%; display: block; overflow: visible"
+          >
+            <g filter="url(#ios-extreme-pop)">
+              <path
+                d="M 38 22 V 17 C 38 13.5 40.5 11 44 11 H 56 C 59.5 11 62 13.5 62 17 V 22"
+                fill="none"
+                stroke="#ff6961"
+                stroke-width="6.5"
+                stroke-linecap="round"
+              />
+              <rect
+                x="18"
+                y="21"
+                width="64"
+                height="10"
+                rx="5"
+                fill="#ff5a52"
+              />
+              <rect
+                x="22"
+                y="22.5"
+                width="56"
+                height="3"
+                rx="1.5"
+                fill="rgba(255,255,255,0.42)"
+              />
+              <path
+                d="M 24 34 H 76 L 71.5 82 C 71 86.5 67.5 89 63 89 H 37 C 32.5 89 29 86.5 28.5 82 Z"
+                fill="#ff3b30"
+              />
+              <path
+                d="M 25 34 H 75 L 74.2 42 H 25.8 Z"
+                fill="rgba(0,0,0,0.16)"
+              />
+              <path
+                d="M 24 34 H 76 L 71.5 82 C 71 86.5 67.5 89 63 89 H 37 C 32.5 89 29 86.5 28.5 82 Z"
+                fill="none"
+                stroke="rgba(255,255,255,0.22)"
+                stroke-width="1.5"
+              />
+              <line
+                x1="39"
+                y1="45"
+                x2="40.5"
+                y2="76"
+                stroke="rgba(255,255,255,0.82)"
+                stroke-width="5.2"
+                stroke-linecap="round"
+              />
+              <line
+                x1="50"
+                y1="45"
+                x2="50"
+                y2="76"
+                stroke="rgba(255,255,255,0.82)"
+                stroke-width="5.2"
+                stroke-linecap="round"
+              />
+              <line
+                x1="61"
+                y1="45"
+                x2="59.5"
+                y2="76"
+                stroke="rgba(255,255,255,0.82)"
+                stroke-width="5.2"
+                stroke-linecap="round"
+              />
+            </g></svg
+        ></span>
+        Xoá
       </div>
     </div>
     <div class="hist-options-menu" id="file-options-menu">
@@ -14321,7 +14685,87 @@
         style="color: var(--danger)"
         onclick="execFile('delete')"
       >
-        <span class="si-ic">🗑</span> Xoá
+        <span
+          class="si-ic"
+          style="
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+          "
+          ><svg
+            viewBox="0 0 100 100"
+            style="width: 100%; height: 100%; display: block; overflow: visible"
+          >
+            <g filter="url(#ios-extreme-pop)">
+              <path
+                d="M 38 22 V 17 C 38 13.5 40.5 11 44 11 H 56 C 59.5 11 62 13.5 62 17 V 22"
+                fill="none"
+                stroke="#ff6961"
+                stroke-width="6.5"
+                stroke-linecap="round"
+              />
+              <rect
+                x="18"
+                y="21"
+                width="64"
+                height="10"
+                rx="5"
+                fill="#ff5a52"
+              />
+              <rect
+                x="22"
+                y="22.5"
+                width="56"
+                height="3"
+                rx="1.5"
+                fill="rgba(255,255,255,0.42)"
+              />
+              <path
+                d="M 24 34 H 76 L 71.5 82 C 71 86.5 67.5 89 63 89 H 37 C 32.5 89 29 86.5 28.5 82 Z"
+                fill="#ff3b30"
+              />
+              <path
+                d="M 25 34 H 75 L 74.2 42 H 25.8 Z"
+                fill="rgba(0,0,0,0.16)"
+              />
+              <path
+                d="M 24 34 H 76 L 71.5 82 C 71 86.5 67.5 89 63 89 H 37 C 32.5 89 29 86.5 28.5 82 Z"
+                fill="none"
+                stroke="rgba(255,255,255,0.22)"
+                stroke-width="1.5"
+              />
+              <line
+                x1="39"
+                y1="45"
+                x2="40.5"
+                y2="76"
+                stroke="rgba(255,255,255,0.82)"
+                stroke-width="5.2"
+                stroke-linecap="round"
+              />
+              <line
+                x1="50"
+                y1="45"
+                x2="50"
+                y2="76"
+                stroke="rgba(255,255,255,0.82)"
+                stroke-width="5.2"
+                stroke-linecap="round"
+              />
+              <line
+                x1="61"
+                y1="45"
+                x2="59.5"
+                y2="76"
+                stroke="rgba(255,255,255,0.82)"
+                stroke-width="5.2"
+                stroke-linecap="round"
+              />
+            </g></svg
+        ></span>
+        Xoá
       </div>
     </div>
 
@@ -17066,9 +17510,27 @@
       let modalCallback = null;
       function openCustomModal(title, desc, showInput, confirmText, callback) {
         document.getElementById("cm-title").innerText = title;
-        let dEl = document.getElementById("cm-desc"),
+        let modalEl = document.querySelector(
+            "#custom-modal-overlay .custom-modal",
+          ),
+          dEl = document.getElementById("cm-desc"),
           iEl = document.getElementById("cm-input"),
           bEl = document.getElementById("cm-confirm-btn");
+        if (modalEl) {
+          modalEl.classList.remove("cm-theme-note", "cm-theme-danger");
+          let fullText = ((title || "") + " " + (desc || "")).toLowerCase();
+          if (
+            showInput &&
+            (fullText.includes("quyển sổ") || fullText.includes("sổ ghi chú"))
+          ) {
+            modalEl.classList.add("cm-theme-note");
+          } else if (
+            !showInput &&
+            (fullText.includes("xóa") || fullText.includes("xoá"))
+          ) {
+            modalEl.classList.add("cm-theme-danger");
+          }
+        }
         if (desc) {
           dEl.innerText = desc;
           dEl.style.display = "block";
@@ -24193,7 +24655,7 @@
                                                 <button class="ai-option-item" onclick="window.tngAiAction('listen', this)"><span>🔊</span> Đọc to văn bản</button>
                                                 <button class="ai-option-item" onclick="window.tngAiAction('share', this)"><span>🔗</span> Chia sẻ</button>
                                                 <button class="ai-option-item" onclick="window.tngAiAction('report', this)"><span>⚠️</span> Báo cáo vấn đề</button>
-                                                <button class="ai-option-item" style="color: #ff4d4d;" onclick="window.tngAiAction('delete', this)"><span>🗑️</span> Xóa tin nhắn</button>
+                                                <button class="ai-option-item" style="color: #ff4d4d;" onclick="window.tngAiAction('delete', this)"><span style="display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; flex-shrink: 0;"><svg viewBox="0 0 100 100" style="width: 100%; height: 100%; display: block; overflow: visible"><g filter="url(#ios-extreme-pop)"><path d="M 38 22 V 17 C 38 13.5 40.5 11 44 11 H 56 C 59.5 11 62 13.5 62 17 V 22" fill="none" stroke="#ff6961" stroke-width="6.5" stroke-linecap="round"/><rect x="18" y="21" width="64" height="10" rx="5" fill="#ff5a52"/><rect x="22" y="22.5" width="56" height="3" rx="1.5" fill="rgba(255,255,255,0.42)"/><path d="M 24 34 H 76 L 71.5 82 C 71 86.5 67.5 89 63 89 H 37 C 32.5 89 29 86.5 28.5 82 Z" fill="#ff3b30"/><path d="M 25 34 H 75 L 74.2 42 H 25.8 Z" fill="rgba(0,0,0,0.16)"/><path d="M 24 34 H 76 L 71.5 82 C 71 86.5 67.5 89 63 89 H 37 C 32.5 89 29 86.5 28.5 82 Z" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1.5"/><line x1="39" y1="45" x2="40.5" y2="76" stroke="rgba(255,255,255,0.82)" stroke-width="5.2" stroke-linecap="round"/><line x1="50" y1="45" x2="50" y2="76" stroke="rgba(255,255,255,0.82)" stroke-width="5.2" stroke-linecap="round"/><line x1="61" y1="45" x2="59.5" y2="76" stroke="rgba(255,255,255,0.82)" stroke-width="5.2" stroke-linecap="round"/></g></svg></span> Xóa tin nhắn</button>
                                             </div>
                                         </div>
                                       `;
