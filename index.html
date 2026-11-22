@@ -4434,44 +4434,6 @@
         animation: ai-breathe-btn 8s ease-in-out infinite !important;
       }
 
-      /* Nhịp thở phát sáng đồng bộ 8s cho riêng nút dấu + trong thanh chat */
-      @keyframes ai-breathe-chat-plus {
-        0%,
-        100% {
-          filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.25))
-            drop-shadow(0 0 3px rgba(155, 114, 203, 0.15))
-            drop-shadow(0 0 6px rgba(66, 133, 244, 0.1));
-        }
-        50% {
-          filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.25))
-            drop-shadow(0 0 11px rgba(155, 114, 203, 0.65))
-            drop-shadow(0 0 18px rgba(66, 133, 244, 0.45));
-        }
-      }
-
-      @keyframes ai-breathe-chat-plus-inner {
-        0%,
-        100% {
-          opacity: 0.18;
-        }
-        50% {
-          opacity: 0.95;
-        }
-      }
-
-      button[onclick*="m-att-h"] svg,
-      button[onclick*="m-att-c"] svg {
-        overflow: visible !important;
-        animation: ai-breathe-chat-plus 8s ease-in-out infinite !important;
-      }
-
-      button[onclick*="m-att-h"] svg g[clip-path] > path:nth-child(2),
-      button[onclick*="m-att-h"] svg g[clip-path] > path:nth-child(3),
-      button[onclick*="m-att-c"] svg g[clip-path] > path:nth-child(2),
-      button[onclick*="m-att-c"] svg g[clip-path] > path:nth-child(3) {
-        animation: ai-breathe-chat-plus-inner 8s ease-in-out infinite !important;
-      }
-
       /* Gắn hiệu ứng cho nút Gửi Mũi Tên */
       #send-btn-home,
       #send-btn-chat {
@@ -8313,6 +8275,70 @@
         animation: tngLgSlideX 0.34s cubic-bezier(0.22, 1, 0.36, 1) forwards !important;
         animation-play-state: running !important;
       }
+
+      /* ============================================================ */
+      /* HIỆU ỨNG XOAY DẤU + THÀNH × VÀ XOAY TRÒN 360° KHI ĐÓNG       */
+      /* ============================================================ */
+      button[onclick*="m-att-h"] svg,
+      button[onclick*="m-att-c"] svg {
+        transform-origin: center center;
+        will-change: transform;
+      }
+
+      button[onclick*="m-att-h"].tng-att-open,
+      button[onclick*="m-att-c"].tng-att-open {
+        background: rgba(255, 255, 255, 0.14) !important;
+        border-color: rgba(255, 255, 255, 0.22) !important;
+      }
+
+      [data-theme="light"] button[onclick*="m-att-h"].tng-att-open,
+      [data-theme="light"] button[onclick*="m-att-c"].tng-att-open {
+        background: rgba(0, 0, 0, 0.1) !important;
+        border-color: rgba(0, 0, 0, 0.16) !important;
+      }
+
+      /* ============================================================ */
+      /* LÚN ÊM & NẢY LÒ XO MƯỢT CHUẨN GPU CHO CÁC NÚT TRÒN THANH CHAT */
+      /* (+, Micro, LIVE AI, Gửi/Dừng - Áp dụng cả Home & Chat)       */
+      /* ============================================================ */
+      html body #iw-home .input-bottom button.icon-btn,
+      html body #iw-chat .input-bottom button.icon-btn {
+        transform-origin: center center !important;
+        backface-visibility: hidden !important;
+        -webkit-backface-visibility: hidden !important;
+        will-change: transform, opacity !important;
+        transition:
+          transform 0.52s cubic-bezier(0.22, 1.38, 0.36, 1),
+          opacity 0.28s ease,
+          background-color 0.22s ease !important;
+      }
+
+      @media (hover: hover) {
+        html body #iw-home .input-bottom button.icon-btn:hover:not([disabled]),
+        html body #iw-chat .input-bottom button.icon-btn:hover:not([disabled]) {
+          transform: scale(0.96) rotate(0deg) !important;
+        }
+      }
+
+      html body #iw-home .input-bottom button.icon-btn:active:not([disabled]),
+      html body #iw-chat .input-bottom button.icon-btn:active:not([disabled]),
+      html
+        body
+        #iw-home
+        .input-bottom
+        button.icon-btn.tng-ios-active:not([disabled]),
+      html
+        body
+        #iw-chat
+        .input-bottom
+        button.icon-btn.tng-ios-active:not([disabled]) {
+        transition:
+          transform 0.14s cubic-bezier(0.22, 1, 0.36, 1),
+          opacity 0.14s ease,
+          background-color 0.14s ease !important;
+        transform: scale(0.8) rotate(0deg) !important;
+        opacity: 0.9 !important;
+      }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
@@ -8837,118 +8863,168 @@
 
       <div class="sb-title">Sổ ghi chú</div>
 
-      <!-- MỤC 3: SỔ GHI CHÚ MỚI (Dấu Cộng 21px + Phát Sáng Nội Khối LIVE AI) -->
+      <!-- MỤC 3: SỔ GHI CHÚ MỚI (Thấu Kính Vàng Liquid Glass Khúc Xạ Thật) -->
       <div class="sb-item" onclick="createNewNote()">
         <span
           class="sb-icon ios27-art"
-          style="margin-right: 0; position: relative; top: -2px"
+          style="margin-right: 0; position: relative; top: 0"
         >
-          <svg viewBox="0 0 100 100">
+          <svg viewBox="0 0 100 100" style="overflow: visible">
             <defs>
-              <!-- Dải màu chuẩn nút LIVE AI -->
-              <linearGradient
-                id="note-plus-live-grad"
-                x1="0%"
-                y1="0%"
-                x2="100%"
-                y2="100%"
-              >
-                <stop offset="0%" stop-color="#4285f4" />
-                <stop offset="50%" stop-color="#9b72cb" />
-                <stop offset="100%" stop-color="#d96570" />
-              </linearGradient>
-
-              <!-- Quầng sáng lõi phát ra từ trung tâm bên trong dấu + -->
+              <!-- 1. Ruột kính vàng hổ phách trong có chiều sâu (giữa trong sâu, mép tụ sáng) -->
               <radialGradient
-                id="note-plus-inner-core"
-                cx="48%"
-                cy="45%"
+                id="note-lg-body"
+                cx="44%"
+                cy="42%"
                 r="58%"
+                fx="38%"
+                fy="34%"
               >
-                <stop offset="0%" stop-color="rgba(255, 255, 255, 0.56)" />
-                <stop offset="45%" stop-color="rgba(220, 200, 255, 0.24)" />
-                <stop offset="100%" stop-color="rgba(255, 255, 255, 0)" />
+                <stop offset="0%" stop-color="rgba(255, 174, 0, 0.72)" />
+                <stop offset="56%" stop-color="rgba(255, 188, 4, 0.82)" />
+                <stop offset="86%" stop-color="rgba(255, 208, 26, 0.94)" />
+                <stop offset="100%" stop-color="rgba(255, 226, 78, 0.98)" />
               </radialGradient>
 
-              <!-- Viền phát sáng đa sắc hắt ngược vào trong -->
+              <!-- 2. Quầng hội tụ ánh sáng (Caustic) xuyên qua kính dội xuống góc dưới-phải -->
+              <radialGradient id="note-lg-caustic" cx="70%" cy="76%" r="46%">
+                <stop offset="0%" stop-color="rgba(255, 248, 175, 0.68)" />
+                <stop offset="48%" stop-color="rgba(255, 214, 48, 0.24)" />
+                <stop offset="100%" stop-color="rgba(255, 196, 0, 0)" />
+              </radialGradient>
+
+              <!-- 3. Viền Fresnel siêu mảnh: sáng sắc 2 góc chéo, gần như trong suốt ở 2 cạnh bên -->
               <linearGradient
-                id="note-plus-rim-glow"
-                x1="0%"
-                y1="0%"
-                x2="100%"
-                y2="100%"
+                id="note-lg-rim"
+                x1="14%"
+                y1="10%"
+                x2="86%"
+                y2="90%"
               >
-                <stop offset="0%" stop-color="#9ec5ff" />
-                <stop offset="50%" stop-color="#ebd4ff" />
-                <stop offset="100%" stop-color="#ffadb9" />
+                <stop offset="0%" stop-color="rgba(255, 255, 255, 0.95)" />
+                <stop offset="22%" stop-color="rgba(255, 248, 215, 0.34)" />
+                <stop offset="48%" stop-color="rgba(255, 255, 255, 0.04)" />
+                <stop offset="76%" stop-color="rgba(255, 236, 160, 0.28)" />
+                <stop offset="100%" stop-color="rgba(255, 250, 210, 0.85)" />
               </linearGradient>
 
-              <!-- Độ mềm cho ánh sáng nội khối -->
-              <filter
-                id="note-plus-inner-blur"
-                x="-20%"
-                y="-20%"
-                width="140%"
-                height="140%"
+              <!-- 4. Vệt lóe gương sắc mảnh ôm mép trên-trái (nhọn mượt 2 đầu) -->
+              <linearGradient
+                id="note-lg-spec-tl"
+                x1="13"
+                y1="40"
+                x2="40"
+                y2="13"
+                gradientUnits="userSpaceOnUse"
               >
-                <feGaussianBlur stdDeviation="2.8" />
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="0" />
+                <stop offset="50%" stop-color="#ffffff" stop-opacity="0.95" />
+                <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+              </linearGradient>
+
+              <!-- 5. Vệt phản xạ hắt ngược mảnh ở mép dưới-phải -->
+              <linearGradient
+                id="note-lg-spec-br"
+                x1="87"
+                y1="60"
+                x2="60"
+                y2="87"
+                gradientUnits="userSpaceOnUse"
+              >
+                <stop offset="0%" stop-color="#fff7c2" stop-opacity="0" />
+                <stop offset="50%" stop-color="#fff9d6" stop-opacity="0.82" />
+                <stop offset="100%" stop-color="#fff7c2" stop-opacity="0" />
+              </linearGradient>
+
+              <!-- Bóng đổ thật + ánh vàng khúc xạ nhẹ xuống mặt kính nền -->
+              <filter
+                id="note-lg-shadow"
+                x="-35%"
+                y="-35%"
+                width="170%"
+                height="170%"
+              >
+                <feDropShadow
+                  dx="0"
+                  dy="3.5"
+                  stdDeviation="3"
+                  flood-color="#000000"
+                  flood-opacity="0.48"
+                />
+                <feDropShadow
+                  dx="0"
+                  dy="2"
+                  stdDeviation="3.5"
+                  flood-color="#ffbb00"
+                  flood-opacity="0.28"
+                />
               </filter>
 
-              <!-- Khóa cứng vùng cắt: 100% ánh sáng chỉ nằm trong dấu +, không lan ra ngoài -->
-              <clipPath id="note-plus-clip">
-                <path
-                  d="M 39.5 20 A 9 9 0 0 1 48.5 11 L 51.5 11 A 9 9 0 0 1 60.5 20 L 60.5 35.5 Q 60.5 39.5 64.5 39.5 L 80 39.5 A 9 9 0 0 1 89 48.5 L 89 51.5 A 9 9 0 0 1 80 60.5 L 64.5 60.5 Q 60.5 60.5 60.5 64.5 L 60.5 80 A 9 9 0 0 1 51.5 89 L 48.5 89 A 9 9 0 0 1 39.5 80 L 39.5 64.5 Q 39.5 60.5 35.5 60.5 L 20 60.5 A 9 9 0 0 1 11 51.5 L 11 48.5 A 9 9 0 0 1 20 39.5 L 35.5 39.5 Q 39.5 39.5 39.5 35.5 Z"
-                />
+              <clipPath id="note-lg-clip">
+                <circle cx="50" cy="50" r="41" />
               </clipPath>
             </defs>
 
-            <g filter="url(#ios-extreme-pop)">
-              <g clip-path="url(#note-plus-clip)">
-                <!-- 1. Nền đa sắc LIVE AI (kích thước 78×78, độ dày nét 21px) -->
-                <path
-                  d="M 39.5 20 A 9 9 0 0 1 48.5 11 L 51.5 11 A 9 9 0 0 1 60.5 20 L 60.5 35.5 Q 60.5 39.5 64.5 39.5 L 80 39.5 A 9 9 0 0 1 89 48.5 L 89 51.5 A 9 9 0 0 1 80 60.5 L 64.5 60.5 Q 60.5 60.5 60.5 64.5 L 60.5 80 A 9 9 0 0 1 51.5 89 L 48.5 89 A 9 9 0 0 1 39.5 80 L 39.5 64.5 Q 39.5 60.5 35.5 60.5 L 20 60.5 A 9 9 0 0 1 11 51.5 L 11 48.5 A 9 9 0 0 1 20 39.5 L 35.5 39.5 Q 39.5 39.5 39.5 35.5 Z"
-                  fill="url(#note-plus-live-grad)"
-                />
+            <g filter="url(#note-lg-shadow)">
+              <g clip-path="url(#note-lg-clip)">
+                <!-- Thân thấu kính vàng trong -->
+                <circle cx="50" cy="50" r="41" fill="url(#note-lg-body)" />
 
-                <!-- 2. Lõi phát sáng dịu từ bên trong -->
-                <path
-                  d="M 39.5 20 A 9 9 0 0 1 48.5 11 L 51.5 11 A 9 9 0 0 1 60.5 20 L 60.5 35.5 Q 60.5 39.5 64.5 39.5 L 80 39.5 A 9 9 0 0 1 89 48.5 L 89 51.5 A 9 9 0 0 1 80 60.5 L 64.5 60.5 Q 60.5 60.5 60.5 64.5 L 60.5 80 A 9 9 0 0 1 51.5 89 L 48.5 89 A 9 9 0 0 1 39.5 80 L 39.5 64.5 Q 39.5 60.5 35.5 60.5 L 20 60.5 A 9 9 0 0 1 11 51.5 L 11 48.5 A 9 9 0 0 1 20 39.5 L 35.5 39.5 Q 39.5 39.5 39.5 35.5 Z"
-                  fill="url(#note-plus-inner-core)"
-                />
+                <!-- Ánh sáng hội tụ khúc xạ ở đáy phải -->
+                <circle cx="50" cy="50" r="41" fill="url(#note-lg-caustic)" />
 
-                <!-- 3. Quầng phát sáng hắt ngược vào mép trong -->
-                <path
-                  d="M 39.5 20 A 9 9 0 0 1 48.5 11 L 51.5 11 A 9 9 0 0 1 60.5 20 L 60.5 35.5 Q 60.5 39.5 64.5 39.5 L 80 39.5 A 9 9 0 0 1 89 48.5 L 89 51.5 A 9 9 0 0 1 80 60.5 L 64.5 60.5 Q 60.5 60.5 60.5 64.5 L 60.5 80 A 9 9 0 0 1 51.5 89 L 48.5 89 A 9 9 0 0 1 39.5 80 L 39.5 64.5 Q 39.5 60.5 35.5 60.5 L 20 60.5 A 9 9 0 0 1 11 51.5 L 11 48.5 A 9 9 0 0 1 20 39.5 L 35.5 39.5 Q 39.5 39.5 39.5 35.5 Z"
+                <!-- Độ dày thành kính mờ nhẹ ngay sát rìa trong -->
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="38.2"
                   fill="none"
-                  stroke="url(#note-plus-rim-glow)"
-                  stroke-width="7"
-                  filter="url(#note-plus-inner-blur)"
-                  opacity="0.88"
+                  stroke="rgba(120, 52, 0, 0.22)"
+                  stroke-width="2.2"
                 />
 
-                <!-- 4. Viền bóng kính mảnh sát mép trong -->
+                <!-- Vệt phản chiếu gương sắc mảnh trên-trái & dưới-phải -->
                 <path
-                  d="M 39.5 20 A 9 9 0 0 1 48.5 11 L 51.5 11 A 9 9 0 0 1 60.5 20 L 60.5 35.5 Q 60.5 39.5 64.5 39.5 L 80 39.5 A 9 9 0 0 1 89 48.5 L 89 51.5 A 9 9 0 0 1 80 60.5 L 64.5 60.5 Q 60.5 60.5 60.5 64.5 L 60.5 80 A 9 9 0 0 1 51.5 89 L 48.5 89 A 9 9 0 0 1 39.5 80 L 39.5 64.5 Q 39.5 60.5 35.5 60.5 L 20 60.5 A 9 9 0 0 1 11 51.5 L 11 48.5 A 9 9 0 0 1 20 39.5 L 35.5 39.5 Q 39.5 39.5 39.5 35.5 Z"
+                  d="M 13.3 40.2 A 38 38 0 0 1 40.2 13.3"
                   fill="none"
-                  stroke="rgba(255, 255, 255, 0.35)"
-                  stroke-width="2"
-                />
-
-                <!-- 5. Điểm bắt sáng góc trên & góc trái -->
-                <path
-                  d="M 43.2 20 Q 43.2 14.8 48.5 14.8 L 51.5 14.8"
-                  fill="none"
-                  stroke="rgba(255, 255, 255, 0.72)"
-                  stroke-width="2.5"
+                  stroke="url(#note-lg-spec-tl)"
+                  stroke-width="2.6"
                   stroke-linecap="round"
                 />
                 <path
-                  d="M 14.8 48.5 Q 14.8 43.2 20 43.2"
+                  d="M 86.7 59.8 A 38 38 0 0 1 59.8 86.7"
                   fill="none"
-                  stroke="rgba(255, 255, 255, 0.65)"
-                  stroke-width="2.5"
+                  stroke="url(#note-lg-spec-br)"
+                  stroke-width="2.2"
                   stroke-linecap="round"
                 />
+              </g>
+
+              <!-- Viền khúc xạ Fresnel 1px mảnh sắc bao ngoài -->
+              <circle
+                cx="50"
+                cy="50"
+                r="40.5"
+                fill="none"
+                stroke="url(#note-lg-rim)"
+                stroke-width="1.8"
+              />
+
+              <!-- Bóng đổ nhẹ tạo cảm giác dấu + lơ lửng bên trong lớp kính -->
+              <g
+                stroke="rgba(125, 60, 0, 0.3)"
+                stroke-width="9.4"
+                stroke-linecap="round"
+                transform="translate(0, 1.4)"
+              >
+                <line x1="50" y1="31.5" x2="50" y2="68.5" />
+                <line x1="31.5" y1="50" x2="68.5" y2="50" />
+              </g>
+
+              <!-- Dấu + trắng sắc nét -->
+              <g stroke="#ffffff" stroke-width="8.4" stroke-linecap="round">
+                <line x1="50" y1="31.5" x2="50" y2="68.5" />
+                <line x1="31.5" y1="50" x2="68.5" y2="50" />
               </g>
             </g>
           </svg>
@@ -10051,117 +10127,39 @@
             </div>
             <div class="input-bottom">
               <div class="tools tool-container">
+                <!-- NÚT ĐÍNH KÈM DẤU + (Kính mờ dập nổi 3D đồng bộ nút Micro) -->
                 <button
                   class="icon-btn"
                   onclick="toggleD('m-att-h', event)"
-                  style="width: 36px; height: 36px; padding: 0"
+                  style="
+                    width: 36px;
+                    height: 36px;
+                    padding: 0;
+                    border-radius: 50%;
+                    background: rgba(255, 255, 255, 0.08);
+                    color: #ffffff;
+                    border: 1px solid rgba(255, 255, 255, 0.12);
+                    box-shadow:
+                      0 4px 10px rgba(0, 0, 0, 0.3),
+                      inset 0 1px 1px rgba(255, 255, 255, 0.15);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: 0.3s;
+                  "
                 >
                   <svg
-                    viewBox="0 0 100 100"
-                    style="
-                      width: 1.28em;
-                      height: 1.28em;
-                      display: block;
-                      filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.25));
-                    "
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
                   >
-                    <defs>
-                      <linearGradient
-                        id="chat-plus-h-live-grad"
-                        x1="0%"
-                        y1="0%"
-                        x2="100%"
-                        y2="100%"
-                      >
-                        <stop offset="0%" stop-color="#4285f4" />
-                        <stop offset="50%" stop-color="#9b72cb" />
-                        <stop offset="100%" stop-color="#d96570" />
-                      </linearGradient>
-                      <radialGradient
-                        id="chat-plus-h-inner-core"
-                        cx="48%"
-                        cy="45%"
-                        r="58%"
-                      >
-                        <stop
-                          offset="0%"
-                          stop-color="rgba(255, 255, 255, 0.56)"
-                        />
-                        <stop
-                          offset="45%"
-                          stop-color="rgba(220, 200, 255, 0.24)"
-                        />
-                        <stop
-                          offset="100%"
-                          stop-color="rgba(255, 255, 255, 0)"
-                        />
-                      </radialGradient>
-                      <linearGradient
-                        id="chat-plus-h-rim-glow"
-                        x1="0%"
-                        y1="0%"
-                        x2="100%"
-                        y2="100%"
-                      >
-                        <stop offset="0%" stop-color="#9ec5ff" />
-                        <stop offset="50%" stop-color="#ebd4ff" />
-                        <stop offset="100%" stop-color="#ffadb9" />
-                      </linearGradient>
-                      <filter
-                        id="chat-plus-h-inner-blur"
-                        x="-20%"
-                        y="-20%"
-                        width="140%"
-                        height="140%"
-                      >
-                        <feGaussianBlur stdDeviation="2.8" />
-                      </filter>
-                      <clipPath id="chat-plus-h-clip">
-                        <path
-                          d="M 39.5 20 A 9 9 0 0 1 48.5 11 L 51.5 11 A 9 9 0 0 1 60.5 20 L 60.5 35.5 Q 60.5 39.5 64.5 39.5 L 80 39.5 A 9 9 0 0 1 89 48.5 L 89 51.5 A 9 9 0 0 1 80 60.5 L 64.5 60.5 Q 60.5 60.5 60.5 64.5 L 60.5 80 A 9 9 0 0 1 51.5 89 L 48.5 89 A 9 9 0 0 1 39.5 80 L 39.5 64.5 Q 39.5 60.5 35.5 60.5 L 20 60.5 A 9 9 0 0 1 11 51.5 L 11 48.5 A 9 9 0 0 1 20 39.5 L 35.5 39.5 Q 39.5 39.5 39.5 35.5 Z"
-                        />
-                      </clipPath>
-                    </defs>
-                    <g filter="url(#ios-extreme-pop)">
-                      <g clip-path="url(#chat-plus-h-clip)">
-                        <path
-                          d="M 39.5 20 A 9 9 0 0 1 48.5 11 L 51.5 11 A 9 9 0 0 1 60.5 20 L 60.5 35.5 Q 60.5 39.5 64.5 39.5 L 80 39.5 A 9 9 0 0 1 89 48.5 L 89 51.5 A 9 9 0 0 1 80 60.5 L 64.5 60.5 Q 60.5 60.5 60.5 64.5 L 60.5 80 A 9 9 0 0 1 51.5 89 L 48.5 89 A 9 9 0 0 1 39.5 80 L 39.5 64.5 Q 39.5 60.5 35.5 60.5 L 20 60.5 A 9 9 0 0 1 11 51.5 L 11 48.5 A 9 9 0 0 1 20 39.5 L 35.5 39.5 Q 39.5 39.5 39.5 35.5 Z"
-                          fill="url(#chat-plus-h-live-grad)"
-                        />
-                        <path
-                          d="M 39.5 20 A 9 9 0 0 1 48.5 11 L 51.5 11 A 9 9 0 0 1 60.5 20 L 60.5 35.5 Q 60.5 39.5 64.5 39.5 L 80 39.5 A 9 9 0 0 1 89 48.5 L 89 51.5 A 9 9 0 0 1 80 60.5 L 64.5 60.5 Q 60.5 60.5 60.5 64.5 L 60.5 80 A 9 9 0 0 1 51.5 89 L 48.5 89 A 9 9 0 0 1 39.5 80 L 39.5 64.5 Q 39.5 60.5 35.5 60.5 L 20 60.5 A 9 9 0 0 1 11 51.5 L 11 48.5 A 9 9 0 0 1 20 39.5 L 35.5 39.5 Q 39.5 39.5 39.5 35.5 Z"
-                          fill="url(#chat-plus-h-inner-core)"
-                        />
-                        <path
-                          d="M 39.5 20 A 9 9 0 0 1 48.5 11 L 51.5 11 A 9 9 0 0 1 60.5 20 L 60.5 35.5 Q 60.5 39.5 64.5 39.5 L 80 39.5 A 9 9 0 0 1 89 48.5 L 89 51.5 A 9 9 0 0 1 80 60.5 L 64.5 60.5 Q 60.5 60.5 60.5 64.5 L 60.5 80 A 9 9 0 0 1 51.5 89 L 48.5 89 A 9 9 0 0 1 39.5 80 L 39.5 64.5 Q 39.5 60.5 35.5 60.5 L 20 60.5 A 9 9 0 0 1 11 51.5 L 11 48.5 A 9 9 0 0 1 20 39.5 L 35.5 39.5 Q 39.5 39.5 39.5 35.5 Z"
-                          fill="none"
-                          stroke="url(#chat-plus-h-rim-glow)"
-                          stroke-width="7"
-                          filter="url(#chat-plus-h-inner-blur)"
-                          opacity="0.88"
-                        />
-                        <path
-                          d="M 39.5 20 A 9 9 0 0 1 48.5 11 L 51.5 11 A 9 9 0 0 1 60.5 20 L 60.5 35.5 Q 60.5 39.5 64.5 39.5 L 80 39.5 A 9 9 0 0 1 89 48.5 L 89 51.5 A 9 9 0 0 1 80 60.5 L 64.5 60.5 Q 60.5 60.5 60.5 64.5 L 60.5 80 A 9 9 0 0 1 51.5 89 L 48.5 89 A 9 9 0 0 1 39.5 80 L 39.5 64.5 Q 39.5 60.5 35.5 60.5 L 20 60.5 A 9 9 0 0 1 11 51.5 L 11 48.5 A 9 9 0 0 1 20 39.5 L 35.5 39.5 Q 39.5 39.5 39.5 35.5 Z"
-                          fill="none"
-                          stroke="rgba(255, 255, 255, 0.35)"
-                          stroke-width="2"
-                        />
-                        <path
-                          d="M 43.2 20 Q 43.2 14.8 48.5 14.8 L 51.5 14.8"
-                          fill="none"
-                          stroke="rgba(255, 255, 255, 0.72)"
-                          stroke-width="2.5"
-                          stroke-linecap="round"
-                        />
-                        <path
-                          d="M 14.8 48.5 Q 14.8 43.2 20 43.2"
-                          fill="none"
-                          stroke="rgba(255, 255, 255, 0.65)"
-                          stroke-width="2.5"
-                          stroke-linecap="round"
-                        />
-                      </g>
-                    </g>
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
                   </svg>
                 </button>
                 <div class="tool-chip" onclick="toggleD('m-tool-h', event)">
@@ -12012,117 +12010,39 @@
             </div>
             <div class="input-bottom">
               <div class="tools tool-container">
+                <!-- NÚT ĐÍNH KÈM DẤU + (Kính mờ dập nổi 3D đồng bộ nút Micro) -->
                 <button
                   class="icon-btn"
                   onclick="toggleD('m-att-c', event)"
-                  style="width: 36px; height: 36px; padding: 0"
+                  style="
+                    width: 36px;
+                    height: 36px;
+                    padding: 0;
+                    border-radius: 50%;
+                    background: rgba(255, 255, 255, 0.08);
+                    color: #ffffff;
+                    border: 1px solid rgba(255, 255, 255, 0.12);
+                    box-shadow:
+                      0 4px 10px rgba(0, 0, 0, 0.3),
+                      inset 0 1px 1px rgba(255, 255, 255, 0.15);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: 0.3s;
+                  "
                 >
                   <svg
-                    viewBox="0 0 100 100"
-                    style="
-                      width: 1.28em;
-                      height: 1.28em;
-                      display: block;
-                      filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.25));
-                    "
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
                   >
-                    <defs>
-                      <linearGradient
-                        id="chat-plus-c-live-grad"
-                        x1="0%"
-                        y1="0%"
-                        x2="100%"
-                        y2="100%"
-                      >
-                        <stop offset="0%" stop-color="#4285f4" />
-                        <stop offset="50%" stop-color="#9b72cb" />
-                        <stop offset="100%" stop-color="#d96570" />
-                      </linearGradient>
-                      <radialGradient
-                        id="chat-plus-c-inner-core"
-                        cx="48%"
-                        cy="45%"
-                        r="58%"
-                      >
-                        <stop
-                          offset="0%"
-                          stop-color="rgba(255, 255, 255, 0.56)"
-                        />
-                        <stop
-                          offset="45%"
-                          stop-color="rgba(220, 200, 255, 0.24)"
-                        />
-                        <stop
-                          offset="100%"
-                          stop-color="rgba(255, 255, 255, 0)"
-                        />
-                      </radialGradient>
-                      <linearGradient
-                        id="chat-plus-c-rim-glow"
-                        x1="0%"
-                        y1="0%"
-                        x2="100%"
-                        y2="100%"
-                      >
-                        <stop offset="0%" stop-color="#9ec5ff" />
-                        <stop offset="50%" stop-color="#ebd4ff" />
-                        <stop offset="100%" stop-color="#ffadb9" />
-                      </linearGradient>
-                      <filter
-                        id="chat-plus-c-inner-blur"
-                        x="-20%"
-                        y="-20%"
-                        width="140%"
-                        height="140%"
-                      >
-                        <feGaussianBlur stdDeviation="2.8" />
-                      </filter>
-                      <clipPath id="chat-plus-c-clip">
-                        <path
-                          d="M 39.5 20 A 9 9 0 0 1 48.5 11 L 51.5 11 A 9 9 0 0 1 60.5 20 L 60.5 35.5 Q 60.5 39.5 64.5 39.5 L 80 39.5 A 9 9 0 0 1 89 48.5 L 89 51.5 A 9 9 0 0 1 80 60.5 L 64.5 60.5 Q 60.5 60.5 60.5 64.5 L 60.5 80 A 9 9 0 0 1 51.5 89 L 48.5 89 A 9 9 0 0 1 39.5 80 L 39.5 64.5 Q 39.5 60.5 35.5 60.5 L 20 60.5 A 9 9 0 0 1 11 51.5 L 11 48.5 A 9 9 0 0 1 20 39.5 L 35.5 39.5 Q 39.5 39.5 39.5 35.5 Z"
-                        />
-                      </clipPath>
-                    </defs>
-                    <g filter="url(#ios-extreme-pop)">
-                      <g clip-path="url(#chat-plus-c-clip)">
-                        <path
-                          d="M 39.5 20 A 9 9 0 0 1 48.5 11 L 51.5 11 A 9 9 0 0 1 60.5 20 L 60.5 35.5 Q 60.5 39.5 64.5 39.5 L 80 39.5 A 9 9 0 0 1 89 48.5 L 89 51.5 A 9 9 0 0 1 80 60.5 L 64.5 60.5 Q 60.5 60.5 60.5 64.5 L 60.5 80 A 9 9 0 0 1 51.5 89 L 48.5 89 A 9 9 0 0 1 39.5 80 L 39.5 64.5 Q 39.5 60.5 35.5 60.5 L 20 60.5 A 9 9 0 0 1 11 51.5 L 11 48.5 A 9 9 0 0 1 20 39.5 L 35.5 39.5 Q 39.5 39.5 39.5 35.5 Z"
-                          fill="url(#chat-plus-c-live-grad)"
-                        />
-                        <path
-                          d="M 39.5 20 A 9 9 0 0 1 48.5 11 L 51.5 11 A 9 9 0 0 1 60.5 20 L 60.5 35.5 Q 60.5 39.5 64.5 39.5 L 80 39.5 A 9 9 0 0 1 89 48.5 L 89 51.5 A 9 9 0 0 1 80 60.5 L 64.5 60.5 Q 60.5 60.5 60.5 64.5 L 60.5 80 A 9 9 0 0 1 51.5 89 L 48.5 89 A 9 9 0 0 1 39.5 80 L 39.5 64.5 Q 39.5 60.5 35.5 60.5 L 20 60.5 A 9 9 0 0 1 11 51.5 L 11 48.5 A 9 9 0 0 1 20 39.5 L 35.5 39.5 Q 39.5 39.5 39.5 35.5 Z"
-                          fill="url(#chat-plus-c-inner-core)"
-                        />
-                        <path
-                          d="M 39.5 20 A 9 9 0 0 1 48.5 11 L 51.5 11 A 9 9 0 0 1 60.5 20 L 60.5 35.5 Q 60.5 39.5 64.5 39.5 L 80 39.5 A 9 9 0 0 1 89 48.5 L 89 51.5 A 9 9 0 0 1 80 60.5 L 64.5 60.5 Q 60.5 60.5 60.5 64.5 L 60.5 80 A 9 9 0 0 1 51.5 89 L 48.5 89 A 9 9 0 0 1 39.5 80 L 39.5 64.5 Q 39.5 60.5 35.5 60.5 L 20 60.5 A 9 9 0 0 1 11 51.5 L 11 48.5 A 9 9 0 0 1 20 39.5 L 35.5 39.5 Q 39.5 39.5 39.5 35.5 Z"
-                          fill="none"
-                          stroke="url(#chat-plus-c-rim-glow)"
-                          stroke-width="7"
-                          filter="url(#chat-plus-c-inner-blur)"
-                          opacity="0.88"
-                        />
-                        <path
-                          d="M 39.5 20 A 9 9 0 0 1 48.5 11 L 51.5 11 A 9 9 0 0 1 60.5 20 L 60.5 35.5 Q 60.5 39.5 64.5 39.5 L 80 39.5 A 9 9 0 0 1 89 48.5 L 89 51.5 A 9 9 0 0 1 80 60.5 L 64.5 60.5 Q 60.5 60.5 60.5 64.5 L 60.5 80 A 9 9 0 0 1 51.5 89 L 48.5 89 A 9 9 0 0 1 39.5 80 L 39.5 64.5 Q 39.5 60.5 35.5 60.5 L 20 60.5 A 9 9 0 0 1 11 51.5 L 11 48.5 A 9 9 0 0 1 20 39.5 L 35.5 39.5 Q 39.5 39.5 39.5 35.5 Z"
-                          fill="none"
-                          stroke="rgba(255, 255, 255, 0.35)"
-                          stroke-width="2"
-                        />
-                        <path
-                          d="M 43.2 20 Q 43.2 14.8 48.5 14.8 L 51.5 14.8"
-                          fill="none"
-                          stroke="rgba(255, 255, 255, 0.72)"
-                          stroke-width="2.5"
-                          stroke-linecap="round"
-                        />
-                        <path
-                          d="M 14.8 48.5 Q 14.8 43.2 20 43.2"
-                          fill="none"
-                          stroke="rgba(255, 255, 255, 0.65)"
-                          stroke-width="2.5"
-                          stroke-linecap="round"
-                        />
-                      </g>
-                    </g>
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
                   </svg>
                 </button>
                 <div class="tool-chip" onclick="toggleD('m-tool-c', event)">
@@ -14293,7 +14213,78 @@
         <span class="si-ic">✏️</span> Đổi tên
       </div>
       <div class="d-item">
-        <span class="si-ic">📖</span> Thêm vào sổ ghi chú
+        <span
+          class="si-ic"
+          style="
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+          "
+          ><svg
+            viewBox="0 0 100 100"
+            style="width: 100%; height: 100%; display: block"
+          >
+            <g filter="url(#ios-extreme-pop)">
+              <rect
+                x="25"
+                y="15"
+                width="55"
+                height="70"
+                rx="6"
+                fill="#ffcc00"
+              />
+              <rect x="25" y="15" width="8" height="70" rx="2" fill="#e6b800" />
+              <line
+                x1="33"
+                y1="15"
+                x2="33"
+                y2="85"
+                stroke="#cc9900"
+                stroke-width="1"
+              />
+              <path d="M 28 85 L 80 85 V 20 H 75 V 80 H 28 Z" fill="#ffffff" />
+              <rect
+                x="25"
+                y="15"
+                width="55"
+                height="70"
+                rx="6"
+                fill="none"
+                stroke="rgba(0,0,0,0.15)"
+                stroke-width="1.5"
+              />
+              <line
+                x1="45"
+                y1="35"
+                x2="68"
+                y2="35"
+                stroke="#cc9900"
+                stroke-width="3"
+                stroke-linecap="round"
+              />
+              <line
+                x1="45"
+                y1="50"
+                x2="68"
+                y2="50"
+                stroke="#cc9900"
+                stroke-width="3"
+                stroke-linecap="round"
+              />
+              <line
+                x1="45"
+                y1="65"
+                x2="55"
+                y2="65"
+                stroke="#cc9900"
+                stroke-width="3"
+                stroke-linecap="round"
+              />
+            </g></svg
+        ></span>
+        Thêm vào sổ ghi chú
       </div>
       <div
         class="d-item"
@@ -22066,9 +22057,25 @@
 
       function renderSidebarNotes() {
         let list = document.getElementById("sidebar-notes-list");
-        if (!list) return;
-        let notes =
-          JSON.parse(localStorage.getItem("tng_notes_" + curA.id)) || [];
+        if (!list || typeof curA === "undefined" || !curA) return;
+        let noteKey = "tng_notes_" + curA.id;
+        let seedKey = "tng_notes_seeded_" + curA.id;
+        let notes = JSON.parse(localStorage.getItem(noteKey)) || [];
+        if (!localStorage.getItem(seedKey)) {
+          if (notes.length === 0) {
+            notes = [
+              {
+                id: Date.now(),
+                name: "Sổ tay không tên",
+                title: "",
+                content: "",
+                pinned: false,
+              },
+            ];
+            localStorage.setItem(noteKey, JSON.stringify(notes));
+          }
+          localStorage.setItem(seedKey, "1");
+        }
         notes.sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
 
         let displayNotes = notes.slice(0, 2); // Chỉ hiển thị 2 sổ trên sidebar
@@ -22077,7 +22084,7 @@
           .map(
             (n) => `
                                             <div class="sb-item ${n.id === currentNoteId ? "active" : ""}" onclick="openNoteEditor(${n.id})">
-                                              <span class="sb-icon" style="color:var(--text-sub)">📓</span>
+                                              <span class="sb-icon"><svg viewBox="0 0 100 100" style="width:100%; height:100%; display:block;"><g filter="url(#ios-extreme-pop)"><rect x="25" y="15" width="55" height="70" rx="6" fill="#ffcc00"/><rect x="25" y="15" width="8" height="70" rx="2" fill="#e6b800"/><line x1="33" y1="15" x2="33" y2="85" stroke="#cc9900" stroke-width="1"/><path d="M 28 85 L 80 85 V 20 H 75 V 80 H 28 Z" fill="#ffffff"/><rect x="25" y="15" width="55" height="70" rx="6" fill="none" stroke="rgba(0,0,0,0.15)" stroke-width="1.5"/><line x1="45" y1="35" x2="68" y2="35" stroke="#cc9900" stroke-width="3" stroke-linecap="round"/><line x1="45" y1="50" x2="68" y2="50" stroke="#cc9900" stroke-width="3" stroke-linecap="round"/><line x1="45" y1="65" x2="55" y2="65" stroke="#cc9900" stroke-width="3" stroke-linecap="round"/></g></svg></span>
                                               <span class="sb-text">${n.pinned ? "📌 " : ""}${n.name || "Sổ chưa tên"}</span>
                                               <div class="hist-dots" onclick="openNoteMenu(event, ${n.id})">⋮</div>
                                             </div>
@@ -26791,8 +26798,82 @@
                   h1.innerHTML = `
                             <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
                                 <span>Tất cả sổ ghi chú</span>
-                                <button onclick="createNewNote()" style="background: rgba(255, 255, 255, 0.08); border: none; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #ffffff; cursor: pointer; transition: all 0.2s ease; outline: none; -webkit-tap-highlight-color: transparent;" ontouchstart="this.style.background='rgba(255, 255, 255, 0.15)'" ontouchend="this.style.background='rgba(255, 255, 255, 0.08)'" onmouseover="this.style.background='rgba(255, 255, 255, 0.15)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.08)'" title="Tạo sổ mới">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                <button onclick="createNewNote()" style="background: transparent; border: none; width: 40px; height: 40px; padding: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; outline: none; overflow: visible; flex-shrink: 0; -webkit-tap-highlight-color: transparent;" title="Tạo sổ mới">
+                                    <svg viewBox="0 0 100 100" style="width: 44px; height: 44px; flex-shrink: 0; display: block; overflow: visible;">
+                                      <defs>
+                                        <!-- Ruột kính vàng hổ phách mịn hơn cho cỡ lớn -->
+                                        <radialGradient id="all-note-lg-body" cx="42%" cy="38%" r="60%" fx="36%" fy="30%">
+                                          <stop offset="0%" stop-color="rgba(255, 184, 10, 0.78)" />
+                                          <stop offset="58%" stop-color="rgba(255, 190, 4, 0.88)" />
+                                          <stop offset="88%" stop-color="rgba(255, 208, 28, 0.95)" />
+                                          <stop offset="100%" stop-color="rgba(255, 224, 72, 0.98)" />
+                                        </radialGradient>
+                                        <!-- Quầng hội tụ ánh sáng (Caustic) dịu, không gây loang -->
+                                        <radialGradient id="all-note-lg-caustic" cx="68%" cy="74%" r="45%">
+                                          <stop offset="0%" stop-color="rgba(255, 248, 185, 0.42)" />
+                                          <stop offset="50%" stop-color="rgba(255, 214, 52, 0.16)" />
+                                          <stop offset="100%" stop-color="rgba(255, 196, 0, 0)" />
+                                        </radialGradient>
+                                        <!-- Độ sâu trong suốt nhẹ ở phần đỉnh-trái mặt kính -->
+                                        <linearGradient id="all-note-lg-gloss" x1="20%" y1="5%" x2="72%" y2="62%">
+                                          <stop offset="0%" stop-color="rgba(255, 255, 255, 0.26)" />
+                                          <stop offset="45%" stop-color="rgba(255, 255, 255, 0.04)" />
+                                          <stop offset="100%" stop-color="rgba(255, 255, 255, 0)" />
+                                        </linearGradient>
+                                        <!-- Viền Fresnel mảnh sắc nét -->
+                                        <linearGradient id="all-note-lg-rim" x1="14%" y1="10%" x2="86%" y2="90%">
+                                          <stop offset="0%" stop-color="rgba(255, 255, 255, 0.92)" />
+                                          <stop offset="22%" stop-color="rgba(255, 248, 215, 0.3)" />
+                                          <stop offset="50%" stop-color="rgba(255, 255, 255, 0.04)" />
+                                          <stop offset="78%" stop-color="rgba(255, 236, 160, 0.24)" />
+                                          <stop offset="100%" stop-color="rgba(255, 250, 210, 0.78)" />
+                                        </linearGradient>
+                                        <!-- 2 vệt phản chiếu gương siêu mảnh -->
+                                        <linearGradient id="all-note-lg-spec-tl" x1="14" y1="39" x2="39" y2="14" gradientUnits="userSpaceOnUse">
+                                          <stop offset="0%" stop-color="#ffffff" stop-opacity="0" />
+                                          <stop offset="50%" stop-color="#ffffff" stop-opacity="0.9" />
+                                          <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+                                        </linearGradient>
+                                        <linearGradient id="all-note-lg-spec-br" x1="86" y1="61" x2="61" y2="86" gradientUnits="userSpaceOnUse">
+                                          <stop offset="0%" stop-color="#fff7c2" stop-opacity="0" />
+                                          <stop offset="50%" stop-color="#fff9d6" stop-opacity="0.7" />
+                                          <stop offset="100%" stop-color="#fff7c2" stop-opacity="0" />
+                                        </linearGradient>
+                                        <!-- Làm mềm nhẹ vệt lóe để không bị cứng nét -->
+                                        <filter id="all-note-lg-spec-blur" x="-25%" y="-25%" width="150%" height="150%">
+                                          <feGaussianBlur stdDeviation="0.55" />
+                                        </filter>
+                                        <!-- Bóng đổ mềm cho dấu + thay cho nét bóng thô cũ -->
+                                        <filter id="all-note-lg-plus-shadow" x="-30%" y="-30%" width="160%" height="160%">
+                                          <feDropShadow dx="0" dy="1.2" stdDeviation="1.4" flood-color="#9e4f00" flood-opacity="0.32" />
+                                        </filter>
+                                        <!-- Bóng đổ mềm + ánh vàng khúc xạ nhẹ dưới nút -->
+                                        <filter id="all-note-lg-shadow" x="-35%" y="-35%" width="170%" height="170%">
+                                          <feDropShadow dx="0" dy="3.5" stdDeviation="3.5" flood-color="#000000" flood-opacity="0.42" />
+                                          <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#ffbb00" flood-opacity="0.22" />
+                                        </filter>
+                                        <clipPath id="all-note-lg-clip">
+                                          <circle cx="50" cy="50" r="41" />
+                                        </clipPath>
+                                      </defs>
+                                      <g filter="url(#all-note-lg-shadow)">
+                                        <g clip-path="url(#all-note-lg-clip)">
+                                          <circle cx="50" cy="50" r="41" fill="url(#all-note-lg-body)" />
+                                          <circle cx="50" cy="50" r="41" fill="url(#all-note-lg-caustic)" />
+                                          <circle cx="50" cy="50" r="41" fill="url(#all-note-lg-gloss)" />
+                                          <!-- Vệt lóe mảnh mượt ôm sát mép cong -->
+                                          <path d="M 13.8 39.6 A 38.6 38.6 0 0 1 39.6 13.8" fill="none" stroke="url(#all-note-lg-spec-tl)" stroke-width="1.5" stroke-linecap="round" filter="url(#all-note-lg-spec-blur)" />
+                                          <path d="M 86.2 60.4 A 38.6 38.6 0 0 1 60.4 86.2" fill="none" stroke="url(#all-note-lg-spec-br)" stroke-width="1.25" stroke-linecap="round" filter="url(#all-note-lg-spec-blur)" />
+                                        </g>
+                                        <!-- Viền khúc xạ Fresnel mảnh gọn -->
+                                        <circle cx="50" cy="50" r="40.6" fill="none" stroke="url(#all-note-lg-rim)" stroke-width="1.15" />
+                                        <!-- Dấu + trắng thanh thoát, đổ bóng mềm -->
+                                        <g stroke="#ffffff" stroke-width="5.8" stroke-linecap="round" filter="url(#all-note-lg-plus-shadow)">
+                                          <line x1="50" y1="31" x2="50" y2="69" />
+                                          <line x1="31" y1="50" x2="69" y2="50" />
+                                        </g>
+                                      </g>
+                                    </svg>
                                 </button>
                             </div>
                         `;
@@ -26806,7 +26887,7 @@
                 grid.innerHTML = `
                         <div style="grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; text-align: center; margin-top: 20px;">
                             <div style="width: 80px; height: 80px; border-radius: 50%; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; margin-bottom: 24px; font-size: 40px; line-height: 1;">
-                                📓
+                                <svg viewBox="0 0 100 100" style="width:52px; height:52px; display:block;"><g filter="url(#ios-extreme-pop)"><rect x="25" y="15" width="55" height="70" rx="6" fill="#ffcc00"/><rect x="25" y="15" width="8" height="70" rx="2" fill="#e6b800"/><line x1="33" y1="15" x2="33" y2="85" stroke="#cc9900" stroke-width="1"/><path d="M 28 85 L 80 85 V 20 H 75 V 80 H 28 Z" fill="#ffffff"/><rect x="25" y="15" width="55" height="70" rx="6" fill="none" stroke="rgba(0,0,0,0.15)" stroke-width="1.5"/><line x1="45" y1="35" x2="68" y2="35" stroke="#cc9900" stroke-width="3" stroke-linecap="round"/><line x1="45" y1="50" x2="68" y2="50" stroke="#cc9900" stroke-width="3" stroke-linecap="round"/><line x1="45" y1="65" x2="55" y2="65" stroke="#cc9900" stroke-width="3" stroke-linecap="round"/></g></svg>
                             </div>
                             <h3 style="margin: 0 0 12px 0; font-size: 18px; font-weight: 500; color: #fff;">Chưa có sổ ghi chú nào</h3>
                             <p style="margin: 0 0 32px 0; font-size: 14px; color: #8e918f; line-height: 1.6; max-width: 320px;">Sổ ghi chú giúp ghi lại các nội dung quan trọng của bạn để AI nhớ hoặc lưu trữ.</p>
@@ -26831,7 +26912,7 @@
                             <div class="note-card" data-id="${n.id}" style="${animStyle}" onmousedown="startPress(event, '${n.id}')" onmouseup="cancelPress()" onmouseleave="cancelPress()" ontouchstart="startPress(event, '${n.id}')" ontouchend="cancelPress()" ontouchmove="cancelPress()" onclick="handleClick(event, ${n.id}, 'note')">
                             <div class="mc-checkbox"></div>
                             <div style="display:flex; justify-content:space-between;">
-                                <div style="font-size:20px;">📓</div>
+                                <div style="width:28px; height:28px; display:flex; align-items:center; justify-content:center;"><svg viewBox="0 0 100 100" style="width:100%; height:100%; display:block;"><g filter="url(#ios-extreme-pop)"><rect x="25" y="15" width="55" height="70" rx="6" fill="#ffcc00"/><rect x="25" y="15" width="8" height="70" rx="2" fill="#e6b800"/><line x1="33" y1="15" x2="33" y2="85" stroke="#cc9900" stroke-width="1"/><path d="M 28 85 L 80 85 V 20 H 75 V 80 H 28 Z" fill="#ffffff"/><rect x="25" y="15" width="55" height="70" rx="6" fill="none" stroke="rgba(0,0,0,0.15)" stroke-width="1.5"/><line x1="45" y1="35" x2="68" y2="35" stroke="#cc9900" stroke-width="3" stroke-linecap="round"/><line x1="45" y1="50" x2="68" y2="50" stroke="#cc9900" stroke-width="3" stroke-linecap="round"/><line x1="45" y1="65" x2="55" y2="65" stroke="#cc9900" stroke-width="3" stroke-linecap="round"/></g></svg></div>
                                 <div class="icon-btn" style="width:30px; height:30px; position:relative; z-index:5;" onclick="openNoteMenu(event, ${n.id})">⋮</div>
                             </div>
                             <div style="font-weight:600; font-size:16px; color:var(--text-main); margin-top:5px;">${n.pinned ? "📌 " : ""}${n.name || "Sổ chưa tên"}</div>
@@ -39434,6 +39515,46 @@
           },
           { passive: true },
         );
+      })();
+    </script>
+
+    <script>
+      (() => {
+        ["m-att-h", "m-att-c"].forEach((menuId) => {
+          const menu = document.getElementById(menuId);
+          const btn = document.querySelector(`button[onclick*="${menuId}"]`);
+          const svg = btn ? btn.querySelector("svg") : null;
+          if (!menu || !btn || !svg) return;
+
+          let angle = 0;
+          let wasOpen = menu.classList.contains("show");
+
+          const syncRotation = () => {
+            const isOpen = menu.classList.contains("show");
+            if (isOpen === wasOpen) return;
+            wasOpen = isOpen;
+
+            if (isOpen) {
+              // Mở menu: xoay sang phải 45° thành chữ × (có lực nảy nhẹ kiểu iOS)
+              angle += 45;
+              btn.classList.add("tng-att-open");
+              svg.style.transition =
+                "transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1)";
+            } else {
+              // Đóng menu: xoay tiếp sang phải 45° nữa (45° → 90°) về gọn dáng dấu +
+              angle += 45;
+              btn.classList.remove("tng-att-open");
+              svg.style.transition =
+                "transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1)";
+            }
+            svg.style.transform = `rotate(${angle}deg)`;
+          };
+
+          new MutationObserver(syncRotation).observe(menu, {
+            attributes: true,
+            attributeFilter: ["class"],
+          });
+        });
       })();
     </script>
   </body>
