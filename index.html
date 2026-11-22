@@ -6305,7 +6305,9 @@
           .tng-hd-opt
         ).tng-pill-focus:not(.is-danger):not([style*="danger" i]):not(
           [style*="#ff453a" i]
-        ):not([style*="#ff3b30" i]):not([style*="#ff4b2b" i]),
+        ):not([style*="#ff3b30" i]):not([style*="#ff4b2b" i]):not(
+          [style*="#ff4d4d" i]
+        ):not([onclick*="delete" i]),
       body .tng-glow-menu .m-item.tng-pill-focus .m-name {
         color: #ffffff !important;
         text-shadow: 0 0 10px rgba(255, 255, 255, 0.22);
@@ -6326,7 +6328,9 @@
           .tng-hd-opt
         ).tng-pill-focus:not(.is-danger):not([style*="danger" i]):not(
           [style*="#ff453a" i]
-        ):not([style*="#ff3b30" i]):not([style*="#ff4b2b" i]),
+        ):not([style*="#ff3b30" i]):not([style*="#ff4b2b" i]):not(
+          [style*="#ff4d4d" i]
+        ):not([onclick*="delete" i]),
       body[data-theme="light"] .tng-glow-menu .m-item.tng-pill-focus .m-name {
         color: #111827 !important;
         text-shadow: none;
@@ -6339,7 +6343,9 @@
           [style*="danger" i],
           [style*="#ff453a" i],
           [style*="#ff3b30" i],
-          [style*="#ff4b2b" i]
+          [style*="#ff4b2b" i],
+          [style*="#ff4d4d" i],
+          [onclick*="delete" i]
         ) {
         color: #ff6961 !important;
         text-shadow: 0 0 10px rgba(255, 69, 58, 0.35);
@@ -6351,10 +6357,18 @@
           [style*="danger" i],
           [style*="#ff453a" i],
           [style*="#ff3b30" i],
-          [style*="#ff4b2b" i]
+          [style*="#ff4b2b" i],
+          [style*="#ff4d4d" i],
+          [onclick*="delete" i]
         ) {
         color: #d93025 !important;
         text-shadow: none;
+      }
+      body[data-theme="light"]
+        #tng-hd-menu-overlay-v37
+        .tng-glow-menu
+        .tng-hd-opt.is-danger:is(:hover, :active, .tng-ios-active) {
+        background-color: transparent !important;
       }
 
       /* Chống các mục bên trong bắt nhầm hover khi thanh sidebar đang trượt đóng */
@@ -8440,108 +8454,1845 @@
         }
       }
 
+      /* Khôi phục căn giữa chuẩn cho icon SVG, đồng bộ màu đỏ & tăng nhẹ kích thước thùng rác cân bằng với các icon khác */
+      .d-item
+        > span.si-ic:not(.switch):not(.chk-light):not(.chk-dark):has(svg) {
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        line-height: 1 !important;
+      }
+      .d-item[style*="danger" i] > .si-ic {
+        color: inherit !important;
+      }
+      .d-item[style*="danger" i] > .si-ic svg {
+        width: 22px !important;
+        height: 22px !important;
+      }
+      .ai-option-item[onclick*="delete"] > span:has(svg) {
+        width: 22px !important;
+        height: 22px !important;
+      }
+      .ai-option-item[onclick*="delete"] > span svg {
+        width: 21px !important;
+        height: 21px !important;
+      }
+
       /* ============================================================ */
-      /* ĐỒNG BỘ TÔNG MÀU HỘP THOẠI: VÀNG (SỔ GHI CHÚ) & ĐỎ (XÓA)     */
+      /* THIẾT KẾ LẠI HỘP THOẠI NHẬP LIỆU, XÓA & THÔNG BÁO LIQUID GLASS */
+      /* Đồng bộ toàn hệ thống (Giao diện Tối & Giao diện Sáng)        */
       /* ============================================================ */
 
-      /* 1. Tạo sổ mới & Đổi tên quyển sổ: Vàng mật ong chuẩn sắc, giữ nguyên dấu nháy mặc định */
-      html body #custom-modal-overlay .custom-modal.cm-theme-note #cm-input {
-        border-color: rgba(245, 200, 66, 0.26) !important;
-        transition:
-          border-color 0.25s ease,
-          box-shadow 0.25s ease;
+      /* 1. Lớp nền mờ dịu cho các hộp thoại */
+      html body #custom-modal-overlay.custom-modal-overlay,
+      html body .tng-modal-overlay {
+        background: rgba(6, 8, 14, 0.52) !important;
+        backdrop-filter: blur(14px) !important;
+        -webkit-backdrop-filter: blur(14px) !important;
       }
-      html
-        body
-        #custom-modal-overlay
-        .custom-modal.cm-theme-note
-        #cm-input:focus {
-        border-color: rgba(245, 200, 66, 0.58) !important;
-        box-shadow: 0 0 0 3px rgba(245, 200, 66, 0.1) !important;
-      }
-      html
-        body
-        #custom-modal-overlay
-        .custom-modal.cm-theme-note
-        #cm-confirm-btn {
-        background: rgba(255, 255, 255, 0.07) !important;
-        color: #f5c842 !important;
-        box-shadow: inset 0 0 0 1px rgba(245, 200, 66, 0.36) !important;
-      }
-      html
-        body
-        #custom-modal-overlay
-        .custom-modal.cm-theme-note
-        #cm-confirm-btn:hover {
-        background: rgba(245, 200, 66, 0.13) !important;
-        box-shadow: inset 0 0 0 1px rgba(245, 200, 66, 0.55) !important;
+      html body[data-theme="light"] #custom-modal-overlay.custom-modal-overlay,
+      html body[data-theme="light"] .tng-modal-overlay {
+        background: rgba(15, 23, 42, 0.28) !important;
       }
 
-      /* Đồng bộ giao diện Sáng cho hộp thoại Sổ ghi chú */
-      html
-        body[data-theme="light"]
-        #custom-modal-overlay
-        .custom-modal.cm-theme-note
-        #cm-input {
-        border-color: rgba(204, 153, 0, 0.3) !important;
-      }
-      html
-        body[data-theme="light"]
-        #custom-modal-overlay
-        .custom-modal.cm-theme-note
-        #cm-input:focus {
-        border-color: #d49b00 !important;
-        box-shadow: 0 0 0 3px rgba(255, 204, 0, 0.16) !important;
-      }
-      html
-        body[data-theme="light"]
-        #custom-modal-overlay
-        .custom-modal.cm-theme-note
-        #cm-confirm-btn {
-        background: rgba(255, 204, 0, 0.16) !important;
-        color: #9e7100 !important;
-        box-shadow: inset 0 0 0 1px rgba(212, 155, 0, 0.35) !important;
-      }
-      html
-        body[data-theme="light"]
-        #custom-modal-overlay
-        .custom-modal.cm-theme-note
-        #cm-confirm-btn:hover {
-        background: rgba(255, 204, 0, 0.26) !important;
+      /* 2. Vỏ thẻ kính lỏng 28px (Đồng bộ mọi hộp thoại nhập, xóa & thông báo) */
+      html body #custom-modal-overlay .custom-modal,
+      html body #crop-modal-overlay .custom-modal,
+      html body .tng-modal-box,
+      html body .tng-del-box,
+      html body .tng-del-hd-box,
+      html body .tng-alert-box,
+      html body #tng-alert-modal-v27 > div,
+      html body #tng-mailbox-confirm-modal .holiday-letter-reader {
+        width: 344px !important;
+        max-width: calc(100vw - 36px) !important;
+        padding: 26px 22px 22px !important;
+        border-radius: 28px !important;
+        gap: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        color: var(--text-main) !important;
+        background: linear-gradient(
+          165deg,
+          rgba(40, 42, 54, 0.88) 0%,
+          rgba(23, 24, 32, 0.94) 100%
+        ) !important;
+        backdrop-filter: blur(42px) saturate(185%) !important;
+        -webkit-backdrop-filter: blur(42px) saturate(185%) !important;
+        border: 1px solid rgba(255, 255, 255, 0.13) !important;
+        box-shadow:
+          0 28px 64px rgba(0, 0, 0, 0.62),
+          0 4px 16px rgba(0, 0, 0, 0.35),
+          inset 0 1px 0 rgba(255, 255, 255, 0.18),
+          inset 0 -1px 0 rgba(0, 0, 0, 0.25) !important;
+        box-sizing: border-box !important;
       }
 
-      /* 2. Hỏi xác nhận xóa toàn hệ thống: Nút Đồng ý tông đỏ */
+      /* Hộp Báo cáo vấn đề giữ căn trái tự nhiên & rộng vừa đủ cho các tùy chọn */
+      html body .tng-modal-box:has(.tng-report-option) {
+        width: 388px !important;
+        align-items: stretch !important;
+        text-align: left !important;
+      }
+
+      /* Vỏ thẻ Giao diện Sáng (vượt độ ưu tiên rule :not(#viewer-modal)) */
+      html body[data-theme="light"] #custom-modal-overlay .custom-modal,
+      html body[data-theme="light"] #crop-modal-overlay .custom-modal,
+      html body[data-theme="light"] .tng-modal-box,
+      html body[data-theme="light"] .tng-del-box,
+      html
+        body[data-theme="light"]
+        div[style*="position: fixed"][style*="z-index"]:not(#viewer-modal)
+        > .tng-del-hd-box,
+      html
+        body[data-theme="light"]
+        div[style*="position: fixed"][style*="z-index"]:not(#viewer-modal)
+        > .tng-alert-box,
+      html body[data-theme="light"] #tng-alert-routine-v37 > .tng-alert-box,
+      html body[data-theme="light"] #tng-alert-modal-v27 > div,
+      html
+        body[data-theme="light"]
+        #tng-mailbox-confirm-modal
+        .holiday-letter-reader {
+        color: #102a43 !important;
+        background: linear-gradient(
+          165deg,
+          rgba(255, 255, 255, 0.96) 0%,
+          rgba(246, 248, 252, 0.94) 100%
+        ) !important;
+        border: 1px solid rgba(15, 23, 42, 0.08) !important;
+        box-shadow:
+          0 24px 56px rgba(15, 23, 42, 0.16),
+          0 4px 12px rgba(15, 23, 42, 0.06),
+          inset 0 1px 0 rgba(255, 255, 255, 0.98) !important;
+      }
+
+      /* 3. Biểu tượng tròn kính mờ 50x50 chuẩn đồng bộ */
+      html body .cm-icon-badge {
+        width: 50px !important;
+        height: 50px !important;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin: 0 auto 15px !important;
+        background: linear-gradient(
+          160deg,
+          rgba(168, 199, 250, 0.2) 0%,
+          rgba(168, 199, 250, 0.08) 100%
+        ) !important;
+        border: 1px solid rgba(168, 199, 250, 0.3) !important;
+        color: var(--btn-blue) !important;
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.22),
+          0 8px 20px rgba(66, 133, 244, 0.14) !important;
+        flex-shrink: 0;
+      }
+      html body .cm-icon-badge svg {
+        width: 23px !important;
+        height: 23px !important;
+        display: block;
+      }
+      html body[data-theme="light"] .cm-icon-badge {
+        background: linear-gradient(
+          160deg,
+          rgba(0, 91, 181, 0.12) 0%,
+          rgba(0, 91, 181, 0.05) 100%
+        ) !important;
+        border: 1px solid rgba(0, 91, 181, 0.2) !important;
+        color: var(--btn-blue) !important;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85) !important;
+      }
+
+      /* Biểu tượng đỏ ruby 50x50 cho TẤT CẢ hộp thoại Xóa */
+      html body .cm-theme-danger .cm-icon-badge,
+      html body .tng-confirm-card .cm-icon-badge,
+      html body .tng-del-box > div:first-child,
+      html body .tng-del-hd-box > div:first-child,
       html
         body
-        #custom-modal-overlay
-        .custom-modal.cm-theme-danger
-        #cm-confirm-btn {
-        background: rgba(255, 69, 58, 0.16) !important;
+        #tng-mailbox-confirm-modal
+        .holiday-letter-reader
+        > div:first-child {
+        width: 50px !important;
+        height: 50px !important;
+        border-radius: 50% !important;
+        margin: 0 auto 15px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: linear-gradient(
+          160deg,
+          rgba(255, 69, 58, 0.22) 0%,
+          rgba(255, 59, 48, 0.09) 100%
+        ) !important;
+        border: 1px solid rgba(255, 82, 72, 0.34) !important;
         color: #ff6961 !important;
+        box-shadow:
+          inset 0 1px 0 rgba(255, 215, 210, 0.24),
+          0 8px 22px rgba(255, 59, 48, 0.18) !important;
+        flex-shrink: 0;
+      }
+      html body .tng-del-box > div:first-child svg,
+      html body .tng-del-hd-box > div:first-child svg,
+      html
+        body
+        #tng-mailbox-confirm-modal
+        .holiday-letter-reader
+        > div:first-child
+        svg {
+        width: 23px !important;
+        height: 23px !important;
+        stroke: currentColor !important;
+        stroke-width: 1.85 !important;
+        display: block;
+      }
+
+      html body[data-theme="light"] .cm-theme-danger .cm-icon-badge,
+      html
+        body[data-theme="light"]
+        .tng-modal-box.tng-confirm-card
+        > .cm-icon-badge,
+      html body[data-theme="light"] .tng-del-box > div:first-child,
+      html
+        body[data-theme="light"]
+        div[style*="position: fixed"][style*="z-index"]:not(#viewer-modal)
+        > .tng-del-hd-box
+        > div:first-child,
+      html
+        body[data-theme="light"]
+        #tng-mailbox-confirm-modal
+        .holiday-letter-reader
+        > div:first-child {
+        background: linear-gradient(
+          160deg,
+          rgba(255, 59, 48, 0.13) 0%,
+          rgba(255, 59, 48, 0.06) 100%
+        ) !important;
+        border: 1px solid rgba(255, 59, 48, 0.22) !important;
+        border-radius: 50% !important;
+        color: #d93025 !important;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85) !important;
+      }
+
+      /* Đồng bộ & bảo vệ vòng tròn icon ở các bảng thông báo (.tng-alert-box & Gửi thành công) */
+      html body .tng-alert-box > div:first-child,
+      html body #tng-alert-modal-v27 > div > div:first-child {
+        width: 50px !important;
+        height: 50px !important;
+        border-radius: 50% !important;
+        margin: 0 auto 15px !important;
+        border: 1px solid rgba(255, 255, 255, 0.12) !important;
+      }
+      html body .tng-alert-box > div:first-child svg,
+      html body #tng-alert-modal-v27 > div > div:first-child svg {
+        width: 24px !important;
+        height: 24px !important;
+        display: block;
+      }
+      html
+        body[data-theme="light"]
+        div[style*="position: fixed"][style*="z-index"]:not(#viewer-modal)
+        > .tng-alert-box
+        > div:first-child,
+      html
+        body[data-theme="light"]
+        #tng-alert-modal-v27
+        > div
+        > div:first-child,
+      html
+        body[data-theme="light"]
+        #tng-alert-routine-v37
+        > .tng-alert-box
+        > div:first-child {
+        border-radius: 50% !important;
+        background: rgba(52, 199, 89, 0.14) !important;
+        border: 1px solid rgba(52, 199, 89, 0.24) !important;
+      }
+      html
+        body[data-theme="light"]
+        div[style*="position: fixed"][style*="z-index"]:not(#viewer-modal)
+        > .tng-alert-box
+        > div:first-child:has(svg[stroke="#ff3b30"]),
+      html
+        body[data-theme="light"]
+        #tng-alert-routine-v37
+        > .tng-alert-box
+        > div:first-child {
+        background: rgba(255, 59, 48, 0.12) !important;
+        border: 1px solid rgba(255, 59, 48, 0.22) !important;
+      }
+      html
+        body[data-theme="light"]
+        #tng-alert-modal-v27
+        > div
+        > div:first-child:has(svg[stroke="#ff9800"]) {
+        background: rgba(255, 152, 0, 0.14) !important;
+        border: 1px solid rgba(255, 152, 0, 0.25) !important;
+      }
+      /* Bảo vệ dấu tích xanh lá ở bảng Gửi báo cáo thành công trên Giao diện Sáng */
+      html body[data-theme="light"] .tng-modal-box > div:first-child:has(svg) {
+        background: linear-gradient(135deg, #4cd964, #34c759) !important;
+        border-radius: 20px !important;
+      }
+      html
+        body[data-theme="light"]
+        .tng-modal-box:has(.tng-report-option)
+        > div:first-child {
+        background: transparent !important;
+      }
+
+      /* 4. Tiêu đề & Mô tả cân đối, rõ nét trên cả Tối & Sáng */
+      html body #custom-modal-overlay #cm-title,
+      html body .tng-modal-box .tng-modal-title,
+      html body .tng-del-box > div:nth-child(2),
+      html body .tng-del-hd-box > div:nth-child(2),
+      html
+        body
+        #tng-mailbox-confirm-modal
+        .holiday-letter-reader
+        > div:nth-child(2) {
+        font-size: 18px !important;
+        font-weight: 600 !important;
+        color: var(--text-main) !important;
+        letter-spacing: -0.25px !important;
+        line-height: 1.38 !important;
+        margin: 0 0 8px !important;
+        width: 100% !important;
+      }
+      html body #custom-modal-overlay #cm-desc,
+      html body .tng-modal-box .tng-modal-desc,
+      html body .tng-del-box > div:nth-child(3),
+      html body .tng-del-hd-box > div:nth-child(3),
+      html
+        body
+        #tng-mailbox-confirm-modal
+        .holiday-letter-reader
+        > div:nth-child(3) {
+        font-size: 14px !important;
+        line-height: 1.55 !important;
+        color: var(--text-sub) !important;
+        margin: 0 0 22px !important;
+        padding: 0 4px !important;
+        width: 100% !important;
+      }
+      html body .tng-alert-box > div:nth-child(2),
+      html body #tng-alert-modal-v27 > div > div:nth-child(2) {
+        font-size: 15px !important;
+        font-weight: 500 !important;
+        line-height: 1.5 !important;
+        color: var(--text-main) !important;
+        margin: 0 0 22px !important;
+        width: 100% !important;
+      }
+      html body #custom-modal-overlay .custom-modal.cm-mode-input #cm-title {
+        margin-bottom: 16px !important;
+      }
+      html body[data-theme="light"] .tng-del-box > div:nth-child(2),
+      html
+        body[data-theme="light"]
+        div[style*="position: fixed"][style*="z-index"]:not(#viewer-modal)
+        > .tng-del-hd-box
+        > div:nth-child(2),
+      html body[data-theme="light"] .tng-modal-box .tng-modal-title {
+        color: #102a43 !important;
+      }
+      html body[data-theme="light"] .tng-del-box > div:nth-child(3),
+      html
+        body[data-theme="light"]
+        div[style*="position: fixed"][style*="z-index"]:not(#viewer-modal)
+        > .tng-del-hd-box
+        > div:nth-child(3),
+      html body[data-theme="light"] .tng-modal-box .tng-modal-desc {
+        color: #5f6368 !important;
+      }
+
+      /* Đồng bộ các tùy chọn Báo cáo vấn đề trên Giao diện Sáng */
+      html body[data-theme="light"] .tng-report-option {
+        color: #1e293b !important;
+        border-color: rgba(15, 23, 42, 0.1) !important;
+        background: rgba(15, 23, 42, 0.025);
+      }
+      html body[data-theme="light"] .tng-report-option:hover {
+        background: rgba(15, 23, 42, 0.055) !important;
+      }
+      html body[data-theme="light"] .tng-report-option.selected {
+        border-color: #005bb5 !important;
+        background: rgba(0, 91, 181, 0.08) !important;
+      }
+      html body[data-theme="light"] #tng-report-other-input {
+        background: rgba(15, 23, 42, 0.04) !important;
+        border-color: rgba(15, 23, 42, 0.14) !important;
+        color: #102a43 !important;
+      }
+
+      /* 5. Ô nhập liệu kính lõm bo 16px + vòng sáng focus êm ái */
+      html body #custom-modal-overlay #cm-input {
+        width: 100% !important;
+        height: 46px !important;
+        padding: 0 16px !important;
+        margin: 0 0 20px !important;
+        border-radius: 16px !important;
+        background: rgba(255, 255, 255, 0.055) !important;
+        border: 1px solid rgba(255, 255, 255, 0.11) !important;
+        color: var(--text-main) !important;
+        font-size: 15px !important;
+        font-weight: 400 !important;
+        outline: none !important;
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.22) !important;
+        transition:
+          border-color 0.24s ease,
+          background-color 0.24s ease,
+          box-shadow 0.24s ease !important;
+      }
+      html body #custom-modal-overlay #cm-input::placeholder {
+        color: rgba(142, 145, 143, 0.78);
+      }
+      html body #custom-modal-overlay #cm-input:focus {
+        background: rgba(255, 255, 255, 0.08) !important;
+        border-color: rgba(168, 199, 250, 0.62) !important;
+        box-shadow:
+          0 0 0 3.5px rgba(168, 199, 250, 0.14),
+          inset 0 1px 2px rgba(0, 0, 0, 0.16) !important;
+      }
+      html body[data-theme="light"] #custom-modal-overlay #cm-input {
+        background: rgba(15, 23, 42, 0.04) !important;
+        border: 1px solid rgba(15, 23, 42, 0.12) !important;
+        color: #102a43 !important;
+        box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04) !important;
+      }
+      html body[data-theme="light"] #custom-modal-overlay #cm-input:focus {
+        background: #ffffff !important;
+        border-color: rgba(0, 91, 181, 0.55) !important;
+        box-shadow: 0 0 0 3.5px rgba(0, 91, 181, 0.12) !important;
+      }
+
+      /* 6. Cặp nút hành động viên nang 50/50 dàn đều toàn chiều ngang */
+      html body #custom-modal-overlay .cm-actions,
+      html body .tng-modal-box .cm-actions,
+      html body .tng-modal-box .tng-modal-actions,
+      html body .tng-del-box > div:last-child,
+      html body .tng-del-hd-box > div:last-child,
+      html
+        body
+        #tng-mailbox-confirm-modal
+        .holiday-letter-reader
+        > div:last-child {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 10px !important;
+        width: 100% !important;
+        margin-top: 2px !important;
+      }
+
+      html body #custom-modal-overlay .cm-btn,
+      html body .tng-modal-box .cm-btn,
+      html body .tng-modal-box .tng-btn,
+      html body .tng-del-box button,
+      html body .tng-del-hd-box button,
+      html body .tng-alert-box button,
+      html body #tng-alert-modal-v27 button,
+      html body #tng-mailbox-confirm-modal .confirm-modal-btn {
+        flex: none !important;
+        width: 100% !important;
+        height: 44px !important;
+        padding: 0 16px !important;
+        border-radius: 999px !important;
+        font-size: 14.5px !important;
+        font-weight: 600 !important;
+        letter-spacing: -0.1px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        outline: none !important;
+        border: 1px solid transparent !important;
+        transition:
+          transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+          background 0.2s ease,
+          border-color 0.2s ease,
+          filter 0.2s ease !important;
+      }
+
+      /* Hiệu ứng lún nảy thống nhất, gỡ khóa scale(1) của rule button[style*="flex"] cũ */
+      @media (hover: hover) {
+        html body #custom-modal-overlay .cm-btn:hover,
+        html body .tng-modal-box .cm-btn:hover,
+        html body .tng-modal-box .tng-btn:hover,
+        html body div[style*="position: fixed"] .tng-del-box button:hover,
+        html body div[style*="position: fixed"] .tng-del-hd-box button:hover,
+        html body .tng-alert-box button:hover,
+        html body #tng-alert-modal-v27 button:hover,
+        html body #tng-mailbox-confirm-modal .confirm-modal-btn:hover {
+          transform: scale(0.975) !important;
+        }
+      }
+      html body #custom-modal-overlay .cm-btn:active,
+      html body .tng-modal-box .cm-btn:active,
+      html body .tng-modal-box .tng-btn:active,
+      html body div[style*="position: fixed"] .tng-del-box button:active,
+      html body div[style*="position: fixed"] .tng-del-hd-box button:active,
+      html body .tng-alert-box button:active,
+      html body #tng-alert-modal-v27 button:active,
+      html body #tng-mailbox-confirm-modal .confirm-modal-btn:active {
+        transition-duration: 0.06s !important;
+        transform: scale(0.935) !important;
+        opacity: 0.92 !important;
+      }
+
+      /* Nút Hủy & Đóng (Kính trung tính) */
+      html body #custom-modal-overlay .cm-btn-cancel,
+      html body .tng-modal-box .cm-btn-cancel,
+      html body .tng-modal-box .tng-btn-cancel,
+      html body div[style*="position: fixed"] .tng-del-box .tng-btn-cancel,
+      html body div[style*="position: fixed"] .tng-del-hd-box #btn-cancel-del,
+      html body .tng-alert-box button,
+      html body #tng-alert-modal-v27 button,
+      html body #tng-mailbox-confirm-modal .confirm-modal-btn.btn-cancel {
+        background: rgba(255, 255, 255, 0.08) !important;
+        border-color: rgba(255, 255, 255, 0.1) !important;
+        color: rgba(227, 227, 227, 0.9) !important;
+        font-weight: 500 !important;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+      }
+      html body #custom-modal-overlay .cm-btn-cancel:hover,
+      html body .tng-modal-box .cm-btn-cancel:hover,
+      html body .tng-modal-box .tng-btn-cancel:hover,
+      html
+        body
+        div[style*="position: fixed"]
+        .tng-del-box
+        .tng-btn-cancel:hover,
+      html
+        body
+        div[style*="position: fixed"]
+        .tng-del-hd-box
+        #btn-cancel-del:hover,
+      html body .tng-alert-box button:hover,
+      html body #tng-alert-modal-v27 button:hover,
+      html body #tng-mailbox-confirm-modal .confirm-modal-btn.btn-cancel:hover {
+        background: rgba(255, 255, 255, 0.14) !important;
+        color: #ffffff !important;
+      }
+
+      html body[data-theme="light"] #custom-modal-overlay .cm-btn-cancel,
+      html body[data-theme="light"] .tng-modal-box .cm-btn-cancel,
+      html body[data-theme="light"] .tng-modal-box .tng-btn-cancel,
+      html
+        body[data-theme="light"]
+        div[style*="position: fixed"]
+        .tng-del-box
+        .tng-btn-cancel,
+      html
+        body[data-theme="light"]
+        div[style*="position: fixed"][style*="z-index"]:not(#viewer-modal)
+        > .tng-del-hd-box
+        #btn-cancel-del,
+      html
+        body[data-theme="light"]
+        div[style*="position: fixed"][style*="z-index"]:not(#viewer-modal)
+        > .tng-alert-box
+        button,
+      html
+        body[data-theme="light"]
+        #tng-alert-routine-v37
+        .tng-alert-box
+        button,
+      html body[data-theme="light"] #tng-alert-modal-v27 button,
+      html
+        body[data-theme="light"]
+        #tng-mailbox-confirm-modal
+        .confirm-modal-btn.btn-cancel {
+        background: rgba(15, 23, 42, 0.06) !important;
+        border-color: rgba(15, 23, 42, 0.09) !important;
+        color: #334155 !important;
+        box-shadow: none !important;
+      }
+      html body[data-theme="light"] #custom-modal-overlay .cm-btn-cancel:hover,
+      html body[data-theme="light"] .tng-modal-box .cm-btn-cancel:hover,
+      html body[data-theme="light"] .tng-modal-box .tng-btn-cancel:hover,
+      html
+        body[data-theme="light"]
+        div[style*="position: fixed"]
+        .tng-del-box
+        .tng-btn-cancel:hover,
+      html
+        body[data-theme="light"]
+        div[style*="position: fixed"][style*="z-index"]:not(#viewer-modal)
+        > .tng-del-hd-box
+        #btn-cancel-del:hover,
+      html
+        body[data-theme="light"]
+        div[style*="position: fixed"][style*="z-index"]:not(#viewer-modal)
+        > .tng-alert-box
+        button:hover,
+      html
+        body[data-theme="light"]
+        #tng-alert-routine-v37
+        .tng-alert-box
+        button:hover,
+      html body[data-theme="light"] #tng-alert-modal-v27 button:hover,
+      html
+        body[data-theme="light"]
+        #tng-mailbox-confirm-modal
+        .confirm-modal-btn.btn-cancel:hover {
+        background: rgba(15, 23, 42, 0.11) !important;
+        color: #0f172a !important;
+      }
+
+      /* Nút Xác nhận / Gửi báo cáo / Đóng thành công (Kính xanh chuẩn hệ thống) */
+      html body #custom-modal-overlay .cm-btn-confirm,
+      html body .tng-modal-box #btn-submit-report,
+      html body .tng-modal-box #btn-close-success {
+        background: linear-gradient(
+          180deg,
+          rgba(168, 199, 250, 0.24) 0%,
+          rgba(168, 199, 250, 0.14) 100%
+        ) !important;
+        border-color: rgba(168, 199, 250, 0.34) !important;
+        color: #cfe0ff !important;
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.22),
+          0 6px 16px rgba(66, 133, 244, 0.16) !important;
+      }
+      html body #custom-modal-overlay .cm-btn-confirm:hover,
+      html body .tng-modal-box #btn-submit-report:hover,
+      html body .tng-modal-box #btn-close-success:hover {
+        background: linear-gradient(
+          180deg,
+          rgba(168, 199, 250, 0.32) 0%,
+          rgba(168, 199, 250, 0.2) 100%
+        ) !important;
+        border-color: rgba(168, 199, 250, 0.48) !important;
+        color: #ffffff !important;
+      }
+      html body[data-theme="light"] #custom-modal-overlay .cm-btn-confirm,
+      html body[data-theme="light"] .tng-modal-box #btn-submit-report,
+      html body[data-theme="light"] .tng-modal-box #btn-close-success {
+        background: linear-gradient(
+          180deg,
+          rgba(0, 91, 181, 0.14) 0%,
+          rgba(0, 91, 181, 0.09) 100%
+        ) !important;
+        border-color: rgba(0, 91, 181, 0.26) !important;
+        color: #005bb5 !important;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75) !important;
+      }
+      html body[data-theme="light"] #custom-modal-overlay .cm-btn-confirm:hover,
+      html body[data-theme="light"] .tng-modal-box #btn-submit-report:hover,
+      html body[data-theme="light"] .tng-modal-box #btn-close-success:hover {
+        background: linear-gradient(
+          180deg,
+          rgba(0, 91, 181, 0.21) 0%,
+          rgba(0, 91, 181, 0.14) 100%
+        ) !important;
+      }
+
+      /* Nút Xóa (Đỏ ruby kính lỏng đồng bộ toàn hệ thống) */
+      html
+        body
+        #custom-modal-overlay
+        .custom-modal.cm-theme-danger
+        #cm-confirm-btn,
+      html body .tng-modal-box.tng-confirm-card .cm-btn-danger,
+      html body div[style*="position: fixed"] .tng-del-box .tng-btn-danger,
+      html body div[style*="position: fixed"] .tng-del-hd-box #btn-confirm-del,
+      html body #tng-mailbox-confirm-modal .confirm-modal-btn.btn-danger {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 69, 58, 0.24) 0%,
+          rgba(255, 59, 48, 0.14) 100%
+        ) !important;
+        border-color: rgba(255, 82, 72, 0.38) !important;
+        color: #ff7b74 !important;
+        font-weight: 600 !important;
+        box-shadow:
+          inset 0 1px 0 rgba(255, 215, 210, 0.24),
+          0 6px 18px rgba(255, 59, 48, 0.18) !important;
       }
       html
         body
         #custom-modal-overlay
         .custom-modal.cm-theme-danger
-        #cm-confirm-btn:hover {
-        background: rgba(255, 69, 58, 0.26) !important;
+        #cm-confirm-btn:hover,
+      html body .tng-modal-box.tng-confirm-card .cm-btn-danger:hover,
+      html
+        body
+        div[style*="position: fixed"]
+        .tng-del-box
+        .tng-btn-danger:hover,
+      html
+        body
+        div[style*="position: fixed"]
+        .tng-del-hd-box
+        #btn-confirm-del:hover,
+      html body #tng-mailbox-confirm-modal .confirm-modal-btn.btn-danger:hover {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 69, 58, 0.34) 0%,
+          rgba(255, 59, 48, 0.22) 100%
+        ) !important;
+        border-color: rgba(255, 96, 86, 0.52) !important;
+        color: #ff948e !important;
       }
 
-      /* Đồng bộ giao diện Sáng cho nút Đồng ý xóa */
+      /* Đồng bộ Giao diện Sáng cho nút Xóa (vượt độ ưu tiên rule L506) */
       html
         body[data-theme="light"]
         #custom-modal-overlay
         .custom-modal.cm-theme-danger
-        #cm-confirm-btn {
-        background: rgba(255, 59, 48, 0.12) !important;
+        #cm-confirm-btn,
+      html
+        body[data-theme="light"]
+        .tng-modal-box.tng-confirm-card
+        .cm-btn-danger,
+      html
+        body[data-theme="light"]
+        div[style*="position: fixed"]
+        .tng-del-box
+        .tng-btn-danger,
+      html
+        body[data-theme="light"]
+        div[style*="position: fixed"][style*="z-index"]:not(#viewer-modal)
+        > .tng-del-hd-box
+        button#btn-confirm-del,
+      html
+        body[data-theme="light"]
+        #tng-mailbox-confirm-modal
+        .confirm-modal-btn.btn-danger {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 59, 48, 0.14) 0%,
+          rgba(255, 59, 48, 0.08) 100%
+        ) !important;
+        border-color: rgba(255, 59, 48, 0.28) !important;
         color: #d93025 !important;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.78) !important;
       }
       html
         body[data-theme="light"]
         #custom-modal-overlay
         .custom-modal.cm-theme-danger
-        #cm-confirm-btn:hover {
-        background: rgba(255, 59, 48, 0.22) !important;
+        #cm-confirm-btn:hover,
+      html
+        body[data-theme="light"]
+        .tng-modal-box.tng-confirm-card
+        .cm-btn-danger:hover,
+      html
+        body[data-theme="light"]
+        div[style*="position: fixed"]
+        .tng-del-box
+        .tng-btn-danger:hover,
+      html
+        body[data-theme="light"]
+        div[style*="position: fixed"][style*="z-index"]:not(#viewer-modal)
+        > .tng-del-hd-box
+        button#btn-confirm-del:hover,
+      html
+        body[data-theme="light"]
+        #tng-mailbox-confirm-modal
+        .confirm-modal-btn.btn-danger:hover {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 59, 48, 0.22) 0%,
+          rgba(255, 59, 48, 0.14) 100%
+        ) !important;
+      }
+
+      /* Đồng bộ hộp thoại nhập 2 ô (#custom-add-modal & #custom-child-add-modal) */
+      html body #custom-add-modal > div,
+      html body #custom-child-add-modal > div {
+        border-radius: 28px !important;
+        border: 1px solid rgba(255, 255, 255, 0.13) !important;
+        box-shadow:
+          0 28px 64px rgba(0, 0, 0, 0.58),
+          inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
+      }
+      html body[data-theme="light"] #custom-add-modal > div,
+      html body[data-theme="light"] #custom-child-add-modal > div {
+        border: 1px solid rgba(15, 23, 42, 0.08) !important;
+        box-shadow:
+          0 24px 56px rgba(15, 23, 42, 0.16),
+          inset 0 1px 0 rgba(255, 255, 255, 0.98) !important;
+      }
+      html body #custom-add-modal input,
+      html body #custom-child-add-modal input {
+        border-radius: 16px !important;
+        transition:
+          border-color 0.24s ease,
+          box-shadow 0.24s ease !important;
+      }
+      html body #custom-add-modal input:focus,
+      html body #custom-child-add-modal input:focus {
+        box-shadow: 0 0 0 3.5px rgba(168, 199, 250, 0.14) !important;
+      }
+      html body[data-theme="light"] #custom-add-modal input:focus,
+      html body[data-theme="light"] #custom-child-add-modal input:focus {
+        box-shadow: 0 0 0 3.5px rgba(0, 91, 181, 0.12) !important;
+      }
+
+      /* ============================================================ */
+      /* STUDIO CHỈNH SỬA ẢNH ĐẠI DIỆN (PC NGANG / MOBILE DỌC)        */
+      /* Ảnh xem trước nguyên gốc + Tab giọt nước xanh Liquid Glass   */
+      /* ============================================================ */
+      html body #crop-modal-overlay.custom-modal-overlay {
+        background: rgba(6, 8, 14, 0.62) !important;
+        backdrop-filter: blur(16px) !important;
+        -webkit-backdrop-filter: blur(16px) !important;
+      }
+      html body[data-theme="light"] #crop-modal-overlay.custom-modal-overlay {
+        background: rgba(15, 23, 42, 0.32) !important;
+      }
+
+      /* Khung Studio: Mặc định dọc cho điện thoại */
+      html body #crop-modal-overlay .custom-modal.crop-studio-modal {
+        width: min(410px, calc(100vw - 24px)) !important;
+        max-width: calc(100vw - 24px) !important;
+        max-height: 92dvh !important;
+        overflow-y: auto !important;
+        padding: 22px 20px 20px !important;
+        border-radius: 28px !important;
+        align-items: stretch !important;
+        text-align: left !important;
+        scrollbar-width: none;
+      }
+      html
+        body
+        #crop-modal-overlay
+        .custom-modal.crop-studio-modal::-webkit-scrollbar {
+        display: none;
+      }
+
+      /* Thanh tiêu đề thoáng, không xuống dòng gãy chữ */
+      .crop-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
+        margin-bottom: 18px;
+      }
+      .crop-header-left {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        min-width: 0;
+      }
+      .crop-header h3 {
+        font-size: 18px !important;
+        font-weight: 600 !important;
+        color: var(--text-main) !important;
+        letter-spacing: -0.25px;
+        line-height: 1.3 !important;
+        margin: 0 !important;
+        white-space: nowrap;
+      }
+      .crop-subtitle {
+        font-size: 12.5px;
+        color: var(--text-sub);
+        line-height: 1.5;
+      }
+      .crop-hint-pc {
+        display: none;
+      }
+      .crop-hint-mb {
+        display: inline;
+      }
+      .crop-header-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-shrink: 0;
+      }
+      .crop-mini-btn {
+        height: 34px;
+        padding: 0 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.11);
+        background: rgba(255, 255, 255, 0.07);
+        color: var(--text-main);
+        font-size: 12.5px;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        cursor: pointer;
+        white-space: nowrap;
+        transition:
+          background 0.2s ease,
+          transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .crop-mini-btn.icon-only {
+        width: 34px;
+        padding: 0;
+      }
+      .crop-mini-btn:hover {
+        background: rgba(255, 255, 255, 0.14);
+      }
+      .crop-mini-btn svg {
+        width: 14px;
+        height: 14px;
+        display: block;
+      }
+      body[data-theme="light"] .crop-mini-btn {
+        background: rgba(15, 23, 42, 0.055);
+        border-color: rgba(15, 23, 42, 0.09);
+        color: #1e293b;
+      }
+      body[data-theme="light"] .crop-mini-btn:hover {
+        background: rgba(15, 23, 42, 0.11);
+      }
+
+      /* Khối thân Studio (Mặc định xếp dọc trên điện thoại) */
+      .crop-body {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+      .crop-left-col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .crop-right-col {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+      }
+
+      /* Khung cắt ảnh nguyên gốc siêu sắc nét */
+      .crop-stage-wrap {
+        position: relative;
+        width: 244px;
+        height: 244px;
+        border-radius: 24px;
+        overflow: hidden;
+        background: #11131a;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow:
+          0 16px 38px rgba(0, 0, 0, 0.48),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        cursor: grab;
+        touch-action: none;
+        user-select: none;
+        -webkit-user-select: none;
+        flex-shrink: 0;
+      }
+      .crop-stage-wrap.is-dragging {
+        cursor: grabbing;
+      }
+      body[data-theme="light"] .crop-stage-wrap {
+        background: #e2e8f0;
+        border-color: rgba(15, 23, 42, 0.12);
+        box-shadow: 0 14px 32px rgba(15, 23, 42, 0.13);
+      }
+
+      .crop-preview-img {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        max-width: none !important;
+        max-height: none !important;
+        display: block;
+        transform-origin: center center;
+        pointer-events: none;
+        user-select: none;
+        -webkit-user-drag: none;
+        image-rendering: auto;
+      }
+
+      .crop-mask-svg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 2;
+      }
+      .crop-mask-shade {
+        fill: rgba(8, 10, 16, 0.6);
+      }
+      body[data-theme="light"] .crop-mask-shade {
+        fill: rgba(15, 23, 42, 0.46);
+      }
+      .crop-mask-grid {
+        opacity: 0;
+        stroke: rgba(255, 255, 255, 0.42);
+        stroke-width: 0.45;
+        transition: opacity 0.22s ease;
+      }
+      .crop-stage-wrap.is-editing .crop-mask-grid {
+        opacity: 1;
+      }
+      .crop-mask-ring {
+        stroke: rgba(255, 255, 255, 0.78);
+        stroke-width: 0.7;
+        transition: stroke 0.22s ease;
+      }
+      .crop-stage-wrap.is-editing .crop-mask-ring {
+        stroke: rgba(168, 199, 250, 0.96);
+      }
+
+      /* ============================================================ */
+      /* THANH 3 TAB GIỌT NƯỚC XANH LỎNG (ĐỒNG BỘ QUẢN LÝ GÓI)        */
+      /* ============================================================ */
+      html body #crop-modal-overlay #crop-tabs-bar.crop-tabs {
+        position: relative !important;
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        padding: 0 !important;
+        gap: 0 !important;
+        border-radius: 14px !important;
+        background: rgba(255, 255, 255, 0.055) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        margin-bottom: 18px !important;
+        isolation: isolate;
+        overflow: visible !important;
+      }
+      html
+        body[data-theme="light"]
+        #crop-modal-overlay
+        #crop-tabs-bar.crop-tabs {
+        background: rgba(15, 23, 42, 0.05) !important;
+        border-color: rgba(15, 23, 42, 0.08) !important;
+      }
+
+      /* Giọt nước xanh trượt ngang thuần GPU */
+      html body #crop-modal-overlay #crop-tabs-bar > .tng-sub-glass-pill {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        z-index: 0 !important;
+        pointer-events: none !important;
+        box-sizing: border-box !important;
+        border: none !important;
+        opacity: 0;
+        overflow: visible !important;
+        border-radius: var(--tng-pill-r, 11.5px) !important;
+        will-change: transform, width, border-radius, opacity;
+        transition:
+          transform 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+          width 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+          border-radius 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+          opacity 0.2s ease !important;
+      }
+      html
+        body
+        #crop-modal-overlay
+        #crop-tabs-bar.returning
+        > .tng-sub-glass-pill {
+        transition:
+          transform 0.44s cubic-bezier(0.22, 1, 0.36, 1),
+          width 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+          border-radius 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+          opacity 0.2s ease !important;
+      }
+      html
+        body
+        #crop-modal-overlay
+        #crop-tabs-bar
+        > .tng-sub-glass-pill.is-instant,
+      html
+        body
+        #crop-modal-overlay
+        #crop-tabs-bar.returning
+        > .tng-sub-glass-pill.is-instant {
+        transition: none !important;
+      }
+      html
+        body
+        #crop-modal-overlay
+        #crop-tabs-bar
+        > .tng-sub-glass-pill.tng-lg-mounted {
+        background: transparent !important;
+        background-image: none !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+      }
+
+      /* Dark Mode: Tông xanh #a8c7fa trong veo giống hệt tab Quản lý gói */
+      html
+        body
+        #crop-modal-overlay
+        #crop-tabs-bar
+        > .tng-sub-glass-pill
+        > .tng-lg-drop {
+        --hit-sy-x: 1.1;
+        background: linear-gradient(
+          168deg,
+          rgba(168, 199, 250, 0.13) 0%,
+          rgba(168, 199, 250, 0.03) 50%,
+          rgba(168, 199, 250, 0.095) 100%
+        ) !important;
+        box-shadow:
+          0 8px 20px -6px rgba(168, 199, 250, 0.24),
+          0 2px 6px -2px rgba(0, 0, 0, 0.3),
+          inset 0 1px 4px rgba(168, 199, 250, 0.24),
+          inset 0 -3px 8px -4px rgba(168, 199, 250, 0.26),
+          inset 0 -1px 3px -1px rgba(0, 0, 0, 0.28) !important;
+      }
+      html
+        body
+        #crop-modal-overlay
+        #crop-tabs-bar
+        > .tng-sub-glass-pill
+        .tng-lg-flow {
+        background:
+          radial-gradient(
+            42% 36% at 32% 42%,
+            rgba(168, 199, 250, 0.075) 0%,
+            rgba(168, 199, 250, 0.028) 46%,
+            transparent 74%
+          ),
+          radial-gradient(
+            38% 34% at 72% 62%,
+            rgba(168, 199, 250, 0.055) 0%,
+            transparent 72%
+          ) !important;
+      }
+      html
+        body
+        #crop-modal-overlay
+        #crop-tabs-bar
+        > .tng-sub-glass-pill
+        .tng-lg-rim {
+        background: linear-gradient(
+          145deg,
+          rgba(168, 199, 250, 0.72) 0%,
+          rgba(168, 199, 250, 0.28) 30%,
+          rgba(168, 199, 250, 0.18) 55%,
+          rgba(168, 199, 250, 0.3) 78%,
+          rgba(168, 199, 250, 0.58) 100%
+        ) !important;
+      }
+      html
+        body
+        #crop-modal-overlay
+        #crop-tabs-bar
+        > .tng-sub-glass-pill
+        .tng-lg-r1 {
+        background: radial-gradient(
+          circle,
+          rgba(222, 236, 255, 0.95) 0%,
+          rgba(168, 199, 250, 0.56) 34%,
+          transparent 68%
+        ) !important;
+      }
+      html
+        body
+        #crop-modal-overlay
+        #crop-tabs-bar
+        > .tng-sub-glass-pill
+        .tng-lg-r2 {
+        background: radial-gradient(
+          circle,
+          rgba(168, 199, 250, 0.58) 0%,
+          rgba(168, 199, 250, 0.22) 40%,
+          transparent 70%
+        ) !important;
+      }
+      html
+        body
+        #crop-modal-overlay
+        #crop-tabs-bar
+        > .tng-sub-glass-pill
+        .tng-lg-in {
+        background: radial-gradient(
+          ellipse 50% 50% at 50% 50%,
+          rgba(168, 199, 250, 0.11) 0%,
+          rgba(168, 199, 250, 0.038) 48%,
+          transparent 74%
+        ) !important;
+      }
+      html
+        body
+        #crop-modal-overlay
+        #crop-tabs-bar
+        > .tng-sub-glass-pill
+        .tng-lg-rip {
+        background: radial-gradient(
+          circle,
+          transparent 42%,
+          rgba(168, 199, 250, 0.52) 60%,
+          rgba(222, 236, 255, 0.24) 68%,
+          transparent 76%
+        ) !important;
+      }
+      html
+        body
+        #crop-modal-overlay
+        #crop-tabs-bar
+        > .tng-sub-glass-pill
+        .tng-lg-rs {
+        background: radial-gradient(
+          ellipse 50% 50% at 50% 50%,
+          rgba(232, 242, 255, 0.96) 0%,
+          rgba(168, 199, 250, 0.62) 44%,
+          transparent 76%
+        ) !important;
+      }
+      html
+        body
+        #crop-modal-overlay
+        #crop-tabs-bar
+        .tng-lg-drop.tng-lg-sliding-x {
+        animation: tngLgSlideX 0.42s cubic-bezier(0.22, 1, 0.36, 1) forwards !important;
+      }
+      html
+        body
+        #crop-modal-overlay
+        #crop-tabs-bar.returning
+        .tng-lg-drop.tng-lg-sliding-x {
+        animation: tngLgSlideX 0.48s cubic-bezier(0.22, 1, 0.36, 1) forwards !important;
+      }
+
+      /* Light Mode: Tông xanh #005bb5 trong veo */
+      html
+        body[data-theme="light"]
+        #crop-modal-overlay
+        #crop-tabs-bar
+        > .tng-sub-glass-pill
+        > .tng-lg-drop {
+        background: linear-gradient(
+          168deg,
+          rgba(0, 91, 181, 0.11) 0%,
+          rgba(0, 91, 181, 0.025) 50%,
+          rgba(0, 91, 181, 0.08) 100%
+        ) !important;
+        box-shadow:
+          0 8px 18px -6px rgba(0, 91, 181, 0.18),
+          0 2px 5px -1px rgba(0, 91, 181, 0.09),
+          inset 0 1px 4px rgba(255, 255, 255, 0.85),
+          inset 0 -3px 8px -4px rgba(0, 91, 181, 0.18) !important;
+      }
+      html
+        body[data-theme="light"]
+        #crop-modal-overlay
+        #crop-tabs-bar
+        > .tng-sub-glass-pill
+        .tng-lg-rim {
+        background: linear-gradient(
+          145deg,
+          rgba(0, 91, 181, 0.56) 0%,
+          rgba(0, 91, 181, 0.22) 34%,
+          rgba(0, 91, 181, 0.14) 56%,
+          rgba(0, 91, 181, 0.44) 100%
+        ) !important;
+      }
+      html
+        body[data-theme="light"]
+        #crop-modal-overlay
+        #crop-tabs-bar
+        > .tng-sub-glass-pill
+        .tng-lg-r1 {
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.96) 0%,
+          rgba(0, 91, 181, 0.44) 36%,
+          transparent 68%
+        ) !important;
+      }
+      html
+        body[data-theme="light"]
+        #crop-modal-overlay
+        #crop-tabs-bar
+        > .tng-sub-glass-pill
+        .tng-lg-r2 {
+        background: radial-gradient(
+          circle,
+          rgba(0, 91, 181, 0.34) 0%,
+          rgba(0, 91, 181, 0.14) 42%,
+          transparent 70%
+        ) !important;
+      }
+      html
+        body[data-theme="light"]
+        #crop-modal-overlay
+        #crop-tabs-bar
+        > .tng-sub-glass-pill
+        .tng-lg-rip {
+        background: radial-gradient(
+          circle,
+          transparent 42%,
+          rgba(0, 91, 181, 0.3) 60%,
+          rgba(255, 255, 255, 0.62) 68%,
+          transparent 76%
+        ) !important;
+      }
+
+      /* 3 nút Tab bên trên lớp nước: khóa kích thước ngoài, chỉ lún lõi chữ */
+      html body #crop-modal-overlay #crop-tabs-bar > .crop-tab-btn,
+      html body #crop-modal-overlay #crop-tabs-bar > .crop-tab-btn:hover,
+      html body #crop-modal-overlay #crop-tabs-bar > .crop-tab-btn:active,
+      html body #crop-modal-overlay #crop-tabs-bar > .crop-tab-btn.active {
+        position: relative !important;
+        z-index: 1 !important;
+        height: 40px !important;
+        margin: 0 !important;
+        padding: 0 8px !important;
+        border: none !important;
+        border-radius: 0 !important;
+        background: transparent !important;
+        background-color: transparent !important;
+        box-shadow: none !important;
+        transform: scale(1) !important;
+        opacity: 1 !important;
+        color: var(--text-sub) !important;
+        font-size: 13px !important;
+        font-weight: 500 !important;
+        cursor: pointer;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        transition: color 0.24s ease !important;
+      }
+      html
+        body[data-theme="light"]
+        #crop-modal-overlay
+        #crop-tabs-bar
+        > .crop-tab-btn {
+        color: #5f6368 !important;
+      }
+      html
+        body
+        #crop-modal-overlay
+        #crop-tabs-bar
+        > .crop-tab-btn.tng-pill-focus,
+      html
+        body
+        #crop-modal-overlay
+        #crop-tabs-bar
+        > .crop-tab-btn.tng-pill-focus
+        * {
+        color: var(--btn-blue) !important;
+        font-weight: 600 !important;
+        text-shadow: 0 0 10px rgba(168, 199, 250, 0.35);
+      }
+      html
+        body[data-theme="light"]
+        #crop-modal-overlay
+        #crop-tabs-bar
+        > .crop-tab-btn.tng-pill-focus,
+      html
+        body[data-theme="light"]
+        #crop-modal-overlay
+        #crop-tabs-bar
+        > .crop-tab-btn.tng-pill-focus
+        * {
+        color: var(--btn-blue) !important;
+        text-shadow: none;
+      }
+      html
+        body
+        #crop-modal-overlay
+        #crop-tabs-bar
+        > .crop-tab-btn
+        > .tng-sub-tab-lbl {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        white-space: nowrap;
+        transform-origin: center center;
+        will-change: transform;
+        transition:
+          transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+          color 0.24s ease !important;
+      }
+      @media (hover: hover) {
+        html
+          body
+          #crop-modal-overlay
+          #crop-tabs-bar
+          > .crop-tab-btn:hover
+          > .tng-sub-tab-lbl {
+          transform: scale(0.965) !important;
+        }
+      }
+      html
+        body
+        #crop-modal-overlay
+        #crop-tabs-bar
+        > .crop-tab-btn:active
+        > .tng-sub-tab-lbl {
+        transition-duration: 0.05s !important;
+        transform: scale(0.88) !important;
+      }
+      .crop-tab-btn svg {
+        width: 14.5px;
+        height: 14.5px;
+        flex-shrink: 0;
+      }
+
+      /* Khung nội dung từng Tab có hiệu ứng trượt êm theo hướng chuyển */
+      .crop-panels {
+        min-height: 158px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-bottom: 18px;
+      }
+      .crop-panel {
+        display: none;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .crop-panel.active {
+        display: flex;
+      }
+      .crop-panel.slide-from-right {
+        animation: cropSlideFromRight 0.34s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      .crop-panel.slide-from-left {
+        animation: cropSlideFromLeft 0.34s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      @keyframes cropSlideFromRight {
+        from {
+          opacity: 0;
+          transform: translateX(14px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      @keyframes cropSlideFromLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-14px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      /* Thanh trượt rộng rãi, nhãn & số liệu thoáng rõ */
+      .crop-slider-row {
+        display: grid;
+        grid-template-columns: 84px 1fr 48px;
+        align-items: center;
+        gap: 12px;
+      }
+      .crop-slider-row.with-steppers {
+        grid-template-columns: 84px 26px 1fr 26px 48px;
+        gap: 8px;
+      }
+      .crop-slider-label {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text-sub);
+        white-space: nowrap;
+        line-height: 1.4;
+      }
+      .crop-slider-val {
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--text-main);
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+      }
+      .crop-step-btn {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.065);
+        color: var(--text-main);
+        font-size: 15px;
+        line-height: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+      .crop-step-btn:hover {
+        background: rgba(255, 255, 255, 0.14);
+      }
+      body[data-theme="light"] .crop-step-btn {
+        background: rgba(15, 23, 42, 0.06);
+        border-color: rgba(15, 23, 42, 0.1);
+        color: #1e293b;
+      }
+
+      input[type="range"].crop-slider {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        height: 5px;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: none !important;
+        border-radius: 999px !important;
+        outline: none !important;
+        cursor: pointer;
+        background: linear-gradient(
+          90deg,
+          var(--btn-blue) 0%,
+          var(--btn-blue) var(--crop-pct, 50%),
+          rgba(255, 255, 255, 0.14) var(--crop-pct, 50%),
+          rgba(255, 255, 255, 0.14) 100%
+        ) !important;
+      }
+      body[data-theme="light"] input[type="range"].crop-slider {
+        background: linear-gradient(
+          90deg,
+          var(--btn-blue) 0%,
+          var(--btn-blue) var(--crop-pct, 50%),
+          rgba(15, 23, 42, 0.12) var(--crop-pct, 50%),
+          rgba(15, 23, 42, 0.12) 100%
+        ) !important;
+      }
+      input[type="range"].crop-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #ffffff;
+        border: 2px solid var(--btn-blue);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+        transition: transform 0.18s ease;
+      }
+      input[type="range"].crop-slider:active::-webkit-slider-thumb {
+        transform: scale(1.18);
+      }
+      input[type="range"].crop-slider::-moz-range-thumb {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #ffffff;
+        border: 2px solid var(--btn-blue);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+      }
+
+      /* 4 nút xoay & lật nhanh thoáng hơn */
+      .crop-quick-tools {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin-top: 6px;
+      }
+      .crop-tool-btn {
+        height: 54px;
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        background: rgba(255, 255, 255, 0.055);
+        color: var(--text-main);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        font-size: 11.5px;
+        font-weight: 500;
+        cursor: pointer;
+        transition:
+          background 0.2s ease,
+          border-color 0.2s ease,
+          color 0.2s ease,
+          transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .crop-tool-btn svg {
+        width: 16px;
+        height: 16px;
+      }
+      .crop-tool-btn:hover {
+        background: rgba(255, 255, 255, 0.12);
+      }
+      .crop-tool-btn.active {
+        background: rgba(168, 199, 250, 0.18);
+        border-color: rgba(168, 199, 250, 0.42);
+        color: var(--btn-blue);
+      }
+      body[data-theme="light"] .crop-tool-btn {
+        background: rgba(15, 23, 42, 0.045);
+        border-color: rgba(15, 23, 42, 0.08);
+        color: #1e293b;
+      }
+      body[data-theme="light"] .crop-tool-btn:hover {
+        background: rgba(15, 23, 42, 0.09);
+      }
+      body[data-theme="light"] .crop-tool-btn.active {
+        background: rgba(0, 91, 181, 0.11);
+        border-color: rgba(0, 91, 181, 0.3);
+        color: #005bb5;
+      }
+
+      /* Lưới 8 bộ lọc màu */
+      .crop-filter-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+      }
+      .crop-filter-item {
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 16px;
+        padding: 7px 5px 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        color: var(--text-sub);
+        transition:
+          border-color 0.2s ease,
+          background 0.2s ease,
+          color 0.2s ease,
+          transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      .crop-filter-item:hover {
+        background: rgba(255, 255, 255, 0.09);
+        color: var(--text-main);
+      }
+      .crop-filter-item.active {
+        border-color: rgba(168, 199, 250, 0.62);
+        background: rgba(168, 199, 250, 0.14);
+        color: var(--btn-blue);
+      }
+      .crop-filter-thumb {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background-size: cover;
+        background-position: center;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        display: block;
+        flex-shrink: 0;
+      }
+      .crop-filter-name {
+        font-size: 11.5px;
+        font-weight: 500;
+        line-height: 1.25;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+      }
+      body[data-theme="light"] .crop-filter-item {
+        background: rgba(15, 23, 42, 0.035);
+        border-color: rgba(15, 23, 42, 0.08);
+        color: #475569;
+      }
+      body[data-theme="light"] .crop-filter-item.active {
+        border-color: rgba(0, 91, 181, 0.45);
+        background: rgba(0, 91, 181, 0.1);
+        color: #005bb5;
+      }
+
+      /* Cặp nút đáy 50/50 */
+      .crop-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        width: 100%;
+      }
+      .crop-actions .crop-action-btn {
+        width: 100%;
+        height: 44px;
+        border-radius: 999px;
+        font-size: 14.5px;
+        font-weight: 600;
+        cursor: pointer;
+        border: 1px solid transparent;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition:
+          transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1),
+          background 0.2s ease,
+          border-color 0.2s ease;
+      }
+      .crop-action-cancel {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.1) !important;
+        color: rgba(227, 227, 227, 0.9);
+        font-weight: 500 !important;
+      }
+      .crop-action-cancel:hover {
+        background: rgba(255, 255, 255, 0.14);
+        color: #ffffff;
+      }
+      body[data-theme="light"] .crop-action-cancel {
+        background: rgba(15, 23, 42, 0.06);
+        border-color: rgba(15, 23, 42, 0.09) !important;
+        color: #334155;
+      }
+      body[data-theme="light"] .crop-action-cancel:hover {
+        background: rgba(15, 23, 42, 0.11);
+        color: #0f172a;
+      }
+      .crop-action-confirm {
+        background: linear-gradient(
+          180deg,
+          rgba(168, 199, 250, 0.24) 0%,
+          rgba(168, 199, 250, 0.14) 100%
+        );
+        border-color: rgba(168, 199, 250, 0.36) !important;
+        color: #cfe0ff;
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.22),
+          0 6px 16px rgba(66, 133, 244, 0.16);
+      }
+      .crop-action-confirm:hover {
+        background: linear-gradient(
+          180deg,
+          rgba(168, 199, 250, 0.34) 0%,
+          rgba(168, 199, 250, 0.22) 100%
+        );
+        color: #ffffff;
+      }
+      body[data-theme="light"] .crop-action-confirm {
+        background: linear-gradient(
+          180deg,
+          rgba(0, 91, 181, 0.14) 0%,
+          rgba(0, 91, 181, 0.09) 100%
+        );
+        border-color: rgba(0, 91, 181, 0.26) !important;
+        color: #005bb5;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.78);
+      }
+      body[data-theme="light"] .crop-action-confirm:hover {
+        background: linear-gradient(
+          180deg,
+          rgba(0, 91, 181, 0.21) 0%,
+          rgba(0, 91, 181, 0.14) 100%
+        );
+      }
+
+      /* ============================================================ */
+      /* BỐ CỤC MÀN HÌNH NGANG RIÊNG CHO PC (>= 769px)                */
+      /* ============================================================ */
+      @media (min-width: 769px) {
+        html body #crop-modal-overlay .custom-modal.crop-studio-modal {
+          width: 736px !important;
+          max-width: calc(100vw - 48px) !important;
+          padding: 24px 28px 24px !important;
+          border-radius: 32px !important;
+          overflow: visible !important;
+        }
+        .crop-header {
+          align-items: center;
+          margin-bottom: 20px;
+          padding-bottom: 16px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        body[data-theme="light"] .crop-header {
+          border-bottom-color: rgba(15, 23, 42, 0.08);
+        }
+        .crop-header h3 {
+          font-size: 19px !important;
+        }
+        .crop-subtitle {
+          font-size: 13px;
+        }
+        .crop-hint-pc {
+          display: inline;
+        }
+        .crop-hint-mb {
+          display: none;
+        }
+        .crop-body {
+          display: grid;
+          grid-template-columns: 296px 1fr;
+          gap: 28px;
+          align-items: stretch;
+        }
+        .crop-stage-wrap {
+          width: 296px;
+          height: 296px;
+          border-radius: 26px;
+        }
+        .crop-right-col {
+          justify-content: space-between;
+        }
+        .crop-panels {
+          min-height: 174px;
+          margin-bottom: 16px;
+        }
+        .crop-panel {
+          gap: 16px;
+        }
+        .crop-slider-row {
+          grid-template-columns: 88px 1fr 48px;
+          gap: 14px;
+        }
+        .crop-slider-row.with-steppers {
+          grid-template-columns: 88px 28px 1fr 28px 48px;
+          gap: 8px;
+        }
+        .crop-filter-thumb {
+          width: 46px;
+          height: 46px;
+        }
+      }
+
+      /* Tinh chỉnh gọn gàng cho điện thoại màn hình nhỏ (<= 420px) */
+      @media (max-width: 420px) {
+        html body #crop-modal-overlay .custom-modal.crop-studio-modal {
+          padding: 18px 16px 16px !important;
+          border-radius: 26px !important;
+        }
+        .crop-header h3 {
+          font-size: 16.5px !important;
+        }
+        .crop-stage-wrap {
+          width: 226px;
+          height: 226px;
+        }
+        .crop-slider-row {
+          grid-template-columns: 74px 1fr 42px;
+          gap: 10px;
+        }
+        .crop-slider-row.with-steppers {
+          grid-template-columns: 74px 24px 1fr 24px 42px;
+          gap: 6px;
+        }
+      }
+
+      /* Hiệu ứng lún nảy lò xo riêng cho nút Thùng rác trong trình xem Ảnh/Video */
+      html body #viewer-modal #tng-top-actions button#tng-btn-delete {
+        background-color: transparent !important;
+        opacity: 0.85 !important;
+        transform: scale(1) !important;
+        will-change: transform, background-color, opacity;
+        transition:
+          transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+          background-color 0.2s ease,
+          opacity 0.2s ease !important;
+      }
+      @media (hover: hover) {
+        html
+          body
+          #viewer-modal
+          #tng-top-actions
+          button#tng-btn-delete:hover:not([disabled]) {
+          background-color: rgba(255, 255, 255, 0.16) !important;
+          opacity: 1 !important;
+          transform: scale(0.95) !important;
+        }
+      }
+      html
+        body
+        #viewer-modal
+        #tng-top-actions
+        button#tng-btn-delete:active:not([disabled]),
+      html
+        body
+        #viewer-modal
+        #tng-top-actions
+        button#tng-btn-delete.tng-ios-active:not([disabled]) {
+        transition-duration: 0.05s !important;
+        background-color: rgba(255, 255, 255, 0.26) !important;
+        opacity: 0.85 !important;
+        transform: scale(0.84) !important;
       }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -14505,75 +16256,32 @@
             height: 24px;
           "
           ><svg
-            viewBox="0 0 100 100"
-            style="width: 100%; height: 100%; display: block; overflow: visible"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.75"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            style="width: 19px; height: 19px; display: block"
           >
-            <g filter="url(#ios-extreme-pop)">
-              <path
-                d="M 38 22 V 17 C 38 13.5 40.5 11 44 11 H 56 C 59.5 11 62 13.5 62 17 V 22"
-                fill="none"
-                stroke="#ff6961"
-                stroke-width="6.5"
-                stroke-linecap="round"
-              />
-              <rect
-                x="18"
-                y="21"
-                width="64"
-                height="10"
-                rx="5"
-                fill="#ff5a52"
-              />
-              <rect
-                x="22"
-                y="22.5"
-                width="56"
-                height="3"
-                rx="1.5"
-                fill="rgba(255,255,255,0.42)"
-              />
-              <path
-                d="M 24 34 H 76 L 71.5 82 C 71 86.5 67.5 89 63 89 H 37 C 32.5 89 29 86.5 28.5 82 Z"
-                fill="#ff3b30"
-              />
-              <path
-                d="M 25 34 H 75 L 74.2 42 H 25.8 Z"
-                fill="rgba(0,0,0,0.16)"
-              />
-              <path
-                d="M 24 34 H 76 L 71.5 82 C 71 86.5 67.5 89 63 89 H 37 C 32.5 89 29 86.5 28.5 82 Z"
-                fill="none"
-                stroke="rgba(255,255,255,0.22)"
-                stroke-width="1.5"
-              />
-              <line
-                x1="39"
-                y1="45"
-                x2="40.5"
-                y2="76"
-                stroke="rgba(255,255,255,0.82)"
-                stroke-width="5.2"
-                stroke-linecap="round"
-              />
-              <line
-                x1="50"
-                y1="45"
-                x2="50"
-                y2="76"
-                stroke="rgba(255,255,255,0.82)"
-                stroke-width="5.2"
-                stroke-linecap="round"
-              />
-              <line
-                x1="61"
-                y1="45"
-                x2="59.5"
-                y2="76"
-                stroke="rgba(255,255,255,0.82)"
-                stroke-width="5.2"
-                stroke-linecap="round"
-              />
-            </g></svg
+            <path
+              d="M5.75 6.5L6.75 19.1Q6.9 20.75 8.55 20.75H15.45Q17.1 20.75 17.25 19.1L18.25 6.5Z"
+              fill="currentColor"
+              fill-opacity="0.14"
+              stroke="none"
+            />
+            <path d="M4.25 6.5H19.75" />
+            <path
+              d="M9.25 6.5V4.75A1.5 1.5 0 0 1 10.75 3.25H13.25A1.5 1.5 0 0 1 14.75 4.75V6.5"
+            />
+            <path
+              d="M5.75 6.5L6.75 19.1Q6.9 20.75 8.55 20.75H15.45Q17.1 20.75 17.25 19.1L18.25 6.5"
+            />
+            <path
+              d="M9.85 10.5L10.2 16.9M14.15 10.5L13.8 16.9"
+              stroke-width="1.55"
+              stroke-opacity="0.82"
+            /></svg
         ></span>
         Xoá
       </div>
@@ -14600,75 +16308,32 @@
             height: 24px;
           "
           ><svg
-            viewBox="0 0 100 100"
-            style="width: 100%; height: 100%; display: block; overflow: visible"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.75"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            style="width: 19px; height: 19px; display: block"
           >
-            <g filter="url(#ios-extreme-pop)">
-              <path
-                d="M 38 22 V 17 C 38 13.5 40.5 11 44 11 H 56 C 59.5 11 62 13.5 62 17 V 22"
-                fill="none"
-                stroke="#ff6961"
-                stroke-width="6.5"
-                stroke-linecap="round"
-              />
-              <rect
-                x="18"
-                y="21"
-                width="64"
-                height="10"
-                rx="5"
-                fill="#ff5a52"
-              />
-              <rect
-                x="22"
-                y="22.5"
-                width="56"
-                height="3"
-                rx="1.5"
-                fill="rgba(255,255,255,0.42)"
-              />
-              <path
-                d="M 24 34 H 76 L 71.5 82 C 71 86.5 67.5 89 63 89 H 37 C 32.5 89 29 86.5 28.5 82 Z"
-                fill="#ff3b30"
-              />
-              <path
-                d="M 25 34 H 75 L 74.2 42 H 25.8 Z"
-                fill="rgba(0,0,0,0.16)"
-              />
-              <path
-                d="M 24 34 H 76 L 71.5 82 C 71 86.5 67.5 89 63 89 H 37 C 32.5 89 29 86.5 28.5 82 Z"
-                fill="none"
-                stroke="rgba(255,255,255,0.22)"
-                stroke-width="1.5"
-              />
-              <line
-                x1="39"
-                y1="45"
-                x2="40.5"
-                y2="76"
-                stroke="rgba(255,255,255,0.82)"
-                stroke-width="5.2"
-                stroke-linecap="round"
-              />
-              <line
-                x1="50"
-                y1="45"
-                x2="50"
-                y2="76"
-                stroke="rgba(255,255,255,0.82)"
-                stroke-width="5.2"
-                stroke-linecap="round"
-              />
-              <line
-                x1="61"
-                y1="45"
-                x2="59.5"
-                y2="76"
-                stroke="rgba(255,255,255,0.82)"
-                stroke-width="5.2"
-                stroke-linecap="round"
-              />
-            </g></svg
+            <path
+              d="M5.75 6.5L6.75 19.1Q6.9 20.75 8.55 20.75H15.45Q17.1 20.75 17.25 19.1L18.25 6.5Z"
+              fill="currentColor"
+              fill-opacity="0.14"
+              stroke="none"
+            />
+            <path d="M4.25 6.5H19.75" />
+            <path
+              d="M9.25 6.5V4.75A1.5 1.5 0 0 1 10.75 3.25H13.25A1.5 1.5 0 0 1 14.75 4.75V6.5"
+            />
+            <path
+              d="M5.75 6.5L6.75 19.1Q6.9 20.75 8.55 20.75H15.45Q17.1 20.75 17.25 19.1L18.25 6.5"
+            />
+            <path
+              d="M9.85 10.5L10.2 16.9M14.15 10.5L13.8 16.9"
+              stroke-width="1.55"
+              stroke-opacity="0.82"
+            /></svg
         ></span>
         Xoá
       </div>
@@ -14695,75 +16360,32 @@
             height: 24px;
           "
           ><svg
-            viewBox="0 0 100 100"
-            style="width: 100%; height: 100%; display: block; overflow: visible"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.75"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            style="width: 19px; height: 19px; display: block"
           >
-            <g filter="url(#ios-extreme-pop)">
-              <path
-                d="M 38 22 V 17 C 38 13.5 40.5 11 44 11 H 56 C 59.5 11 62 13.5 62 17 V 22"
-                fill="none"
-                stroke="#ff6961"
-                stroke-width="6.5"
-                stroke-linecap="round"
-              />
-              <rect
-                x="18"
-                y="21"
-                width="64"
-                height="10"
-                rx="5"
-                fill="#ff5a52"
-              />
-              <rect
-                x="22"
-                y="22.5"
-                width="56"
-                height="3"
-                rx="1.5"
-                fill="rgba(255,255,255,0.42)"
-              />
-              <path
-                d="M 24 34 H 76 L 71.5 82 C 71 86.5 67.5 89 63 89 H 37 C 32.5 89 29 86.5 28.5 82 Z"
-                fill="#ff3b30"
-              />
-              <path
-                d="M 25 34 H 75 L 74.2 42 H 25.8 Z"
-                fill="rgba(0,0,0,0.16)"
-              />
-              <path
-                d="M 24 34 H 76 L 71.5 82 C 71 86.5 67.5 89 63 89 H 37 C 32.5 89 29 86.5 28.5 82 Z"
-                fill="none"
-                stroke="rgba(255,255,255,0.22)"
-                stroke-width="1.5"
-              />
-              <line
-                x1="39"
-                y1="45"
-                x2="40.5"
-                y2="76"
-                stroke="rgba(255,255,255,0.82)"
-                stroke-width="5.2"
-                stroke-linecap="round"
-              />
-              <line
-                x1="50"
-                y1="45"
-                x2="50"
-                y2="76"
-                stroke="rgba(255,255,255,0.82)"
-                stroke-width="5.2"
-                stroke-linecap="round"
-              />
-              <line
-                x1="61"
-                y1="45"
-                x2="59.5"
-                y2="76"
-                stroke="rgba(255,255,255,0.82)"
-                stroke-width="5.2"
-                stroke-linecap="round"
-              />
-            </g></svg
+            <path
+              d="M5.75 6.5L6.75 19.1Q6.9 20.75 8.55 20.75H15.45Q17.1 20.75 17.25 19.1L18.25 6.5Z"
+              fill="currentColor"
+              fill-opacity="0.14"
+              stroke="none"
+            />
+            <path d="M4.25 6.5H19.75" />
+            <path
+              d="M9.25 6.5V4.75A1.5 1.5 0 0 1 10.75 3.25H13.25A1.5 1.5 0 0 1 14.75 4.75V6.5"
+            />
+            <path
+              d="M5.75 6.5L6.75 19.1Q6.9 20.75 8.55 20.75H15.45Q17.1 20.75 17.25 19.1L18.25 6.5"
+            />
+            <path
+              d="M9.85 10.5L10.2 16.9M14.15 10.5L13.8 16.9"
+              stroke-width="1.55"
+              stroke-opacity="0.82"
+            /></svg
         ></span>
         Xoá
       </div>
@@ -14830,31 +16452,32 @@
     </div>
 
     <div class="custom-modal-overlay" id="custom-modal-overlay">
-      <div id="cm-anim-wrapper" class="anim-wrapper">
-        <div class="custom-modal">
+      <div
+        id="cm-anim-wrapper"
+        class="anim-wrapper"
+        onclick="if (event.target === this) closeCustomModal();"
+      >
+        <div class="custom-modal" onclick="event.stopPropagation()">
+          <div class="cm-icon-badge" id="cm-icon" aria-hidden="true"></div>
           <h3 id="cm-title">Tiêu đề</h3>
-          <div
-            id="cm-desc"
-            style="font-size: 14px; color: var(--text-sub); display: none"
-          ></div>
-          <input type="text" id="cm-input" style="display: none" />
-          <div
-            style="
-              display: flex;
-              justify-content: flex-end;
-              gap: 10px;
-              margin-top: 10px;
-            "
-          >
+          <div id="cm-desc" style="display: none"></div>
+          <input
+            type="text"
+            id="cm-input"
+            autocomplete="off"
+            style="display: none"
+          />
+          <div class="cm-actions">
             <button
-              class="mc-btn"
-              style="color: var(--text-sub)"
+              type="button"
+              class="cm-btn cm-btn-cancel"
               onclick="closeCustomModal()"
             >
-              Hủy</button
-            ><button
-              class="mc-btn"
-              style="background: var(--chat-user-bg)"
+              Hủy
+            </button>
+            <button
+              type="button"
+              class="cm-btn cm-btn-confirm"
               id="cm-confirm-btn"
             >
               Đồng ý
@@ -14890,72 +16513,401 @@
     </div>
 
     <div class="custom-modal-overlay" id="crop-modal-overlay">
-      <div id="crop-anim-wrapper" class="anim-wrapper">
-        <div class="custom-modal" style="align-items: center">
-          <h3 style="margin-bottom: 5px">Chỉnh sửa ảnh đại diện</h3>
-          <div
-            style="font-size: 12px; color: var(--text-sub); margin-bottom: 15px"
-          >
-            Dùng tay kéo thả hoặc thu phóng để canh chỉnh ảnh
+      <div
+        id="crop-anim-wrapper"
+        class="anim-wrapper"
+        onclick="if (event.target === this) closeCropModal();"
+      >
+        <div
+          class="custom-modal crop-studio-modal"
+          onclick="event.stopPropagation()"
+        >
+          <div class="crop-header">
+            <div class="crop-header-left">
+              <h3>Chỉnh sửa ảnh đại diện</h3>
+              <div class="crop-subtitle">
+                <span class="crop-hint-pc"
+                  >Kéo để canh vị trí • Cuộn chuột để thu phóng • Nhấp đúp để
+                  căn giữa</span
+                >
+                <span class="crop-hint-mb"
+                  >Kéo để canh vị trí • Chụm 2 ngón để thu phóng</span
+                >
+              </div>
+            </div>
+            <div class="crop-header-actions">
+              <button
+                type="button"
+                class="crop-mini-btn"
+                title="Chọn ảnh khác"
+                onclick="document.getElementById('avt-inp').click()"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <rect x="3" y="3" width="18" height="18" rx="4" />
+                  <circle cx="8.5" cy="8.5" r="1.5" />
+                  <path d="m21 15-5-5L5 21" />
+                </svg>
+                <span>Đổi ảnh</span>
+              </button>
+              <button
+                type="button"
+                class="crop-mini-btn icon-only"
+                title="Đặt lại mặc định"
+                onclick="resetCropEditor()"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M3 12a9 9 0 1 0 3-6.7L3 8" />
+                  <path d="M3 3v5h5" />
+                </svg>
+              </button>
+            </div>
           </div>
-          <div
-            style="
-              position: relative;
-              width: 250px;
-              height: 250px;
-              overflow: hidden;
-              border-radius: 50%;
-              box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
-            "
-          >
-            <canvas id="crop-canvas" width="250" height="250"></canvas>
-          </div>
-          <div
-            style="
-              width: 100%;
-              display: flex;
-              align-items: center;
-              gap: 10px;
-              margin-top: 20px;
-            "
-          >
-            <span style="font-size: 18px">-</span
-            ><input
-              type="range"
-              id="crop-zoom"
-              min="0.5"
-              max="3"
-              step="0.05"
-              value="1"
-              style="flex: 1"
-            /><span style="font-size: 18px">+</span>
-          </div>
-          <div
-            style="
-              display: flex;
-              gap: 10px;
-              width: 100%;
-              justify-content: flex-end;
-              margin-top: 15px;
-            "
-          >
-            <button
-              class="mc-btn"
-              style="color: var(--text-sub)"
-              onclick="
-                document
-                  .getElementById('crop-modal-overlay')
-                  .classList.remove('show')
-              "
-            >
-              Hủy</button
-            ><button
-              class="mc-btn"
-              style="background: var(--chat-user-bg)"
-              onclick="confirmCrop()"
-            >
-              Cập nhật
-            </button>
+
+          <div class="crop-body">
+            <div class="crop-left-col">
+              <div class="crop-stage-wrap" id="crop-stage">
+                <img
+                  id="crop-preview-img"
+                  class="crop-preview-img"
+                  alt=""
+                  draggable="false"
+                />
+                <svg
+                  class="crop-mask-svg"
+                  viewBox="0 0 100 100"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                >
+                  <defs>
+                    <mask id="crop-circle-cutout">
+                      <rect width="100" height="100" fill="white" />
+                      <circle cx="50" cy="50" r="45" fill="black" />
+                    </mask>
+                    <clipPath id="crop-grid-clip">
+                      <circle cx="50" cy="50" r="45" />
+                    </clipPath>
+                  </defs>
+                  <rect
+                    class="crop-mask-shade"
+                    width="100"
+                    height="100"
+                    mask="url(#crop-circle-cutout)"
+                  />
+                  <g class="crop-mask-grid" clip-path="url(#crop-grid-clip)">
+                    <line x1="35" y1="5" x2="35" y2="95" />
+                    <line x1="65" y1="5" x2="65" y2="95" />
+                    <line x1="5" y1="35" x2="95" y2="35" />
+                    <line x1="5" y1="65" x2="95" y2="65" />
+                  </g>
+                  <circle
+                    class="crop-mask-ring"
+                    cx="50"
+                    cy="50"
+                    r="45"
+                    fill="none"
+                  />
+                </svg>
+              </div>
+            </div>
+
+            <div class="crop-right-col">
+              <div class="crop-tabs tng-sub-tabs" id="crop-tabs-bar">
+                <span
+                  class="tng-sub-glass-pill is-horizontal"
+                  id="crop-tab-pill"
+                ></span>
+                <button
+                  type="button"
+                  class="crop-tab-btn tng-sub-tab active tng-pill-focus"
+                  onclick="switchCropTab('crop', 0)"
+                >
+                  <span class="tng-sub-tab-lbl">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path d="M6 2v14a2 2 0 0 0 2 2h14" />
+                      <path d="M18 22V8a2 2 0 0 0-2-2H2" />
+                    </svg>
+                    <span>Cắt & Xoay</span>
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  class="crop-tab-btn tng-sub-tab"
+                  onclick="switchCropTab('adjust', 1)"
+                >
+                  <span class="tng-sub-tab-lbl">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <line x1="4" y1="21" x2="4" y2="14" />
+                      <line x1="4" y1="10" x2="4" y2="3" />
+                      <line x1="12" y1="21" x2="12" y2="12" />
+                      <line x1="12" y1="8" x2="12" y2="3" />
+                      <line x1="20" y1="21" x2="20" y2="16" />
+                      <line x1="20" y1="12" x2="20" y2="3" />
+                      <line x1="2" y1="14" x2="6" y2="14" />
+                      <line x1="10" y1="8" x2="14" y2="8" />
+                      <line x1="18" y1="16" x2="22" y2="16" />
+                    </svg>
+                    <span>Điều chỉnh</span>
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  class="crop-tab-btn tng-sub-tab"
+                  onclick="switchCropTab('filter', 2)"
+                >
+                  <span class="tng-sub-tab-lbl">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <circle cx="12" cy="12" r="9" />
+                      <path
+                        d="M12 3a9 9 0 0 0 0 18"
+                        fill="currentColor"
+                        fill-opacity="0.2"
+                      />
+                    </svg>
+                    <span>Bộ lọc</span>
+                  </span>
+                </button>
+              </div>
+
+              <div class="crop-panels">
+                <div class="crop-panel active" id="crop-panel-crop">
+                  <div class="crop-slider-row with-steppers">
+                    <span class="crop-slider-label">Thu phóng</span>
+                    <button
+                      type="button"
+                      class="crop-step-btn"
+                      onclick="stepCropZoom(-0.15)"
+                    >
+                      −
+                    </button>
+                    <input
+                      type="range"
+                      class="crop-slider"
+                      id="crop-zoom"
+                      min="0.6"
+                      max="4"
+                      step="0.01"
+                      value="1"
+                    />
+                    <button
+                      type="button"
+                      class="crop-step-btn"
+                      onclick="stepCropZoom(0.15)"
+                    >
+                      +
+                    </button>
+                    <span class="crop-slider-val" id="crop-zoom-val">100%</span>
+                  </div>
+                  <div class="crop-slider-row">
+                    <span class="crop-slider-label">Góc nghiêng</span>
+                    <input
+                      type="range"
+                      class="crop-slider"
+                      id="crop-angle"
+                      min="-45"
+                      max="45"
+                      step="1"
+                      value="0"
+                    />
+                    <span class="crop-slider-val" id="crop-angle-val">0°</span>
+                  </div>
+                  <div class="crop-quick-tools">
+                    <button
+                      type="button"
+                      class="crop-tool-btn"
+                      onclick="cropRotateStep(-90)"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M3 12a9 9 0 1 0 3-6.7L3 8" />
+                        <path d="M3 3v5h5" />
+                      </svg>
+                      <span>Xoay trái</span>
+                    </button>
+                    <button
+                      type="button"
+                      class="crop-tool-btn"
+                      onclick="cropRotateStep(90)"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M21 12a9 9 0 1 1-3-6.7L21 8" />
+                        <path d="M21 3v5h-5" />
+                      </svg>
+                      <span>Xoay phải</span>
+                    </button>
+                    <button
+                      type="button"
+                      class="crop-tool-btn"
+                      id="crop-btn-flipx"
+                      onclick="cropToggleFlip('x')"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M12 3v18" stroke-dasharray="2 3" />
+                        <path d="M8 7 3 12l5 5V7Z" />
+                        <path d="m16 7 5 5-5 5V7Z" />
+                      </svg>
+                      <span>Lật ngang</span>
+                    </button>
+                    <button
+                      type="button"
+                      class="crop-tool-btn"
+                      id="crop-btn-flipy"
+                      onclick="cropToggleFlip('y')"
+                    >
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        <path d="M3 12h18" stroke-dasharray="2 3" />
+                        <path d="m7 8 5-5 5 5H7Z" />
+                        <path d="m7 16 5 5 5-5H7Z" />
+                      </svg>
+                      <span>Lật dọc</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="crop-panel" id="crop-panel-adjust">
+                  <div class="crop-slider-row">
+                    <span class="crop-slider-label">Độ sáng</span>
+                    <input
+                      type="range"
+                      class="crop-slider"
+                      id="crop-bright"
+                      min="50"
+                      max="150"
+                      step="1"
+                      value="100"
+                    />
+                    <span class="crop-slider-val" id="crop-bright-val"
+                      >100%</span
+                    >
+                  </div>
+                  <div class="crop-slider-row">
+                    <span class="crop-slider-label">Tương phản</span>
+                    <input
+                      type="range"
+                      class="crop-slider"
+                      id="crop-contrast"
+                      min="50"
+                      max="150"
+                      step="1"
+                      value="100"
+                    />
+                    <span class="crop-slider-val" id="crop-contrast-val"
+                      >100%</span
+                    >
+                  </div>
+                  <div class="crop-slider-row">
+                    <span class="crop-slider-label">Bão hòa</span>
+                    <input
+                      type="range"
+                      class="crop-slider"
+                      id="crop-saturate"
+                      min="0"
+                      max="200"
+                      step="1"
+                      value="100"
+                    />
+                    <span class="crop-slider-val" id="crop-saturate-val"
+                      >100%</span
+                    >
+                  </div>
+                  <div class="crop-slider-row">
+                    <span class="crop-slider-label">Độ ấm</span>
+                    <input
+                      type="range"
+                      class="crop-slider"
+                      id="crop-warmth"
+                      min="-40"
+                      max="40"
+                      step="1"
+                      value="0"
+                    />
+                    <span class="crop-slider-val" id="crop-warmth-val">0</span>
+                  </div>
+                </div>
+
+                <div class="crop-panel" id="crop-panel-filter">
+                  <div class="crop-filter-grid" id="crop-filter-grid"></div>
+                </div>
+              </div>
+
+              <div class="crop-actions">
+                <button
+                  type="button"
+                  class="crop-action-btn crop-action-cancel"
+                  onclick="closeCropModal()"
+                >
+                  Hủy
+                </button>
+                <button
+                  type="button"
+                  class="crop-action-btn crop-action-confirm"
+                  onclick="confirmCrop()"
+                >
+                  Cập nhật
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -17385,83 +19337,668 @@
       }
 
       let cropImgObj = new Image();
-      let cropScale = 1,
-        cropX = 0,
-        cropY = 0;
+      const CROP_CIRCLE_RATIO = 0.9;
+      const CROP_OUT_SIZE = 600;
+
+      let cropZoom = 1,
+        cropPanX = 0,
+        cropPanY = 0,
+        cropRotate90 = 0,
+        cropAngle = 0,
+        cropFlipX = false,
+        cropFlipY = false,
+        cropBright = 100,
+        cropContrast = 100,
+        cropSaturate = 100,
+        cropWarmth = 0,
+        cropPreset = "none",
+        cropActiveTabIdx = 0;
+
       let isDraggingCrop = false,
-        startCropX,
-        startCropY;
-      let cropCanvas, cropCtx;
+        isAdjustingCrop = false,
+        cropGridTimer = null,
+        cropDragStartX = 0,
+        cropDragStartY = 0,
+        cropStartPanX = 0,
+        cropStartPanY = 0,
+        isPinchingCrop = false,
+        pinchStartDist = 0,
+        pinchStartZoom = 1,
+        cropLastTap = 0;
+
+      let cropEditorInited = false,
+        cropStageEl = null,
+        cropPreviewImg = null,
+        cropTabCurrentEl = null,
+        cropTabActiveEl = null,
+        cropTabLeaveTimer = 0;
+
+      const CROP_PRESETS = [
+        { id: "none", name: "Gốc", b: 1, c: 1, s: 1, w: 0, h: 0 },
+        {
+          id: "vivid",
+          name: "Tự nhiên",
+          b: 1.05,
+          c: 1.08,
+          s: 1.22,
+          w: 0,
+          h: 0,
+        },
+        {
+          id: "bright",
+          name: "Trong trẻo",
+          b: 1.12,
+          c: 1.04,
+          s: 1.1,
+          w: 0,
+          h: 0,
+        },
+        {
+          id: "warm",
+          name: "Ấm áp",
+          b: 1.04,
+          c: 1.04,
+          s: 1.12,
+          w: 0.24,
+          h: -4,
+        },
+        {
+          id: "cool",
+          name: "Mát lạnh",
+          b: 1.02,
+          c: 1.06,
+          s: 0.94,
+          w: 0,
+          h: 12,
+        },
+        {
+          id: "vintage",
+          name: "Cổ điển",
+          b: 1.02,
+          c: 0.92,
+          s: 0.78,
+          w: 0.34,
+          h: -6,
+        },
+        {
+          id: "cinema",
+          name: "Điện ảnh",
+          b: 0.96,
+          c: 1.24,
+          s: 0.92,
+          w: 0.1,
+          h: -5,
+        },
+        { id: "mono", name: "Đen trắng", b: 1.04, c: 1.18, s: 0, w: 0, h: 0 },
+      ];
+
+      function buildPresetFilterCss(p) {
+        if (!p || p.id === "none") return "none";
+        let parts = [];
+        if (p.b !== 1) parts.push(`brightness(${p.b})`);
+        if (p.c !== 1) parts.push(`contrast(${p.c})`);
+        if (p.s !== 1) parts.push(`saturate(${p.s})`);
+        if (p.w > 0) parts.push(`sepia(${p.w})`);
+        if (p.h !== 0) parts.push(`hue-rotate(${p.h}deg)`);
+        return parts.length ? parts.join(" ") : "none";
+      }
+
+      function getCropFilterCss() {
+        let p =
+          CROP_PRESETS.find((x) => x.id === cropPreset) || CROP_PRESETS[0];
+        let b = (cropBright / 100) * p.b;
+        let c = (cropContrast / 100) * p.c;
+        let s = (cropSaturate / 100) * p.s;
+        let w = Math.min(
+          1,
+          Math.max(0, p.w + (cropWarmth > 0 ? cropWarmth / 100 : 0)),
+        );
+        let h =
+          p.h +
+          (cropWarmth < 0
+            ? Math.abs(cropWarmth) * 0.45
+            : cropWarmth > 0
+              ? -cropWarmth * 0.12
+              : 0);
+        let parts = [
+          `brightness(${b.toFixed(3)})`,
+          `contrast(${c.toFixed(3)})`,
+          `saturate(${s.toFixed(3)})`,
+        ];
+        if (w > 0.001) parts.push(`sepia(${w.toFixed(3)})`);
+        if (Math.abs(h) > 0.1) parts.push(`hue-rotate(${h.toFixed(1)}deg)`);
+        return parts.join(" ");
+      }
+
+      function getCropStageMetrics() {
+        let size =
+          (cropStageEl && cropStageEl.clientWidth) ||
+          (window.innerWidth >= 769 ? 296 : 244);
+        return { size, diam: size * CROP_CIRCLE_RATIO };
+      }
+
+      function setSliderTrackFill(el) {
+        if (!el) return;
+        let min = parseFloat(el.min) || 0;
+        let max = parseFloat(el.max) || 100;
+        let val = parseFloat(el.value) || 0;
+        let pct = ((val - min) / (max - min)) * 100;
+        el.style.setProperty(
+          "--crop-pct",
+          `${Math.max(0, Math.min(100, pct))}%`,
+        );
+      }
+
+      function updateCropGridVisibility() {
+        if (!cropStageEl) return;
+        cropStageEl.classList.toggle(
+          "is-editing",
+          isDraggingCrop || isPinchingCrop || isAdjustingCrop,
+        );
+      }
+
+      function pulseCropGrid() {
+        isAdjustingCrop = true;
+        updateCropGridVisibility();
+        clearTimeout(cropGridTimer);
+        cropGridTimer = setTimeout(() => {
+          isAdjustingCrop = false;
+          updateCropGridVisibility();
+        }, 460);
+      }
+
+      function moveCropTabPill(tab, opts = {}) {
+        const { instant = false, isReturn = false } = opts;
+        const bar = document.getElementById("crop-tabs-bar");
+        const pill = document.getElementById("crop-tab-pill");
+        if (!bar || !pill || !tab || !tab.isConnected) return;
+
+        const tabs = Array.from(bar.querySelectorAll(".crop-tab-btn"));
+        const w = tab.offsetWidth;
+        const h = tab.offsetHeight;
+        if (w <= 0 || h <= 0) return;
+
+        const x = tab.offsetLeft;
+        const y = tab.offsetTop;
+
+        const outerR =
+          parseFloat(window.getComputedStyle(bar).borderRadius) || 14;
+        const innerR = Math.max(10, outerR - 1);
+        const midR = Math.min(11.5, innerR);
+        const isFirst = tab === tabs[0];
+        const isLast = tab === tabs[tabs.length - 1];
+        const tl = isFirst ? innerR : midR;
+        const bl = isFirst ? innerR : midR;
+        const tr = isLast ? innerR : midR;
+        const br = isLast ? innerR : midR;
+
+        bar.classList.toggle("returning", !!isReturn);
+        tabs.forEach((t) => t.classList.toggle("tng-pill-focus", t === tab));
+        pill.style.setProperty(
+          "--tng-pill-r",
+          `${tl.toFixed(1)}px ${tr.toFixed(1)}px ${br.toFixed(1)}px ${bl.toFixed(1)}px`,
+        );
+
+        if (instant || !cropTabCurrentEl) {
+          pill.classList.add("is-instant");
+          pill.style.width = w.toFixed(2) + "px";
+          pill.style.height = h.toFixed(2) + "px";
+          pill.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0)`;
+          pill.style.opacity = "1";
+          void pill.offsetWidth;
+          pill.classList.remove("is-instant");
+        } else {
+          pill.classList.remove("is-instant");
+          pill.style.width = w.toFixed(2) + "px";
+          pill.style.height = h.toFixed(2) + "px";
+          pill.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0)`;
+          pill.style.opacity = "1";
+        }
+        cropTabCurrentEl = tab;
+      }
+
+      function initCropTabWaterEngine() {
+        const bar = document.getElementById("crop-tabs-bar");
+        if (!bar || bar.dataset.cropWaterBound) return;
+        bar.dataset.cropWaterBound = "1";
+
+        const tabs = Array.from(bar.querySelectorAll(".crop-tab-btn"));
+        const canHover = window.matchMedia("(hover: hover)").matches;
+        cropTabActiveEl =
+          tabs.find((t) => t.classList.contains("active")) || tabs[0];
+
+        const resolveTab = (raw) => {
+          if (!raw || !(raw instanceof Element)) return null;
+          return tabs.find((t) => t === raw || t.contains(raw)) || null;
+        };
+
+        if (canHover) {
+          bar.addEventListener(
+            "pointerover",
+            (ev) => {
+              if (ev.pointerType === "touch") return;
+              const tab = resolveTab(ev.target);
+              if (!tab) return;
+              clearTimeout(cropTabLeaveTimer);
+              if (tab !== cropTabCurrentEl) {
+                moveCropTabPill(tab, { instant: false, isReturn: false });
+              }
+            },
+            { passive: true },
+          );
+
+          bar.addEventListener("mouseleave", () => {
+            clearTimeout(cropTabLeaveTimer);
+            cropTabLeaveTimer = setTimeout(() => {
+              const realActive =
+                tabs.find((t) => t.classList.contains("active")) ||
+                cropTabActiveEl;
+              if (realActive) cropTabActiveEl = realActive;
+              if (
+                cropTabActiveEl &&
+                cropTabActiveEl.isConnected &&
+                cropTabActiveEl !== cropTabCurrentEl
+              ) {
+                moveCropTabPill(cropTabActiveEl, {
+                  instant: false,
+                  isReturn: true,
+                });
+              }
+            }, 35);
+          });
+        }
+
+        tabs.forEach((tab) => {
+          tab.addEventListener("pointerdown", () => {
+            clearTimeout(cropTabLeaveTimer);
+            cropTabActiveEl = tab;
+            moveCropTabPill(tab, { instant: false, isReturn: false });
+          });
+        });
+
+        if (typeof ResizeObserver === "function") {
+          new ResizeObserver(() => {
+            const target = cropTabCurrentEl || cropTabActiveEl;
+            if (target && target.offsetWidth > 0) {
+              moveCropTabPill(target, { instant: true });
+            }
+          }).observe(bar);
+        }
+      }
+
+      function syncCropControlsUI() {
+        let zEl = document.getElementById("crop-zoom");
+        let aEl = document.getElementById("crop-angle");
+        let bEl = document.getElementById("crop-bright");
+        let cEl = document.getElementById("crop-contrast");
+        let sEl = document.getElementById("crop-saturate");
+        let wEl = document.getElementById("crop-warmth");
+
+        if (zEl) {
+          zEl.value = cropZoom.toFixed(2);
+          setSliderTrackFill(zEl);
+        }
+        if (aEl) {
+          aEl.value = cropAngle;
+          setSliderTrackFill(aEl);
+        }
+        if (bEl) {
+          bEl.value = cropBright;
+          setSliderTrackFill(bEl);
+        }
+        if (cEl) {
+          cEl.value = cropContrast;
+          setSliderTrackFill(cEl);
+        }
+        if (sEl) {
+          sEl.value = cropSaturate;
+          setSliderTrackFill(sEl);
+        }
+        if (wEl) {
+          wEl.value = cropWarmth;
+          setSliderTrackFill(wEl);
+        }
+
+        let zv = document.getElementById("crop-zoom-val");
+        let av = document.getElementById("crop-angle-val");
+        let bv = document.getElementById("crop-bright-val");
+        let cv = document.getElementById("crop-contrast-val");
+        let sv = document.getElementById("crop-saturate-val");
+        let wv = document.getElementById("crop-warmth-val");
+
+        if (zv) zv.innerText = Math.round(cropZoom * 100) + "%";
+        if (av) av.innerText = (cropAngle > 0 ? "+" : "") + cropAngle + "°";
+        if (bv) bv.innerText = cropBright + "%";
+        if (cv) cv.innerText = cropContrast + "%";
+        if (sv) sv.innerText = cropSaturate + "%";
+        if (wv) wv.innerText = (cropWarmth > 0 ? "+" : "") + cropWarmth;
+
+        let fxBtn = document.getElementById("crop-btn-flipx");
+        let fyBtn = document.getElementById("crop-btn-flipy");
+        if (fxBtn) fxBtn.classList.toggle("active", cropFlipX);
+        if (fyBtn) fyBtn.classList.toggle("active", cropFlipY);
+
+        document
+          .querySelectorAll("#crop-filter-grid .crop-filter-item")
+          .forEach((btn) => {
+            btn.classList.toggle("active", btn.dataset.preset === cropPreset);
+          });
+      }
+
+      function renderCropFilterThumbnails() {
+        let grid = document.getElementById("crop-filter-grid");
+        let W = cropImgObj.naturalWidth || cropImgObj.width;
+        let H = cropImgObj.naturalHeight || cropImgObj.height;
+        if (!grid || !W || !H) return;
+
+        let thumbCanvas = document.createElement("canvas");
+        thumbCanvas.width = 160;
+        thumbCanvas.height = 160;
+        let tctx = thumbCanvas.getContext("2d");
+        tctx.imageSmoothingEnabled = true;
+        tctx.imageSmoothingQuality = "high";
+        let ts = Math.max(160 / W, 160 / H);
+        tctx.drawImage(
+          cropImgObj,
+          (160 - W * ts) / 2,
+          (160 - H * ts) / 2,
+          W * ts,
+          H * ts,
+        );
+        let thumbUrl = thumbCanvas.toDataURL("image/jpeg", 0.8);
+
+        grid.innerHTML = CROP_PRESETS.map(
+          (p) => `
+            <button type="button" class="crop-filter-item ${p.id === cropPreset ? "active" : ""}" data-preset="${p.id}" onclick="selectCropPreset('${p.id}')">
+              <span class="crop-filter-thumb" style="background-image: url('${thumbUrl}'); filter: ${buildPresetFilterCss(p)};"></span>
+              <span class="crop-filter-name">${p.name}</span>
+            </button>
+          `,
+        ).join("");
+      }
+
+      function switchCropTab(tabName, idx, instant = false) {
+        let bar = document.getElementById("crop-tabs-bar");
+        let dir = idx >= cropActiveTabIdx ? 1 : -1;
+        cropActiveTabIdx = idx;
+
+        let tabs = bar ? Array.from(bar.querySelectorAll(".crop-tab-btn")) : [];
+        tabs.forEach((b, i) => b.classList.toggle("active", i === idx));
+        if (tabs[idx]) {
+          cropTabActiveEl = tabs[idx];
+          moveCropTabPill(tabs[idx], { instant, isReturn: false });
+        }
+
+        document
+          .querySelectorAll("#crop-modal-overlay .crop-panel")
+          .forEach((p) => {
+            let isTarget = p.id === "crop-panel-" + tabName;
+            p.classList.remove("slide-from-right", "slide-from-left");
+            p.classList.toggle("active", isTarget);
+            if (isTarget && !instant) {
+              void p.offsetWidth;
+              p.classList.add(
+                dir >= 0 ? "slide-from-right" : "slide-from-left",
+              );
+            }
+          });
+      }
+
+      function setCropZoomCentered(nextZoom, showGrid = true) {
+        let clamped = Math.max(0.6, Math.min(4, nextZoom));
+        let factor = clamped / cropZoom;
+        cropZoom = clamped;
+        cropPanX *= factor;
+        cropPanY *= factor;
+        if (showGrid) pulseCropGrid();
+        syncCropControlsUI();
+        drawCrop();
+      }
+
+      function stepCropZoom(delta) {
+        setCropZoomCentered(cropZoom + delta, true);
+      }
+
+      function cropRotateStep(deg) {
+        cropRotate90 = (cropRotate90 + deg + 360) % 360;
+        pulseCropGrid();
+        drawCrop();
+      }
+
+      function cropToggleFlip(axis) {
+        if (axis === "x") cropFlipX = !cropFlipX;
+        else cropFlipY = !cropFlipY;
+        pulseCropGrid();
+        syncCropControlsUI();
+        drawCrop();
+      }
+
+      function selectCropPreset(id) {
+        cropPreset = id;
+        syncCropControlsUI();
+        drawCrop();
+      }
+
+      function resetCropEditor() {
+        cropZoom = 1;
+        cropPanX = 0;
+        cropPanY = 0;
+        cropRotate90 = 0;
+        cropAngle = 0;
+        cropFlipX = false;
+        cropFlipY = false;
+        cropBright = 100;
+        cropContrast = 100;
+        cropSaturate = 100;
+        cropWarmth = 0;
+        cropPreset = "none";
+        syncCropControlsUI();
+        drawCrop();
+      }
+
+      function closeCropModal() {
+        let overlay = document.getElementById("crop-modal-overlay");
+        if (overlay) overlay.classList.remove("show");
+      }
+
       function initCropper() {
-        cropCanvas = document.getElementById("crop-canvas");
-        cropCtx = cropCanvas.getContext("2d");
+        if (cropEditorInited) return;
+        cropEditorInited = true;
+
+        cropStageEl = document.getElementById("crop-stage");
+        cropPreviewImg = document.getElementById("crop-preview-img");
+        initCropTabWaterEngine();
+
         document.getElementById("crop-zoom").addEventListener("input", (e) => {
-          let oldScale = cropScale;
-          cropScale = parseFloat(e.target.value);
-          cropX -= (cropCanvas.width / 2 - cropX) * (cropScale / oldScale - 1);
-          cropY -= (cropCanvas.height / 2 - cropY) * (cropScale / oldScale - 1);
+          setCropZoomCentered(parseFloat(e.target.value), true);
+        });
+        document.getElementById("crop-angle").addEventListener("input", (e) => {
+          cropAngle = parseInt(e.target.value, 10) || 0;
+          pulseCropGrid();
+          syncCropControlsUI();
           drawCrop();
         });
-        cropCanvas.addEventListener("mousedown", (e) => {
-          isDraggingCrop = true;
-          startCropX = e.offsetX - cropX;
-          startCropY = e.offsetY - cropY;
-        });
-        cropCanvas.addEventListener("mousemove", (e) => {
-          if (isDraggingCrop) {
-            cropX = e.offsetX - startCropX;
-            cropY = e.offsetY - startCropY;
+        document
+          .getElementById("crop-bright")
+          .addEventListener("input", (e) => {
+            cropBright = parseInt(e.target.value, 10) || 100;
+            syncCropControlsUI();
             drawCrop();
-          }
+          });
+        document
+          .getElementById("crop-contrast")
+          .addEventListener("input", (e) => {
+            cropContrast = parseInt(e.target.value, 10) || 100;
+            syncCropControlsUI();
+            drawCrop();
+          });
+        document
+          .getElementById("crop-saturate")
+          .addEventListener("input", (e) => {
+            cropSaturate = parseInt(e.target.value, 10) || 100;
+            syncCropControlsUI();
+            drawCrop();
+          });
+        document
+          .getElementById("crop-warmth")
+          .addEventListener("input", (e) => {
+            cropWarmth = parseInt(e.target.value, 10) || 0;
+            syncCropControlsUI();
+            drawCrop();
+          });
+
+        // Kéo thả bằng chuột
+        cropStageEl.addEventListener("mousedown", (e) => {
+          isDraggingCrop = true;
+          cropStageEl.classList.add("is-dragging");
+          cropDragStartX = e.clientX;
+          cropDragStartY = e.clientY;
+          cropStartPanX = cropPanX;
+          cropStartPanY = cropPanY;
+          updateCropGridVisibility();
+          e.preventDefault();
         });
-        cropCanvas.addEventListener("mouseup", () => (isDraggingCrop = false));
-        cropCanvas.addEventListener(
-          "mouseleave",
-          () => (isDraggingCrop = false),
+        window.addEventListener("mousemove", (e) => {
+          if (!isDraggingCrop) return;
+          let { diam } = getCropStageMetrics();
+          if (!diam) return;
+          cropPanX = cropStartPanX + (e.clientX - cropDragStartX) / diam;
+          cropPanY = cropStartPanY + (e.clientY - cropDragStartY) / diam;
+          drawCrop();
+        });
+        window.addEventListener("mouseup", () => {
+          if (!isDraggingCrop) return;
+          isDraggingCrop = false;
+          if (cropStageEl) cropStageEl.classList.remove("is-dragging");
+          updateCropGridVisibility();
+        });
+
+        // Cuộn chuột thu phóng mượt
+        cropStageEl.addEventListener(
+          "wheel",
+          (e) => {
+            e.preventDefault();
+            let step = e.deltaY < 0 ? 1.07 : 0.935;
+            setCropZoomCentered(cropZoom * step, true);
+          },
+          { passive: false },
         );
-        cropCanvas.addEventListener(
+
+        // Nhấp đúp căn giữa nhanh
+        cropStageEl.addEventListener("dblclick", () => {
+          cropZoom = 1;
+          cropPanX = 0;
+          cropPanY = 0;
+          syncCropControlsUI();
+          drawCrop();
+        });
+
+        // Kéo 1 ngón & chụm 2 ngón (Pinch-to-Zoom) trên cảm ứng
+        const getTouchDist = (t1, t2) =>
+          Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY);
+
+        cropStageEl.addEventListener(
           "touchstart",
           (e) => {
-            let touch = e.touches[0];
-            let rect = cropCanvas.getBoundingClientRect();
-            isDraggingCrop = true;
-            startCropX = touch.clientX - rect.left - cropX;
-            startCropY = touch.clientY - rect.top - cropY;
+            if (e.touches.length === 2) {
+              isDraggingCrop = false;
+              isPinchingCrop = true;
+              pinchStartDist = getTouchDist(e.touches[0], e.touches[1]) || 1;
+              pinchStartZoom = cropZoom;
+              updateCropGridVisibility();
+            } else if (e.touches.length === 1) {
+              let now = Date.now();
+              if (now - cropLastTap < 280) {
+                cropZoom = 1;
+                cropPanX = 0;
+                cropPanY = 0;
+                syncCropControlsUI();
+                drawCrop();
+                cropLastTap = 0;
+                e.preventDefault();
+                return;
+              }
+              cropLastTap = now;
+              isPinchingCrop = false;
+              isDraggingCrop = true;
+              cropDragStartX = e.touches[0].clientX;
+              cropDragStartY = e.touches[0].clientY;
+              cropStartPanX = cropPanX;
+              cropStartPanY = cropPanY;
+              updateCropGridVisibility();
+            }
             e.preventDefault();
           },
           { passive: false },
         );
-        cropCanvas.addEventListener(
+
+        cropStageEl.addEventListener(
           "touchmove",
           (e) => {
-            if (isDraggingCrop) {
-              let touch = e.touches[0];
-              let rect = cropCanvas.getBoundingClientRect();
-              cropX = touch.clientX - rect.left - startCropX;
-              cropY = touch.clientY - rect.top - startCropY;
+            if (isPinchingCrop && e.touches.length === 2) {
+              let dist = getTouchDist(e.touches[0], e.touches[1]);
+              setCropZoomCentered(
+                pinchStartZoom * (dist / pinchStartDist),
+                true,
+              );
+              e.preventDefault();
+            } else if (isDraggingCrop && e.touches.length === 1) {
+              let { diam } = getCropStageMetrics();
+              if (!diam) return;
+              cropPanX =
+                cropStartPanX + (e.touches[0].clientX - cropDragStartX) / diam;
+              cropPanY =
+                cropStartPanY + (e.touches[0].clientY - cropDragStartY) / diam;
               drawCrop();
               e.preventDefault();
             }
           },
           { passive: false },
         );
-        cropCanvas.addEventListener("touchend", () => (isDraggingCrop = false));
+
+        cropStageEl.addEventListener("touchend", (e) => {
+          if (e.touches.length < 2) isPinchingCrop = false;
+          if (e.touches.length === 0) {
+            isDraggingCrop = false;
+            updateCropGridVisibility();
+          }
+        });
+
+        if (typeof ResizeObserver === "function") {
+          new ResizeObserver(() => {
+            drawCrop();
+          }).observe(cropStageEl);
+        }
+
+        document.addEventListener("keydown", (ev) => {
+          let ov = document.getElementById("crop-modal-overlay");
+          if (ev.key === "Escape" && ov && ov.classList.contains("show")) {
+            closeCropModal();
+          }
+        });
       }
+
+      // Hiển thị trực tiếp bằng ảnh gốc nguyên bản (không nén trước -> sắc nét tối đa)
       function drawCrop() {
-        cropCtx.clearRect(0, 0, 250, 250);
-        cropCtx.drawImage(
-          cropImgObj,
-          cropX,
-          cropY,
-          cropImgObj.width * cropScale,
-          cropImgObj.height * cropScale,
-        );
-        cropCtx.fillStyle = "rgba(0,0,0,0.6)";
-        cropCtx.beginPath();
-        cropCtx.rect(0, 0, 250, 250);
-        cropCtx.arc(125, 125, 125, 0, Math.PI * 2, true);
-        cropCtx.fill();
+        if (!cropPreviewImg || !cropImgObj) return;
+        let W = cropImgObj.naturalWidth || cropImgObj.width;
+        let H = cropImgObj.naturalHeight || cropImgObj.height;
+        if (!W || !H) return;
+
+        let { diam } = getCropStageMetrics();
+        let coverScale = Math.max(diam / W, diam / H);
+        let drawW = W * coverScale * cropZoom;
+        let drawH = H * coverScale * cropZoom;
+        let panPxX = cropPanX * diam;
+        let panPxY = cropPanY * diam;
+        let deg = cropRotate90 + cropAngle;
+
+        cropPreviewImg.style.width = drawW.toFixed(2) + "px";
+        cropPreviewImg.style.height = drawH.toFixed(2) + "px";
+        cropPreviewImg.style.transform = `translate3d(calc(-50% + ${panPxX.toFixed(2)}px), calc(-50% + ${panPxY.toFixed(2)}px), 0) rotate(${deg}deg) scale(${cropFlipX ? -1 : 1}, ${cropFlipY ? -1 : 1})`;
+        cropPreviewImg.style.filter = getCropFilterCss();
       }
+
       function handleAvtChange(e) {
         let f = e.target.files[0];
         if (!f) return;
@@ -17469,78 +20006,178 @@
         rd.onload = (ev) => {
           cropImgObj.src = ev.target.result;
           cropImgObj.onload = () => {
-            if (!cropCanvas) initCropper();
-            openModalWithOrigin("crop-modal-overlay", "crop-anim-wrapper");
-            cropScale = Math.max(
-              250 / cropImgObj.width,
-              250 / cropImgObj.height,
-            );
-            document.getElementById("crop-zoom").min = cropScale / 2;
-            document.getElementById("crop-zoom").value = cropScale;
-            cropX = (250 - cropImgObj.width * cropScale) / 2;
-            cropY = (250 - cropImgObj.height * cropScale) / 2;
-            drawCrop();
+            if (!cropEditorInited) initCropper();
+            if (cropPreviewImg) cropPreviewImg.src = ev.target.result;
+            resetCropEditor();
+            renderCropFilterThumbnails();
+            let ov = document.getElementById("crop-modal-overlay");
+            if (!ov || !ov.classList.contains("show")) {
+              openModalWithOrigin("crop-modal-overlay", "crop-anim-wrapper");
+            }
+            requestAnimationFrame(() => {
+              switchCropTab("crop", 0, true);
+              drawCrop();
+            });
           };
         };
         rd.readAsDataURL(f);
         e.target.value = "";
       }
+
+      // Chỉ khi nhấn "Cập nhật" mới nén và xuất ảnh JPEG chuẩn 600x600
       function confirmCrop() {
+        let W = cropImgObj.naturalWidth || cropImgObj.width;
+        let H = cropImgObj.naturalHeight || cropImgObj.height;
+        if (!W || !H) return;
+
         let outCanvas = document.createElement("canvas");
-        outCanvas.width = 500;
-        outCanvas.height = 500;
+        outCanvas.width = CROP_OUT_SIZE;
+        outCanvas.height = CROP_OUT_SIZE;
         let ctx = outCanvas.getContext("2d");
-        let ratio = 500 / 250;
-        ctx.fillStyle = "#1e1f26";
-        ctx.fillRect(0, 0, 500, 500);
-        ctx.drawImage(
-          cropImgObj,
-          cropX * ratio,
-          cropY * ratio,
-          cropImgObj.width * cropScale * ratio,
-          cropImgObj.height * cropScale * ratio,
+        let isLight = document.body.getAttribute("data-theme") === "light";
+
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = "high";
+        ctx.fillStyle = isLight ? "#e2e8f0" : "#11131a";
+        ctx.fillRect(0, 0, CROP_OUT_SIZE, CROP_OUT_SIZE);
+
+        let coverScaleOut = Math.max(CROP_OUT_SIZE / W, CROP_OUT_SIZE / H);
+        let drawW = W * coverScaleOut * cropZoom;
+        let drawH = H * coverScaleOut * cropZoom;
+
+        ctx.save();
+        ctx.translate(
+          CROP_OUT_SIZE / 2 + cropPanX * CROP_OUT_SIZE,
+          CROP_OUT_SIZE / 2 + cropPanY * CROP_OUT_SIZE,
         );
-        curA.avatar = outCanvas.toDataURL("image/jpeg", 0.8);
+        ctx.rotate(((cropRotate90 + cropAngle) * Math.PI) / 180);
+        ctx.scale(cropFlipX ? -1 : 1, cropFlipY ? -1 : 1);
+        ctx.filter = getCropFilterCss();
+        ctx.drawImage(cropImgObj, -drawW / 2, -drawH / 2, drawW, drawH);
+        ctx.restore();
+
+        let dataUrl = outCanvas.toDataURL("image/jpeg", 0.84);
+        if (dataUrl.length > 260000) {
+          dataUrl = outCanvas.toDataURL("image/jpeg", 0.76);
+        }
+
+        curA.avatar = dataUrl;
         let idx = accounts.findIndex((x) => x.id === curA.id);
         if (idx > -1) accounts[idx].avatar = curA.avatar;
         safeSetItem("tng_accounts", JSON.stringify(accounts));
-        document.getElementById("crop-modal-overlay").classList.remove("show");
+        closeCropModal();
         refreshUI();
       }
       let modalCallback = null;
+      const CM_ICONS = {
+        trash: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5.75 6.5L6.75 19.1Q6.9 20.75 8.55 20.75H15.45Q17.1 20.75 17.25 19.1L18.25 6.5Z" fill="currentColor" fill-opacity="0.14" stroke="none"/><path d="M4.25 6.5H19.75"/><path d="M9.25 6.5V4.75A1.5 1.5 0 0 1 10.75 3.25H13.25A1.5 1.5 0 0 1 14.75 4.75V6.5"/><path d="M5.75 6.5L6.75 19.1Q6.9 20.75 8.55 20.75H15.45Q17.1 20.75 17.25 19.1L18.25 6.5"/><path d="M9.85 10.5L10.2 16.9M14.15 10.5L13.8 16.9" stroke-width="1.55" stroke-opacity="0.85"/></svg>`,
+        logout: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>`,
+        edit: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg>`,
+        note: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="12" y1="8" x2="12" y2="14"/><line x1="9" y1="11" x2="15" y2="11"/></svg>`,
+        mail: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3 7 9 6 9-6"/></svg>`,
+        phone: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>`,
+        info: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m9.5 12.2 1.8 1.8 3.5-3.8"/></svg>`,
+      };
+
       function openCustomModal(title, desc, showInput, confirmText, callback) {
-        document.getElementById("cm-title").innerText = title;
         let modalEl = document.querySelector(
             "#custom-modal-overlay .custom-modal",
           ),
+          tEl = document.getElementById("cm-title"),
+          icEl = document.getElementById("cm-icon"),
           dEl = document.getElementById("cm-desc"),
           iEl = document.getElementById("cm-input"),
           bEl = document.getElementById("cm-confirm-btn");
+
+        let cleanTitle = (title || "").replace(/:\s*$/, "").trim();
+        let displayTitle = cleanTitle;
+        let displayDesc = desc || "";
+        let displayConfirm = confirmText || "Xác nhận";
+        let fullText = (cleanTitle + " " + displayDesc).toLowerCase();
+
+        let isDelete =
+          !showInput &&
+          (fullText.includes("xóa") ||
+            fullText.includes("xoá") ||
+            fullText.includes("gỡ liên kết"));
+        let isLogout = !showInput && fullText.includes("đăng xuất");
+        let isDanger = isDelete || isLogout;
+
         if (modalEl) {
-          modalEl.classList.remove("cm-theme-note", "cm-theme-danger");
-          let fullText = ((title || "") + " " + (desc || "")).toLowerCase();
-          if (
-            showInput &&
-            (fullText.includes("quyển sổ") || fullText.includes("sổ ghi chú"))
-          ) {
-            modalEl.classList.add("cm-theme-note");
-          } else if (
-            !showInput &&
-            (fullText.includes("xóa") || fullText.includes("xoá"))
-          ) {
-            modalEl.classList.add("cm-theme-danger");
-          }
+          modalEl.classList.remove(
+            "cm-theme-note",
+            "cm-theme-danger",
+            "cm-mode-input",
+            "cm-mode-info",
+          );
+          if (showInput) modalEl.classList.add("cm-mode-input");
+          else if (isDanger) modalEl.classList.add("cm-theme-danger");
+          else modalEl.classList.add("cm-mode-info");
         }
-        if (desc) {
-          dEl.innerText = desc;
+
+        if (showInput) {
+          let ph = "Nhập nội dung...";
+          let iconHtml = CM_ICONS.edit;
+          if (
+            fullText.includes("quyển sổ") ||
+            fullText.includes("sổ ghi chú")
+          ) {
+            ph = "Ví dụ: Kế hoạch học tập...";
+            if (!fullText.includes("đổi tên")) iconHtml = CM_ICONS.note;
+          } else if (fullText.includes("email") || fullText.includes("gmail")) {
+            ph = "example@gmail.com";
+            iconHtml = CM_ICONS.mail;
+          } else if (
+            fullText.includes("di động") ||
+            fullText.includes("điện thoại")
+          ) {
+            ph = "Nhập số điện thoại...";
+            iconHtml = CM_ICONS.phone;
+          } else if (fullText.includes("đổi tên")) {
+            ph = "Nhập tên mới...";
+          } else if (fullText.includes("tên")) {
+            ph = "Nhập tên hiển thị...";
+          }
+          if (icEl) icEl.innerHTML = iconHtml;
+          iEl.placeholder = ph;
+        } else if (isDanger) {
+          if (icEl)
+            icEl.innerHTML =
+              isLogout && !isDelete ? CM_ICONS.logout : CM_ICONS.trash;
+          if (
+            cleanTitle === "Xác nhận" &&
+            displayDesc &&
+            displayDesc.length <= 54
+          ) {
+            displayTitle = displayDesc;
+            displayDesc =
+              isLogout && !isDelete
+                ? "Bạn có thể đăng nhập lại bất cứ lúc nào."
+                : "Hành động này không thể hoàn tác.";
+          }
+          if (displayConfirm === "Đồng ý") {
+            if (fullText.includes("gỡ liên kết"))
+              displayConfirm = "Gỡ liên kết";
+            else if (isLogout && !isDelete) displayConfirm = "Đăng xuất";
+            else displayConfirm = "Xóa";
+          }
+        } else {
+          if (icEl) icEl.innerHTML = CM_ICONS.info;
+        }
+
+        tEl.innerText = displayTitle;
+        if (displayDesc) {
+          dEl.innerText = displayDesc;
           dEl.style.display = "block";
         } else dEl.style.display = "none";
+
         if (showInput) {
           iEl.style.display = "block";
           iEl.value = "";
-          setTimeout(() => iEl.focus(), 50);
+          setTimeout(() => iEl.focus(), 60);
         } else iEl.style.display = "none";
-        bEl.innerText = confirmText;
+
+        bEl.innerText = displayConfirm;
         modalCallback = callback;
         openModalWithOrigin("custom-modal-overlay", "cm-anim-wrapper");
       }
@@ -17559,6 +20196,15 @@
           );
         closeCustomModal();
       };
+      document.getElementById("cm-input").addEventListener("keydown", (ev) => {
+        if (ev.key === "Enter") {
+          ev.preventDefault();
+          document.getElementById("cm-confirm-btn").click();
+        } else if (ev.key === "Escape") {
+          ev.preventDefault();
+          closeCustomModal();
+        }
+      });
       function promptInput(title, callback) {
         openCustomModal(title, null, !0, "Xác nhận", callback);
       }
@@ -24655,7 +27301,7 @@
                                                 <button class="ai-option-item" onclick="window.tngAiAction('listen', this)"><span>🔊</span> Đọc to văn bản</button>
                                                 <button class="ai-option-item" onclick="window.tngAiAction('share', this)"><span>🔗</span> Chia sẻ</button>
                                                 <button class="ai-option-item" onclick="window.tngAiAction('report', this)"><span>⚠️</span> Báo cáo vấn đề</button>
-                                                <button class="ai-option-item" style="color: #ff4d4d;" onclick="window.tngAiAction('delete', this)"><span style="display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; flex-shrink: 0;"><svg viewBox="0 0 100 100" style="width: 100%; height: 100%; display: block; overflow: visible"><g filter="url(#ios-extreme-pop)"><path d="M 38 22 V 17 C 38 13.5 40.5 11 44 11 H 56 C 59.5 11 62 13.5 62 17 V 22" fill="none" stroke="#ff6961" stroke-width="6.5" stroke-linecap="round"/><rect x="18" y="21" width="64" height="10" rx="5" fill="#ff5a52"/><rect x="22" y="22.5" width="56" height="3" rx="1.5" fill="rgba(255,255,255,0.42)"/><path d="M 24 34 H 76 L 71.5 82 C 71 86.5 67.5 89 63 89 H 37 C 32.5 89 29 86.5 28.5 82 Z" fill="#ff3b30"/><path d="M 25 34 H 75 L 74.2 42 H 25.8 Z" fill="rgba(0,0,0,0.16)"/><path d="M 24 34 H 76 L 71.5 82 C 71 86.5 67.5 89 63 89 H 37 C 32.5 89 29 86.5 28.5 82 Z" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="1.5"/><line x1="39" y1="45" x2="40.5" y2="76" stroke="rgba(255,255,255,0.82)" stroke-width="5.2" stroke-linecap="round"/><line x1="50" y1="45" x2="50" y2="76" stroke="rgba(255,255,255,0.82)" stroke-width="5.2" stroke-linecap="round"/><line x1="61" y1="45" x2="59.5" y2="76" stroke="rgba(255,255,255,0.82)" stroke-width="5.2" stroke-linecap="round"/></g></svg></span> Xóa tin nhắn</button>
+                                                <button class="ai-option-item" style="color: #ff4d4d;" onclick="window.tngAiAction('delete', this)"><span style="display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; flex-shrink: 0;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="width: 19px; height: 19px; display: block;"><path d="M5.75 6.5L6.75 19.1Q6.9 20.75 8.55 20.75H15.45Q17.1 20.75 17.25 19.1L18.25 6.5Z" fill="currentColor" fill-opacity="0.14" stroke="none"/><path d="M4.25 6.5H19.75"/><path d="M9.25 6.5V4.75A1.5 1.5 0 0 1 10.75 3.25H13.25A1.5 1.5 0 0 1 14.75 4.75V6.5"/><path d="M5.75 6.5L6.75 19.1Q6.9 20.75 8.55 20.75H15.45Q17.1 20.75 17.25 19.1L18.25 6.5"/><path d="M9.85 10.5L10.2 16.9M14.15 10.5L13.8 16.9" stroke-width="1.55" stroke-opacity="0.82"/></svg></span> Xóa tin nhắn</button>
                                             </div>
                                         </div>
                                       `;
@@ -25022,7 +27668,7 @@
             let btnHoverFX = `onmouseover="this.style.background='rgba(255,255,255,0.15)'; this.style.opacity='1'" onmouseout="this.style.background='none'; this.style.opacity='0.8'" onmousedown="this.style.background='rgba(255,255,255,0.25)'; this.style.transform='scale(0.92)'" onmouseup="this.style.background='rgba(255,255,255,0.15)'; this.style.transform='scale(1)'" ontouchstart="this.style.background='rgba(255,255,255,0.25)'; this.style.transform='scale(0.92)'" ontouchend="this.style.background='none'; this.style.transform='scale(1)'"`;
 
             topActions.innerHTML = `
-                                                <button id="tng-btn-delete" style="background:none; border:none; padding:6px; display:flex; align-items:center; justify-content:center; cursor:pointer; opacity:0.8; transition:all 0.2s cubic-bezier(0.16, 1, 0.3, 1); border-radius: 50%; outline:none; -webkit-tap-highlight-color:transparent;" ${btnHoverFX}>
+                                                <button id="tng-btn-delete" style="background:none; border:none; padding:6px; display:flex; align-items:center; justify-content:center; cursor:pointer; opacity:0.8; border-radius: 50%; outline:none; -webkit-tap-highlight-color:transparent;">
                                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
                                                 </button>
                                                 <div style="width: 1px; height: 50%; background: rgba(255,255,255,0.3); margin: 0 2px;"></div>
@@ -26524,12 +29170,11 @@
       // ============================================================
       try {
         (function () {
-          // 1. Phục hồi và vá lỗi hàm Xác Nhận Xóa Tin Nhắn
+          // 1. Phục hồi và vá lỗi hàm Xác Nhận Xóa Tin Nhắn (Liquid Glass đồng bộ)
           window.tngConfirmUI = function (e, message, onConfirm) {
             let overlay = document.createElement("div");
             overlay.className = "tng-modal-overlay";
 
-            // Bắt tọa độ chuẩn xác 100% của ngón tay/chuột
             let cx =
               e && e.clientX !== undefined ? e.clientX : window.innerWidth / 2;
             let cy =
@@ -26538,21 +29183,23 @@
             let dy = cy - window.innerHeight / 2;
 
             overlay.innerHTML = `
-                      <div class="tng-modal-box">
-                          <div class="tng-modal-title">Xác nhận xóa</div>
+                      <div class="tng-modal-box tng-confirm-card">
+                          <div class="cm-icon-badge" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5.75 6.5L6.75 19.1Q6.9 20.75 8.55 20.75H15.45Q17.1 20.75 17.25 19.1L18.25 6.5Z" fill="currentColor" fill-opacity="0.14" stroke="none"/><path d="M4.25 6.5H19.75"/><path d="M9.25 6.5V4.75A1.5 1.5 0 0 1 10.75 3.25H13.25A1.5 1.5 0 0 1 14.75 4.75V6.5"/><path d="M5.75 6.5L6.75 19.1Q6.9 20.75 8.55 20.75H15.45Q17.1 20.75 17.25 19.1L18.25 6.5"/><path d="M9.85 10.5L10.2 16.9M14.15 10.5L13.8 16.9" stroke-width="1.55" stroke-opacity="0.85"/></svg>
+                          </div>
+                          <div class="tng-modal-title">Xóa tin nhắn này?</div>
                           <div class="tng-modal-desc">${message}</div>
-                          <div class="tng-modal-actions">
-                              <button class="tng-btn tng-btn-cancel" id="btn-cancel-del">Hủy</button>
-                              <button class="tng-btn tng-btn-danger" id="btn-confirm-delete">Xóa tin nhắn</button>
+                          <div class="cm-actions">
+                              <button type="button" class="cm-btn cm-btn-cancel" id="btn-cancel-del">Hủy</button>
+                              <button type="button" class="cm-btn cm-btn-danger" id="btn-confirm-delete">Xóa</button>
                           </div>
                       </div>
                   `;
 
             document.body.appendChild(overlay);
-            void overlay.offsetWidth; // Bắt buộc render để DOM nhận diện
+            void overlay.offsetWidth;
 
             let box = overlay.querySelector(".tng-modal-box");
-            // ÉP TỌA ĐỘ VÀO ĐÚNG VỊ TRÍ CLICK
             box.style.setProperty(
               "transform-origin",
               `calc(50% + ${dx}px) calc(50% + ${dy}px)`,
@@ -26562,7 +29209,6 @@
             overlay.classList.add("show");
 
             const closeModal = () => {
-              // Khi thu về cũng khóa chặt tọa độ tại điểm đó
               box.style.setProperty(
                 "transform-origin",
                 `calc(50% + ${dx}px) calc(50% + ${dy}px)`,
@@ -26572,6 +29218,9 @@
               setTimeout(() => overlay.remove(), 850);
             };
 
+            overlay.onclick = (ev) => {
+              if (ev.target === overlay) closeModal();
+            };
             overlay.querySelector("#btn-cancel-del").onclick = () =>
               closeModal();
             overlay.querySelector("#btn-confirm-delete").onclick = function () {
@@ -36663,11 +39312,16 @@
           if (!el) return false;
           if (el.classList.contains("is-danger")) return true;
           const inlineStyle = (el.getAttribute("style") || "").toLowerCase();
+          const onclickAttr = (el.getAttribute("onclick") || "").toLowerCase();
           return (
             inlineStyle.includes("var(--danger)") ||
             inlineStyle.includes("#ff453a") ||
             inlineStyle.includes("#ff3b30") ||
-            inlineStyle.includes("#ff4b2b")
+            inlineStyle.includes("#ff4b2b") ||
+            inlineStyle.includes("#ff4d4d") ||
+            inlineStyle.includes("#ff6961") ||
+            inlineStyle.includes("#d93025") ||
+            onclickAttr.includes("delete")
           );
         };
 
