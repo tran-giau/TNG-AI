@@ -4434,6 +4434,44 @@
         animation: ai-breathe-btn 8s ease-in-out infinite !important;
       }
 
+      /* Nhịp thở phát sáng đồng bộ 8s cho riêng nút dấu + trong thanh chat */
+      @keyframes ai-breathe-chat-plus {
+        0%,
+        100% {
+          filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.25))
+            drop-shadow(0 0 3px rgba(155, 114, 203, 0.15))
+            drop-shadow(0 0 6px rgba(66, 133, 244, 0.1));
+        }
+        50% {
+          filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.25))
+            drop-shadow(0 0 11px rgba(155, 114, 203, 0.65))
+            drop-shadow(0 0 18px rgba(66, 133, 244, 0.45));
+        }
+      }
+
+      @keyframes ai-breathe-chat-plus-inner {
+        0%,
+        100% {
+          opacity: 0.18;
+        }
+        50% {
+          opacity: 0.95;
+        }
+      }
+
+      button[onclick*="m-att-h"] svg,
+      button[onclick*="m-att-c"] svg {
+        overflow: visible !important;
+        animation: ai-breathe-chat-plus 8s ease-in-out infinite !important;
+      }
+
+      button[onclick*="m-att-h"] svg g[clip-path] > path:nth-child(2),
+      button[onclick*="m-att-h"] svg g[clip-path] > path:nth-child(3),
+      button[onclick*="m-att-c"] svg g[clip-path] > path:nth-child(2),
+      button[onclick*="m-att-c"] svg g[clip-path] > path:nth-child(3) {
+        animation: ai-breathe-chat-plus-inner 8s ease-in-out infinite !important;
+      }
+
       /* Gắn hiệu ứng cho nút Gửi Mũi Tên */
       #send-btn-home,
       #send-btn-chat {
@@ -5121,7 +5159,7 @@
       }
 
       /* ============================================================ */
-      /* 1. KHOẢNG CÁCH THANH MENU BÊN TRÁI (GIỮ NGUYÊN ĐIỂM GIỮA)    */
+      /* 1. KHOẢNG CÁCH THANH MENU BÊN TRÁI (ĐÃ CHỈNH CỠ CHỮ & THOÁNG) */
       /* ============================================================ */
       @media (min-width: 769px) {
         #sidebar {
@@ -5130,31 +5168,70 @@
       }
 
       #sidebar .sb-item {
-        margin: 2.75px 13px !important;
+        margin: 2.5px 5px !important;
         padding: 9px 14px !important;
-        gap: 12.5px !important;
+        gap: 13.5px !important;
         border-radius: 11.5px !important;
-        font-size: 13.9px !important;
+        font-size: 15px !important;
+        flex-shrink: 0;
       }
 
       #sidebar .sb-item:not(.gear-item) {
         border: 1px solid transparent !important;
       }
 
-      #sidebar .sb-item .ios27-art {
+      #sidebar .sb-item.gear-item {
+        border-left: 1px solid transparent !important;
+        border-right: 1px solid transparent !important;
+        border-bottom: 1px solid transparent !important;
+      }
+
+      #sidebar-notes-list,
+      #history-list {
+        display: flex;
+        flex-direction: column;
+      }
+
+      #history-list {
+        min-height: 0;
+      }
+
+      #sidebar .sb-item .ios27-art,
+      #sidebar .sb-item .sb-icon,
+      #sidebar .sb-item .gear-wrap {
         width: 24px !important;
         height: 24px !important;
         min-width: 24px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex-shrink: 0 !important;
+        line-height: 1 !important;
+      }
+
+      /* Căn giữa dọc chuẩn cho 4 icon SVG phía trên (bỏ lệch top: -2px cũ) */
+      #sidebar .sb-item .ios27-art {
+        top: 0 !important;
+      }
+
+      /* Phóng đồng đều các icon đang bị nhỏ hơn trên toàn menu */
+      #sidebar .sb-item[onclick*="showSearch"] .ios27-art svg {
+        transform: scale(1.14);
+      }
+
+      #sidebar-notes-list .sb-item .sb-icon,
+      #history-list .sb-item .sb-icon {
+        font-size: 19px !important;
+      }
+
+      #sidebar #btn-all-notes .sb-icon {
+        font-size: 21px !important;
+        letter-spacing: 0.5px;
       }
 
       #sidebar .sb-title {
-        margin: 11.5px 18.5px 3.75px 18.5px !important;
-        font-size: 12.5px !important;
-      }
-
-      #sidebar .sb-item.gear-item {
-        margin-top: auto !important;
-        padding: 10.5px 14px !important;
+        margin: 13px 18.5px 5px 18.5px !important;
+        font-size: 13.5px !important;
       }
 
       /* ============================================================ */
@@ -6511,6 +6588,7 @@
         }
         body #set-menu.set-menu {
           padding-top: 0 !important;
+          padding-bottom: 0 !important;
         }
         body #set-menu > .d-item {
           width: 100% !important;
@@ -6523,6 +6601,7 @@
       @media (max-width: 768px) {
         html body #set-menu.set-menu {
           padding-top: 0 !important;
+          padding-bottom: 0 !important;
         }
         html
           body
@@ -6530,6 +6609,10 @@
           > .d-item:not(.tng-sub-open):not(.tng-sub-animating) {
           border-radius: 0 !important;
         }
+      }
+
+      body #set-menu > .d-divider {
+        margin: 0 !important;
       }
 
       body .drop-menu > .d-item,
@@ -6739,13 +6822,6 @@
         padding: 13px 10px !important;
         height: 100% !important;
         border-radius: 0 !important;
-      }
-
-      /* 6. Thanh Sidebar: nới rộng giọt kính ra sát mép hơn */
-      body #sidebar .sb-item {
-        margin: 2px 5px !important;
-        padding: 9px 14px !important;
-        border-radius: 11.5px !important;
       }
 
       /* ============================================================ */
@@ -7699,48 +7775,48 @@
       }
 
       /* ============================================================ */
-      /* TINH CHỈNH GIỌT NƯỚC TRONG VEO & VIỀN MẢNH CÂN BẰNG          */
+      /* TINH CHỈNH GIỌT NƯỚC TRONG VEO & VIỀN MẢNH DỄ NHÌN           */
       /* ============================================================ */
 
-      /* 1. Dark Mode: giữ ruột trong suốt, nhích nhẹ độ rõ khối & vệt phản chiếu */
+      /* 1. Dark Mode: ruột vẫn trong veo, tăng nhẹ mép cong & vệt phản chiếu */
       html body .tng-lg-drop {
         background: linear-gradient(
           168deg,
-          rgba(255, 255, 255, 0.024) 0%,
-          rgba(255, 255, 255, 0.003) 50%,
-          rgba(210, 235, 255, 0.018) 100%
+          rgba(255, 255, 255, 0.036) 0%,
+          rgba(255, 255, 255, 0.006) 50%,
+          rgba(210, 235, 255, 0.026) 100%
         ) !important;
         box-shadow:
-          0 10px 22px -6px rgba(0, 0, 0, 0.45),
-          0 2px 6px -2px rgba(0, 0, 0, 0.28),
-          inset 0 5px 11px -7px rgba(255, 255, 255, 0.15),
-          inset 0 -5px 11px -7px rgba(190, 228, 255, 0.14),
-          inset 0 -1.5px 4px -2px rgba(0, 0, 0, 0.26) !important;
+          0 11px 23px -6px rgba(0, 0, 0, 0.48),
+          0 2px 7px -2px rgba(0, 0, 0, 0.3),
+          inset 0 5px 11px -7px rgba(255, 255, 255, 0.21),
+          inset 0 -5px 11px -7px rgba(190, 228, 255, 0.19),
+          inset 0 -1.5px 4px -2px rgba(0, 0, 0, 0.3) !important;
       }
 
       html body .tng-lg-flow {
         background:
           radial-gradient(
             42% 36% at 32% 42%,
-            rgba(255, 255, 255, 0.032) 0%,
-            rgba(195, 230, 255, 0.015) 45%,
+            rgba(255, 255, 255, 0.044) 0%,
+            rgba(195, 230, 255, 0.02) 45%,
             transparent 74%
           ),
           radial-gradient(
             38% 34% at 72% 62%,
-            rgba(190, 225, 255, 0.024) 0%,
+            rgba(190, 225, 255, 0.032) 0%,
             transparent 72%
           ) !important;
       }
 
       html body .tng-lg-in {
-        width: 190px !important;
-        height: 90px !important;
-        margin: -45px 0 0 -95px !important;
+        width: 200px !important;
+        height: 94px !important;
+        margin: -47px 0 0 -100px !important;
         background: radial-gradient(
           ellipse 50% 50% at 50% 50%,
-          rgba(255, 255, 255, 0.06) 0%,
-          rgba(205, 232, 255, 0.022) 46%,
+          rgba(255, 255, 255, 0.082) 0%,
+          rgba(205, 232, 255, 0.03) 46%,
           transparent 74%
         ) !important;
       }
@@ -7748,73 +7824,73 @@
       html body .tng-lg-rim {
         background: linear-gradient(
           145deg,
-          rgba(255, 255, 255, 0.095) 0%,
-          rgba(255, 255, 255, 0.015) 30%,
-          rgba(255, 255, 255, 0.006) 55%,
-          rgba(205, 232, 255, 0.022) 78%,
-          rgba(255, 255, 255, 0.068) 100%
+          rgba(255, 255, 255, 0.145) 0%,
+          rgba(255, 255, 255, 0.028) 30%,
+          rgba(255, 255, 255, 0.012) 55%,
+          rgba(205, 232, 255, 0.036) 78%,
+          rgba(255, 255, 255, 0.105) 100%
         ) !important;
       }
 
       html body .tng-lg-r1 {
-        width: 196px !important;
-        height: 196px !important;
-        margin: -98px 0 0 -98px !important;
+        width: 206px !important;
+        height: 206px !important;
+        margin: -103px 0 0 -103px !important;
         background: radial-gradient(
           circle,
-          rgba(255, 255, 255, 0.68) 0%,
-          rgba(204, 232, 255, 0.24) 30%,
-          transparent 65%
+          rgba(255, 255, 255, 0.78) 0%,
+          rgba(204, 232, 255, 0.3) 30%,
+          transparent 66%
         ) !important;
       }
 
       html body .tng-lg-r2 {
-        width: 180px !important;
-        height: 180px !important;
-        margin: -90px 0 0 -90px !important;
+        width: 190px !important;
+        height: 190px !important;
+        margin: -95px 0 0 -95px !important;
         background: radial-gradient(
           circle,
-          rgba(196, 226, 255, 0.32) 0%,
-          rgba(232, 218, 255, 0.11) 36%,
-          transparent 67%
+          rgba(196, 226, 255, 0.4) 0%,
+          rgba(232, 218, 255, 0.14) 36%,
+          transparent 68%
         ) !important;
       }
 
       html body .tng-lg-rs {
         background: radial-gradient(
           ellipse 50% 50% at 50% 50%,
-          rgba(255, 255, 255, 0.82) 0%,
-          rgba(192, 228, 255, 0.34) 42%,
-          transparent 73%
+          rgba(255, 255, 255, 0.9) 0%,
+          rgba(192, 228, 255, 0.4) 42%,
+          transparent 74%
         ) !important;
       }
 
-      /* 2. Light Mode: đủ rõ trên nền sáng mà vẫn trong trẻo */
+      /* 2. Light Mode: dễ nhìn rõ trên nền sáng mà vẫn trong trẻo */
       html body[data-theme="light"] .tng-lg-drop {
         background: linear-gradient(
           168deg,
-          rgba(255, 255, 255, 0.25) 0%,
-          rgba(255, 255, 255, 0.035) 50%,
-          rgba(225, 240, 255, 0.14) 100%
+          rgba(255, 255, 255, 0.34) 0%,
+          rgba(255, 255, 255, 0.055) 50%,
+          rgba(225, 240, 255, 0.2) 100%
         ) !important;
         box-shadow:
-          0 9px 19px -6px rgba(15, 23, 42, 0.125),
-          0 2px 5px -1px rgba(15, 23, 42, 0.07),
-          inset 0 5px 11px -7px rgba(255, 255, 255, 0.78),
-          inset 0 -5px 11px -7px rgba(15, 23, 42, 0.105) !important;
+          0 9px 20px -6px rgba(15, 23, 42, 0.145),
+          0 2px 5px -1px rgba(15, 23, 42, 0.085),
+          inset 0 5px 11px -7px rgba(255, 255, 255, 0.9),
+          inset 0 -5px 11px -7px rgba(15, 23, 42, 0.13) !important;
       }
 
       html body[data-theme="light"] .tng-lg-flow {
         background:
           radial-gradient(
             42% 36% at 32% 42%,
-            rgba(255, 255, 255, 0.26) 0%,
-            rgba(56, 139, 253, 0.024) 48%,
+            rgba(255, 255, 255, 0.34) 0%,
+            rgba(56, 139, 253, 0.032) 48%,
             transparent 74%
           ),
           radial-gradient(
             38% 34% at 72% 62%,
-            rgba(255, 255, 255, 0.19) 0%,
+            rgba(255, 255, 255, 0.25) 0%,
             transparent 72%
           ) !important;
       }
@@ -7822,8 +7898,8 @@
       html body[data-theme="light"] .tng-lg-in {
         background: radial-gradient(
           ellipse 50% 50% at 50% 50%,
-          rgba(255, 255, 255, 0.3) 0%,
-          rgba(56, 139, 253, 0.032) 50%,
+          rgba(255, 255, 255, 0.38) 0%,
+          rgba(56, 139, 253, 0.042) 50%,
           transparent 74%
         ) !important;
       }
@@ -7831,28 +7907,28 @@
       html body[data-theme="light"] .tng-lg-rim {
         background: linear-gradient(
           145deg,
-          rgba(255, 255, 255, 0.64) 0%,
-          rgba(15, 23, 42, 0.056) 44%,
-          rgba(15, 23, 42, 0.032) 58%,
-          rgba(255, 255, 255, 0.52) 100%
+          rgba(255, 255, 255, 0.78) 0%,
+          rgba(15, 23, 42, 0.085) 44%,
+          rgba(15, 23, 42, 0.048) 58%,
+          rgba(255, 255, 255, 0.66) 100%
         ) !important;
       }
 
       html body[data-theme="light"] .tng-lg-r1 {
         background: radial-gradient(
           circle,
-          rgba(255, 255, 255, 0.88) 0%,
-          rgba(186, 220, 255, 0.38) 34%,
-          transparent 67%
+          rgba(255, 255, 255, 0.96) 0%,
+          rgba(186, 220, 255, 0.46) 34%,
+          transparent 68%
         ) !important;
       }
 
       html body[data-theme="light"] .tng-lg-r2 {
         background: radial-gradient(
           circle,
-          rgba(15, 23, 42, 0.14) 0%,
-          rgba(56, 139, 253, 0.13) 40%,
-          transparent 69%
+          rgba(15, 23, 42, 0.19) 0%,
+          rgba(56, 139, 253, 0.17) 40%,
+          transparent 70%
         ) !important;
       }
 
@@ -7860,49 +7936,382 @@
       html body .tng-glow-pill.is-danger > .tng-lg-drop {
         background: linear-gradient(
           168deg,
-          rgba(255, 80, 70, 0.068) 0%,
-          rgba(255, 69, 58, 0.012) 50%,
-          rgba(255, 110, 100, 0.05) 100%
+          rgba(255, 80, 70, 0.095) 0%,
+          rgba(255, 69, 58, 0.018) 50%,
+          rgba(255, 110, 100, 0.072) 100%
         ) !important;
         box-shadow:
-          0 10px 22px -6px rgba(255, 59, 48, 0.21),
-          0 2px 6px -2px rgba(0, 0, 0, 0.28),
-          inset 0 5px 11px -7px rgba(255, 210, 205, 0.21),
-          inset 0 -5px 11px -7px rgba(255, 100, 92, 0.18) !important;
+          0 10px 22px -6px rgba(255, 59, 48, 0.24),
+          0 2px 6px -2px rgba(0, 0, 0, 0.3),
+          inset 0 5px 11px -7px rgba(255, 210, 205, 0.26),
+          inset 0 -5px 11px -7px rgba(255, 100, 92, 0.23) !important;
       }
 
       html body .tng-glow-pill.is-danger .tng-lg-rim {
         background: linear-gradient(
           145deg,
-          rgba(255, 195, 190, 0.17) 0%,
-          rgba(255, 69, 58, 0.035) 44%,
-          rgba(255, 155, 148, 0.12) 100%
+          rgba(255, 195, 190, 0.23) 0%,
+          rgba(255, 69, 58, 0.055) 44%,
+          rgba(255, 155, 148, 0.165) 100%
         ) !important;
       }
 
       html body .tng-glow-pill.is-danger .tng-lg-r1 {
         background: radial-gradient(
           circle,
-          rgba(255, 230, 226, 0.7) 0%,
-          rgba(255, 110, 100, 0.28) 34%,
-          transparent 67%
+          rgba(255, 230, 226, 0.8) 0%,
+          rgba(255, 110, 100, 0.34) 34%,
+          transparent 68%
         ) !important;
       }
 
       html body .tng-glow-pill.is-danger .tng-lg-r2 {
         background: radial-gradient(
           circle,
-          rgba(255, 88, 78, 0.33) 0%,
-          transparent 69%
+          rgba(255, 88, 78, 0.4) 0%,
+          transparent 70%
         ) !important;
       }
 
       html body .tng-glow-pill.is-danger .tng-lg-in {
         background: radial-gradient(
           ellipse 50% 50% at 50% 50%,
-          rgba(255, 185, 178, 0.078) 0%,
+          rgba(255, 185, 178, 0.105) 0%,
           transparent 72%
         ) !important;
+      }
+
+      /* ============================================================ */
+      /* GIỌT NƯỚC XANH DA TRỜI CHUẨN --btn-blue (#a8c7fa / #005bb5)  */
+      /* TRONG VEO KHÔNG ĐỤC - RIÊNG THANH TAB QUẢN LÝ GÓI THUÊ BAO   */
+      /* ============================================================ */
+
+      /* 1. Ẩn pill rAF cũ bên trong thanh tab để hết xung đột nhảy khung hình */
+      html body #sp-body .tng-sub-tabs > .tng-glow-pill {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+      }
+
+      /* 2. Giọt kính GPU độc lập trượt ngang siêu mượt */
+      html body #sp-body .tng-sub-tabs > .tng-sub-glass-pill {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        z-index: 0 !important;
+        pointer-events: none !important;
+        box-sizing: border-box !important;
+        border: none !important;
+        opacity: 0;
+        overflow: visible !important;
+        border-radius: var(--tng-pill-r, 11.5px) !important;
+        will-change: transform, width, border-radius, opacity;
+        transition:
+          transform 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+          width 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+          border-radius 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+          opacity 0.2s ease !important;
+      }
+
+      html body #sp-body .tng-sub-tabs.returning > .tng-sub-glass-pill {
+        transition:
+          transform 0.44s cubic-bezier(0.22, 1, 0.36, 1),
+          width 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+          border-radius 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+          opacity 0.2s ease !important;
+      }
+
+      html body #sp-body .tng-sub-tabs > .tng-sub-glass-pill.is-instant,
+      html
+        body
+        #sp-body
+        .tng-sub-tabs.returning
+        > .tng-sub-glass-pill.is-instant {
+        transition: none !important;
+      }
+
+      html body #sp-body .tng-sub-tabs > .tng-sub-glass-pill.tng-lg-mounted {
+        background: transparent !important;
+        background-image: none !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+      }
+
+      /* 3. Dark Mode: Khóa chuẩn 100% mã màu rgb(168, 199, 250) (#a8c7fa) nhưng giữ lòng trong veo */
+      html body #sp-body .tng-sub-tabs > .tng-sub-glass-pill > .tng-lg-drop {
+        --hit-sy-x: 1;
+        background: linear-gradient(
+          168deg,
+          rgba(168, 199, 250, 0.13) 0%,
+          rgba(168, 199, 250, 0.03) 50%,
+          rgba(168, 199, 250, 0.095) 100%
+        ) !important;
+        box-shadow:
+          0 8px 20px -6px rgba(168, 199, 250, 0.24),
+          0 2px 6px -2px rgba(0, 0, 0, 0.3),
+          inset 0 1px 4px rgba(168, 199, 250, 0.24),
+          inset 0 -3px 8px -4px rgba(168, 199, 250, 0.26),
+          inset 0 -1px 3px -1px rgba(0, 0, 0, 0.28) !important;
+      }
+
+      html body #sp-body .tng-sub-tabs > .tng-sub-glass-pill .tng-lg-flow {
+        background:
+          radial-gradient(
+            42% 36% at 32% 42%,
+            rgba(168, 199, 250, 0.075) 0%,
+            rgba(168, 199, 250, 0.028) 46%,
+            transparent 74%
+          ),
+          radial-gradient(
+            38% 34% at 72% 62%,
+            rgba(168, 199, 250, 0.055) 0%,
+            transparent 72%
+          ) !important;
+      }
+
+      /* Viền 1px đồng màu #a8c7fa với viền thẻ gói và nút "< Trở lại" */
+      html body #sp-body .tng-sub-tabs > .tng-sub-glass-pill .tng-lg-rim {
+        background: linear-gradient(
+          145deg,
+          rgba(168, 199, 250, 0.72) 0%,
+          rgba(168, 199, 250, 0.28) 30%,
+          rgba(168, 199, 250, 0.18) 55%,
+          rgba(168, 199, 250, 0.3) 78%,
+          rgba(168, 199, 250, 0.58) 100%
+        ) !important;
+      }
+
+      html body #sp-body .tng-sub-tabs > .tng-sub-glass-pill .tng-lg-r1 {
+        background: radial-gradient(
+          circle,
+          rgba(222, 236, 255, 0.95) 0%,
+          rgba(168, 199, 250, 0.56) 34%,
+          transparent 68%
+        ) !important;
+      }
+
+      html body #sp-body .tng-sub-tabs > .tng-sub-glass-pill .tng-lg-r2 {
+        background: radial-gradient(
+          circle,
+          rgba(168, 199, 250, 0.58) 0%,
+          rgba(168, 199, 250, 0.22) 40%,
+          transparent 70%
+        ) !important;
+      }
+
+      html body #sp-body .tng-sub-tabs > .tng-sub-glass-pill .tng-lg-in {
+        background: radial-gradient(
+          ellipse 50% 50% at 50% 50%,
+          rgba(168, 199, 250, 0.11) 0%,
+          rgba(168, 199, 250, 0.038) 48%,
+          transparent 74%
+        ) !important;
+      }
+
+      html body #sp-body .tng-sub-tabs > .tng-sub-glass-pill .tng-lg-rip {
+        background: radial-gradient(
+          circle,
+          transparent 42%,
+          rgba(168, 199, 250, 0.52) 60%,
+          rgba(222, 236, 255, 0.24) 68%,
+          transparent 76%
+        ) !important;
+      }
+
+      html body #sp-body .tng-sub-tabs > .tng-sub-glass-pill .tng-lg-rs {
+        background: radial-gradient(
+          ellipse 50% 50% at 50% 50%,
+          rgba(232, 242, 255, 0.96) 0%,
+          rgba(168, 199, 250, 0.62) 44%,
+          transparent 76%
+        ) !important;
+      }
+
+      html
+        body
+        #sp-body
+        .tng-sub-tabs
+        > .tng-sub-glass-pill
+        > .tng-lg-drop.tng-lg-pressing {
+        box-shadow:
+          0 2px 7px rgba(168, 199, 250, 0.26),
+          inset 0 3px 8px -4px rgba(0, 0, 0, 0.28),
+          inset 0 -3px 8px -4px rgba(168, 199, 250, 0.34) !important;
+      }
+
+      /* Đồng bộ chữ tab về đúng màu --btn-blue (#a8c7fa) như "< Trở lại" */
+      html body #sp-body .tng-sub-tabs > .tng-sub-tab.tng-pill-focus,
+      html body #sp-body .tng-sub-tabs > .tng-sub-tab.tng-pill-focus * {
+        color: var(--btn-blue) !important;
+        text-shadow: 0 0 10px rgba(168, 199, 250, 0.38) !important;
+      }
+
+      /* 4. Light Mode: Khóa chuẩn 100% mã màu rgb(0, 91, 181) (#005bb5) trong veo */
+      html
+        body[data-theme="light"]
+        #sp-body
+        .tng-sub-tabs
+        > .tng-sub-glass-pill
+        > .tng-lg-drop {
+        background: linear-gradient(
+          168deg,
+          rgba(0, 91, 181, 0.11) 0%,
+          rgba(0, 91, 181, 0.025) 50%,
+          rgba(0, 91, 181, 0.08) 100%
+        ) !important;
+        box-shadow:
+          0 8px 18px -6px rgba(0, 91, 181, 0.18),
+          0 2px 5px -1px rgba(0, 91, 181, 0.09),
+          inset 0 1px 4px rgba(255, 255, 255, 0.85),
+          inset 0 -3px 8px -4px rgba(0, 91, 181, 0.18) !important;
+      }
+
+      html
+        body[data-theme="light"]
+        #sp-body
+        .tng-sub-tabs
+        > .tng-sub-glass-pill
+        .tng-lg-flow {
+        background:
+          radial-gradient(
+            42% 36% at 32% 42%,
+            rgba(255, 255, 255, 0.34) 0%,
+            rgba(0, 91, 181, 0.045) 48%,
+            transparent 74%
+          ),
+          radial-gradient(
+            38% 34% at 72% 62%,
+            rgba(0, 91, 181, 0.05) 0%,
+            transparent 72%
+          ) !important;
+      }
+
+      html
+        body[data-theme="light"]
+        #sp-body
+        .tng-sub-tabs
+        > .tng-sub-glass-pill
+        .tng-lg-rim {
+        background: linear-gradient(
+          145deg,
+          rgba(0, 91, 181, 0.56) 0%,
+          rgba(0, 91, 181, 0.22) 34%,
+          rgba(0, 91, 181, 0.14) 56%,
+          rgba(0, 91, 181, 0.44) 100%
+        ) !important;
+      }
+
+      html
+        body[data-theme="light"]
+        #sp-body
+        .tng-sub-tabs
+        > .tng-sub-glass-pill
+        .tng-lg-r1 {
+        background: radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.96) 0%,
+          rgba(0, 91, 181, 0.44) 36%,
+          transparent 68%
+        ) !important;
+      }
+
+      html
+        body[data-theme="light"]
+        #sp-body
+        .tng-sub-tabs
+        > .tng-sub-glass-pill
+        .tng-lg-r2 {
+        background: radial-gradient(
+          circle,
+          rgba(0, 91, 181, 0.34) 0%,
+          rgba(0, 91, 181, 0.14) 42%,
+          transparent 70%
+        ) !important;
+      }
+
+      html
+        body[data-theme="light"]
+        #sp-body
+        .tng-sub-tabs
+        > .tng-sub-glass-pill
+        .tng-lg-in {
+        background: radial-gradient(
+          ellipse 50% 50% at 50% 50%,
+          rgba(255, 255, 255, 0.36) 0%,
+          rgba(0, 91, 181, 0.045) 50%,
+          transparent 74%
+        ) !important;
+      }
+
+      html
+        body[data-theme="light"]
+        #sp-body
+        .tng-sub-tabs
+        > .tng-sub-glass-pill
+        .tng-lg-rip {
+        background: radial-gradient(
+          circle,
+          transparent 42%,
+          rgba(0, 91, 181, 0.3) 60%,
+          rgba(255, 255, 255, 0.62) 68%,
+          transparent 76%
+        ) !important;
+      }
+
+      html
+        body[data-theme="light"]
+        #sp-body
+        .tng-sub-tabs
+        > .tng-sub-glass-pill
+        .tng-lg-rs {
+        background: radial-gradient(
+          ellipse 50% 50% at 50% 50%,
+          rgba(255, 255, 255, 1) 0%,
+          rgba(0, 91, 181, 0.44) 44%,
+          transparent 76%
+        ) !important;
+      }
+
+      html
+        body[data-theme="light"]
+        #sp-body
+        .tng-sub-tabs
+        > .tng-sub-tab.tng-pill-focus,
+      html
+        body[data-theme="light"]
+        #sp-body
+        .tng-sub-tabs
+        > .tng-sub-tab.tng-pill-focus
+        * {
+        color: var(--btn-blue) !important;
+        text-shadow: none !important;
+      }
+
+      /* 5. Nhịp co duỗi lỏng ngang cực nhẹ khi giọt nước lướt giữa 3 tab */
+      @keyframes tngLgSlideX {
+        0% {
+          transform: scale3d(1, 1, 1);
+        }
+        36% {
+          transform: scale3d(1.032, 0.986, 1);
+        }
+        74% {
+          transform: scale3d(0.992, 1.004, 1);
+        }
+        100% {
+          transform: scale3d(1, 1, 1);
+        }
+      }
+
+      html body .tng-lg-drop.tng-lg-sliding-x {
+        transform-origin: center center !important;
+        will-change: transform !important;
+        animation: tngLgSlideX 0.34s cubic-bezier(0.22, 1, 0.36, 1) forwards !important;
+        animation-play-state: running !important;
       }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -8428,39 +8837,119 @@
 
       <div class="sb-title">Sổ ghi chú</div>
 
-      <!-- MỤC 3: SỔ GHI CHÚ MỚI (Dấu Cộng Kính Trắng, Thon gọn sắc nét) -->
+      <!-- MỤC 3: SỔ GHI CHÚ MỚI (Dấu Cộng 21px + Phát Sáng Nội Khối LIVE AI) -->
       <div class="sb-item" onclick="createNewNote()">
         <span
           class="sb-icon ios27-art"
           style="margin-right: 0; position: relative; top: -2px"
         >
           <svg viewBox="0 0 100 100">
+            <defs>
+              <!-- Dải màu chuẩn nút LIVE AI -->
+              <linearGradient
+                id="note-plus-live-grad"
+                x1="0%"
+                y1="0%"
+                x2="100%"
+                y2="100%"
+              >
+                <stop offset="0%" stop-color="#4285f4" />
+                <stop offset="50%" stop-color="#9b72cb" />
+                <stop offset="100%" stop-color="#d96570" />
+              </linearGradient>
+
+              <!-- Quầng sáng lõi phát ra từ trung tâm bên trong dấu + -->
+              <radialGradient
+                id="note-plus-inner-core"
+                cx="48%"
+                cy="45%"
+                r="58%"
+              >
+                <stop offset="0%" stop-color="rgba(255, 255, 255, 0.56)" />
+                <stop offset="45%" stop-color="rgba(220, 200, 255, 0.24)" />
+                <stop offset="100%" stop-color="rgba(255, 255, 255, 0)" />
+              </radialGradient>
+
+              <!-- Viền phát sáng đa sắc hắt ngược vào trong -->
+              <linearGradient
+                id="note-plus-rim-glow"
+                x1="0%"
+                y1="0%"
+                x2="100%"
+                y2="100%"
+              >
+                <stop offset="0%" stop-color="#9ec5ff" />
+                <stop offset="50%" stop-color="#ebd4ff" />
+                <stop offset="100%" stop-color="#ffadb9" />
+              </linearGradient>
+
+              <!-- Độ mềm cho ánh sáng nội khối -->
+              <filter
+                id="note-plus-inner-blur"
+                x="-20%"
+                y="-20%"
+                width="140%"
+                height="140%"
+              >
+                <feGaussianBlur stdDeviation="2.8" />
+              </filter>
+
+              <!-- Khóa cứng vùng cắt: 100% ánh sáng chỉ nằm trong dấu +, không lan ra ngoài -->
+              <clipPath id="note-plus-clip">
+                <path
+                  d="M 39.5 20 A 9 9 0 0 1 48.5 11 L 51.5 11 A 9 9 0 0 1 60.5 20 L 60.5 35.5 Q 60.5 39.5 64.5 39.5 L 80 39.5 A 9 9 0 0 1 89 48.5 L 89 51.5 A 9 9 0 0 1 80 60.5 L 64.5 60.5 Q 60.5 60.5 60.5 64.5 L 60.5 80 A 9 9 0 0 1 51.5 89 L 48.5 89 A 9 9 0 0 1 39.5 80 L 39.5 64.5 Q 39.5 60.5 35.5 60.5 L 20 60.5 A 9 9 0 0 1 11 51.5 L 11 48.5 A 9 9 0 0 1 20 39.5 L 35.5 39.5 Q 39.5 39.5 39.5 35.5 Z"
+                />
+              </clipPath>
+            </defs>
+
             <g filter="url(#ios-extreme-pop)">
-              <!-- Khối Dấu Cộng Kính Trắng Xuyên Thấu (Độ dày giảm xuống 10px, dáng thon gọn) -->
-              <path
-                d="M 45 20 L 55 20 C 56.5 20 58 21.5 58 23 L 58 42 L 77 42 C 78.5 42 80 43.5 80 45 L 80 55 C 80 56.5 78.5 58 77 58 L 58 58 L 58 77 C 58 78.5 56.5 80 55 80 L 45 80 C 43.5 80 42 78.5 42 77 L 42 58 L 23 58 C 21.5 58 20 56.5 20 55 L 20 45 C 20 43.5 21.5 42 23 42 L 42 42 L 42 23 C 42 21.5 43.5 20 45 20 Z"
-                fill="url(#frosted-white-glass)"
-                stroke="rgba(255, 255, 255, 0.8)"
-                stroke-width="1.5"
-              />
+              <g clip-path="url(#note-plus-clip)">
+                <!-- 1. Nền đa sắc LIVE AI (kích thước 78×78, độ dày nét 21px) -->
+                <path
+                  d="M 39.5 20 A 9 9 0 0 1 48.5 11 L 51.5 11 A 9 9 0 0 1 60.5 20 L 60.5 35.5 Q 60.5 39.5 64.5 39.5 L 80 39.5 A 9 9 0 0 1 89 48.5 L 89 51.5 A 9 9 0 0 1 80 60.5 L 64.5 60.5 Q 60.5 60.5 60.5 64.5 L 60.5 80 A 9 9 0 0 1 51.5 89 L 48.5 89 A 9 9 0 0 1 39.5 80 L 39.5 64.5 Q 39.5 60.5 35.5 60.5 L 20 60.5 A 9 9 0 0 1 11 51.5 L 11 48.5 A 9 9 0 0 1 20 39.5 L 35.5 39.5 Q 39.5 39.5 39.5 35.5 Z"
+                  fill="url(#note-plus-live-grad)"
+                />
 
-              <!-- Vệt hắt sáng siêu nét góc trên -->
-              <path
-                d="M 43.5 26 Q 43.5 21.5 48 21.5"
-                fill="none"
-                stroke="rgba(255,255,255,1)"
-                stroke-width="2.5"
-                stroke-linecap="round"
-              />
+                <!-- 2. Lõi phát sáng dịu từ bên trong -->
+                <path
+                  d="M 39.5 20 A 9 9 0 0 1 48.5 11 L 51.5 11 A 9 9 0 0 1 60.5 20 L 60.5 35.5 Q 60.5 39.5 64.5 39.5 L 80 39.5 A 9 9 0 0 1 89 48.5 L 89 51.5 A 9 9 0 0 1 80 60.5 L 64.5 60.5 Q 60.5 60.5 60.5 64.5 L 60.5 80 A 9 9 0 0 1 51.5 89 L 48.5 89 A 9 9 0 0 1 39.5 80 L 39.5 64.5 Q 39.5 60.5 35.5 60.5 L 20 60.5 A 9 9 0 0 1 11 51.5 L 11 48.5 A 9 9 0 0 1 20 39.5 L 35.5 39.5 Q 39.5 39.5 39.5 35.5 Z"
+                  fill="url(#note-plus-inner-core)"
+                />
 
-              <!-- Vệt hắt sáng siêu nét góc trái -->
-              <path
-                d="M 21.5 48 Q 21.5 43.5 26 43.5"
-                fill="none"
-                stroke="rgba(255,255,255,1)"
-                stroke-width="2.5"
-                stroke-linecap="round"
-              />
+                <!-- 3. Quầng phát sáng hắt ngược vào mép trong -->
+                <path
+                  d="M 39.5 20 A 9 9 0 0 1 48.5 11 L 51.5 11 A 9 9 0 0 1 60.5 20 L 60.5 35.5 Q 60.5 39.5 64.5 39.5 L 80 39.5 A 9 9 0 0 1 89 48.5 L 89 51.5 A 9 9 0 0 1 80 60.5 L 64.5 60.5 Q 60.5 60.5 60.5 64.5 L 60.5 80 A 9 9 0 0 1 51.5 89 L 48.5 89 A 9 9 0 0 1 39.5 80 L 39.5 64.5 Q 39.5 60.5 35.5 60.5 L 20 60.5 A 9 9 0 0 1 11 51.5 L 11 48.5 A 9 9 0 0 1 20 39.5 L 35.5 39.5 Q 39.5 39.5 39.5 35.5 Z"
+                  fill="none"
+                  stroke="url(#note-plus-rim-glow)"
+                  stroke-width="7"
+                  filter="url(#note-plus-inner-blur)"
+                  opacity="0.88"
+                />
+
+                <!-- 4. Viền bóng kính mảnh sát mép trong -->
+                <path
+                  d="M 39.5 20 A 9 9 0 0 1 48.5 11 L 51.5 11 A 9 9 0 0 1 60.5 20 L 60.5 35.5 Q 60.5 39.5 64.5 39.5 L 80 39.5 A 9 9 0 0 1 89 48.5 L 89 51.5 A 9 9 0 0 1 80 60.5 L 64.5 60.5 Q 60.5 60.5 60.5 64.5 L 60.5 80 A 9 9 0 0 1 51.5 89 L 48.5 89 A 9 9 0 0 1 39.5 80 L 39.5 64.5 Q 39.5 60.5 35.5 60.5 L 20 60.5 A 9 9 0 0 1 11 51.5 L 11 48.5 A 9 9 0 0 1 20 39.5 L 35.5 39.5 Q 39.5 39.5 39.5 35.5 Z"
+                  fill="none"
+                  stroke="rgba(255, 255, 255, 0.35)"
+                  stroke-width="2"
+                />
+
+                <!-- 5. Điểm bắt sáng góc trên & góc trái -->
+                <path
+                  d="M 43.2 20 Q 43.2 14.8 48.5 14.8 L 51.5 14.8"
+                  fill="none"
+                  stroke="rgba(255, 255, 255, 0.72)"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                />
+                <path
+                  d="M 14.8 48.5 Q 14.8 43.2 20 43.2"
+                  fill="none"
+                  stroke="rgba(255, 255, 255, 0.65)"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                />
+              </g>
             </g>
           </svg>
         </span>
@@ -9562,8 +10051,118 @@
             </div>
             <div class="input-bottom">
               <div class="tools tool-container">
-                <button class="icon-btn" onclick="toggleD('m-att-h', event)">
-                  ➕
+                <button
+                  class="icon-btn"
+                  onclick="toggleD('m-att-h', event)"
+                  style="width: 36px; height: 36px; padding: 0"
+                >
+                  <svg
+                    viewBox="0 0 100 100"
+                    style="
+                      width: 1.28em;
+                      height: 1.28em;
+                      display: block;
+                      filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.25));
+                    "
+                  >
+                    <defs>
+                      <linearGradient
+                        id="chat-plus-h-live-grad"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="100%"
+                      >
+                        <stop offset="0%" stop-color="#4285f4" />
+                        <stop offset="50%" stop-color="#9b72cb" />
+                        <stop offset="100%" stop-color="#d96570" />
+                      </linearGradient>
+                      <radialGradient
+                        id="chat-plus-h-inner-core"
+                        cx="48%"
+                        cy="45%"
+                        r="58%"
+                      >
+                        <stop
+                          offset="0%"
+                          stop-color="rgba(255, 255, 255, 0.56)"
+                        />
+                        <stop
+                          offset="45%"
+                          stop-color="rgba(220, 200, 255, 0.24)"
+                        />
+                        <stop
+                          offset="100%"
+                          stop-color="rgba(255, 255, 255, 0)"
+                        />
+                      </radialGradient>
+                      <linearGradient
+                        id="chat-plus-h-rim-glow"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="100%"
+                      >
+                        <stop offset="0%" stop-color="#9ec5ff" />
+                        <stop offset="50%" stop-color="#ebd4ff" />
+                        <stop offset="100%" stop-color="#ffadb9" />
+                      </linearGradient>
+                      <filter
+                        id="chat-plus-h-inner-blur"
+                        x="-20%"
+                        y="-20%"
+                        width="140%"
+                        height="140%"
+                      >
+                        <feGaussianBlur stdDeviation="2.8" />
+                      </filter>
+                      <clipPath id="chat-plus-h-clip">
+                        <path
+                          d="M 39.5 20 A 9 9 0 0 1 48.5 11 L 51.5 11 A 9 9 0 0 1 60.5 20 L 60.5 35.5 Q 60.5 39.5 64.5 39.5 L 80 39.5 A 9 9 0 0 1 89 48.5 L 89 51.5 A 9 9 0 0 1 80 60.5 L 64.5 60.5 Q 60.5 60.5 60.5 64.5 L 60.5 80 A 9 9 0 0 1 51.5 89 L 48.5 89 A 9 9 0 0 1 39.5 80 L 39.5 64.5 Q 39.5 60.5 35.5 60.5 L 20 60.5 A 9 9 0 0 1 11 51.5 L 11 48.5 A 9 9 0 0 1 20 39.5 L 35.5 39.5 Q 39.5 39.5 39.5 35.5 Z"
+                        />
+                      </clipPath>
+                    </defs>
+                    <g filter="url(#ios-extreme-pop)">
+                      <g clip-path="url(#chat-plus-h-clip)">
+                        <path
+                          d="M 39.5 20 A 9 9 0 0 1 48.5 11 L 51.5 11 A 9 9 0 0 1 60.5 20 L 60.5 35.5 Q 60.5 39.5 64.5 39.5 L 80 39.5 A 9 9 0 0 1 89 48.5 L 89 51.5 A 9 9 0 0 1 80 60.5 L 64.5 60.5 Q 60.5 60.5 60.5 64.5 L 60.5 80 A 9 9 0 0 1 51.5 89 L 48.5 89 A 9 9 0 0 1 39.5 80 L 39.5 64.5 Q 39.5 60.5 35.5 60.5 L 20 60.5 A 9 9 0 0 1 11 51.5 L 11 48.5 A 9 9 0 0 1 20 39.5 L 35.5 39.5 Q 39.5 39.5 39.5 35.5 Z"
+                          fill="url(#chat-plus-h-live-grad)"
+                        />
+                        <path
+                          d="M 39.5 20 A 9 9 0 0 1 48.5 11 L 51.5 11 A 9 9 0 0 1 60.5 20 L 60.5 35.5 Q 60.5 39.5 64.5 39.5 L 80 39.5 A 9 9 0 0 1 89 48.5 L 89 51.5 A 9 9 0 0 1 80 60.5 L 64.5 60.5 Q 60.5 60.5 60.5 64.5 L 60.5 80 A 9 9 0 0 1 51.5 89 L 48.5 89 A 9 9 0 0 1 39.5 80 L 39.5 64.5 Q 39.5 60.5 35.5 60.5 L 20 60.5 A 9 9 0 0 1 11 51.5 L 11 48.5 A 9 9 0 0 1 20 39.5 L 35.5 39.5 Q 39.5 39.5 39.5 35.5 Z"
+                          fill="url(#chat-plus-h-inner-core)"
+                        />
+                        <path
+                          d="M 39.5 20 A 9 9 0 0 1 48.5 11 L 51.5 11 A 9 9 0 0 1 60.5 20 L 60.5 35.5 Q 60.5 39.5 64.5 39.5 L 80 39.5 A 9 9 0 0 1 89 48.5 L 89 51.5 A 9 9 0 0 1 80 60.5 L 64.5 60.5 Q 60.5 60.5 60.5 64.5 L 60.5 80 A 9 9 0 0 1 51.5 89 L 48.5 89 A 9 9 0 0 1 39.5 80 L 39.5 64.5 Q 39.5 60.5 35.5 60.5 L 20 60.5 A 9 9 0 0 1 11 51.5 L 11 48.5 A 9 9 0 0 1 20 39.5 L 35.5 39.5 Q 39.5 39.5 39.5 35.5 Z"
+                          fill="none"
+                          stroke="url(#chat-plus-h-rim-glow)"
+                          stroke-width="7"
+                          filter="url(#chat-plus-h-inner-blur)"
+                          opacity="0.88"
+                        />
+                        <path
+                          d="M 39.5 20 A 9 9 0 0 1 48.5 11 L 51.5 11 A 9 9 0 0 1 60.5 20 L 60.5 35.5 Q 60.5 39.5 64.5 39.5 L 80 39.5 A 9 9 0 0 1 89 48.5 L 89 51.5 A 9 9 0 0 1 80 60.5 L 64.5 60.5 Q 60.5 60.5 60.5 64.5 L 60.5 80 A 9 9 0 0 1 51.5 89 L 48.5 89 A 9 9 0 0 1 39.5 80 L 39.5 64.5 Q 39.5 60.5 35.5 60.5 L 20 60.5 A 9 9 0 0 1 11 51.5 L 11 48.5 A 9 9 0 0 1 20 39.5 L 35.5 39.5 Q 39.5 39.5 39.5 35.5 Z"
+                          fill="none"
+                          stroke="rgba(255, 255, 255, 0.35)"
+                          stroke-width="2"
+                        />
+                        <path
+                          d="M 43.2 20 Q 43.2 14.8 48.5 14.8 L 51.5 14.8"
+                          fill="none"
+                          stroke="rgba(255, 255, 255, 0.72)"
+                          stroke-width="2.5"
+                          stroke-linecap="round"
+                        />
+                        <path
+                          d="M 14.8 48.5 Q 14.8 43.2 20 43.2"
+                          fill="none"
+                          stroke="rgba(255, 255, 255, 0.65)"
+                          stroke-width="2.5"
+                          stroke-linecap="round"
+                        />
+                      </g>
+                    </g>
+                  </svg>
                 </button>
                 <div class="tool-chip" onclick="toggleD('m-tool-h', event)">
                   <span style="font-size: 16px">⎘</span> Công cụ
@@ -11413,8 +12012,118 @@
             </div>
             <div class="input-bottom">
               <div class="tools tool-container">
-                <button class="icon-btn" onclick="toggleD('m-att-c', event)">
-                  ➕
+                <button
+                  class="icon-btn"
+                  onclick="toggleD('m-att-c', event)"
+                  style="width: 36px; height: 36px; padding: 0"
+                >
+                  <svg
+                    viewBox="0 0 100 100"
+                    style="
+                      width: 1.28em;
+                      height: 1.28em;
+                      display: block;
+                      filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.25));
+                    "
+                  >
+                    <defs>
+                      <linearGradient
+                        id="chat-plus-c-live-grad"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="100%"
+                      >
+                        <stop offset="0%" stop-color="#4285f4" />
+                        <stop offset="50%" stop-color="#9b72cb" />
+                        <stop offset="100%" stop-color="#d96570" />
+                      </linearGradient>
+                      <radialGradient
+                        id="chat-plus-c-inner-core"
+                        cx="48%"
+                        cy="45%"
+                        r="58%"
+                      >
+                        <stop
+                          offset="0%"
+                          stop-color="rgba(255, 255, 255, 0.56)"
+                        />
+                        <stop
+                          offset="45%"
+                          stop-color="rgba(220, 200, 255, 0.24)"
+                        />
+                        <stop
+                          offset="100%"
+                          stop-color="rgba(255, 255, 255, 0)"
+                        />
+                      </radialGradient>
+                      <linearGradient
+                        id="chat-plus-c-rim-glow"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="100%"
+                      >
+                        <stop offset="0%" stop-color="#9ec5ff" />
+                        <stop offset="50%" stop-color="#ebd4ff" />
+                        <stop offset="100%" stop-color="#ffadb9" />
+                      </linearGradient>
+                      <filter
+                        id="chat-plus-c-inner-blur"
+                        x="-20%"
+                        y="-20%"
+                        width="140%"
+                        height="140%"
+                      >
+                        <feGaussianBlur stdDeviation="2.8" />
+                      </filter>
+                      <clipPath id="chat-plus-c-clip">
+                        <path
+                          d="M 39.5 20 A 9 9 0 0 1 48.5 11 L 51.5 11 A 9 9 0 0 1 60.5 20 L 60.5 35.5 Q 60.5 39.5 64.5 39.5 L 80 39.5 A 9 9 0 0 1 89 48.5 L 89 51.5 A 9 9 0 0 1 80 60.5 L 64.5 60.5 Q 60.5 60.5 60.5 64.5 L 60.5 80 A 9 9 0 0 1 51.5 89 L 48.5 89 A 9 9 0 0 1 39.5 80 L 39.5 64.5 Q 39.5 60.5 35.5 60.5 L 20 60.5 A 9 9 0 0 1 11 51.5 L 11 48.5 A 9 9 0 0 1 20 39.5 L 35.5 39.5 Q 39.5 39.5 39.5 35.5 Z"
+                        />
+                      </clipPath>
+                    </defs>
+                    <g filter="url(#ios-extreme-pop)">
+                      <g clip-path="url(#chat-plus-c-clip)">
+                        <path
+                          d="M 39.5 20 A 9 9 0 0 1 48.5 11 L 51.5 11 A 9 9 0 0 1 60.5 20 L 60.5 35.5 Q 60.5 39.5 64.5 39.5 L 80 39.5 A 9 9 0 0 1 89 48.5 L 89 51.5 A 9 9 0 0 1 80 60.5 L 64.5 60.5 Q 60.5 60.5 60.5 64.5 L 60.5 80 A 9 9 0 0 1 51.5 89 L 48.5 89 A 9 9 0 0 1 39.5 80 L 39.5 64.5 Q 39.5 60.5 35.5 60.5 L 20 60.5 A 9 9 0 0 1 11 51.5 L 11 48.5 A 9 9 0 0 1 20 39.5 L 35.5 39.5 Q 39.5 39.5 39.5 35.5 Z"
+                          fill="url(#chat-plus-c-live-grad)"
+                        />
+                        <path
+                          d="M 39.5 20 A 9 9 0 0 1 48.5 11 L 51.5 11 A 9 9 0 0 1 60.5 20 L 60.5 35.5 Q 60.5 39.5 64.5 39.5 L 80 39.5 A 9 9 0 0 1 89 48.5 L 89 51.5 A 9 9 0 0 1 80 60.5 L 64.5 60.5 Q 60.5 60.5 60.5 64.5 L 60.5 80 A 9 9 0 0 1 51.5 89 L 48.5 89 A 9 9 0 0 1 39.5 80 L 39.5 64.5 Q 39.5 60.5 35.5 60.5 L 20 60.5 A 9 9 0 0 1 11 51.5 L 11 48.5 A 9 9 0 0 1 20 39.5 L 35.5 39.5 Q 39.5 39.5 39.5 35.5 Z"
+                          fill="url(#chat-plus-c-inner-core)"
+                        />
+                        <path
+                          d="M 39.5 20 A 9 9 0 0 1 48.5 11 L 51.5 11 A 9 9 0 0 1 60.5 20 L 60.5 35.5 Q 60.5 39.5 64.5 39.5 L 80 39.5 A 9 9 0 0 1 89 48.5 L 89 51.5 A 9 9 0 0 1 80 60.5 L 64.5 60.5 Q 60.5 60.5 60.5 64.5 L 60.5 80 A 9 9 0 0 1 51.5 89 L 48.5 89 A 9 9 0 0 1 39.5 80 L 39.5 64.5 Q 39.5 60.5 35.5 60.5 L 20 60.5 A 9 9 0 0 1 11 51.5 L 11 48.5 A 9 9 0 0 1 20 39.5 L 35.5 39.5 Q 39.5 39.5 39.5 35.5 Z"
+                          fill="none"
+                          stroke="url(#chat-plus-c-rim-glow)"
+                          stroke-width="7"
+                          filter="url(#chat-plus-c-inner-blur)"
+                          opacity="0.88"
+                        />
+                        <path
+                          d="M 39.5 20 A 9 9 0 0 1 48.5 11 L 51.5 11 A 9 9 0 0 1 60.5 20 L 60.5 35.5 Q 60.5 39.5 64.5 39.5 L 80 39.5 A 9 9 0 0 1 89 48.5 L 89 51.5 A 9 9 0 0 1 80 60.5 L 64.5 60.5 Q 60.5 60.5 60.5 64.5 L 60.5 80 A 9 9 0 0 1 51.5 89 L 48.5 89 A 9 9 0 0 1 39.5 80 L 39.5 64.5 Q 39.5 60.5 35.5 60.5 L 20 60.5 A 9 9 0 0 1 11 51.5 L 11 48.5 A 9 9 0 0 1 20 39.5 L 35.5 39.5 Q 39.5 39.5 39.5 35.5 Z"
+                          fill="none"
+                          stroke="rgba(255, 255, 255, 0.35)"
+                          stroke-width="2"
+                        />
+                        <path
+                          d="M 43.2 20 Q 43.2 14.8 48.5 14.8 L 51.5 14.8"
+                          fill="none"
+                          stroke="rgba(255, 255, 255, 0.72)"
+                          stroke-width="2.5"
+                          stroke-linecap="round"
+                        />
+                        <path
+                          d="M 14.8 48.5 Q 14.8 43.2 20 43.2"
+                          fill="none"
+                          stroke="rgba(255, 255, 255, 0.65)"
+                          stroke-width="2.5"
+                          stroke-linecap="round"
+                        />
+                      </g>
+                    </g>
+                  </svg>
                 </button>
                 <div class="tool-chip" onclick="toggleD('m-tool-c', event)">
                   <span style="font-size: 16px">⎘</span> Công cụ
@@ -21131,6 +21840,19 @@
 
       // HÀM MỞ SỔ GHI CHÚ (Đã tích hợp Tẩy rửa thanh công cụ chống kẹt màu)
       function openNoteEditor(id) {
+        let overlay = document.getElementById("notebook-overlay");
+        if (
+          overlay &&
+          overlay.classList.contains("show") &&
+          String(currentNoteId) === String(id)
+        ) {
+          let anim = document.getElementById("notebook-anim-wrapper");
+          if (anim) {
+            anim.style.transformOrigin = `${lastClickX}px ${lastClickY}px`;
+          }
+          closeNoteEditor();
+          return;
+        }
         if (typeof exitSelectMode === "function") exitSelectMode();
         stopAudio();
 
@@ -35234,6 +35956,7 @@
             const el = item.el;
             if (!el || !el.isConnected) return;
             stopExistingAnim(el, Boolean(item.keepLayer));
+            if (el.classList.contains("note-card")) el.style.animation = "none";
             const r = el.getBoundingClientRect();
             if (idx > 20 && r.top > window.innerHeight + 280) return;
             measured.push({ item, el, r });
@@ -35259,7 +35982,7 @@
               ? Math.round(Math.abs(relX) * 0.1)
               : 0;
             const delay = (item.delay || 0) + extraRadialDelay;
-            const duration = 1280;
+            const duration = 1100;
 
             const frames = buildSilkFrames(
               dx,
@@ -35318,24 +36041,25 @@
           });
         });
 
-        // 2. Kích hoạt lại hiệu ứng ngay cả khi bấm vào mục đang đứng sẵn
+        // 2. Kích hoạt lại hiệu ứng ngay cả khi bấm vào mục đang đứng sẵn (gồm cả NotebookLM)
         const NAV_MAP = [
           { match: "newChat", target: "home" },
           { match: "showSearch", target: "search-view" },
           { match: "showMyContent", target: "my-content-view" },
           { match: "showAllNotes", target: "all-notes-view" },
           { match: "toggleAllNotes", target: "all-notes-view" },
+          { match: "NotebookLM", target: "all-notes-view" },
         ];
 
         document.addEventListener("click", (ev) => {
-          const item = ev.target.closest(".sb-item[onclick]");
+          const item = ev.target.closest(".sb-item[onclick], .d-item[onclick]");
           if (!item) return;
           const attr = item.getAttribute("onclick") || "";
           const found = NAV_MAP.find((entry) => attr.includes(entry.match));
           if (!found) return;
           const view = document.getElementById(found.target);
           if (view && isVisible(view)) {
-            playSilkEnter(view);
+            playSilkEnter(view, true);
           }
         });
 
@@ -36551,6 +37275,8 @@
           boundBars.add(container);
 
           let activeTab = tabs.find(isTabInitiallyActive) || tabs[0];
+          let currentTarget = null;
+          let leaveTimer = 0;
 
           container.classList.add("tng-sub-tabs");
           extras.forEach((oldEl) => oldEl.classList.add("tng-sub-old-glider"));
@@ -36560,200 +37286,61 @@
           });
 
           const pill = document.createElement("span");
-          pill.className = "tng-glow-pill is-horizontal";
+          pill.className = "tng-sub-glass-pill is-horizontal";
           container.insertBefore(pill, container.firstChild);
 
-          const state = {
-            target: null,
-            focusEl: null,
-            leaveTimer: null,
-            rafId: null,
-            lastTs: 0,
-            x: 0,
-            y: 0,
-            w: 0,
-            h: 0,
-            tx: 0,
-            ty: 0,
-            tw: 0,
-            th: 0,
-            vx: 0,
-            vy: 0,
-            vw: 0,
-            vh: 0,
-            stiffness: 285,
-            damping: 22.5,
-          };
-
-          const setFocusTab = (el) => {
-            if (state.focusEl === el) return;
-            if (state.focusEl) state.focusEl.classList.remove("tng-pill-focus");
-            state.focusEl = el || null;
-            if (el) el.classList.add("tng-pill-focus");
-          };
-
-          const updateWaterArrival = () => {
-            const tgt = state.target;
-            if (!tgt || state.tw <= 0) return;
-            const overlapLeft = Math.max(state.x, state.tx);
-            const overlapRight = Math.min(
-              state.x + state.w,
-              state.tx + state.tw,
+          const setFocusTab = (targetTab) => {
+            tabs.forEach((t) =>
+              t.classList.toggle("tng-pill-focus", t === targetTab),
             );
-            const ratio =
-              Math.max(0, overlapRight - overlapLeft) / Math.max(1, state.tw);
-            setFocusTab(ratio >= 0.48 ? tgt : null);
           };
 
-          const renderPill = (
-            stretchX = 1,
-            stretchY = 1,
-            sheenX = 0,
-            sheenOp = 0.42,
-          ) => {
-            pill.style.transform = `translate3d(${state.x.toFixed(2)}px, ${state.y.toFixed(2)}px, 0) scale(${stretchX.toFixed(4)}, ${stretchY.toFixed(4)})`;
-            pill.style.width = Math.max(0, state.w).toFixed(2) + "px";
-            pill.style.height = Math.max(0, state.h).toFixed(2) + "px";
-            pill.style.setProperty("--sheen-x", sheenX.toFixed(2) + "px");
-            pill.style.setProperty("--sheen-op", sheenOp.toFixed(3));
-          };
-
-          const stopPhysics = () => {
-            if (state.rafId) {
-              cancelAnimationFrame(state.rafId);
-              state.rafId = null;
-            }
-            state.vx = state.vy = state.vw = state.vh = 0;
-          };
-
-          const stepPhysics = (ts) => {
-            if (!container.isConnected) {
-              stopPhysics();
-              return;
-            }
-            const dt = state.lastTs
-              ? Math.min(0.032, Math.max(0.004, (ts - state.lastTs) / 1000))
-              : 0.016;
-            state.lastTs = ts;
-
-            const k = state.stiffness;
-            const c = state.damping;
-
-            const subDt = dt * 0.5;
-            for (let step = 0; step < 2; step++) {
-              const ax = (state.tx - state.x) * k - state.vx * c;
-              const ay = (state.ty - state.y) * k - state.vy * c;
-              const aw = (state.tw - state.w) * k - state.vw * c;
-              const ah = (state.th - state.h) * k - state.vh * c;
-
-              state.vx += ax * subDt;
-              state.vy += ay * subDt;
-              state.vw += aw * subDt;
-              state.vh += ah * subDt;
-
-              state.x += state.vx * subDt;
-              state.y += state.vy * subDt;
-              state.w += state.vw * subDt;
-              state.h += state.vh * subDt;
-            }
-
-            const speedX = Math.abs(state.vx);
-            const stretch = Math.min(0.145, speedX * 0.00008);
-            const stretchX = 1 + stretch;
-            const stretchY = 1 / Math.sqrt(stretchX);
-            const sheenX = Math.max(-44, Math.min(44, state.vx * 0.018));
-            const sheenOp = Math.min(0.9, 0.42 + stretch * 3.3);
-
-            renderPill(stretchX, stretchY, sheenX, sheenOp);
-            updateWaterArrival();
-
-            lastSnapshot = {
-              x: state.x,
-              y: state.y,
-              w: state.w,
-              h: state.h,
-              vx: state.vx,
-              ts: performance.now(),
-            };
-
-            const settled =
-              Math.abs(state.tx - state.x) < 0.06 &&
-              Math.abs(state.ty - state.y) < 0.06 &&
-              Math.abs(state.tw - state.w) < 0.06 &&
-              Math.abs(state.th - state.h) < 0.06 &&
-              Math.abs(state.vx) < 0.35 &&
-              Math.abs(state.vy) < 0.35;
-
-            if (settled) {
-              state.x = state.tx;
-              state.y = state.ty;
-              state.w = state.tw;
-              state.h = state.th;
-              state.vx = state.vy = state.vw = state.vh = 0;
-              renderPill(1, 1, 0, 0.42);
-              updateWaterArrival();
-              state.rafId = null;
-              state.lastTs = 0;
-              return;
-            }
-
-            state.rafId = requestAnimationFrame(stepPhysics);
+          const calcTabRadius = (tab) => {
+            const outerR =
+              parseFloat(window.getComputedStyle(container).borderRadius) || 14;
+            const innerR = Math.max(10, outerR - 1);
+            const midR = Math.min(11.5, innerR);
+            const isFirst = tab === tabs[0];
+            const isLast = tab === tabs[tabs.length - 1];
+            const tl = isFirst ? innerR : midR;
+            const bl = isFirst ? innerR : midR;
+            const tr = isLast ? innerR : midR;
+            const br = isLast ? innerR : midR;
+            return `${tl.toFixed(1)}px ${tr.toFixed(1)}px ${br.toFixed(1)}px ${bl.toFixed(1)}px`;
           };
 
           const moveToTab = (tab, opts = {}) => {
-            const { instant = false, isReturn = false, isTap = false } = opts;
+            const { instant = false, isReturn = false } = opts;
             if (!tab || !tab.isConnected) return;
+
             const w = tab.offsetWidth;
             const h = tab.offsetHeight;
-            if (!w || !h) return;
+            if (w <= 0 || h <= 0) return;
 
-            const radius = window.getComputedStyle(tab).borderRadius;
-            pill.style.borderRadius =
-              radius && radius !== "0px" ? radius : "11.5px";
+            const x = tab.offsetLeft;
+            const y = tab.offsetTop;
 
-            state.target = tab;
-            state.tx = tab.offsetLeft;
-            state.ty = tab.offsetTop;
-            state.tw = w;
-            state.th = h;
+            container.classList.toggle("returning", !!isReturn);
+            setFocusTab(tab);
+            pill.style.setProperty("--tng-pill-r", calcTabRadius(tab));
 
-            if (instant) {
-              stopPhysics();
-              state.x = state.tx;
-              state.y = state.ty;
-              state.w = state.tw;
-              state.h = state.th;
-              renderPill(1, 1, 0, 0.42);
+            if (instant || !currentTarget) {
+              pill.classList.add("is-instant");
+              pill.style.width = w.toFixed(2) + "px";
+              pill.style.height = h.toFixed(2) + "px";
+              pill.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0)`;
               pill.style.opacity = "1";
-              setFocusTab(tab);
-              lastSnapshot = {
-                x: state.x,
-                y: state.y,
-                w: state.w,
-                h: state.h,
-                vx: 0,
-                ts: performance.now(),
-              };
-              return;
-            }
-
-            if (isReturn) {
-              state.stiffness = 185;
-              state.damping = 20.5;
-            } else if (isTap) {
-              state.stiffness = 330;
-              state.damping = 23.5;
+              void pill.offsetWidth;
+              pill.classList.remove("is-instant");
             } else {
-              state.stiffness = 285;
-              state.damping = 22.5;
+              pill.classList.remove("is-instant");
+              pill.style.width = w.toFixed(2) + "px";
+              pill.style.height = h.toFixed(2) + "px";
+              pill.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0)`;
+              pill.style.opacity = "1";
             }
 
-            pill.style.opacity = "1";
-            updateWaterArrival();
-            if (!state.rafId) {
-              state.lastTs = 0;
-              state.rafId = requestAnimationFrame(stepPhysics);
-            }
+            currentTarget = tab;
           };
 
           const resolveTab = (rawTarget) => {
@@ -36764,66 +37351,82 @@
             return null;
           };
 
-          // Rê chuột ngang qua 3 mục: giọt nước trôi bám mượt theo chuột
+          // Rê chuột ngang: chỉ kích hoạt 1 lần khi sang tab mới -> trượt thuần GPU không rớt frame
           if (canHover) {
-            container.addEventListener("pointermove", (ev) => {
-              if (ev.pointerType === "touch") return;
-              const tab = resolveTab(ev.target);
-              if (!tab) return;
-              clearTimeout(state.leaveTimer);
-              if (tab !== state.target) {
-                moveToTab(tab, { instant: false, isReturn: false });
-              }
-            });
+            container.addEventListener(
+              "pointerover",
+              (ev) => {
+                if (ev.pointerType === "touch") return;
+                const tab = resolveTab(ev.target);
+                if (!tab) return;
+                clearTimeout(leaveTimer);
+                if (tab !== currentTarget) {
+                  moveToTab(tab, { instant: false, isReturn: false });
+                }
+              },
+              { passive: true },
+            );
 
             container.addEventListener("mouseleave", () => {
-              clearTimeout(state.leaveTimer);
-              state.leaveTimer = setTimeout(() => {
+              clearTimeout(leaveTimer);
+              leaveTimer = setTimeout(() => {
+                const realActive =
+                  tabs.find((t) => t.classList.contains("active")) || activeTab;
+                if (realActive) activeTab = realActive;
                 if (
                   activeTab &&
                   activeTab.isConnected &&
-                  activeTab !== state.target
+                  activeTab !== currentTarget
                 ) {
                   moveToTab(activeTab, { instant: false, isReturn: true });
                 }
-              }, 60);
+              }, 35);
             });
           }
 
           tabs.forEach((tab) => {
             tab.addEventListener("pointerdown", () => {
-              clearTimeout(state.leaveTimer);
+              clearTimeout(leaveTimer);
               activeTab = tab;
-              moveToTab(tab, { instant: false, isTap: true });
+              moveToTab(tab, { instant: false, isReturn: false });
             });
             tab.addEventListener("click", () => {
-              clearTimeout(state.leaveTimer);
+              clearTimeout(leaveTimer);
               activeTab = tab;
-              moveToTab(tab, { instant: false, isTap: true });
+              moveToTab(tab, { instant: false, isReturn: false });
             });
           });
 
-          const startInit = () => {
-            if (!container.isConnected) return;
-            if (lastSnapshot && performance.now() - lastSnapshot.ts < 450) {
-              state.x = lastSnapshot.x;
-              state.y = lastSnapshot.y;
-              state.w = lastSnapshot.w;
-              state.h = lastSnapshot.h;
-              state.vx = lastSnapshot.vx || 0;
-              renderPill(1, 1, 0, 0.42);
-              pill.style.opacity = "1";
-              moveToTab(activeTab, { instant: false, isTap: true });
-            } else {
-              moveToTab(activeTab, { instant: true });
+          // Tự đồng bộ khi switchSubTab cập nhật class .active bằng code
+          const activeObs = new MutationObserver(() => {
+            const realActive = tabs.find((t) => t.classList.contains("active"));
+            if (realActive && realActive !== activeTab) {
+              activeTab = realActive;
+              if (!container.matches(":hover") && activeTab !== currentTarget) {
+                moveToTab(activeTab, { instant: false, isReturn: false });
+              }
             }
-          };
-          requestAnimationFrame(startInit);
+          });
+          tabs.forEach((tab) =>
+            activeObs.observe(tab, {
+              attributes: true,
+              attributeFilter: ["class"],
+            }),
+          );
+
+          requestAnimationFrame(() => {
+            if (!container.isConnected) return;
+            const realActive =
+              tabs.find((t) => t.classList.contains("active")) || activeTab;
+            activeTab = realActive || tabs[0];
+            moveToTab(activeTab, { instant: true });
+          });
 
           if (typeof ResizeObserver === "function") {
             const ro = new ResizeObserver(() => {
-              if (activeTab && activeTab.isConnected && !state.rafId) {
-                moveToTab(activeTab, { instant: true });
+              const target = currentTarget || activeTab;
+              if (target && target.isConnected) {
+                moveToTab(target, { instant: true });
               }
             });
             ro.observe(container);
@@ -36833,162 +37436,6 @@
         const bodyObs = new MutationObserver(() => initHorizontalLiquidTabs());
         bodyObs.observe(spBody, { childList: true, subtree: true });
         initHorizontalLiquidTabs();
-      })();
-
-      // ============================================================
-      // ĐẶT LẠI HIỆU ỨNG KHỞI ĐỘNG KHI NHẤN NOTEBOOKLM -> TẤT CẢ SỔ GHI CHÚ
-      // ============================================================
-      (function () {
-        let replayTimers = [];
-
-        const clearReplayTimers = () => {
-          replayTimers.forEach((id) => clearTimeout(id));
-          replayTimers = [];
-        };
-
-        const isAllNotesVisible = (view) =>
-          !!view && window.getComputedStyle(view).display !== "none";
-
-        const isSilkAlreadyRunning = (view) => {
-          if (!view) return false;
-          if (view.querySelector(".tng-silk-anim")) return true;
-          const sample =
-            view.querySelector("#all-notes-grid .note-card") ||
-            view.querySelector("h1");
-          if (!sample) return false;
-          if (
-            typeof sample.getAnimations === "function" &&
-            sample.getAnimations().length > 0
-          ) {
-            return true;
-          }
-          const op = parseFloat(sample.style.opacity);
-          return !Number.isNaN(op) && op < 0.99;
-        };
-
-        const playAllNotesEntrance = (view) => {
-          if (!isAllNotesVisible(view)) return;
-          clearReplayTimers();
-          view.scrollTop = 0;
-
-          const grid = document.getElementById("all-notes-grid");
-          const targets = [];
-
-          // Lấy tiêu đề/thanh trên cùng của Tất cả sổ ghi chú
-          Array.from(view.children).forEach((ch) => {
-            if (
-              ch === grid ||
-              ch.tagName === "STYLE" ||
-              ch.tagName === "SCRIPT"
-            ) {
-              return;
-            }
-            if (window.getComputedStyle(ch).display !== "none") {
-              targets.push(ch);
-            }
-          });
-
-          // Lấy từng thẻ sổ ghi chú trong lưới
-          if (grid) {
-            Array.from(grid.children).forEach((card) => {
-              if (
-                card.tagName !== "STYLE" &&
-                card.tagName !== "SCRIPT" &&
-                window.getComputedStyle(card).display !== "none"
-              ) {
-                targets.push(card);
-              }
-            });
-          }
-
-          if (!targets.length) return;
-
-          // Đưa về trạng thái khởi đầu (trước khi trình duyệt vẽ khung hình)
-          targets.forEach((el) => {
-            el.classList.add("tng-silk-anim");
-            el.style.setProperty("transition", "none", "important");
-            el.style.setProperty("opacity", "0", "important");
-            el.style.setProperty(
-              "transform",
-              "translate3d(0, 26px, 0) scale(0.95)",
-              "important",
-            );
-            el.style.setProperty("filter", "blur(6px)", "important");
-            el.style.willChange = "transform, opacity, filter";
-          });
-
-          // Ép trình duyệt cập nhật trạng thái đầu rồi chạy hiệu ứng nổi mượt theo nhịp
-          void view.offsetWidth;
-
-          let maxEndMs = 0;
-          targets.forEach((el, idx) => {
-            const delay = Math.min(idx * 55, 380);
-            const dur = 680;
-            maxEndMs = Math.max(maxEndMs, delay + dur);
-
-            el.style.setProperty(
-              "transition",
-              `transform ${dur}ms cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, opacity ${Math.round(dur * 0.78)}ms ease ${delay}ms, filter ${Math.round(dur * 0.82)}ms ease ${delay}ms`,
-              "important",
-            );
-            el.style.setProperty("opacity", "1", "important");
-            el.style.setProperty(
-              "transform",
-              "translate3d(0, 0, 0) scale(1)",
-              "important",
-            );
-            el.style.setProperty("filter", "blur(0px)", "important");
-          });
-
-          // Dọn sạch style tạm sau khi hoàn tất để giữ nguyên hover & chế độ chọn thẻ
-          const cleanTimer = setTimeout(() => {
-            targets.forEach((el) => {
-              el.classList.remove("tng-silk-anim");
-              el.style.removeProperty("transition");
-              el.style.removeProperty("opacity");
-              el.style.removeProperty("transform");
-              el.style.removeProperty("filter");
-              el.style.willChange = "";
-            });
-          }, maxEndMs + 80);
-          replayTimers.push(cleanTimer);
-        };
-
-        // Bắt sự kiện nhấn vào mục NotebookLM (trong Cài đặt #set-menu hoặc menu Đính kèm +)
-        document.addEventListener("click", (ev) => {
-          if (!(ev.target instanceof Element)) return;
-          const item = ev.target.closest(".d-item, .s-item, .sb-item");
-          if (!item) return;
-
-          const text = (item.textContent || "").trim().toLowerCase();
-          const oc = (item.getAttribute("onclick") || "").toLowerCase();
-          const isNotebookLM =
-            text.includes("notebooklm") || oc.includes("notebooklm");
-          if (!isNotebookLM) return;
-
-          const triggerIfAllNotes = () => {
-            const view = document.getElementById("all-notes-view");
-            const settingsOverlay = document.getElementById(
-              "settings-page-overlay",
-            );
-            if (settingsOverlay && settingsOverlay.classList.contains("show")) {
-              return false;
-            }
-            if (!isAllNotesVisible(view)) return false;
-            if (!isSilkAlreadyRunning(view)) {
-              playAllNotesEntrance(view);
-            }
-            return true;
-          };
-
-          // Chạy trong microtask ngay sau onclick (trước khi vẽ khung hình để không bị chớp)
-          queueMicrotask(() => {
-            if (!triggerIfAllNotes()) {
-              const fallback = setTimeout(triggerIfAllNotes, 45);
-              replayTimers.push(fallback);
-            }
-          });
-        });
       })();
 
       // ============================================================
@@ -38429,18 +38876,18 @@
 
       // ============================================================
       // GIỌT NƯỚC TRONG VEO 3D: BÁM SÁT VIỀN + PHÁT QUANG + VA CHẠM
-      // + CHẠM TAY NẢY GỢN SÓNG (0 RAF KHI TRƯỢT -> SIÊU MƯỢT)
+      // + CHẠM TAY NẢY GỢN SÓNG + TRƯỢT NGANG GPU (FIX VA CHẠM HOVER)
       // ============================================================
       (function () {
-        if (window.__tngLiquidInteractV9) return;
-        window.__tngLiquidInteractV9 = true;
+        if (window.__tngLiquidInteractV11) return;
+        window.__tngLiquidInteractV11 = true;
 
         const PILL_SEL =
-          ".tng-glow-pill, .tng-rp-glass-pill, .tng-set-glass-pill, .tng-tm-glass-pill";
+          ".tng-glow-pill, .tng-rp-glass-pill, .tng-set-glass-pill, .tng-tm-glass-pill, .tng-sub-glass-pill";
         const DIRECT_PILL_SEL =
-          ":scope > .tng-glow-pill, :scope > .tng-rp-glass-pill, :scope > .tng-set-glass-pill, :scope > .tng-tm-glass-pill";
+          ":scope > .tng-glow-pill, :scope > .tng-rp-glass-pill, :scope > .tng-set-glass-pill, :scope > .tng-tm-glass-pill, :scope > .tng-sub-glass-pill";
         const CSS_MOVE_SEL =
-          ".tng-set-glass-pill, .tng-tm-glass-pill, .tng-rp-glass-pill";
+          ".tng-set-glass-pill, .tng-tm-glass-pill, .tng-rp-glass-pill, .tng-sub-glass-pill";
         const MENU_SEL =
           ".tng-glow-menu, #sidebar, #set-menu, #theme-menu, .drop-menu, .sub-menu, .hist-options-menu, .ai-options-menu, #custom-dropdown-menu, .tng-rp-list, .tng-sub-tabs";
         const ITEM_SEL =
@@ -38463,14 +38910,15 @@
 
         const clamp = (v, min, max) => (v < min ? min : v > max ? max : v);
 
-        const parseY = (str) => {
+        const parseXY = (str) => {
           if (!str || str === "none") return null;
-          let m = str.match(/translate3d\(\s*[-\d.]+px\s*,\s*([-\d.]+)px/i);
-          if (m) return parseFloat(m[1]);
+          let m = str.match(/translate3d\(\s*([-\d.]+)px\s*,\s*([-\d.]+)px/i);
+          if (m) return { x: parseFloat(m[1]), y: parseFloat(m[2]) };
           m = str.match(/matrix\(([^)]+)\)/i);
           if (m) {
             const p = m[1].split(",");
-            if (p.length >= 6) return parseFloat(p[5]);
+            if (p.length >= 6)
+              return { x: parseFloat(p[4]), y: parseFloat(p[5]) };
           }
           return null;
         };
@@ -38521,92 +38969,140 @@
           pill.appendChild(drop);
           pill.classList.add("tng-lg-mounted");
 
+          // Chỉ dọn đúng class của hoạt ảnh vừa kết thúc để không xóa nhầm xung va chạm
           drop.addEventListener("animationend", (e) => {
             if (e.target !== drop) return;
-            drop.classList.remove(
-              ...HIT_CLASSES,
-              "tng-lg-release",
-              "tng-lg-sliding",
-            );
+            const anim = e.animationName;
+            if (anim === "tngLgHitY" || anim === "tngLgHitX") {
+              drop.classList.remove(...HIT_CLASSES);
+            } else if (anim === "tngLgRelease") {
+              drop.classList.remove("tng-lg-release");
+            } else if (anim === "tngLgSlideHugging") {
+              drop.classList.remove("tng-lg-sliding");
+            } else if (anim === "tngLgSlideX") {
+              drop.classList.remove("tng-lg-sliding-x");
+            }
           });
 
           ripEl.addEventListener("animationend", () => {
             ripEl.classList.remove("tng-rip-go");
           });
 
+          const initPos = parseXY(pill.style.transform);
           info = {
             drop,
             r1,
             r2,
             inEl,
             ripEl,
-            lastY: null,
-            pendingDir: 0,
+            lastX: initPos ? initPos.x : null,
+            lastY: initPos ? initPos.y : null,
+            hitTimer: 0,
             lastHitTime: 0,
             lastLightKey: "",
           };
           pillInfo.set(pill, info);
 
-          // Cài đặt, Giao diện & Lặp lại: bám sát viền 2 bên (chỉ nhún lỏng cực khẽ, không thụt lề) + va chạm đầu/đáy
-          if (pill.matches(CSS_MOVE_SEL) && !pill.dataset.tngEdgeBoundV9) {
-            pill.dataset.tngEdgeBoundV9 = "1";
+          // Cài đặt, Giao diện, Lặp lại & Tab Gói thuê bao: trượt thuần GPU + va chạm đúng lúc chạm cạnh
+          if (pill.matches(CSS_MOVE_SEL) && !pill.dataset.tngEdgeBoundV11) {
+            pill.dataset.tngEdgeBoundV11 = "1";
+            const isHoriz = pill.classList.contains("is-horizontal");
+
+            const clearHitTimer = () => {
+              if (info.hitTimer) {
+                clearTimeout(info.hitTimer);
+                info.hitTimer = 0;
+              }
+            };
 
             new MutationObserver(() => {
-              const y = parseY(pill.style.transform);
-              if (y === null) return;
+              const pos = parseXY(pill.style.transform);
+              if (!pos) return;
               if (
                 pill.classList.contains("is-instant") ||
                 pill.classList.contains("is-snap") ||
                 pill.classList.contains("is-tracking")
               ) {
-                info.lastY = y;
-                info.pendingDir = 0;
-                info.drop.classList.remove("tng-lg-sliding");
+                info.lastX = pos.x;
+                info.lastY = pos.y;
+                clearHitTimer();
+                info.drop.classList.remove(
+                  "tng-lg-sliding",
+                  "tng-lg-sliding-x",
+                );
                 return;
               }
 
-              const prev = info.lastY !== null ? info.lastY : y;
-              info.lastY = y;
-              const dy = y - prev;
-              const dist = Math.abs(dy);
-              if (dist < 4) return;
+              const prev = isHoriz
+                ? info.lastX !== null
+                  ? info.lastX
+                  : pos.x
+                : info.lastY !== null
+                  ? info.lastY
+                  : pos.y;
+              info.lastX = pos.x;
+              info.lastY = pos.y;
 
-              info.pendingDir = dy > 0 ? 1 : -1;
+              const delta = (isHoriz ? pos.x : pos.y) - prev;
+              if (Math.abs(delta) < 4) return;
+
+              clearHitTimer();
 
               if (!info.drop.classList.contains("tng-lg-pressing")) {
+                const slideCls = isHoriz
+                  ? "tng-lg-sliding-x"
+                  : "tng-lg-sliding";
                 info.drop.classList.remove(
                   ...HIT_CLASSES,
                   "tng-lg-release",
                   "tng-lg-sliding",
+                  "tng-lg-sliding-x",
                 );
                 void info.drop.offsetWidth;
-                info.drop.classList.add("tng-lg-sliding");
+                info.drop.classList.add(slideCls);
               }
-            }).observe(pill, {
-              attributes: true,
-              attributeFilter: ["style"],
-            });
 
-            pill.addEventListener("transitionend", (e) => {
-              if (e.target !== pill || e.propertyName !== "transform") return;
-              const dir = info.pendingDir;
-              info.pendingDir = 0;
-              if (!dir) return;
-
+              // Kiểm tra ngay xem đích đến có nằm sát cạnh ngoài cùng không để nảy đúng khoảnh khắc chạm mép
               const menu = pill.parentElement;
               if (!menu) return;
               const items = getSelectableItems(menu);
               if (items.length < 2) return;
 
-              const pRect = pill.getBoundingClientRect();
-              const firstRect = items[0].getBoundingClientRect();
-              const lastRect = items[items.length - 1].getBoundingClientRect();
+              const first = items[0];
+              const last = items[items.length - 1];
+              let hitSide = null;
 
-              if (dir > 0 && Math.abs(pRect.bottom - lastRect.bottom) <= 8) {
-                triggerHit(pill, "bottom");
-              } else if (dir < 0 && Math.abs(pRect.top - firstRect.top) <= 8) {
-                triggerHit(pill, "top");
+              if (isHoriz) {
+                if (delta > 0 && Math.abs(pos.x - last.offsetLeft) <= 10) {
+                  hitSide = "right";
+                } else if (
+                  delta < 0 &&
+                  Math.abs(pos.x - first.offsetLeft) <= 10
+                ) {
+                  hitSide = "left";
+                }
+              } else {
+                if (delta > 0 && Math.abs(pos.y - last.offsetTop) <= 10) {
+                  hitSide = "bottom";
+                } else if (
+                  delta < 0 &&
+                  Math.abs(pos.y - first.offsetTop) <= 10
+                ) {
+                  hitSide = "top";
+                }
               }
+
+              if (hitSide) {
+                const isReturning = menu.classList.contains("returning");
+                const delay = isReturning ? 265 : 205;
+                info.hitTimer = setTimeout(() => {
+                  info.hitTimer = 0;
+                  if (pill.isConnected) triggerHit(pill, hitSide);
+                }, delay);
+              }
+            }).observe(pill, {
+              attributes: true,
+              attributeFilter: ["style"],
             });
           }
 
@@ -38669,6 +39165,7 @@
             ...HIT_CLASSES,
             "tng-lg-release",
             "tng-lg-sliding",
+            "tng-lg-sliding-x",
           );
           void drop.offsetWidth;
           drop.classList.add("tng-hit-" + side);
@@ -38678,6 +39175,11 @@
           const info = ensureDrop(pill);
           const drop = info.drop;
 
+          if (info.hitTimer) {
+            clearTimeout(info.hitTimer);
+            info.hitTimer = 0;
+          }
+
           if (pressedPill && pressedPill !== pill) releasePressedPill();
           pressedPill = pill;
 
@@ -38685,6 +39187,7 @@
             ...HIT_CLASSES,
             "tng-lg-release",
             "tng-lg-sliding",
+            "tng-lg-sliding-x",
           );
           drop.classList.add("tng-lg-pressing");
 
@@ -38713,6 +39216,7 @@
             ...HIT_CLASSES,
             "tng-lg-release",
             "tng-lg-sliding",
+            "tng-lg-sliding-x",
           );
           void drop.offsetWidth;
           drop.classList.add("tng-lg-release");
@@ -38822,12 +39326,25 @@
           document.querySelectorAll(PILL_SEL).forEach(ensureDrop);
         };
 
-        if (document.readyState === "loading") {
-          document.addEventListener("DOMContentLoaded", mountExisting, {
-            once: true,
-          });
-        } else {
+        const watchSettingsBody = () => {
+          const spBodyEl = document.getElementById("sp-body");
+          if (!spBodyEl || spBodyEl.dataset.tngLgSpBound) return;
+          spBodyEl.dataset.tngLgSpBound = "1";
+          new MutationObserver(() => {
+            const spPill = spBodyEl.querySelector(".tng-sub-glass-pill");
+            if (spPill) ensureDrop(spPill);
+          }).observe(spBodyEl, { childList: true, subtree: true });
+        };
+
+        const boot = () => {
           mountExisting();
+          watchSettingsBody();
+        };
+
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", boot, { once: true });
+        } else {
+          boot();
         }
 
         document.addEventListener(
@@ -38841,6 +39358,7 @@
           { passive: true },
         );
 
+        // Capture phase để gắn màng kính & đọc tọa độ cũ trước khi menu kịp dịch chuyển pill
         document.addEventListener(
           "pointerover",
           (e) => {
@@ -38848,7 +39366,7 @@
               e.target && e.target.closest ? e.target.closest(ITEM_SEL) : null;
             if (item) handleItemEnter(item, e.clientX, e.clientY);
           },
-          { passive: true },
+          { passive: true, capture: true },
         );
 
         document.addEventListener(
