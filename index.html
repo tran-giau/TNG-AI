@@ -10479,14 +10479,25 @@
             background-color 0.14s ease,
             color 0.14s ease !important;
         }
+        /* Cân bằng khoảng cách mục đầu chạm mép nước & mục cuối chạm đáy (Giao diện + Trợ giúp) */
         html
           body
           #set-menu
           .d-item.flex-between
           > .sub-menu
-          > .d-item:last-child {
+          > .d-item:first-of-type {
+          padding-top: 13px !important;
+          padding-bottom: 11px !important;
+        }
+        html
+          body
+          #set-menu
+          .d-item.flex-between
+          > .sub-menu
+          > .d-item:last-of-type {
           flex: 0 0 auto !important;
-          padding-bottom: 14px !important;
+          padding-top: 11px !important;
+          padding-bottom: 16px !important;
         }
 
         /* Xoay mũi tên > xuống thành v khi xổ trên điện thoại */
