@@ -10347,6 +10347,209 @@
           align-items: center !important;
         }
       }
+
+      /* ============================================================ */
+      /* FIX CÀI ĐẶT: HẾT CHỚP GIẬT MOBILE + ĐỒNG BỘ > PC + NƯỚC ĐÁY VUÔNG */
+      /* ============================================================ */
+
+      /* 1. Đồng bộ dấu nhọn > mảnh chuẩn iOS cho Giao diện & Trợ giúp trên CẢ PC lẫn điện thoại */
+      html
+        body
+        #set-menu
+        .d-item.flex-between:has(> .sub-menu)
+        > span:not(.sub-menu):not(.s-badge):not(.tng-sub-water-pill) {
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        font-size: 0 !important;
+        line-height: 0 !important;
+        color: transparent !important;
+        flex-shrink: 0;
+      }
+      html
+        body
+        #set-menu
+        .d-item.flex-between:has(> .sub-menu)
+        > span:not(.sub-menu):not(.s-badge):not(.tng-sub-water-pill)::after {
+        content: "";
+        display: block;
+        width: 6.5px;
+        height: 6.5px;
+        border-right: 1.8px solid var(--text-sub);
+        border-bottom: 1.8px solid var(--text-sub);
+        border-radius: 1px;
+        transform: translateX(-1.5px) rotate(-45deg);
+        transform-origin: center center;
+        will-change: transform, border-color;
+        transition:
+          transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+          border-color 0.24s ease;
+      }
+
+      /* PC: giữ mũi tên > hướng phải, chỉ sáng màu & nhích nhẹ khi rê/mở */
+      @media (min-width: 769px) {
+        html
+          body
+          #set-menu
+          .d-item.flex-between:is(.tng-set-focus, .tng-sub-open):has(
+            > .sub-menu
+          )
+          > span:not(.sub-menu):not(.s-badge):not(.tng-sub-water-pill)::after {
+          border-color: #ffffff !important;
+          transform: translateX(0.5px) rotate(-45deg);
+        }
+        html
+          body[data-theme="light"]
+          #set-menu
+          .d-item.flex-between:is(.tng-set-focus, .tng-sub-open):has(
+            > .sub-menu
+          )
+          > span:not(.sub-menu):not(.s-badge):not(.tng-sub-water-pill)::after {
+          border-color: #111827 !important;
+        }
+        html body #set-menu .tng-sub-water-pill {
+          display: none !important;
+        }
+      }
+
+      /* Mobile: triệt tiêu 100% chớp sáng/giật + gắn màng nước 3D đáy vuông full viền */
+      @media (max-width: 768px) {
+        /* Khóa chuyển động chỉ theo opacity/transform & tắt blur thừa trên nền đặc để hết chớp GPU */
+        html body #set-menu.set-menu {
+          backdrop-filter: none !important;
+          -webkit-backdrop-filter: none !important;
+          transition:
+            opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+            transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+            visibility 0.85s !important;
+          contain: layout style;
+          backface-visibility: hidden;
+          -webkit-backface-visibility: hidden;
+        }
+
+        /* Tắt thanh ::before phẳng cũ để nhường chỗ cho màng nước Liquid Glass thật */
+        html body #set-menu .d-item.flex-between:has(> .sub-menu)::before {
+          display: none !important;
+          content: none !important;
+        }
+
+        /* Bỏ filter:blur & flex stretch trên mục con để cuộn mở/đóng êm 60/120fps không giật */
+        html body #set-menu .d-item.flex-between > .sub-menu > .d-item {
+          filter: none !important;
+          will-change: transform, opacity;
+          transition:
+            transform 0.24s cubic-bezier(0.4, 0, 0.2, 1),
+            opacity 0.18s ease,
+            background-color 0.14s ease,
+            color 0.14s ease !important;
+        }
+        html body #set-menu .d-item.flex-between > .sub-menu.show > .d-item {
+          filter: none !important;
+          transition:
+            transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+            opacity 0.28s ease,
+            background-color 0.14s ease,
+            color 0.14s ease !important;
+        }
+        html
+          body
+          #set-menu
+          .d-item.flex-between
+          > .sub-menu
+          > .d-item:last-child {
+          flex: 0 0 auto !important;
+          padding-bottom: 14px !important;
+        }
+
+        /* Xoay mũi tên > xuống thành v khi xổ trên điện thoại */
+        html
+          body
+          #set-menu
+          .d-item.flex-between.tng-sub-open:has(> .sub-menu)
+          > span:not(.sub-menu):not(.s-badge):not(.tng-sub-water-pill)::after {
+          transform: translateY(-1.5px) rotate(45deg) !important;
+          border-color: #ffffff !important;
+        }
+        html
+          body[data-theme="light"]
+          #set-menu
+          .d-item.flex-between.tng-sub-open:has(> .sub-menu)
+          > span:not(.sub-menu):not(.s-badge):not(.tng-sub-water-pill)::after {
+          border-color: #111827 !important;
+        }
+
+        /* Làm sáng chữ tiêu đề Giao diện / Trợ giúp khi nước phủ qua */
+        html body #set-menu .d-item.flex-between.tng-sub-open,
+        html body #set-menu .d-item.flex-between.tng-sub-pressed {
+          color: #ffffff !important;
+        }
+        html
+          body[data-theme="light"]
+          #set-menu
+          .d-item.flex-between.tng-sub-open,
+        html
+          body[data-theme="light"]
+          #set-menu
+          .d-item.flex-between.tng-sub-pressed {
+          color: #111827 !important;
+        }
+
+        /* MÀNG NƯỚC 3D RIÊNG CHO GIAO DIỆN & TRỢ GIÚP: TRÊN BO 11.5PX, ĐÁY VUÔNG 0PX FULL VIỀN */
+        html body #set-menu .d-item.flex-between > .tng-sub-water-pill {
+          position: absolute !important;
+          top: 0 !important;
+          left: 0 !important;
+          right: 0 !important;
+          width: 100% !important;
+          height: var(--sub-hdr-h, 44px) !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          z-index: 0 !important;
+          pointer-events: none !important;
+          border-radius: 11.5px 11.5px 0px 0px !important;
+          overflow: hidden !important;
+          opacity: 0;
+          transition: opacity 0.22s ease !important;
+        }
+        html
+          body
+          #set-menu
+          .d-item.flex-between.tng-sub-open
+          > .tng-sub-water-pill,
+        html
+          body
+          #set-menu
+          .d-item.flex-between.tng-sub-pressed
+          > .tng-sub-water-pill {
+          opacity: 1 !important;
+        }
+
+        /* Giữ giọt nước ôm sát 100% cạnh trái/phải và đáy vuông (không hở viền) */
+        html body #set-menu .tng-sub-water-pill > .tng-lg-drop {
+          --idle-sx-a: 1;
+          --idle-sx-b: 1;
+          --idle-sy-a: 1;
+          --idle-sy-b: 1;
+          --press-sx: 1;
+          border-radius: 11.5px 11.5px 0px 0px !important;
+          box-shadow:
+            inset 0 6px 12px -7px rgba(255, 255, 255, 0.22),
+            inset 0 -5px 10px -7px rgba(190, 228, 255, 0.2),
+            inset 0 -1px 0 rgba(255, 255, 255, 0.14) !important;
+        }
+        html
+          body[data-theme="light"]
+          #set-menu
+          .tng-sub-water-pill
+          > .tng-lg-drop {
+          box-shadow:
+            inset 0 6px 12px -7px rgba(255, 255, 255, 0.92),
+            inset 0 -4px 10px -7px rgba(15, 23, 42, 0.12),
+            inset 0 -1px 0 rgba(15, 23, 42, 0.08) !important;
+        }
+      }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
@@ -20522,7 +20725,19 @@
         document
           .querySelectorAll(".drop-menu, .sub-menu")
           .forEach((x) => x.classList.remove("show"));
-        if (!s) showWithOrigin(id);
+        if (!s) {
+          if (
+            window.innerWidth <= 768 &&
+            m &&
+            m.classList.contains("sub-menu")
+          ) {
+            m.style.transition = "";
+            m.style.transform = "";
+            m.classList.add("show");
+          } else {
+            showWithOrigin(id);
+          }
+        }
       }
 
       document.addEventListener("click", (e) => {
@@ -40002,6 +40217,14 @@
           container.addEventListener("pointerdown", (ev) => {
             const item = resolveItem(ev.target, false);
             if (!item) return;
+            if (
+              container.id === "set-menu" &&
+              window.innerWidth <= 768 &&
+              item.querySelector(":scope > .sub-menu")
+            ) {
+              hidePill();
+              return;
+            }
             clearTimeout(state.leaveTimer);
             moveTo(item, { instant: false, isTap: true });
           });
@@ -40175,29 +40398,9 @@
             if (container.id === "set-menu") {
               container.querySelectorAll(".sub-menu").forEach((sub) => {
                 const subObs = new MutationObserver(() => {
-                  if (window.getComputedStyle(sub).position !== "relative") {
-                    return;
-                  }
-                  const parentItem = sub.closest(".d-item");
-                  syncDuringSubToggle(520, parentItem);
-                  // Cuộn êm nếu menu con vừa mở bị chạm đáy vùng cuộn trên điện thoại
-                  if (sub.classList.contains("show") && parentItem) {
-                    setTimeout(() => {
-                      const itemBottom =
-                        parentItem.offsetTop + parentItem.offsetHeight;
-                      const viewBottom =
-                        container.scrollTop + container.clientHeight;
-                      if (itemBottom > viewBottom - 12) {
-                        container.scrollTo({
-                          top: Math.max(
-                            0,
-                            itemBottom - container.clientHeight + 16,
-                          ),
-                          behavior: "smooth",
-                        });
-                      }
-                    }, 180);
-                  }
+                  if (window.innerWidth > 768) return;
+                  hidePill();
+                  stopLayoutSync();
                 });
                 subObs.observe(sub, {
                   attributes: true,
@@ -40728,6 +40931,78 @@
         let globalRaf = null;
         let lastTs = 0;
 
+        const clamp = (v, min, max) => (v < min ? min : v > max ? max : v);
+
+        // Gắn màng nước 3D Liquid Glass đáy vuông (11.5px 11.5px 0 0) vào tiêu đề Giao diện & Trợ giúp
+        const ensureSubWaterPill = (parent) => {
+          if (!parent) return null;
+          let pill = parent.querySelector(":scope > .tng-sub-water-pill");
+          if (pill && pill._lg) return pill._lg;
+
+          if (pill) pill.remove();
+          pill = document.createElement("span");
+          pill.className = "tng-sub-water-pill tng-lg-mounted";
+          pill.setAttribute("aria-hidden", "true");
+
+          const drop = document.createElement("span");
+          drop.className = "tng-lg-drop";
+          const flowEl = document.createElement("span");
+          flowEl.className = "tng-lg-flow";
+          const inEl = document.createElement("span");
+          inEl.className = "tng-lg-in";
+          const ripEl = document.createElement("span");
+          ripEl.className = "tng-lg-rip";
+          const rim = document.createElement("span");
+          rim.className = "tng-lg-rim";
+          const r1 = document.createElement("span");
+          r1.className = "tng-lg-r1";
+          const r2 = document.createElement("span");
+          r2.className = "tng-lg-r2";
+          const rs = document.createElement("span");
+          rs.className = "tng-lg-rs";
+
+          rim.appendChild(r1);
+          rim.appendChild(r2);
+          rim.appendChild(rs);
+          drop.appendChild(flowEl);
+          drop.appendChild(inEl);
+          drop.appendChild(ripEl);
+          drop.appendChild(rim);
+          pill.appendChild(drop);
+          parent.insertBefore(pill, parent.firstChild);
+
+          drop.addEventListener("animationend", (e) => {
+            if (e.target === drop && e.animationName === "tngLgRelease") {
+              drop.classList.remove("tng-lg-release");
+            }
+          });
+          ripEl.addEventListener("animationend", () => {
+            ripEl.classList.remove("tng-rip-go");
+          });
+
+          pill._lg = { pill, drop, r1, r2, inEl, ripEl };
+          return pill._lg;
+        };
+
+        const updateWaterLight = (lg, clientX, clientY) => {
+          if (!lg) return null;
+          const rect = lg.pill.getBoundingClientRect();
+          if (rect.width < 4 || rect.height < 4) return null;
+          const w = lg.pill.offsetWidth || rect.width;
+          const h = lg.pill.offsetHeight || rect.height;
+          const rx = clamp((clientX - rect.left) / rect.width, 0, 1);
+          const ry = clamp((clientY - rect.top) / rect.height, 0, 1);
+          const hx = Math.round(rx * w);
+          const hy = Math.round(ry * h);
+          const ox = Math.round((1 - rx) * w);
+          const oy = Math.round((1 - ry) * h);
+          const tf = `translate3d(${hx}px,${hy}px,0)`;
+          lg.r1.style.transform = tf;
+          lg.inEl.style.transform = tf;
+          lg.r2.style.transform = `translate3d(${ox}px,${oy}px,0)`;
+          return { hx, hy };
+        };
+
         const updateSetMenuOpenFlag = () => {
           const anyOpen = subs.some(
             (s) =>
@@ -40741,20 +41016,20 @@
           if (!parent) return 44;
           const cs = window.getComputedStyle(parent);
           const pt = parseFloat(cs.paddingTop) || 9;
-          const first = parent.firstElementChild;
-          const contentH = first && first !== sub ? first.offsetHeight : 26;
+          const labelRow = parent.querySelector(":scope > div:not(.sub-menu)");
+          const contentH = labelRow ? labelRow.offsetHeight : 26;
           const h = Math.max(38, Math.round(contentH + pt * 2));
           parent.style.setProperty("--sub-hdr-h", h + "px");
           return h;
         };
 
+        // Đo tổng chiều cao mục con trực tiếp không bật height:auto -> hết chớp layout 100%
         const measureNaturalSubHeight = (sub) => {
-          const prevH = sub.style.height;
-          sub.style.setProperty("height", "auto", "important");
-          const naturalH = sub.getBoundingClientRect().height;
-          if (prevH) sub.style.setProperty("height", prevH, "important");
-          else sub.style.removeProperty("height");
-          return Math.max(naturalH, 48);
+          let total = 0;
+          sub.querySelectorAll(":scope > .d-item").forEach((el) => {
+            total += el.offsetHeight;
+          });
+          return Math.max(total || sub.scrollHeight, 48);
         };
 
         const stepAllSprings = (ts) => {
@@ -40774,8 +41049,9 @@
           states.forEach((st, sub) => {
             if (!st.running) return;
 
-            const k = st.opening ? 210 : 230;
-            const c = st.opening ? 19.5 : 28;
+            // Lò xo hãm êm chuẩn iOS, không văng lố gây giật khung bảng
+            const k = st.opening ? 240 : 265;
+            const c = st.opening ? 30 : 33;
 
             for (let i = 0; i < 2; i++) {
               const acc = (st.target - st.h) * k - st.v * c;
@@ -40798,7 +41074,7 @@
             sub.style.setProperty("opacity", op.toFixed(3), "important");
 
             const settled =
-              Math.abs(st.target - st.h) < 0.18 && Math.abs(st.v) < 0.6;
+              Math.abs(st.target - st.h) < 0.25 && Math.abs(st.v) < 0.8;
 
             if (settled) {
               st.running = false;
@@ -40806,7 +41082,11 @@
               st.v = 0;
 
               if (st.opening) {
-                sub.style.setProperty("height", "auto", "important");
+                sub.style.setProperty(
+                  "height",
+                  st.target.toFixed(2) + "px",
+                  "important",
+                );
                 sub.style.setProperty("opacity", "1", "important");
                 sub.classList.remove("tng-sub-animating");
                 if (st.parent) st.parent.classList.remove("tng-sub-animating");
@@ -40855,13 +41135,73 @@
             sub.style.removeProperty("opacity");
             sub.classList.remove("tng-sub-animating");
             if (st.parent) {
-              st.parent.classList.remove("tng-sub-open", "tng-sub-animating");
+              st.parent.classList.remove(
+                "tng-sub-open",
+                "tng-sub-animating",
+                "tng-sub-pressed",
+              );
             }
           });
         };
 
+        let activePressedParent = null;
+        let activePressedLg = null;
+
+        const releaseSubWater = () => {
+          if (!activePressedParent || !activePressedLg) return;
+          const p = activePressedParent;
+          const lg = activePressedLg;
+          activePressedParent = null;
+          activePressedLg = null;
+          p.classList.remove("tng-sub-pressed");
+          lg.drop.classList.remove("tng-lg-pressing", "tng-lg-release");
+          void lg.drop.offsetWidth;
+          lg.drop.classList.add("tng-lg-release");
+        };
+
+        document.addEventListener("pointerup", releaseSubWater, true);
+        document.addEventListener("pointercancel", releaseSubWater, true);
+        window.addEventListener("blur", releaseSubWater);
+
         subs.forEach((sub) => {
           const parent = sub.closest(".d-item.flex-between");
+          const lg = ensureSubWaterPill(parent);
+
+          if (parent && lg && !parent.dataset.tngSubWaterBound) {
+            parent.dataset.tngSubWaterBound = "1";
+            parent.addEventListener(
+              "pointerdown",
+              (e) => {
+                if (!isMobile()) return;
+                if (
+                  e.target &&
+                  e.target.closest &&
+                  e.target.closest(".sub-menu")
+                ) {
+                  return;
+                }
+                measureHeaderHeight(parent, sub);
+                if (activePressedParent && activePressedParent !== parent) {
+                  releaseSubWater();
+                }
+                activePressedParent = parent;
+                activePressedLg = lg;
+                parent.classList.add("tng-sub-pressed");
+                lg.drop.classList.remove("tng-lg-release");
+                lg.drop.classList.add("tng-lg-pressing");
+                const pos = updateWaterLight(lg, e.clientX, e.clientY);
+                if (pos) {
+                  lg.ripEl.classList.remove("tng-rip-go");
+                  lg.ripEl.style.left = pos.hx + "px";
+                  lg.ripEl.style.top = pos.hy + "px";
+                  void lg.ripEl.offsetWidth;
+                  lg.ripEl.classList.add("tng-rip-go");
+                }
+              },
+              true,
+            );
+          }
+
           const st = {
             parent,
             opening: sub.classList.contains("show"),
@@ -40892,7 +41232,7 @@
             measureHeaderHeight(parent, sub);
 
             if (isOpen) {
-              const startH = sub.getBoundingClientRect().height || 0;
+              const startH = st.h || sub.getBoundingClientRect().height || 0;
               const naturalH = measureNaturalSubHeight(sub);
               st.lastTarget = naturalH;
               st.opening = true;
@@ -40912,7 +41252,7 @@
               updateSetMenuOpenFlag();
               startSpringLoop();
             } else {
-              const curH = sub.getBoundingClientRect().height || st.h || 0;
+              const curH = st.h || sub.getBoundingClientRect().height || 0;
               st.lastTarget = Math.max(curH, st.lastTarget || 80);
               st.opening = false;
               st.h = curH;
