@@ -10433,7 +10433,7 @@
           transition:
             opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
             transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
-            visibility 0.85s !important;
+            visibility 0.85s;
           contain: layout style;
           backface-visibility: hidden;
           -webkit-backface-visibility: hidden;
@@ -10507,7 +10507,22 @@
         }
 
         /* MÀNG NƯỚC 3D RIÊNG CHO GIAO DIỆN & TRỢ GIÚP: TRÊN BO 11.5PX, ĐÁY VUÔNG 0PX FULL VIỀN */
-        html body #set-menu .d-item.flex-between > .tng-sub-water-pill {
+        html
+          body
+          #set-menu.set-menu
+          .d-item.flex-between:has(> .sub-menu)
+          > span.tng-sub-water-pill.tng-lg-mounted,
+        html
+          body
+          #set-menu.set-menu
+          .d-item.flex-between:has(> .sub-menu):active
+          > span.tng-sub-water-pill.tng-lg-mounted,
+        html
+          body
+          #set-menu.set-menu
+          .d-item.flex-between:has(> .sub-menu):hover
+          > span.tng-sub-water-pill.tng-lg-mounted {
+          display: block !important;
           position: absolute !important;
           top: 0 !important;
           left: 0 !important;
@@ -10521,7 +10536,16 @@
           border-radius: 11.5px 11.5px 0px 0px !important;
           overflow: hidden !important;
           opacity: 0;
+          transform: none !important;
           transition: opacity 0.22s ease !important;
+        }
+        html
+          body
+          #set-menu.set-menu
+          .d-item.flex-between:has(> .sub-menu)
+          > span.tng-sub-water-pill.tng-lg-mounted::after {
+          content: none !important;
+          display: none !important;
         }
         html
           body
