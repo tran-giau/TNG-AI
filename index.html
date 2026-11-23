@@ -10600,6 +10600,110 @@
             inset 0 -1px 0 rgba(15, 23, 42, 0.08) !important;
         }
       }
+
+      /* ============================================================ */
+      /* HIỆU ỨNG NẢY PHÁT SÁNG & NHẤN ĐÈ CHO THẺ HOẠT ĐỘNG CỦA TÔI   */
+      /* ============================================================ */
+      html body #sp-body .act-card {
+        cursor: pointer;
+        -webkit-user-select: none;
+        user-select: none;
+        touch-action: manipulation;
+        will-change:
+          transform, background-color, border-color, box-shadow, opacity;
+        transition:
+          transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+          background-color 0.22s ease,
+          border-color 0.22s ease,
+          box-shadow 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+          opacity 0.25s ease !important;
+      }
+
+      /* Di chuột trên PC: lún nảy nhẹ + bừng sáng nền & hắt sáng viền */
+      @media (hover: hover) {
+        html body #sp-body .act-card:hover {
+          background-color: var(--glass-hover) !important;
+          border-color: rgba(255, 255, 255, 0.22) !important;
+          opacity: 1 !important;
+          transform: scale(0.965) translateY(1px) !important;
+          box-shadow:
+            0 10px 24px rgba(0, 0, 0, 0.34),
+            0 0 18px rgba(255, 255, 255, 0.08) !important;
+        }
+        html body #sp-body .act-card.is-current:hover {
+          background-color: rgba(168, 199, 250, 0.22) !important;
+          border-color: rgba(168, 199, 250, 0.44) !important;
+          box-shadow:
+            0 10px 24px rgba(0, 0, 0, 0.34),
+            0 0 22px rgba(168, 199, 250, 0.24) !important;
+        }
+
+        /* Đồng bộ Giao diện Sáng */
+        html body[data-theme="light"] #sp-body .act-card:hover {
+          background-color: var(--glass-hover) !important;
+          border-color: rgba(0, 0, 0, 0.16) !important;
+          box-shadow: 0 8px 20px rgba(15, 23, 42, 0.1) !important;
+        }
+        html body[data-theme="light"] #sp-body .act-card.is-current:hover {
+          background-color: rgba(0, 118, 210, 0.16) !important;
+          border-color: rgba(0, 118, 210, 0.36) !important;
+          box-shadow: 0 8px 20px rgba(0, 118, 210, 0.16) !important;
+        }
+      }
+
+      /* Nhấn đè (PC & chạm giữ điện thoại): lún sâu tức thì, thả ra bung nảy lò xo */
+      html body #sp-body .act-card:active,
+      html body #sp-body .act-card.tng-ios-active {
+        transition-duration: 0.05s !important;
+        background-color: var(--glass-hover) !important;
+        border-color: rgba(255, 255, 255, 0.26) !important;
+        opacity: 1 !important;
+        transform: scale(0.93) translateY(2px) !important;
+        box-shadow:
+          0 2px 10px rgba(0, 0, 0, 0.5),
+          0 0 16px rgba(255, 255, 255, 0.1) !important;
+      }
+      html body #sp-body .act-card.is-current:active,
+      html body #sp-body .act-card.is-current.tng-ios-active {
+        background-color: rgba(168, 199, 250, 0.26) !important;
+        border-color: rgba(168, 199, 250, 0.5) !important;
+        box-shadow:
+          0 2px 10px rgba(0, 0, 0, 0.5),
+          0 0 20px rgba(168, 199, 250, 0.28) !important;
+      }
+      html body[data-theme="light"] #sp-body .act-card:active,
+      html body[data-theme="light"] #sp-body .act-card.tng-ios-active {
+        background-color: rgba(0, 0, 0, 0.09) !important;
+        border-color: rgba(0, 0, 0, 0.2) !important;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12) !important;
+      }
+      html body[data-theme="light"] #sp-body .act-card.is-current:active,
+      html
+        body[data-theme="light"]
+        #sp-body
+        .act-card.is-current.tng-ios-active {
+        background-color: rgba(0, 118, 210, 0.2) !important;
+        border-color: rgba(0, 118, 210, 0.42) !important;
+        box-shadow: 0 2px 10px rgba(0, 118, 210, 0.2) !important;
+      }
+
+      /* ============================================================ */
+      /* HIỆU ỨNG XOAY MŨI TÊN CHỌN MÔ HÌNH (NHANH / TƯ DUY / PRO)    */
+      /* Mở lên trên, xoay qua phải gọn khớp 0.4s                     */
+      /* ============================================================ */
+      .tool-chip .model-arrow {
+        display: block;
+        flex-shrink: 0;
+        transform: rotate(0deg);
+        transform-origin: center center;
+        will-change: transform;
+        transition: transform 0.4s cubic-bezier(0.34, -0.4, 0.64, 1) !important;
+      }
+
+      .tool-container:has(> .model-menu.show) .tool-chip .model-arrow {
+        transform: rotate(-180deg);
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+      }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
@@ -13534,7 +13638,20 @@
               </div>
               <div class="tools tool-container">
                 <div class="tool-chip" onclick="toggleD('m-mod-h', event)">
-                  <span class="model-name">Pro</span> ⌵
+                  <span class="model-name">Pro</span>
+                  <svg
+                    class="model-arrow"
+                    width="13"
+                    height="13"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
                 </div>
                 <div id="m-mod-h" class="drop-menu model-menu">
                   <div class="m-title">TNG AI 1.0</div>
@@ -15414,7 +15531,20 @@
               </div>
               <div class="tools tool-container">
                 <div class="tool-chip" onclick="toggleD('m-mod-c', event)">
-                  <span class="model-name">Nhanh</span> ⌵
+                  <span class="model-name">Nhanh</span>
+                  <svg
+                    class="model-arrow"
+                    width="13"
+                    height="13"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
                 </div>
                 <div id="m-mod-c" class="drop-menu model-menu">
                   <div class="m-title">TNG AI 1.0</div>
@@ -18427,7 +18557,7 @@
           let safeDevice = log.device || "Máy tính Windows";
 
           html += `
-                                                    <div style='padding:20px;background:${cardBg};border-radius:15px;border:1px solid ${cardBorder}; transition:0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.2); opacity:${cardOpacity};'>
+                                                    <div class='act-card ${isCurrent ? "is-current" : ""}' style='padding:20px;background:${cardBg};border-radius:15px;border:1px solid ${cardBorder}; box-shadow: 0 5px 15px rgba(0,0,0,0.2); opacity:${cardOpacity};'>
                                                         <div style='display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom:1px solid ${cardBorder}; padding-bottom:10px;'>
                                                            <div style='font-weight:600; font-size:16px; color:var(--text-main); display:flex; align-items:center; gap:8px;'><span style='font-size:20px;'>${icon}</span> ${title}</div>
                                                            <span style='font-size:12px; font-weight:600; background:${statusBg}; color:${statusColor}; padding:4px 10px; border-radius:12px;'>${log.statusText}</span>
@@ -31191,7 +31321,7 @@
       // 2. CẢM BIẾN THEO DÕI NGÓN TAY (SWIPE TO HIGHLIGHT NHƯ APP NATIVE IOS)
       let activeTouchItem = null;
       const touchSelectors =
-        "button, .sb-item, .d-item, .m-item, .s-item, .sv-item, .qa-item, .am-item, .chip, .avatar, .mc-item-wrap, .note-card";
+        "button, .sb-item, .d-item, .m-item, .s-item, .sv-item, .qa-item, .am-item, .chip, .avatar, .mc-item-wrap, .note-card, .act-card";
 
       // Chạm ngón tay xuống
       document.addEventListener(
