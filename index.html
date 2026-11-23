@@ -10427,6 +10427,7 @@
       /* Mobile: triệt tiêu 100% chớp sáng/giật + gắn màng nước 3D đáy vuông full viền */
       @media (max-width: 768px) {
         /* Khóa chuyển động chỉ theo opacity/transform & tắt blur thừa trên nền đặc để hết chớp GPU */
+        /* Tắt ép GPU layer cố định trên khung lớn #set-menu để Chrome Mobile không rớt tile đáy */
         html body #set-menu.set-menu {
           backdrop-filter: none !important;
           -webkit-backdrop-filter: none !important;
@@ -10434,7 +10435,22 @@
             opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
             transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
             visibility 0.85s;
-          contain: layout style;
+          will-change: auto !important;
+          contain: none !important;
+          backface-visibility: visible !important;
+          -webkit-backface-visibility: visible !important;
+        }
+
+        /* Bỏ will-change: height trên menu con (gây vẽ lại tile liên tục mỗi khung hình) */
+        html body #set-menu .d-item.flex-between > .sub-menu {
+          will-change: auto !important;
+        }
+
+        /* Tách vạch ngăn và khối vị trí (#u-loc) sang lớp GPU riêng gọn nhẹ -> hết nhấp nháy 100% */
+        html body #set-menu.set-menu > .d-divider,
+        html body #set-menu.set-menu > #u-loc {
+          transform: translate3d(0, 0, 0);
+          will-change: transform;
           backface-visibility: hidden;
           -webkit-backface-visibility: hidden;
         }
@@ -16081,12 +16097,6 @@
         </div>
         <span style="font-size: 11px; color: var(--text-sub)">▶</span>
         <div id="theme-menu" class="sub-menu">
-          <div
-            class="d-item"
-            style="pointer-events: none; color: var(--text-sub)"
-          >
-            Hệ thống
-          </div>
           <div class="d-item" onclick="setTheme('light')">
             Sáng<span class="chk-light" style="margin-left: auto; display: none"
               >✔</span
