@@ -10779,16 +10779,8 @@
           background-color: rgba(15, 23, 42, 0.035);
         }
         /* Di chuột: lún nhẹ 0.965 giống hệt .am-item bên Quản lý tài khoản */
-        html
-          body
-          #sp-body
-          .tng-priv-row:hover:not(.tng-priv-nohover)
-          > .tng-priv-label,
-        html
-          body
-          #sp-body
-          .tng-priv-row:hover:not(.tng-priv-nohover)
-          > .tng-priv-right {
+        html body #sp-body .tng-priv-row:hover > .tng-priv-label,
+        html body #sp-body .tng-priv-row:hover > .tng-priv-right {
           transform: scale(0.965) !important;
         }
       }
@@ -10835,7 +10827,7 @@
         transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
       }
 
-      /* Nhấn giữ (PC & cảm ứng): lún sâu 0.88 tức thì trong 0.05s, không ảnh hưởng góc xoay mũi tên */
+      /* Nhấn giữ (PC & cảm ứng): lún sâu 0.88 tức thì trong 0.05s giống hệt .am-item */
       html body #sp-body .tng-priv-row:active > .tng-priv-label,
       html body #sp-body .tng-priv-row:active > .tng-priv-right,
       html body #sp-body .tng-priv-row.tng-ios-active > .tng-priv-label,
@@ -10925,6 +10917,21 @@
         white-space: nowrap;
       }
 
+      /* Đồng bộ kích thước bảng Quyền riêng tư trên điện thoại ngang bằng Quản lý Tài khoản TNG AI */
+      @media (max-width: 768px) {
+        html
+          body
+          #settings-page-overlay
+          .settings-page-content:has(.tng-priv-wrap) {
+          width: 95% !important;
+          height: 85dvh !important;
+          max-height: 85dvh !important;
+        }
+        html body #sp-body .tng-priv-wrap {
+          padding: 5px;
+        }
+      }
+
       /* ============================================================ */
       /* HIỆU ỨNG XÓA BỐC HƠI NƯỚC + DỒN LÒ XO FLIP CHUẨN IOS 27      */
       /* Thuần GPU (transform + opacity) - Không lag, nảy mượt 120fps */
@@ -11001,6 +11008,11 @@
       html body #all-notes-grid .tng-flip-hold,
       html body #tng-ins-list-container .tng-flip-hold,
       html body .acc-expanded-list .tng-flip-hold,
+      html
+        body
+        #acc-modal
+        .acc-expanded-list.show
+        .acc-row-btn.tng-flip-hold:last-child,
       html body .file-staging .tng-flip-hold,
       html body #custom-manage-modal .tng-flip-hold,
       html body #custom-child-manage-modal .tng-flip-hold {
@@ -11024,6 +11036,11 @@
       html body #all-notes-grid .tng-flip-play,
       html body #tng-ins-list-container .tng-flip-play,
       html body .acc-expanded-list .tng-flip-play,
+      html
+        body
+        #acc-modal
+        .acc-expanded-list.show
+        .acc-row-btn.tng-flip-play:last-child,
       html body .file-staging .tng-flip-play,
       html body #custom-manage-modal .tng-flip-play,
       html body #custom-child-manage-modal .tng-flip-play {
@@ -11032,6 +11049,29 @@
         transform: translate3d(0, 0, 0) !important;
         transition: transform var(--flip-dur, 620ms)
           var(--flip-ease, cubic-bezier(0.32, 1.5, 0.58, 1))
+          var(--flip-delay, 0ms) !important;
+      }
+
+      /* Đồng bộ chiều cao khung bảng chạy chung nhịp 1:1 với chuyển động FLIP bên trong */
+      html body .tng-height-hold,
+      html body #acc-modal .acc-expanded-list.show.tng-height-hold,
+      html body #custom-manage-modal .tng-height-hold,
+      html body #custom-child-manage-modal .tng-height-hold {
+        transition: none !important;
+        overflow: hidden !important;
+        max-height: none !important;
+        height: var(--h-from) !important;
+      }
+
+      html body .tng-height-play,
+      html body #acc-modal .acc-expanded-list.show.tng-height-play,
+      html body #custom-manage-modal .tng-height-play,
+      html body #custom-child-manage-modal .tng-height-play {
+        overflow: hidden !important;
+        max-height: none !important;
+        height: var(--h-to) !important;
+        transition: height var(--flip-dur, 580ms)
+          var(--flip-ease, cubic-bezier(0.22, 1, 0.36, 1))
           var(--flip-delay, 0ms) !important;
       }
 
@@ -44026,6 +44066,8 @@
           const row = e.currentTarget;
           if (!row) return;
 
+          clearTimeout(row._privPressReleaseTimer);
+          row.classList.remove("tng-ios-active");
           if (row._unlockHover) row._unlockHover();
 
           const oldOverlay = document.getElementById("tng-priv-dd-overlay");
@@ -44091,30 +44133,6 @@
             isClosing = true;
             overlay._isClosing = true;
 
-            if (row._unlockHover) row._unlockHover();
-            row.classList.add("tng-priv-nohover");
-            const cleanupUnlock = () => {
-              row.classList.remove("tng-priv-nohover");
-              document.removeEventListener("pointermove", unlockHover);
-              if (row._unlockHover === cleanupUnlock) row._unlockHover = null;
-            };
-            const unlockHover = (ev) => {
-              const r = row.getBoundingClientRect();
-              if (
-                !row.isConnected ||
-                ev.clientX < r.left ||
-                ev.clientX > r.right ||
-                ev.clientY < r.top ||
-                ev.clientY > r.bottom
-              ) {
-                cleanupUnlock();
-              }
-            };
-            row._unlockHover = cleanupUnlock;
-            document.addEventListener("pointermove", unlockHover, {
-              passive: true,
-            });
-
             overlay.style.pointerEvents = "none";
             row.classList.remove("tng-priv-open");
             menu.classList.remove("show");
@@ -44126,6 +44144,8 @@
           };
 
           overlay._closeImmediate = () => {
+            clearTimeout(row._privPressReleaseTimer);
+            row.classList.remove("tng-ios-active");
             row.classList.remove("tng-priv-open");
             if (spBody) spBody.removeEventListener("scroll", closeMenu);
             clearTimeout(overlay._rmTimer);
@@ -44135,7 +44155,72 @@
           if (spBody)
             spBody.addEventListener("scroll", closeMenu, { passive: true });
 
+          const isPointInRow = (x, y) => {
+            if (!row.isConnected) return false;
+            const r = row.getBoundingClientRect();
+            return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+          };
+
+          let pressedOwnerRow = false;
+          let pressStartTime = 0;
+          let handledByOwnerRelease = false;
+
+          overlay.addEventListener("pointerdown", (ev) => {
+            if (ev.target !== overlay || isClosing) return;
+            if (isPointInRow(ev.clientX, ev.clientY)) {
+              pressedOwnerRow = true;
+              pressStartTime = performance.now();
+              clearTimeout(row._privPressReleaseTimer);
+              row.classList.add("tng-ios-active");
+            }
+          });
+
+          overlay.addEventListener(
+            "pointermove",
+            (ev) => {
+              if (isClosing) return;
+              const inside =
+                ev.target === overlay && isPointInRow(ev.clientX, ev.clientY);
+              overlay.style.cursor = inside ? "pointer" : "default";
+              if (pressedOwnerRow) {
+                row.classList.toggle("tng-ios-active", inside);
+              }
+            },
+            { passive: true },
+          );
+
+          overlay.addEventListener("pointerup", (ev) => {
+            if (!pressedOwnerRow) return;
+            const inside = isPointInRow(ev.clientX, ev.clientY);
+            pressedOwnerRow = false;
+            if (!inside) {
+              row.classList.remove("tng-ios-active");
+              return;
+            }
+            handledByOwnerRelease = true;
+            const releaseWait = Math.max(
+              0,
+              65 - (performance.now() - pressStartTime),
+            );
+            clearTimeout(row._privPressReleaseTimer);
+            row._privPressReleaseTimer = setTimeout(() => {
+              row.classList.remove("tng-ios-active");
+              closeMenu();
+            }, releaseWait);
+          });
+
+          overlay.addEventListener("pointercancel", () => {
+            if (pressedOwnerRow) {
+              pressedOwnerRow = false;
+              row.classList.remove("tng-ios-active");
+            }
+          });
+
           overlay.addEventListener("click", (ev) => {
+            if (handledByOwnerRelease) {
+              handledByOwnerRelease = false;
+              return;
+            }
             if (ev.target === overlay) closeMenu();
           });
 
@@ -44548,6 +44633,9 @@
             boundaryEl = document.querySelector(".acc-expanded-list");
             const hdr = document.querySelector(".acc-collapse-header");
             if (hdr) extras.push(hdr);
+            const activeRow =
+              boundaryEl && boundaryEl.querySelector(":scope > .acc-item-row");
+            if (activeRow) extras.push(activeRow);
           } else if (sc === "staging") {
             boundaryEl =
               document.getElementById("file-staging-chat") ||
@@ -46139,15 +46227,38 @@
           );
         };
 
-        // 8. BỘ MÁY CHỤP & CHẠY FLIP HỢP NHẤT (DÙNG CHUNG CHO CẢ XÓA, THÊM & GHIM)
+        // 8. BỘ MÁY CHỤP & CHẠY FLIP HỢP NHẤT (ĐỒNG BỘ CẢ CHIỀU CAO KHUNG BẢNG + MỤC BÊN TRONG)
+        const getResizableContainer = (sc) => {
+          if (sc === "accounts") {
+            const list = document.getElementById("acc-expandable-list");
+            return list && list.classList.contains("show") ? list : null;
+          }
+          if (
+            typeof sc === "object" &&
+            sc &&
+            sc.nodeType === 1 &&
+            sc.closest &&
+            sc.closest("#custom-manage-modal, #custom-child-manage-modal")
+          ) {
+            return sc;
+          }
+          return null;
+        };
+
         const captureScopes = (scopes, excludeEls = []) => {
           const scopeList = (Array.isArray(scopes) ? scopes : [scopes]).filter(
             Boolean,
           );
           const excludeSet = new Set(excludeEls.filter(Boolean));
           const beforeMap = new Map();
+          const beforeHeights = new Map();
 
           scopeList.forEach((sc) => {
+            const resizeEl = getResizableContainer(sc);
+            if (resizeEl) {
+              const hr = resizeEl.getBoundingClientRect();
+              if (hr.height > 0) beforeHeights.set(sc, hr.height);
+            }
             collectItems(sc).forEach(({ key, el }) => {
               if (excludeSet.has(el) || el.dataset.tngEvap === "1") return;
               const r = el.getBoundingClientRect();
@@ -46156,16 +46267,17 @@
               }
             });
           });
-          return { scopes: scopeList, beforeMap };
+          return { scopes: scopeList, beforeMap, beforeHeights };
         };
 
         const playMotion = (snapshot, opts = {}) => {
           if (!snapshot || !snapshot.scopes || !snapshot.scopes.length) return;
-          const { scopes, beforeMap } = snapshot;
+          const { scopes, beforeMap, beforeHeights } = snapshot;
           const mode = opts.mode || "delete"; // "delete" | "add" | "reorder"
           const moving = [];
           const entering = [];
           const emptyStates = [];
+          const resizing = [];
 
           if (scopes.includes("my-content")) syncPinnedOrderSync();
 
@@ -46220,7 +46332,16 @@
               },
             );
 
-            if (!scopeMoving.length) return;
+            const oldH = beforeHeights ? beforeHeights.get(sc) : null;
+            const resizeEl = oldH != null ? getResizableContainer(sc) : null;
+            const newH = resizeEl
+              ? resizeEl.getBoundingClientRect().height
+              : null;
+            const deltaH =
+              oldH != null && newH != null ? Math.round(oldH - newH) : 0;
+            const hasResize = Math.abs(deltaH) > 1;
+
+            if (!scopeMoving.length && !hasResize) return;
 
             const { boundaryEl, extras } = getScopeCollisionContext(sc);
             extras.forEach((ex) => {
@@ -46240,14 +46361,32 @@
               }
             });
 
-            const maxDist = scopeMoving.reduce(
-              (m, n) => Math.max(m, Math.hypot(n.dx, n.dy)),
-              0,
+            const maxDist = Math.max(
+              scopeMoving.reduce(
+                (m, n) => Math.max(m, Math.hypot(n.dx, n.dy)),
+                0,
+              ),
+              Math.abs(deltaH),
             );
             const dur = calcAdaptiveDur(maxDist);
             const capPx = mode === "add" || mode === "reorder" ? 18 : 0;
-            const safeR = calcSafeRatio(nodes, boundaryEl, capPx);
-            const ease = buildSpringEasing(safeR);
+            const safeR = scopeMoving.length
+              ? calcSafeRatio(nodes, boundaryEl, capPx)
+              : 0;
+            // Khi khung bảng co/giãn theo nội dung, dùng lò xo đồng bộ êm tuyệt đối (tối đa 2% để không giật mép)
+            const ease = buildSpringEasing(
+              hasResize ? Math.min(safeR, 0.02) : safeR,
+            );
+
+            if (hasResize) {
+              resizing.push({
+                el: resizeEl,
+                fromH: oldH,
+                toH: newH,
+                dur,
+                ease,
+              });
+            }
 
             scopeMoving.forEach((item) => {
               item.ease = ease;
@@ -46256,7 +46395,13 @@
             });
           });
 
-          if (!moving.length && !entering.length && !emptyStates.length) return;
+          if (
+            !moving.length &&
+            !entering.length &&
+            !emptyStates.length &&
+            !resizing.length
+          )
+            return;
 
           // Tạm mở tràn cho #history-list nếu không cuộn để mục đầu nảy không bị cắt mép trên
           const histList = scopes.includes("sidebar")
@@ -46273,7 +46418,19 @@
             unclippedHist = true;
           }
 
-          // INVERT: Khóa mục cũ về tọa độ cũ ngay lập tức (pixel nguyên)
+          // INVERT 1: Khóa khung bảng ở chiều cao cũ để nội dung bên trong không bị cắt mép
+          resizing.forEach(({ el, fromH, toH, dur, ease }) => {
+            if (el._tngHeightCleanup) el._tngHeightCleanup();
+            el.classList.remove("tng-height-play");
+            el.style.setProperty("--h-from", fromH.toFixed(2) + "px");
+            el.style.setProperty("--h-to", toH.toFixed(2) + "px");
+            el.style.setProperty("--flip-dur", dur + "ms");
+            el.style.setProperty("--flip-ease", ease);
+            el.style.setProperty("--flip-delay", "0ms");
+            el.classList.add("tng-height-hold");
+          });
+
+          // INVERT 2: Khóa mục cũ về tọa độ cũ ngay lập tức (pixel nguyên)
           moving.forEach(({ el, dx, dy, ease, dur }) => {
             if (el._tngFlipCleanup) el._tngFlipCleanup();
             el.classList.remove("tng-flip-play");
@@ -46303,10 +46460,44 @@
             el.classList.add("tng-flip-enter");
           });
 
-          if (moving.length || entering.length) void document.body.offsetWidth;
+          if (moving.length || entering.length || resizing.length) {
+            void document.body.offsetWidth;
+          }
           moving.sort((a, b) => a.top - b.top || a.left - b.left);
 
           const startPlay = () => {
+            // Chạy co/giãn khung bảng cùng 1 nhịp với FLIP bên trong
+            resizing.forEach(({ el, dur }) => {
+              if (!el.isConnected) return;
+              el.classList.remove("tng-height-hold");
+              el.classList.add("tng-height-play");
+
+              let cleaned = false;
+              const cleanup = () => {
+                if (cleaned) return;
+                cleaned = true;
+                clearTimeout(fb);
+                el.removeEventListener("transitionend", onEnd);
+                el._tngHeightCleanup = null;
+                requestAnimationFrame(() => {
+                  el.classList.remove("tng-height-play");
+                  el.style.removeProperty("--h-from");
+                  el.style.removeProperty("--h-to");
+                  el.style.removeProperty("--flip-dur");
+                  el.style.removeProperty("--flip-ease");
+                  el.style.removeProperty("--flip-delay");
+                });
+              };
+              const onEnd = (ev) => {
+                if (ev.target === el && ev.propertyName === "height") {
+                  cleanup();
+                }
+              };
+              const fb = setTimeout(cleanup, (dur || 620) + 220);
+              el._tngHeightCleanup = cleanup;
+              el.addEventListener("transitionend", onEnd);
+            });
+
             moving.forEach(({ el, dur }) => {
               if (!el.isConnected) return;
               el.style.setProperty("--flip-delay", "0ms");
@@ -46380,7 +46571,7 @@
           };
 
           const playDelay = opts.flipPlayDelay || opts.playDelay || 0;
-          if (moving.length || entering.length) {
+          if (moving.length || entering.length || resizing.length) {
             const schedule = () =>
               requestAnimationFrame(() => requestAnimationFrame(startPlay));
             if (playDelay > 0) setTimeout(schedule, playDelay);
