@@ -10924,6 +10924,408 @@
         gap: 12px;
         white-space: nowrap;
       }
+
+      /* ============================================================ */
+      /* HIỆU ỨNG XÓA BỐC HƠI NƯỚC + DỒN LÒ XO FLIP CHUẨN IOS 27      */
+      /* Thuần GPU (transform + opacity) - Không lag, nảy mượt 120fps */
+      /* ============================================================ */
+      :root {
+        --tng-evap-bright: 1.22;
+      }
+      [data-theme="light"] {
+        --tng-evap-bright: 1.06;
+      }
+
+      /* 1. Mục đang bị xóa: bay hơi mềm lên trên, KHÔNG co height gây reflow lag */
+      html body .tng-evap-prep,
+      html body .select-mode .tng-evap-prep,
+      html body #sidebar .tng-evap-prep,
+      html body #sp-body .tng-evap-prep,
+      html body #tng-mailbox-list .tng-evap-prep,
+      html body #my-content-body .tng-evap-prep,
+      html body #all-notes-grid .tng-evap-prep,
+      html body #all-notes-view .tng-evap-prep,
+      html body #tng-ins-list-container .tng-evap-prep,
+      html body .acc-expanded-list .tng-evap-prep,
+      html body .file-staging .tng-evap-prep,
+      html body #custom-manage-modal .tng-evap-prep,
+      html body #custom-child-manage-modal .tng-evap-prep {
+        pointer-events: none !important;
+        transform-origin: center 62% !important;
+        will-change: transform, opacity, filter !important;
+        transition:
+          transform var(--evap-tr-dur, 560ms) cubic-bezier(0.24, 0.04, 0.2, 1),
+          opacity var(--evap-op-dur, 460ms) cubic-bezier(0.32, 0.08, 0.22, 1),
+          filter var(--evap-tr-dur, 560ms) cubic-bezier(0.24, 0.04, 0.2, 1) !important;
+      }
+
+      html body .tng-evap-go,
+      html body .deleting-item,
+      html body .select-mode .tng-evap-go,
+      html body .select-mode .tng-evap-go.selected,
+      html body #sidebar .tng-evap-go,
+      html body #sp-body .tng-evap-go,
+      html body #tng-mailbox-list .tng-evap-go,
+      html body #my-content-body .tng-evap-go,
+      html body #all-notes-grid .tng-evap-go,
+      html body #all-notes-view .tng-evap-go,
+      html body #tng-ins-list-container .tng-evap-go,
+      html body .acc-expanded-list .tng-evap-go,
+      html body .file-staging .tng-evap-go,
+      html body #custom-manage-modal .tng-evap-go,
+      html body #custom-child-manage-modal .tng-evap-go,
+      html body #viewer-modal .tng-evap-go {
+        transform: translate3d(0, -28px, 0) scale(1.035) !important;
+        opacity: 0 !important;
+        filter: blur(18px) brightness(var(--tng-evap-bright)) !important;
+        box-shadow: none !important;
+        pointer-events: none !important;
+      }
+
+      /* 2. BỘ MÁY DỒN VỊ TRÍ FLIP LÒ XO VẬT LÝ IOS 27 (THUẦN GPU 120FPS, CHỐNG VA CHẠM) */
+      html body .tng-flip-noanim {
+        animation: none !important;
+      }
+
+      html body .tng-flip-unclip {
+        overflow: visible !important;
+      }
+
+      html body .tng-flip-hold,
+      html body .tng-flip-hold:hover,
+      html body .select-mode .tng-flip-hold,
+      html body #sidebar .tng-flip-hold,
+      html body #sp-body .tng-flip-hold,
+      html body #tng-mailbox-list .tng-flip-hold,
+      html body #my-content-body .tng-flip-hold,
+      html body #all-notes-grid .tng-flip-hold,
+      html body #tng-ins-list-container .tng-flip-hold,
+      html body .acc-expanded-list .tng-flip-hold,
+      html body .file-staging .tng-flip-hold,
+      html body #custom-manage-modal .tng-flip-hold,
+      html body #custom-child-manage-modal .tng-flip-hold {
+        transition: none !important;
+        animation: none !important;
+        will-change: transform !important;
+        transform: translate3d(
+          var(--flip-x, 0px),
+          var(--flip-y, 0px),
+          0
+        ) !important;
+      }
+
+      html body .tng-flip-play,
+      html body .tng-flip-play:hover,
+      html body .select-mode .tng-flip-play,
+      html body #sidebar .tng-flip-play,
+      html body #sp-body .tng-flip-play,
+      html body #tng-mailbox-list .tng-flip-play,
+      html body #my-content-body .tng-flip-play,
+      html body #all-notes-grid .tng-flip-play,
+      html body #tng-ins-list-container .tng-flip-play,
+      html body .acc-expanded-list .tng-flip-play,
+      html body .file-staging .tng-flip-play,
+      html body #custom-manage-modal .tng-flip-play,
+      html body #custom-child-manage-modal .tng-flip-play {
+        animation: none !important;
+        will-change: transform !important;
+        transform: translate3d(0, 0, 0) !important;
+        transition: transform var(--flip-dur, 620ms)
+          var(--flip-ease, cubic-bezier(0.32, 1.5, 0.58, 1))
+          var(--flip-delay, 0ms) !important;
+      }
+
+      /* Mục mới xuất hiện chuẩn iOS 27 Liquid Glass (kết tụ từ sương kính + lò xo vật lý) */
+      :root {
+        --tng-enter-bright: 1.12;
+      }
+      [data-theme="light"] {
+        --tng-enter-bright: 1.04;
+      }
+
+      html body .tng-flip-enter,
+      html body .tng-flip-enter:hover,
+      html body .select-mode .tng-flip-enter,
+      html body #sidebar .tng-flip-enter,
+      html body #all-notes-grid .tng-flip-enter,
+      html body #all-notes-view .tng-flip-enter,
+      html body #my-content-body .tng-flip-enter,
+      html body #sp-body .tng-flip-enter,
+      html body #tng-mailbox-list .tng-flip-enter,
+      html body #tng-ins-list-container .tng-flip-enter,
+      html body .acc-expanded-list .tng-flip-enter,
+      html body .file-staging .tng-flip-enter,
+      html body #custom-manage-modal .tng-flip-enter,
+      html body #custom-child-manage-modal .tng-flip-enter {
+        transition: none !important;
+        animation: none !important;
+        will-change: transform, opacity, filter !important;
+        opacity: 0 !important;
+        transform: translate3d(0, var(--enter-y, 18px), 0)
+          scale(var(--enter-scale, 0.86)) !important;
+        filter: blur(var(--enter-blur, 9px))
+          brightness(var(--tng-enter-bright, 1.12)) !important;
+      }
+
+      html body .tng-flip-enter-play,
+      html body .tng-flip-enter-play:hover,
+      html body .select-mode .tng-flip-enter-play,
+      html body #sidebar .tng-flip-enter-play,
+      html body #all-notes-grid .tng-flip-enter-play,
+      html body #all-notes-view .tng-flip-enter-play,
+      html body #my-content-body .tng-flip-enter-play,
+      html body #sp-body .tng-flip-enter-play,
+      html body #tng-mailbox-list .tng-flip-enter-play,
+      html body #tng-ins-list-container .tng-flip-enter-play,
+      html body .acc-expanded-list .tng-flip-enter-play,
+      html body .file-staging .tng-flip-enter-play,
+      html body #custom-manage-modal .tng-flip-enter-play,
+      html body #custom-child-manage-modal .tng-flip-enter-play {
+        animation: none !important;
+        will-change: transform, opacity, filter !important;
+        opacity: 1 !important;
+        transform: translate3d(0, 0, 0) scale(1) !important;
+        filter: blur(0px) brightness(1) !important;
+        transition:
+          transform var(--enter-dur, 660ms)
+            var(--flip-ease, cubic-bezier(0.32, 1.5, 0.58, 1))
+            var(--enter-delay, 0ms),
+          opacity 0.42s cubic-bezier(0.22, 1, 0.36, 1) var(--enter-delay, 0ms),
+          filter 0.52s cubic-bezier(0.22, 1, 0.36, 1) var(--enter-delay, 0ms) !important;
+      }
+
+      /* Giao diện trống nở mượt chuẩn iOS 27 khi xóa hết (Hòm thư, Sổ, Thư viện, Hành động, Chỉ dẫn, Tài khoản) */
+      html body .tng-empty-bloom,
+      html body #all-notes-grid .tng-empty-bloom,
+      html body #my-content-body .tng-empty-bloom,
+      html body #tng-mailbox-list .tng-empty-bloom,
+      html body #sp-body .tng-empty-bloom,
+      html body #tng-ins-list-container .tng-empty-bloom,
+      html body #custom-manage-modal .tng-empty-bloom,
+      html body #custom-child-manage-modal .tng-empty-bloom {
+        transition: none !important;
+        animation: none !important;
+        will-change: transform, opacity, filter !important;
+        opacity: 0 !important;
+        transform: translate3d(0, 26px, 0) scale(0.93) !important;
+        filter: blur(10px) !important;
+      }
+
+      html body .tng-empty-bloom-play,
+      html body #all-notes-grid .tng-empty-bloom-play,
+      html body #my-content-body .tng-empty-bloom-play,
+      html body #tng-mailbox-list .tng-empty-bloom-play,
+      html body #sp-body .tng-empty-bloom-play,
+      html body #tng-ins-list-container .tng-empty-bloom-play,
+      html body #custom-manage-modal .tng-empty-bloom-play,
+      html body #custom-child-manage-modal .tng-empty-bloom-play {
+        animation: none !important;
+        will-change: transform, opacity, filter !important;
+        opacity: 1 !important;
+        transform: translate3d(0, 0, 0) scale(1) !important;
+        filter: blur(0px) !important;
+        transition:
+          transform 0.74s var(--empty-ease, cubic-bezier(0.22, 1.18, 0.36, 1))
+            var(--empty-delay, 70ms),
+          opacity 0.48s cubic-bezier(0.22, 1, 0.36, 1) var(--empty-delay, 70ms),
+          filter 0.58s cubic-bezier(0.22, 1, 0.36, 1) var(--empty-delay, 70ms) !important;
+      }
+
+      /* Phân tầng từng thành phần con bên trong giao diện trống (Icon -> Tiêu đề -> Mô tả -> Nút) */
+      html body .tng-empty-child {
+        transition: none !important;
+        animation: none !important;
+        will-change: transform, opacity, filter !important;
+        opacity: 0 !important;
+        transform: translate3d(0, 16px, 0) scale(0.94) !important;
+        filter: blur(6px) !important;
+      }
+
+      html body .tng-empty-child-play {
+        animation: none !important;
+        will-change: transform, opacity, filter !important;
+        opacity: 1 !important;
+        transform: translate3d(0, 0, 0) scale(1) !important;
+        filter: blur(0px) !important;
+        transition:
+          transform 0.68s var(--empty-ease, cubic-bezier(0.22, 1.18, 0.36, 1))
+            var(--ec-delay, 0ms),
+          opacity 0.44s cubic-bezier(0.22, 1, 0.36, 1) var(--ec-delay, 0ms),
+          filter 0.52s cubic-bezier(0.22, 1, 0.36, 1) var(--ec-delay, 0ms) !important;
+      }
+
+      /* 3. Khung hơi nước cố định phủ trên body (tản loãng dần vào không khí 120fps) */
+      .tng-vapor-stage {
+        position: fixed;
+        pointer-events: none !important;
+        z-index: 99999998;
+        overflow: visible;
+        contain: layout style;
+      }
+
+      /* Làn sương siêu mỏng, tản rộng và loãng dần không có điểm cắt cuối */
+      .tng-vapor-wisp {
+        position: absolute;
+        left: var(--wx, 50%);
+        top: var(--wy, 50%);
+        width: var(--ww, 148px);
+        height: var(--wh, 68px);
+        margin-left: calc(var(--ww, 148px) / -2);
+        margin-top: calc(var(--wh, 68px) / -2);
+        border-radius: 50%;
+        opacity: 0;
+        background: radial-gradient(
+          ellipse 50% 50% at 50% 50%,
+          rgba(224, 240, 255, 0.18) 0%,
+          rgba(190, 222, 255, 0.095) 28%,
+          rgba(176, 214, 255, 0.036) 54%,
+          rgba(170, 210, 255, 0.008) 72%,
+          transparent 84%
+        );
+        will-change: transform, opacity;
+        animation: tngVaporWisp var(--wdur, 1180ms) linear var(--wdel, 0ms)
+          forwards;
+      }
+
+      body[data-theme="light"] .tng-vapor-wisp {
+        background: radial-gradient(
+          ellipse 50% 50% at 50% 50%,
+          rgba(130, 178, 232, 0.17) 0%,
+          rgba(255, 255, 255, 0.28) 32%,
+          rgba(180, 210, 245, 0.06) 58%,
+          rgba(180, 210, 245, 0.012) 74%,
+          transparent 84%
+        );
+      }
+
+      /* Hạt sương li ti khuếch tán nở mềm khi tan (không còn co thành chấm cứng) */
+      .tng-vapor-mote {
+        position: absolute;
+        left: var(--mx, 50%);
+        top: var(--my, 50%);
+        width: var(--ms, 8px);
+        height: var(--ms, 8px);
+        margin-left: calc(var(--ms, 8px) / -2);
+        margin-top: calc(var(--ms, 8px) / -2);
+        border-radius: 50%;
+        opacity: 0;
+        background: radial-gradient(
+          circle at 42% 42%,
+          rgba(238, 248, 255, 0.62) 0%,
+          rgba(196, 228, 255, 0.28) 36%,
+          rgba(180, 220, 255, 0.075) 60%,
+          transparent 82%
+        );
+        will-change: transform, opacity;
+        animation: tngVaporMote var(--mdur, 1120ms) linear var(--mdel, 0ms)
+          forwards;
+      }
+
+      body[data-theme="light"] .tng-vapor-mote {
+        background: radial-gradient(
+          circle at 42% 42%,
+          rgba(255, 255, 255, 0.85) 0%,
+          rgba(86, 148, 218, 0.3) 40%,
+          rgba(86, 148, 218, 0.07) 64%,
+          transparent 84%
+        );
+      }
+
+      @keyframes tngVaporWisp {
+        0% {
+          opacity: 0;
+          transform: translate3d(0, 6px, 0) scale(0.74, 0.8);
+        }
+        18% {
+          opacity: 0.78;
+          transform: translate3d(
+              var(--wdx1, 3px),
+              calc(var(--wrise, -94px) * 0.16),
+              0
+            )
+            scale(1.04, 1.02);
+        }
+        42% {
+          opacity: 0.54;
+          transform: translate3d(
+              var(--wdx2, -4px),
+              calc(var(--wrise, -94px) * 0.44),
+              0
+            )
+            scale(1.34, 1.25);
+        }
+        66% {
+          opacity: 0.23;
+          transform: translate3d(
+              var(--wdx3, 6px),
+              calc(var(--wrise, -94px) * 0.7),
+              0
+            )
+            scale(1.68, 1.52);
+        }
+        84% {
+          opacity: 0.065;
+          transform: translate3d(
+              var(--wdx4, 11px),
+              calc(var(--wrise, -94px) * 0.88),
+              0
+            )
+            scale(2.02, 1.78);
+        }
+        100% {
+          opacity: 0;
+          transform: translate3d(var(--wdx5, 16px), var(--wrise, -94px), 0)
+            scale(2.38, 2.04);
+        }
+      }
+
+      @keyframes tngVaporMote {
+        0% {
+          opacity: 0;
+          transform: translate3d(0, 4px, 0) scale(0.55);
+        }
+        16% {
+          opacity: 0.72;
+          transform: translate3d(
+              var(--mdx1, 4px),
+              calc(var(--mrise, -104px) * 0.16),
+              0
+            )
+            scale(1.04);
+        }
+        42% {
+          opacity: 0.48;
+          transform: translate3d(
+              var(--mdx2, -4px),
+              calc(var(--mrise, -104px) * 0.44),
+              0
+            )
+            scale(1.24);
+        }
+        68% {
+          opacity: 0.19;
+          transform: translate3d(
+              var(--mdx3, 7px),
+              calc(var(--mrise, -104px) * 0.72),
+              0
+            )
+            scale(1.52);
+        }
+        86% {
+          opacity: 0.05;
+          transform: translate3d(
+              var(--mdx4, 13px),
+              calc(var(--mrise, -104px) * 0.89),
+              0
+            )
+            scale(1.8);
+        }
+        100% {
+          opacity: 0;
+          transform: translate3d(var(--mdx5, 18px), var(--mrise, -104px), 0)
+            scale(2.08);
+        }
+      }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
@@ -43804,6 +44206,2865 @@
             });
           });
         };
+      })();
+    </script>
+
+    <script>
+      (() => {
+        // ============================================================
+        // BỘ MÁY XÓA BỐC HƠI NƯỚC + DỒN LÒ XO FLIP CHUẨN IOS TOÀN HỆ THỐNG
+        // ============================================================
+
+        // 1. Tạo làn sương & hạt hơi nước thuần GPU (không blur động)
+        const spawnVaporOverRect = (rect, density = 1) => {
+          if (!rect || rect.width < 4 || rect.height < 4) return;
+          const stage = document.createElement("div");
+          stage.className = "tng-vapor-stage";
+          stage.style.left = rect.left + "px";
+          stage.style.top = rect.top + "px";
+          stage.style.width = rect.width + "px";
+          stage.style.height = rect.height + "px";
+
+          const frag = document.createDocumentFragment();
+          const area = rect.width * rect.height;
+
+          const wispCount = Math.max(
+            2,
+            Math.min(4, Math.round((2 + area / 28000) * density)),
+          );
+          for (let i = 0; i < wispCount; i++) {
+            const w = document.createElement("span");
+            w.className = "tng-vapor-wisp";
+            const xPct =
+              wispCount === 1
+                ? 50
+                : 20 + (i / (wispCount - 1)) * 60 + (Math.random() * 12 - 6);
+            const yPct = 28 + Math.random() * 44;
+            const ww = Math.max(
+              92,
+              Math.min(rect.width * 0.92, 240) * (0.8 + Math.random() * 0.35),
+            );
+            const wh = Math.max(
+              44,
+              Math.min(rect.height * 0.95, 110) * (0.8 + Math.random() * 0.35),
+            );
+            const sway = (Math.random() - 0.5) * 24;
+            w.style.setProperty("--wx", xPct.toFixed(1) + "%");
+            w.style.setProperty("--wy", yPct.toFixed(1) + "%");
+            w.style.setProperty("--ww", ww.toFixed(0) + "px");
+            w.style.setProperty("--wh", wh.toFixed(0) + "px");
+            w.style.setProperty("--wdx1", (sway * 0.45).toFixed(1) + "px");
+            w.style.setProperty("--wdx2", (-sway * 0.7).toFixed(1) + "px");
+            w.style.setProperty("--wdx3", (sway * 0.85).toFixed(1) + "px");
+            w.style.setProperty(
+              "--wrise",
+              -(72 + Math.random() * 38).toFixed(0) + "px",
+            );
+            w.style.setProperty(
+              "--wdur",
+              (720 + Math.random() * 190).toFixed(0) + "ms",
+            );
+            w.style.setProperty("--wdel", (i * 48).toFixed(0) + "ms");
+            frag.appendChild(w);
+          }
+
+          const moteCount = Math.max(
+            6,
+            Math.min(16, Math.round((7 + area / 11000) * density)),
+          );
+          for (let i = 0; i < moteCount; i++) {
+            const m = document.createElement("span");
+            m.className = "tng-vapor-mote";
+            const size = 4 + Math.random() * 5.5;
+            const sway = (Math.random() - 0.5) * 28;
+            const rise = 66 + Math.random() * 52;
+            m.style.setProperty(
+              "--mx",
+              (8 + Math.random() * 84).toFixed(1) + "%",
+            );
+            m.style.setProperty(
+              "--my",
+              (15 + Math.random() * 72).toFixed(1) + "%",
+            );
+            m.style.setProperty("--ms", size.toFixed(1) + "px");
+            m.style.setProperty("--mdx1", (sway * 0.5).toFixed(1) + "px");
+            m.style.setProperty("--mdx2", (-sway * 0.65).toFixed(1) + "px");
+            m.style.setProperty("--mdx3", (sway * 0.85).toFixed(1) + "px");
+            m.style.setProperty("--mrise1", -(rise * 0.55).toFixed(0) + "px");
+            m.style.setProperty("--mrise2", -rise.toFixed(0) + "px");
+            m.style.setProperty(
+              "--mdur",
+              (620 + Math.random() * 240).toFixed(0) + "ms",
+            );
+            m.style.setProperty(
+              "--mdel",
+              (Math.random() * 160).toFixed(0) + "ms",
+            );
+            frag.appendChild(m);
+          }
+
+          stage.appendChild(frag);
+          document.body.appendChild(stage);
+          setTimeout(() => {
+            if (stage.isConnected) stage.remove();
+          }, 1050);
+        };
+
+        // 2. Gom các phần tử có thể dịch chuyển theo từng khu vực (kể cả sau khi render lại innerHTML)
+        const collectScopeItems = (scope) => {
+          const out = [];
+          if (!scope) return out;
+
+          // Cho phép truyền thẳng 1 container DOM (như #chat-box hoặc list trong popup)
+          if (typeof scope === "object" && scope.nodeType === 1) {
+            Array.from(scope.children).forEach((el) => {
+              if (el.offsetParent !== null) out.push({ key: el, el });
+            });
+            return out;
+          }
+
+          if (scope === "my-content") {
+            const root = document.getElementById("my-content-body");
+            if (!root) return out;
+            root.querySelectorAll(".mc-section-title").forEach((el) => {
+              out.push({ key: "mc-sec:" + el.textContent.trim(), el });
+            });
+            root.querySelectorAll(".mc-learned-row").forEach((el, i) => {
+              out.push({
+                key: "mc-lrn:" + i + ":" + el.textContent.trim(),
+                el,
+              });
+            });
+            root.querySelectorAll(".mc-item-wrap").forEach((el) => {
+              const id = el.getAttribute("data-id");
+              if (id) out.push({ key: "mc:" + id, el });
+            });
+            const empty = root.querySelector(".mc-empty-card");
+            if (empty) out.push({ key: "mc:empty", el: empty, isNewOk: true });
+          } else if (scope === "all-notes") {
+            const grid = document.getElementById("all-notes-grid");
+            if (!grid) return out;
+            grid.querySelectorAll(".note-card").forEach((el) => {
+              const id = el.getAttribute("data-id");
+              if (id) out.push({ key: "note:" + id, el });
+            });
+          } else if (scope === "sidebar") {
+            const sb = document.getElementById("sidebar");
+            if (!sb) return out;
+            sb.querySelectorAll("#sidebar-notes-list .sb-item").forEach(
+              (el) => {
+                const dot = el.querySelector(".hist-dots");
+                const oc = (dot && dot.getAttribute("onclick")) || "";
+                const m = oc.match(/openNoteMenu\([^,]+,\s*['"]?([^)'"]+)/);
+                if (m) out.push({ key: "sbn:" + m[1], el, isNewOk: true });
+              },
+            );
+            const allBtn = document.getElementById("btn-all-notes");
+            if (allBtn && allBtn.style.display !== "none") {
+              out.push({ key: "sb:all-notes", el: allBtn });
+            }
+            sb.querySelectorAll(":scope > .sb-title").forEach((el) => {
+              out.push({ key: "sbt:" + el.textContent.trim(), el });
+            });
+            sb.querySelectorAll("#history-list .sb-item").forEach((el) => {
+              const dot = el.querySelector(".hist-dots");
+              const oc = (dot && dot.getAttribute("onclick")) || "";
+              const m = oc.match(/openHistMenu\([^,]+,\s*['"]([^'"]+)['"]/);
+              if (m) out.push({ key: "sbh:" + m[1], el });
+            });
+          } else if (scope === "mailbox") {
+            const list = document.getElementById("tng-mailbox-list");
+            if (!list) return out;
+            list.querySelectorAll(".swipe-container").forEach((el) => {
+              if (el.id) out.push({ key: "mb:" + el.id, el });
+            });
+          } else if (scope === "hanhdong") {
+            const sp = document.getElementById("sp-body");
+            if (!sp) return out;
+            sp.querySelectorAll('[onclick*="toggleHanhDongMenu("]').forEach(
+              (btn) => {
+                const oc = btn.getAttribute("onclick") || "";
+                const m = oc.match(/toggleHanhDongMenu\('([^']+)'/);
+                const card =
+                  btn.parentElement && btn.parentElement.parentElement;
+                if (m && card) out.push({ key: "hd:" + m[1], el: card });
+              },
+            );
+          } else if (scope === "instructions") {
+            const box = document.getElementById("tng-ins-list-container");
+            if (!box) return out;
+            const seen = {};
+            box
+              .querySelectorAll('[onclick*="tngDeleteInstruction("]')
+              .forEach((btn) => {
+                const row = btn.parentElement;
+                if (!row) return;
+                const txt = row.firstElementChild
+                  ? row.firstElementChild.textContent.trim()
+                  : row.textContent.trim();
+                seen[txt] = (seen[txt] || 0) + 1;
+                out.push({ key: "ins:" + txt + "#" + seen[txt], el: row });
+              });
+          } else if (scope === "accounts") {
+            const list = document.querySelector(".acc-expanded-list");
+            if (!list) return out;
+            list.querySelectorAll(".acc-wrap-box").forEach((el) => {
+              if (el.id) out.push({ key: "acc:" + el.id, el });
+            });
+            list.querySelectorAll(".acc-row-btn").forEach((el, i) => {
+              out.push({
+                key: "accbtn:" + i + ":" + el.textContent.trim(),
+                el,
+              });
+            });
+          } else if (scope === "staging") {
+            ["file-staging-home", "file-staging-chat"].forEach((sid) => {
+              const box = document.getElementById(sid);
+              if (!box || box.style.display === "none") return;
+              box.querySelectorAll(".st-item").forEach((el) => {
+                const rm = el.querySelector(".st-rm");
+                const oc = (rm && rm.getAttribute("onclick")) || "";
+                const m = oc.match(/removePending\('([^']+)'\)/);
+                if (m) out.push({ key: sid + ":" + m[1], el });
+              });
+            });
+          }
+          return out;
+        };
+
+        // Đồng bộ thứ tự ghim trong .mc-grid ngay lập tức để syncPinToGrid không làm nhảy giữa chừng FLIP
+        const syncPinnedOrderSync = () => {
+          if (typeof curA === "undefined" || !curA) return;
+          let files = [];
+          try {
+            files = JSON.parse(localStorage.getItem("tng_f_" + curA.id)) || [];
+          } catch (e) {}
+          const fileMap = {};
+          files.forEach((f) => (fileMap[String(f.id)] = f));
+
+          document
+            .querySelectorAll("#my-content-body .mc-grid")
+            .forEach((g) => {
+              const items = Array.from(g.querySelectorAll(".mc-item-wrap"));
+              const pinned = [];
+              const unpinned = [];
+              items.forEach((el) => {
+                const f = fileMap[el.getAttribute("data-id")];
+                if (f && f.pinned) pinned.push({ el, time: f.pinnedAt || 0 });
+                else unpinned.push(el);
+              });
+              pinned.sort((a, b) => a.time - b.time);
+              const sorted = [...pinned.map((p) => p.el), ...unpinned];
+              for (let i = 0; i < sorted.length; i++) {
+                if (items[i] !== sorted[i]) {
+                  sorted.forEach((el) => g.appendChild(el));
+                  break;
+                }
+              }
+            });
+        };
+
+        // 3. Chụp tọa độ TRƯỚC khi xóa (FIRST)
+        const captureFlip = (scopes, excludeEls = []) => {
+          const scopeList = (Array.isArray(scopes) ? scopes : [scopes]).filter(
+            Boolean,
+          );
+          const excludeSet = new Set(excludeEls.filter(Boolean));
+          const beforeMap = new Map();
+
+          scopeList.forEach((sc) => {
+            collectScopeItems(sc).forEach(({ key, el }) => {
+              if (excludeSet.has(el) || el.dataset.tngEvap === "1") return;
+              const r = el.getBoundingClientRect();
+              if (r.width > 0 && r.height > 0) {
+                beforeMap.set(key, { left: r.left, top: r.top });
+              }
+            });
+          });
+          return { scopes: scopeList, beforeMap };
+        };
+
+        // Tính chính xác p1y cho cubic-bezier(0.32, p1y, 0.58, 1) theo độ bật r (mặc định 8% => p1y = 1.5)
+        const overshootToP1Y = (r) => {
+          if (r <= 0.0005) return 1.0;
+          if (r >= 0.08) return 1.5;
+          let lo = 1.0,
+            hi = 1.5;
+          for (let k = 0; k < 18; k++) {
+            const mid = 0.5 * (lo + hi);
+            const val =
+              (4 * (mid - 1) * (mid - 1) * (mid - 1)) /
+              ((3 * mid - 2) * (3 * mid - 2));
+            if (val < r) lo = mid;
+            else hi = mid;
+          }
+          return Number((0.5 * (lo + hi)).toFixed(4));
+        };
+
+        // Lấy các vật cản tĩnh (tiêu đề, nút phía trên...) và khung giới hạn của từng khu vực
+        const getScopeCollisionContext = (sc) => {
+          const extras = [];
+          let boundaryEl = null;
+
+          if (typeof sc === "object" && sc.nodeType === 1) {
+            boundaryEl = sc;
+            return { boundaryEl, extras };
+          }
+          if (sc === "all-notes") {
+            boundaryEl = document.getElementById("all-notes-view");
+            if (boundaryEl) {
+              const h1 = boundaryEl.querySelector(":scope > h1");
+              if (h1) extras.push(h1);
+            }
+          } else if (sc === "my-content") {
+            boundaryEl = document.getElementById("my-content-view");
+            const hdr = document.querySelector("#my-content-body > .mc-header");
+            if (hdr) extras.push(hdr);
+          } else if (sc === "sidebar") {
+            boundaryEl = document.getElementById("sidebar");
+            if (boundaryEl) {
+              boundaryEl
+                .querySelectorAll(
+                  ":scope > .sb-header, :scope > .sb-item, :scope > .sb-title",
+                )
+                .forEach((el) => extras.push(el));
+            }
+          } else if (sc === "mailbox") {
+            boundaryEl = document.getElementById("tng-mailbox-list");
+          } else if (sc === "hanhdong") {
+            boundaryEl = document.getElementById("sp-body");
+            if (boundaryEl) {
+              const hdr = boundaryEl.querySelector(
+                ":scope > div > div:first-child",
+              );
+              if (hdr) extras.push(hdr);
+            }
+          } else if (sc === "instructions") {
+            const box = document.getElementById("tng-ins-list-container");
+            boundaryEl = (box && box.parentElement) || box;
+            if (box && box.firstElementChild)
+              extras.push(box.firstElementChild);
+          } else if (sc === "accounts") {
+            boundaryEl = document.querySelector(".acc-expanded-list");
+            const hdr = document.querySelector(".acc-collapse-header");
+            if (hdr) extras.push(hdr);
+          } else if (sc === "staging") {
+            boundaryEl =
+              document.getElementById("file-staging-chat") ||
+              document.getElementById("file-staging-home");
+          }
+          return { boundaryEl, extras };
+        };
+
+        // Tính tỷ lệ nảy an toàn (tối đa 8%) sao cho mọi mục không bao giờ chạm vào mục lân cận hay tràn mép
+        const computeSafeOvershootRatio = (
+          nodes,
+          boundaryEl,
+          targetR = 0.08,
+        ) => {
+          let r = targetR;
+          const bRect =
+            boundaryEl && boundaryEl.getBoundingClientRect
+              ? boundaryEl.getBoundingClientRect()
+              : null;
+          const atTop = !boundaryEl || boundaryEl.scrollTop <= 1;
+
+          for (let i = 0; i < nodes.length; i++) {
+            const a = nodes[i];
+            if (a.dx === 0 && a.dy === 0) continue;
+
+            for (let j = 0; j < nodes.length; j++) {
+              if (i === j) continue;
+              const b = nodes[j];
+
+              // Kiểm tra va chạm theo trục ngang (nếu cùng hàng)
+              const ovY = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
+              if (ovY > 4) {
+                const gapL = a.left - b.right;
+                const relDxL = a.dx - b.dx;
+                if (gapL >= -1 && relDxL > 0) {
+                  const cushion = Math.min(4.5, Math.max(2, gapL * 0.3));
+                  r = Math.min(r, Math.max(0, gapL - cushion) / relDxL);
+                }
+
+                const gapR = b.left - a.right;
+                const relDxR = b.dx - a.dx;
+                if (gapR >= -1 && relDxR > 0) {
+                  const cushion = Math.min(4.5, Math.max(2, gapR * 0.3));
+                  r = Math.min(r, Math.max(0, gapR - cushion) / relDxR);
+                }
+              }
+
+              // Kiểm tra va chạm theo trục dọc (nếu cùng cột)
+              const ovX = Math.min(a.right, b.right) - Math.max(a.left, b.left);
+              if (ovX > 4) {
+                const gapT = a.top - b.bottom;
+                const relDyT = a.dy - b.dy;
+                if (gapT >= -1 && relDyT > 0) {
+                  const cushion = Math.min(4.5, Math.max(2, gapT * 0.3));
+                  r = Math.min(r, Math.max(0, gapT - cushion) / relDyT);
+                }
+
+                const gapB = b.top - a.bottom;
+                const relDyB = b.dy - a.dy;
+                if (gapB >= -1 && relDyB > 0) {
+                  const cushion = Math.min(4.5, Math.max(2, gapB * 0.3));
+                  r = Math.min(r, Math.max(0, gapB - cushion) / relDyB);
+                }
+              }
+            }
+
+            // Giữ không nảy lấn ra ngoài mép khung chứa
+            if (bRect && bRect.width > 0 && bRect.height > 0) {
+              const edgePad = 4;
+              if (a.dx > 0 && a.left >= bRect.left - 1) {
+                const clr = a.left - bRect.left - edgePad;
+                if (clr >= 0) r = Math.min(r, clr / a.dx);
+              } else if (a.dx < 0 && a.right <= bRect.right + 1) {
+                const clr = bRect.right - a.right - edgePad;
+                if (clr >= 0) r = Math.min(r, clr / -a.dx);
+              }
+              if (atTop && a.dy > 0 && a.top >= bRect.top - 1) {
+                const clr = a.top - bRect.top - edgePad;
+                if (clr >= 0) r = Math.min(r, clr / a.dy);
+              }
+            }
+          }
+          return Math.max(0, Math.min(targetR, r));
+        };
+
+        // 4. Trả ngược về tọa độ cũ rồi thả lò xo iOS 8% đồng pha, tự chống va chạm phần tử lân cận
+        const playFlip = (snapshot, opts = {}) => {
+          if (!snapshot || !snapshot.scopes || !snapshot.scopes.length) return;
+          const { scopes, beforeMap } = snapshot;
+          const moving = [];
+          const entering = [];
+
+          if (scopes.includes("my-content")) syncPinnedOrderSync();
+
+          scopes.forEach((sc) => {
+            const scopeItems = collectScopeItems(sc);
+            const scopeMoving = [];
+            const nodes = [];
+            const seenEls = new Set();
+
+            scopeItems.forEach(({ key, el, isNewOk }) => {
+              const oldPos = beforeMap.get(key);
+              const newRect = el.getBoundingClientRect();
+              if (newRect.width <= 0 || newRect.height <= 0) return;
+              seenEls.add(el);
+
+              if (!oldPos) {
+                if (isNewOk) entering.push(el);
+                nodes.push({
+                  el,
+                  left: newRect.left,
+                  right: newRect.right,
+                  top: newRect.top,
+                  bottom: newRect.bottom,
+                  dx: 0,
+                  dy: 0,
+                });
+                return;
+              }
+              const dx = Math.round(oldPos.left - newRect.left);
+              const dy = Math.round(oldPos.top - newRect.top);
+              const node = {
+                el,
+                dx,
+                dy,
+                left: newRect.left,
+                right: newRect.right,
+                top: newRect.top,
+                bottom: newRect.bottom,
+              };
+              nodes.push(node);
+              if (dx !== 0 || dy !== 0) {
+                scopeMoving.push(node);
+              }
+            });
+
+            if (!scopeMoving.length) return;
+
+            // Thêm các vật cản đứng yên xung quanh (như tiêu đề h1, nút Sổ ghi chú mới...)
+            const { boundaryEl, extras } = getScopeCollisionContext(sc);
+            extras.forEach((ex) => {
+              if (!ex || seenEls.has(ex)) return;
+              const er = ex.getBoundingClientRect();
+              if (er.width > 0 && er.height > 0) {
+                seenEls.add(ex);
+                nodes.push({
+                  el: ex,
+                  left: er.left,
+                  right: er.right,
+                  top: er.top,
+                  bottom: er.bottom,
+                  dx: 0,
+                  dy: 0,
+                });
+              }
+            });
+
+            const safeR = computeSafeOvershootRatio(nodes, boundaryEl, 0.08);
+            const p1y = overshootToP1Y(safeR);
+            const ease = `cubic-bezier(0.32, ${p1y}, 0.58, 1)`;
+
+            scopeMoving.forEach((item) => {
+              item.ease = ease;
+              moving.push(item);
+            });
+          });
+
+          if (!moving.length && !entering.length) return;
+
+          // Tạm mở tràn cho #history-list nếu không có thanh cuộn để mục đầu nảy không bị cắt mép trên
+          const histList = scopes.includes("sidebar")
+            ? document.getElementById("history-list")
+            : null;
+          let unclippedHist = false;
+          if (histList && histList.scrollHeight <= histList.clientHeight + 2) {
+            clearTimeout(histList._tngUnclipTimer);
+            histList.classList.add("tng-flip-unclip");
+            unclippedHist = true;
+          }
+
+          // Khóa vào vị trí cũ theo pixel nguyên (INVERT)
+          moving.forEach(({ el, dx, dy, ease }) => {
+            if (el._tngFlipCleanup) el._tngFlipCleanup();
+            el.classList.remove("tng-flip-play");
+            if (el.classList.contains("msg-row")) {
+              el.classList.add("tng-flip-noanim");
+            }
+            el.style.setProperty("--flip-x", dx + "px");
+            el.style.setProperty("--flip-y", dy + "px");
+            el.style.setProperty("--flip-ease", ease);
+            el.classList.add("tng-flip-hold");
+          });
+
+          entering.forEach((el) => {
+            if (el._tngFlipCleanup) el._tngFlipCleanup();
+            el.classList.remove("tng-flip-enter-play");
+            el.classList.add("tng-flip-enter");
+          });
+
+          void document.body.offsetWidth;
+          moving.sort((a, b) => a.top - b.top || a.left - b.left);
+
+          const startPlay = () => {
+            const staggerStep = opts.flipStagger != null ? opts.flipStagger : 0;
+
+            moving.forEach(({ el }, idx) => {
+              if (!el.isConnected) return;
+              const delay = staggerStep ? Math.min(idx * staggerStep, 90) : 0;
+              el.style.setProperty("--flip-delay", delay + "ms");
+              el.classList.remove("tng-flip-hold");
+              el.classList.add("tng-flip-play");
+
+              let cleaned = false;
+              const cleanup = () => {
+                if (cleaned) return;
+                cleaned = true;
+                clearTimeout(fallbackTimer);
+                el.removeEventListener("transitionend", onEnd);
+                el._tngFlipCleanup = null;
+                el.classList.remove("tng-flip-play");
+                el.style.removeProperty("--flip-x");
+                el.style.removeProperty("--flip-y");
+                el.style.removeProperty("--flip-delay");
+                el.style.removeProperty("--flip-ease");
+              };
+              const onEnd = (ev) => {
+                if (ev.target === el && ev.propertyName === "transform") {
+                  cleanup();
+                }
+              };
+              const fallbackTimer = setTimeout(cleanup, 780 + delay);
+              el._tngFlipCleanup = cleanup;
+              el.addEventListener("transitionend", onEnd);
+            });
+
+            entering.forEach((el) => {
+              if (!el.isConnected) return;
+              el.classList.remove("tng-flip-enter");
+              el.classList.add("tng-flip-enter-play");
+
+              let cleaned = false;
+              const cleanup = () => {
+                if (cleaned) return;
+                cleaned = true;
+                clearTimeout(fallbackTimer);
+                el.removeEventListener("transitionend", onEnd);
+                el._tngFlipCleanup = null;
+                el.classList.remove("tng-flip-enter-play");
+              };
+              const onEnd = (ev) => {
+                if (ev.target === el && ev.propertyName === "transform") {
+                  cleanup();
+                }
+              };
+              const fallbackTimer = setTimeout(cleanup, 740);
+              el._tngFlipCleanup = cleanup;
+              el.addEventListener("transitionend", onEnd);
+            });
+
+            if (unclippedHist && histList) {
+              histList._tngUnclipTimer = setTimeout(() => {
+                histList.classList.remove("tng-flip-unclip");
+              }, 760);
+            }
+          };
+
+          const playDelay = opts.flipPlayDelay || 0;
+          const schedule = () =>
+            requestAnimationFrame(() => requestAnimationFrame(startPlay));
+          if (playDelay > 0) setTimeout(schedule, playDelay);
+          else schedule();
+        };
+
+        // Tự động phát hiện tiêu đề nhóm (.mc-section-title) bị rỗng để bốc hơi đồng bộ cùng mục cuối
+        const expandWithEmptySectionHeaders = (els) => {
+          const set = new Set(els.filter(Boolean));
+          const extra = [];
+          const checkedParents = new Set();
+
+          set.forEach((el) => {
+            const parent = el.parentElement;
+            if (!parent || checkedParents.has(parent)) return;
+            if (!parent.closest("#my-content-body")) return;
+            checkedParents.add(parent);
+
+            const wraps = Array.from(
+              parent.querySelectorAll(":scope > .mc-item-wrap"),
+            );
+            if (wraps.length > 0 && wraps.every((w) => set.has(w))) {
+              const prev = parent.previousElementSibling;
+              if (prev && prev.classList.contains("mc-section-title")) {
+                extra.push(prev);
+              }
+            }
+          });
+          return [...els, ...extra];
+        };
+
+        // 5. Hàm điều phối chính: Bốc hơi nước -> Cập nhật DOM -> Trượt lò xo FLIP chuẩn iOS
+        window.tngEvaporateRemove = function (elements, onDone, opts = {}) {
+          const rawList = (
+            Array.isArray(elements) ? elements : [elements]
+          ).filter((el) => el && el.isConnected && !el.dataset.tngEvap);
+          const expanded = opts.autoSectionHeader
+            ? expandWithEmptySectionHeaders(rawList)
+            : rawList;
+
+          const visible = expanded.filter((el) => {
+            const r = el.getBoundingClientRect();
+            return r.width > 0 && r.height > 0;
+          });
+
+          if (!visible.length) {
+            if (typeof onDone === "function") onDone();
+            return;
+          }
+
+          const startDelay = opts.startDelay != null ? opts.startDelay : 90;
+          const dissolveAt = opts.dissolveAt != null ? opts.dissolveAt : 330;
+          const stagger = opts.stagger != null ? opts.stagger : 45;
+          const density = opts.density || 1;
+          const restoreAfter = !!opts.restoreAfter;
+
+          visible.forEach((el, idx) => {
+            el.dataset.tngEvap = "1";
+            const delay = startDelay + idx * stagger;
+
+            setTimeout(() => {
+              if (!el.isConnected) return;
+              const rect = el.getBoundingClientRect();
+              const isHeader = el.classList.contains("mc-section-title");
+              spawnVaporOverRect(rect, isHeader ? 0.55 : density);
+
+              el.classList.add("tng-evap-prep");
+              void el.offsetWidth;
+              el.classList.add("tng-evap-go");
+            }, delay);
+          });
+
+          // Đúng lúc mục đã tan vào sương (~75%), thực thi DOM update + FLIP lò xo mượt 120fps
+          const commitWait =
+            startDelay + (visible.length - 1) * stagger + dissolveAt;
+
+          setTimeout(() => {
+            const snap = opts.flipScopes
+              ? captureFlip(opts.flipScopes, visible)
+              : null;
+
+            if (typeof onDone === "function") onDone();
+
+            if (snap) playFlip(snap, opts);
+
+            if (restoreAfter) {
+              visible.forEach((el) => {
+                el.classList.remove("tng-evap-prep", "tng-evap-go");
+                delete el.dataset.tngEvap;
+              });
+            }
+          }, commitWait);
+        };
+
+        // ============================================================
+        // GẮN ĐỒNG BỘ CHO TOÀN BỘ 12 VỊ TRÍ XÓA TRONG HỆ THỐNG
+        // ============================================================
+
+        // 1. XÓA NHIỀU MỤC (THƯ VIỆN & TẤT CẢ SỔ GHI CHÚ)
+        window.deleteSelected = function () {
+          const itemsArr = Array.from(selectedItems);
+          const allSelectedEls = Array.from(
+            document.querySelectorAll(
+              ".mc-item-wrap.selected, .note-card.selected",
+            ),
+          );
+          const isAllNotes =
+            allSelectedEls.length > 0 &&
+            allSelectedEls.every((el) => el.classList.contains("note-card"));
+
+          let msg = "Bạn chắc chắn muốn xóa tất cả các mục đã chọn chứ?";
+          if (itemsArr.length > 1 && isAllNotes) {
+            msg =
+              "Bạn có chắc chắn muốn xóa tất cả các sổ ghi chú đã chọn chứ?";
+          } else if (itemsArr.length === 1) {
+            if (
+              allSelectedEls[0] &&
+              allSelectedEls[0].classList.contains("note-card")
+            ) {
+              msg = "Bạn chắc chắn muốn xóa sổ ghi chú này chứ?";
+            } else {
+              const singleId = itemsArr[0];
+              const files =
+                JSON.parse(localStorage.getItem("tng_f_" + curA.id)) || [];
+              const f = files.find((x) => x.id.toString() === singleId);
+              if (f) {
+                const fType = f.type;
+                if (fType === "audio")
+                  msg = "Bạn chắc chắn muốn xóa bài hát này chứ?";
+                else if (fType === "doc")
+                  msg = "Bạn chắc chắn muốn xóa tài liệu này chứ?";
+                else if (fType === "video")
+                  msg = "Bạn chắc chắn muốn xóa video này chứ?";
+                else if (fType === "image" || fType.startsWith("image/"))
+                  msg = "Bạn chắc chắn muốn xóa ảnh này chứ?";
+              }
+            }
+          }
+
+          promptConfirm(msg, () => {
+            const idsToDelete = new Set(itemsArr);
+            const scopes = [];
+            if (
+              document.getElementById("my-content-view").style.display ===
+              "block"
+            )
+              scopes.push("my-content");
+            if (
+              document.getElementById("all-notes-view").style.display === "flex"
+            )
+              scopes.push("all-notes");
+            scopes.push("sidebar");
+
+            window.tngEvaporateRemove(
+              allSelectedEls,
+              () => {
+                let files =
+                  JSON.parse(localStorage.getItem("tng_f_" + curA.id)) || [];
+                let notes =
+                  JSON.parse(localStorage.getItem("tng_notes_" + curA.id)) ||
+                  [];
+                files = files.filter((f) => !idsToDelete.has(f.id.toString()));
+                notes = notes.filter((n) => !idsToDelete.has(n.id.toString()));
+
+                safeSetItem("tng_f_" + curA.id, JSON.stringify(files));
+                localStorage.setItem(
+                  "tng_notes_" + curA.id,
+                  JSON.stringify(notes),
+                );
+
+                exitSelectMode();
+                if (scopes.includes("my-content")) renderMyContent();
+                if (scopes.includes("all-notes")) showAllNotes();
+                renderSidebarNotes();
+              },
+              {
+                stagger: 45,
+                startDelay: 90,
+                autoSectionHeader: true,
+                flipScopes: scopes,
+              },
+            );
+          });
+        };
+
+        // 2. XÓA 1 QUYỂN SỔ GHI CHÚ (SIDEBAR & LƯỚI SỔ)
+        const _origExecNote = window.execNote;
+        window.execNote = function (action) {
+          if (action !== "delete") return _origExecNote.apply(this, arguments);
+          document.getElementById("note-options-menu").classList.remove("show");
+          const delId = targetNoteId;
+          const notesNow =
+            JSON.parse(localStorage.getItem("tng_notes_" + curA.id)) || [];
+          if (notesNow.findIndex((x) => String(x.id) === String(delId)) === -1)
+            return;
+
+          promptConfirm("Xóa quyển sổ này?", () => {
+            const targets = [];
+            const cardEl = document.querySelector(`[data-id="${delId}"]`);
+            if (cardEl) targets.push(cardEl);
+            const sbDot = document.querySelector(
+              `#sidebar-notes-list .hist-dots[onclick*="openNoteMenu(event, ${delId})"]`,
+            );
+            if (sbDot && sbDot.closest(".sb-item"))
+              targets.push(sbDot.closest(".sb-item"));
+
+            const scopes = ["sidebar"];
+            const anv = document.getElementById("all-notes-view");
+            if (anv && anv.style.display === "flex") scopes.push("all-notes");
+
+            window.tngEvaporateRemove(
+              targets,
+              () => {
+                let notes =
+                  JSON.parse(localStorage.getItem("tng_notes_" + curA.id)) ||
+                  [];
+                const idx = notes.findIndex(
+                  (x) => String(x.id) === String(delId),
+                );
+                if (idx !== -1) notes.splice(idx, 1);
+                localStorage.setItem(
+                  "tng_notes_" + curA.id,
+                  JSON.stringify(notes),
+                );
+                renderSidebarNotes();
+                if (String(currentNoteId) === String(delId)) {
+                  document
+                    .getElementById("notebook-overlay")
+                    .classList.remove("show");
+                  currentNoteId = null;
+                }
+                if (anv && anv.style.display === "flex") showAllNotes();
+              },
+              { startDelay: 90, flipScopes: scopes },
+            );
+          });
+        };
+
+        // 3. XÓA 1 TỆP TRONG THƯ VIỆN
+        const _origExecFile = window.execFile;
+        window.execFile = function (action) {
+          if (action !== "delete") return _origExecFile.apply(this, arguments);
+          document.getElementById("file-options-menu").classList.remove("show");
+          const delId = targetFileId;
+          const filesNow =
+            JSON.parse(localStorage.getItem("tng_f_" + curA.id)) || [];
+          const idxNow = filesNow.findIndex(
+            (x) => x.id.toString() === String(delId),
+          );
+          if (idxNow === -1) return;
+
+          const fType = filesNow[idxNow].type;
+          let confirmMsg = "Bạn chắc chắn muốn xóa mục này chứ?";
+          if (fType === "audio")
+            confirmMsg = "Bạn chắc chắn muốn xóa bài hát này chứ?";
+          else if (fType === "doc")
+            confirmMsg = "Bạn chắc chắn muốn xóa tài liệu này chứ?";
+          else if (fType === "video")
+            confirmMsg = "Bạn chắc chắn muốn xóa video này chứ?";
+          else if (fType === "image" || fType.startsWith("image/"))
+            confirmMsg = "Bạn chắc chắn muốn xóa ảnh này chứ?";
+
+          promptConfirm(confirmMsg, () => {
+            const el = document.querySelector(`[data-id="${delId}"]`);
+            window.tngEvaporateRemove(
+              [el],
+              () => {
+                let files =
+                  JSON.parse(localStorage.getItem("tng_f_" + curA.id)) || [];
+                const idx = files.findIndex(
+                  (x) => x.id.toString() === String(delId),
+                );
+                if (idx !== -1) files.splice(idx, 1);
+                localStorage.setItem("tng_f_" + curA.id, JSON.stringify(files));
+                renderMyContent();
+              },
+              {
+                startDelay: 90,
+                autoSectionHeader: true,
+                flipScopes: ["my-content"],
+              },
+            );
+          });
+        };
+
+        // 4. XÓA CUỘC TRÒ CHUYỆN TRONG LỊCH SỬ SIDEBAR
+        const _origExecHist = window.execHist;
+        window.execHist = function (action) {
+          if (action !== "delete") return _origExecHist.apply(this, arguments);
+          histMenu.classList.remove("show");
+          const delId = targetHistId;
+          if (sessions.findIndex((x) => String(x.id) === String(delId)) === -1)
+            return;
+
+          promptConfirm("Xóa cuộc trò chuyện này?", () => {
+            const dot = document.querySelector(
+              `#history-list .hist-dots[onclick*="'${delId}'"]`,
+            );
+            const row = dot ? dot.closest(".sb-item") : null;
+
+            window.tngEvaporateRemove(
+              [row],
+              () => {
+                const idx = sessions.findIndex(
+                  (x) => String(x.id) === String(delId),
+                );
+                if (idx !== -1) sessions.splice(idx, 1);
+                safeSaveHist();
+                renderHist();
+                if (String(curId) === String(delId)) newChat();
+              },
+              { startDelay: 90, flipScopes: ["sidebar"] },
+            );
+          });
+        };
+
+        // 5. XÓA TIN NHẮN AI TRONG ĐOẠN CHAT
+        const _origAiAction = window.tngAiAction;
+        if (typeof _origAiAction === "function") {
+          window.tngAiAction = function (type, btn) {
+            if (type !== "delete") return _origAiAction.apply(this, arguments);
+            const menu = btn && btn.closest(".ai-options-menu");
+            if (menu) menu.classList.remove("show");
+
+            window.tngConfirmUI(
+              window.event,
+              "Bạn có chắc chắn muốn xóa vĩnh viễn tin nhắn này?",
+              () => {
+                const row =
+                  (btn && btn.closest(".msg-row")) ||
+                  (btn && btn.closest(".ai-msg"));
+                const parentList = row ? row.parentElement : null;
+                window.tngEvaporateRemove(
+                  [row],
+                  () => {
+                    if (row && row.isConnected) row.remove();
+                  },
+                  {
+                    startDelay: 90,
+                    flipScopes: parentList ? [parentList] : [],
+                  },
+                );
+              },
+            );
+          };
+        }
+
+        // 6. XÓA THƯ TRONG HÒM THƯ TNG AI
+        window.executeMailboxDelete = function (id) {
+          const container = document.getElementById("swipe-container-" + id);
+          window.tngEvaporateRemove(
+            [container],
+            () => {
+              const key =
+                "tng_mailbox_v63_" + (window.curA ? window.curA.id : "guest");
+              const letters = JSON.parse(localStorage.getItem(key)) || [];
+              const letter = letters.find((l) => l.id === id);
+              if (letter) letter.isDeleted = true;
+
+              localStorage.setItem(key, JSON.stringify(letters));
+              window.updateMailboxBadgeOnly();
+              if (container && container.isConnected) container.remove();
+
+              const visibleLetters = letters.filter((l) => !l.isDeleted);
+              if (visibleLetters.length === 0) window.renderMailboxList();
+            },
+            { startDelay: 40, flipScopes: ["mailbox"] },
+          );
+        };
+
+        // 7. XÓA HÀNH ĐỘNG ĐÃ LÊN LỊCH (QUY TRÌNH)
+        const _origConfirmDelHD = window.tngConfirmDeleteHanhDong;
+        if (typeof _origConfirmDelHD === "function") {
+          window.tngConfirmDeleteHanhDong = function (id, e) {
+            _origConfirmDelHD.apply(this, arguments);
+            const boxes = document.querySelectorAll(".tng-del-hd-box");
+            const box = boxes[boxes.length - 1];
+            if (!box) return;
+            const confirmBtn = box.querySelector("#btn-confirm-del");
+            const cancelBtn = box.querySelector("#btn-cancel-del");
+            if (!confirmBtn) return;
+
+            confirmBtn.onclick = () => {
+              if (cancelBtn) cancelBtn.click();
+              const menuBtn = document.querySelector(
+                `#sp-body [onclick*="toggleHanhDongMenu('${id}'"]`,
+              );
+              const card =
+                menuBtn &&
+                menuBtn.parentElement &&
+                menuBtn.parentElement.parentElement;
+
+              window.tngEvaporateRemove(
+                [card],
+                () => {
+                  window.tngHanhDongList = window.tngHanhDongList.filter(
+                    (x) => x.id !== id,
+                  );
+                  localStorage.setItem(
+                    "tng_hanhdong_list",
+                    JSON.stringify(window.tngHanhDongList),
+                  );
+                  const spBody = document.getElementById("sp-body");
+                  if (spBody) spBody.innerHTML = getTngHanhDongContent();
+                },
+                { startDelay: 90, flipScopes: ["hanhdong"] },
+              );
+            };
+          };
+        }
+
+        // 8. XÓA CHỈ DẪN TRONG TRÍ THÔNG MINH CÁ NHÂN
+        window.tngDeleteInstruction = function (idx, btnEl) {
+          const row = btnEl && btnEl.parentElement;
+          if (row && row.dataset.tngEvap) return;
+          window.tngEvaporateRemove(
+            [row],
+            () => {
+              window.tngAiInstructions.splice(idx, 1);
+              localStorage.setItem(
+                "tng_ai_instructions",
+                JSON.stringify(window.tngAiInstructions),
+              );
+              tngRenderInstructionsList(
+                document.getElementById("tng-ins-list-container"),
+              );
+            },
+            { startDelay: 0, dissolveAt: 290, flipScopes: ["instructions"] },
+          );
+        };
+
+        // 9. XÓA TÀI KHOẢN TRONG BẢNG TÀI KHOẢN
+        window.deleteAcc = function (id, e) {
+          if (e) e.stopPropagation();
+          promptConfirm("Bạn chắc chắn muốn xóa tài khoản này chứ?", () => {
+            const box = document.getElementById("acc-box-" + id);
+            window.tngEvaporateRemove(
+              [box],
+              () => {
+                accounts = accounts.filter((a) => a.id !== id);
+                safeSetItem("tng_accounts", JSON.stringify(accounts));
+                renderAccList();
+              },
+              { startDelay: 90, flipScopes: ["accounts"] },
+            );
+          });
+        };
+
+        // 10. XÓA TÀI KHOẢN TRẺ EM & LIÊN KẾT QUẢN LÝ TÀI KHOẢN
+        window.deleteChildAccount = function (id) {
+          const cmOverlay = document.getElementById("custom-modal-overlay");
+          if (cmOverlay) cmOverlay.style.zIndex = "99999999";
+          const btn = document.querySelector(
+            `#custom-child-manage-modal button[onclick*="deleteChildAccount(${id})"]`,
+          );
+          const row = btn ? btn.parentElement : null;
+          const parentList = row ? row.parentElement : null;
+
+          promptConfirm("Bạn muốn gỡ liên kết tài khoản này?", () => {
+            if (!Array.isArray(curA.childAcc)) return;
+            window.tngEvaporateRemove(
+              [row],
+              () => {
+                curA.childAcc = curA.childAcc.filter((acc) => acc.id !== id);
+                safeSaveCurA();
+                silentRefreshAccount();
+                if (row && row.isConnected) row.remove();
+                if (curA.childAcc.length === 0) {
+                  closeCustomPopup("custom-child-manage-modal");
+                  setTimeout(() => manageChildAccounts(null, null), 360);
+                }
+              },
+              { startDelay: 90, flipScopes: parentList ? [parentList] : [] },
+            );
+          });
+        };
+
+        window.delManageItem = function (k, id, ref) {
+          const cm = document.getElementById("custom-modal-overlay");
+          if (cm) cm.style.zIndex = "99999999";
+          const btn = document.querySelector(
+            `#custom-manage-modal button[onclick*="delManageItem('${k}', ${id}"]`,
+          );
+          const row = btn ? btn.parentElement : null;
+          const parentList = row ? row.parentElement : null;
+
+          promptConfirm("Bạn muốn xóa liên kết này?", () => {
+            window.tngEvaporateRemove(
+              [row],
+              () => {
+                curA[k] = (curA[k] || []).filter((a) => a.id !== id);
+                safeSaveCurA();
+                silentRefreshAccount();
+                if (row && row.isConnected) row.remove();
+                if (curA[k].length === 0) {
+                  closeCustomPopup("custom-manage-modal");
+                  setTimeout(() => window[ref](), 360);
+                }
+              },
+              { startDelay: 90, flipScopes: parentList ? [parentList] : [] },
+            );
+          });
+        };
+
+        // 11. XÓA TỆP ĐÍNH KÈM ĐANG CHỜ GỬI (STAGING)
+        window.removePending = function (id) {
+          const targets = Array.from(
+            document.querySelectorAll(
+              `.st-item .st-rm[onclick*="removePending('${id}')"]`,
+            ),
+          )
+            .map((rm) => rm.closest(".st-item"))
+            .filter(Boolean);
+
+          window.tngEvaporateRemove(
+            targets,
+            () => {
+              pendingFiles = pendingFiles.filter((f) => f.id !== id);
+              renderStaging();
+            },
+            {
+              dissolveAt: 260,
+              startDelay: 0,
+              density: 0.7,
+              flipScopes: ["staging"],
+            },
+          );
+        };
+
+        // 12. XÓA ẢNH / VIDEO / NHẠC NGAY TRONG TRÌNH XEM MEDIA VIEWER
+        // (Tự chụp & chạy FLIP cho lưới Thư viện phía sau ngay khi trình xem mờ dần!)
+        document.addEventListener(
+          "click",
+          (ev) => {
+            const btn = ev.target.closest(".tng-del-box .tng-btn-danger");
+            if (!btn || btn.dataset.tngEvapDone === "1") return;
+
+            ev.stopImmediatePropagation();
+            ev.preventDefault();
+
+            const box = btn.closest(".tng-del-box");
+            const overlay =
+              box && box.parentElement && box.parentElement.parentElement;
+            if (overlay && box) {
+              overlay.style.pointerEvents = "none";
+              overlay.style.opacity = "0";
+              box.style.transform = "scale(0.02)";
+              box.style.opacity = "0";
+            }
+
+            const mediaEl =
+              document.querySelector("#viewer-modal .tng-media-view-active") ||
+              document.getElementById("viewer-modal-body");
+
+            const bgVisible =
+              document.getElementById("my-content-view") &&
+              document.getElementById("my-content-view").style.display ===
+                "block";
+
+            window.tngEvaporateRemove(
+              [mediaEl],
+              () => {
+                btn.dataset.tngEvapDone = "1";
+                btn.click();
+              },
+              {
+                startDelay: 90,
+                dissolveAt: 460,
+                density: 1.4,
+                restoreAfter: true,
+                flipScopes: bgVisible ? ["my-content"] : [],
+                flipPlayDelay: 170,
+              },
+            );
+          },
+          true,
+        );
+      })();
+    </script>
+
+    <script>
+      // ============================================================
+      // BỘ MÁY CHUYỂN ĐỘNG VẬT LÝ IOS 27 TOÀN HỆ THỐNG (V2 - UNIFIED)
+      // - Lò xo damped harmonic thật (linear() GPU 120fps, chống va chạm)
+      // - Xóa bốc hơi tinh tế + Tự nở giao diện trống phân tầng toàn hệ thống
+      // - Xuất hiện kết tụ kính mờ + Ghim/Bỏ ghim trượt vị trí mượt
+      // ============================================================
+      (function () {
+        if (window.__tngIos27UnifiedMotion) return;
+        window.__tngIos27UnifiedMotion = true;
+
+        const pendingNewNoteIds = new Set();
+        let pendingManageAnim = null;
+        let lastHistAccId = null;
+        let _inEvapCommit = false;
+
+        // 1. BỘ SINH ĐƯỜNG CONG LÒ XO VẬT LÝ THẬT (DAMPED HARMONIC OSCILLATOR)
+        const supportsLinear =
+          typeof CSS !== "undefined" &&
+          typeof CSS.supports === "function" &&
+          CSS.supports("transition-timing-function", "linear(0, 1)");
+
+        const springCache = new Map();
+
+        const overshootToP1Y = (r) => {
+          if (r <= 0.0005) return 1.0;
+          if (r >= 0.08) return 1.5;
+          let lo = 1.0,
+            hi = 1.5;
+          for (let k = 0; k < 18; k++) {
+            const mid = 0.5 * (lo + hi);
+            const val =
+              (4 * (mid - 1) * (mid - 1) * (mid - 1)) /
+              ((3 * mid - 2) * (3 * mid - 2));
+            if (val < r) lo = mid;
+            else hi = mid;
+          }
+          return Number((0.5 * (lo + hi)).toFixed(4));
+        };
+
+        const buildSpringEasing = (overshootRatio = 0.08) => {
+          const r = Math.max(0, Math.min(0.08, overshootRatio));
+          const cacheKey = Math.round(r * 1000);
+          if (springCache.has(cacheKey)) return springCache.get(cacheKey);
+
+          let easing;
+          if (!supportsLinear) {
+            easing = `cubic-bezier(0.32, ${overshootToP1Y(r)}, 0.58, 1)`;
+          } else {
+            const steps = 26;
+            const ys = [];
+            if (r <= 0.002) {
+              // Lò xo tới hạn (critically damped): gia tốc từ 0, dừng êm không lố
+              const w = 8.4;
+              const raw = [];
+              for (let i = 0; i < steps; i++) {
+                const t = i / (steps - 1);
+                raw.push(1 - (1 + w * t) * Math.exp(-w * t));
+              }
+              const end = raw[raw.length - 1] || 1;
+              for (let i = 0; i < steps; i++) ys.push(raw[i] / end);
+            } else {
+              const lnR = Math.log(r);
+              const zeta = -lnR / Math.sqrt(Math.PI * Math.PI + lnR * lnR);
+              const wd = Math.PI / 0.43; // Đỉnh nảy luôn đồng nhất ở 43% chặng
+              const wn = wd / Math.sqrt(1 - zeta * zeta);
+              const kSin = zeta / Math.sqrt(1 - zeta * zeta);
+              for (let i = 0; i < steps; i++) {
+                const t = i / (steps - 1);
+                let y =
+                  1 -
+                  Math.exp(-zeta * wn * t) *
+                    (Math.cos(wd * t) + kSin * Math.sin(wd * t));
+                if (t > 0.78) {
+                  const b = (t - 0.78) / 0.22;
+                  const s = b * b * (3 - 2 * b);
+                  y = y * (1 - s) + s;
+                }
+                ys.push(y);
+              }
+            }
+            ys[0] = 0;
+            ys[ys.length - 1] = 1;
+            const fmt = ys.map((v) =>
+              Number(v.toFixed(4)).toString().replace(/^0\./, "."),
+            );
+            fmt[0] = "0";
+            fmt[fmt.length - 1] = "1";
+            easing = "linear(" + fmt.join(",") + ")";
+          }
+          springCache.set(cacheKey, easing);
+          return easing;
+        };
+
+        const SPRING_8 = buildSpringEasing(0.08);
+        const SPRING_EMPTY = buildSpringEasing(0.035);
+
+        // Thời lượng co giãn theo quãng đường di chuyển để bước ngắn gọn nhanh, bước dài lướt êm
+        const calcAdaptiveDur = (maxDist) => {
+          if (maxDist <= 60) return 560;
+          if (maxDist >= 420) return 680;
+          return Math.round(560 + ((maxDist - 60) / 360) * 120);
+        };
+
+        // 2. LÀN SƯƠNG HƠI NƯỚC KHUẾCH TÁN THEO LUỒNG KHÍ THUẦN GPU
+        const spawnVaporOverRect = (rect, density = 1) => {
+          if (!rect || rect.width <= 0 || rect.height <= 0) return;
+          const stage = document.createElement("div");
+          stage.className = "tng-vapor-stage";
+          stage.style.left = rect.left + "px";
+          stage.style.top = rect.top + "px";
+          stage.style.width = rect.width + "px";
+          stage.style.height = rect.height + "px";
+
+          const isCompact = rect.width < 95 && rect.height < 95;
+          const wispCount = Math.max(
+            2,
+            Math.min(5, Math.round((isCompact ? 2 : 3.5) * density)),
+          );
+          const moteCount = Math.max(
+            4,
+            Math.min(11, Math.round((isCompact ? 4 : 7) * density)),
+          );
+          // Luồng gió nhẹ đồng nhất giúp toàn bộ làn sương tản tự nhiên theo cùng chiều không khí
+          const breeze =
+            (Math.random() < 0.5 ? -1 : 1) * (10 + Math.random() * 16);
+
+          const frag = document.createDocumentFragment();
+          for (let i = 0; i < wispCount; i++) {
+            const w = document.createElement("span");
+            w.className = "tng-vapor-wisp";
+            const xPct =
+              wispCount === 1
+                ? 50
+                : 18 + (i / (wispCount - 1)) * 64 + (Math.random() * 10 - 5);
+            const yPct = 26 + Math.random() * 44;
+            const ww = Math.max(
+              104,
+              Math.min(rect.width * 0.94, 240) * (0.84 + Math.random() * 0.3),
+            );
+            const wh = Math.max(
+              48,
+              Math.min(rect.height * 0.94, 114) * (0.84 + Math.random() * 0.3),
+            );
+            const sway = (Math.random() - 0.5) * 18;
+            w.style.setProperty("--wx", xPct.toFixed(1) + "%");
+            w.style.setProperty("--wy", yPct.toFixed(1) + "%");
+            w.style.setProperty("--ww", ww.toFixed(0) + "px");
+            w.style.setProperty("--wh", wh.toFixed(0) + "px");
+            w.style.setProperty(
+              "--wdx1",
+              (breeze * 0.14 + sway * 0.35).toFixed(1) + "px",
+            );
+            w.style.setProperty(
+              "--wdx2",
+              (breeze * 0.38 - sway * 0.4).toFixed(1) + "px",
+            );
+            w.style.setProperty(
+              "--wdx3",
+              (breeze * 0.68 + sway * 0.35).toFixed(1) + "px",
+            );
+            w.style.setProperty(
+              "--wdx4",
+              (breeze * 0.92 + sway * 0.15).toFixed(1) + "px",
+            );
+            w.style.setProperty(
+              "--wdx5",
+              (breeze * 1.15 - sway * 0.1).toFixed(1) + "px",
+            );
+            w.style.setProperty(
+              "--wrise",
+              -(78 + Math.random() * 38).toFixed(0) + "px",
+            );
+            w.style.setProperty(
+              "--wdur",
+              (1040 + Math.random() * 280).toFixed(0) + "ms",
+            );
+            w.style.setProperty("--wdel", (i * 48).toFixed(0) + "ms");
+            frag.appendChild(w);
+          }
+
+          for (let i = 0; i < moteCount; i++) {
+            const m = document.createElement("span");
+            m.className = "tng-vapor-mote";
+            const xPct = 10 + Math.random() * 80;
+            const yPct = 14 + Math.random() * 72;
+            const size = 5 + Math.random() * 5.5;
+            const sway = (Math.random() - 0.5) * 20;
+            const rise = 78 + Math.random() * 52;
+            m.style.setProperty("--mx", xPct.toFixed(1) + "%");
+            m.style.setProperty("--my", yPct.toFixed(1) + "%");
+            m.style.setProperty("--ms", size.toFixed(1) + "px");
+            m.style.setProperty(
+              "--mdx1",
+              (breeze * 0.16 + sway * 0.4).toFixed(1) + "px",
+            );
+            m.style.setProperty(
+              "--mdx2",
+              (breeze * 0.42 - sway * 0.45).toFixed(1) + "px",
+            );
+            m.style.setProperty(
+              "--mdx3",
+              (breeze * 0.74 + sway * 0.4).toFixed(1) + "px",
+            );
+            m.style.setProperty(
+              "--mdx4",
+              (breeze * 0.98 + sway * 0.15).toFixed(1) + "px",
+            );
+            m.style.setProperty(
+              "--mdx5",
+              (breeze * 1.25 - sway * 0.1).toFixed(1) + "px",
+            );
+            m.style.setProperty("--mrise", -rise.toFixed(0) + "px");
+            m.style.setProperty(
+              "--mdur",
+              (960 + Math.random() * 340).toFixed(0) + "ms",
+            );
+            m.style.setProperty(
+              "--mdel",
+              (Math.random() * 170).toFixed(0) + "ms",
+            );
+            frag.appendChild(m);
+          }
+
+          stage.appendChild(frag);
+          document.body.appendChild(stage);
+          // Dọn khung sau khi 100% làn sương & hạt hơi đã tan hoàn toàn về 0
+          setTimeout(() => {
+            if (stage.isConnected) stage.remove();
+          }, 1850);
+        };
+
+        // 3. ĐỒNG BỘ THỨ TỰ GHIM TRONG THƯ VIỆN NGAY LẬP TỨC (CHỐNG GIẬT GIỮA CHỪNG FLIP)
+        const syncPinnedOrderSync = () => {
+          if (typeof curA === "undefined" || !curA) return;
+          let files = [];
+          try {
+            files = JSON.parse(localStorage.getItem("tng_f_" + curA.id)) || [];
+          } catch (e) {}
+          const fileMap = {};
+          files.forEach((f) => (fileMap[String(f.id)] = f));
+
+          document
+            .querySelectorAll("#my-content-body .mc-grid")
+            .forEach((g) => {
+              const items = Array.from(g.querySelectorAll(".mc-item-wrap"));
+              const pinned = [];
+              const unpinned = [];
+              items.forEach((el) => {
+                const f = fileMap[el.getAttribute("data-id")];
+                if (f && f.pinned) pinned.push({ el, time: f.pinnedAt || 0 });
+                else unpinned.push(el);
+              });
+              pinned.sort((a, b) => a.time - b.time);
+              const sorted = [...pinned.map((p) => p.el), ...unpinned];
+              for (let i = 0; i < sorted.length; i++) {
+                if (items[i] !== sorted[i]) {
+                  sorted.forEach((el) => g.appendChild(el));
+                  break;
+                }
+              }
+            });
+        };
+
+        // 4. THU THẬP PHẦN TỬ & GIAO DIỆN TRỐNG TRÊN TOÀN BỘ HỆ THỐNG
+        const collectItems = (scope) => {
+          const out = [];
+          if (!scope) return out;
+
+          // Container DOM trực tiếp (chat-box, danh sách trong Quản lý tài khoản...)
+          if (typeof scope === "object" && scope.nodeType === 1) {
+            Array.from(scope.children).forEach((el) => {
+              if (el.offsetParent === null) return;
+              const isEmpty = el.getAttribute("data-tng-empty") === "1";
+              out.push({
+                key: isEmpty ? "dom:empty" : el,
+                el,
+                isNewOk: isEmpty,
+                isEmptyState: isEmpty,
+              });
+            });
+            return out;
+          }
+
+          if (scope === "my-content") {
+            const root = document.getElementById("my-content-body");
+            if (!root) return out;
+            root.querySelectorAll(".mc-section-title").forEach((el) => {
+              out.push({ key: "mc-sec:" + el.textContent.trim(), el });
+            });
+            root.querySelectorAll(".mc-learned-row").forEach((el, i) => {
+              out.push({
+                key: "mc-lrn:" + i + ":" + el.textContent.trim(),
+                el,
+              });
+            });
+            root.querySelectorAll(".mc-item-wrap").forEach((el) => {
+              const id = el.getAttribute("data-id");
+              if (id) out.push({ key: "mc:" + id, el });
+            });
+            const empty = root.querySelector(".mc-empty-card");
+            if (empty) {
+              out.push({
+                key: "mc:empty",
+                el: empty,
+                isNewOk: true,
+                isEmptyState: true,
+              });
+            }
+          } else if (scope === "all-notes") {
+            const grid = document.getElementById("all-notes-grid");
+            if (!grid) return out;
+            const cards = grid.querySelectorAll(".note-card");
+            cards.forEach((el) => {
+              const id = el.getAttribute("data-id");
+              if (id) out.push({ key: "note:" + id, el });
+            });
+            if (cards.length === 0) {
+              const empty = grid.querySelector(":scope > div:not(.note-card)");
+              if (empty) {
+                out.push({
+                  key: "note:empty",
+                  el: empty,
+                  isNewOk: true,
+                  isEmptyState: true,
+                });
+              }
+            } else {
+              const addBtn = document.querySelector(
+                "#all-notes-view > h1 button",
+              );
+              if (addBtn) {
+                out.push({ key: "note:add-btn", el: addBtn, compact: true });
+              }
+            }
+          } else if (scope === "sidebar") {
+            const sb = document.getElementById("sidebar");
+            if (!sb) return out;
+            sb.querySelectorAll("#sidebar-notes-list .sb-item").forEach(
+              (el) => {
+                const dot = el.querySelector(".hist-dots");
+                const oc = (dot && dot.getAttribute("onclick")) || "";
+                const m = oc.match(/openNoteMenu\([^,]+,\s*['"]?([^)'"]+)/);
+                if (m) {
+                  out.push({
+                    key: "sbn:" + m[1],
+                    el,
+                    isNewOk: true,
+                    compact: true,
+                  });
+                }
+              },
+            );
+            const allBtn = document.getElementById("btn-all-notes");
+            if (allBtn && allBtn.style.display !== "none") {
+              out.push({
+                key: "sb:all-notes",
+                el: allBtn,
+                isNewOk: true,
+                compact: true,
+              });
+            }
+            sb.querySelectorAll(":scope > .sb-title").forEach((el) => {
+              out.push({
+                key: "sbt:" + el.textContent.trim(),
+                el,
+                noEnter: true,
+              });
+            });
+            sb.querySelectorAll("#history-list .sb-item").forEach((el) => {
+              const dot = el.querySelector(".hist-dots");
+              const oc = (dot && dot.getAttribute("onclick")) || "";
+              const m = oc.match(/openHistMenu\([^,]+,\s*['"]([^'"]+)['"]/);
+              if (m) {
+                out.push({
+                  key: "sbh:" + m[1],
+                  el,
+                  isNewOk: true,
+                  compact: true,
+                });
+              }
+            });
+          } else if (scope === "mailbox") {
+            const list = document.getElementById("tng-mailbox-list");
+            if (!list) return out;
+            const swipes = list.querySelectorAll(".swipe-container");
+            swipes.forEach((el) => {
+              if (el.id) out.push({ key: "mb:" + el.id, el });
+            });
+            const empty = list.querySelector(".notif-empty-state");
+            if (empty) {
+              out.push({
+                key: "mb:empty",
+                el: empty,
+                isNewOk: true,
+                isEmptyState: true,
+              });
+            }
+          } else if (scope === "hanhdong") {
+            const sp = document.getElementById("sp-body");
+            if (!sp) return out;
+            const btns = sp.querySelectorAll(
+              '[onclick*="toggleHanhDongMenu("]',
+            );
+            if (btns.length > 0) {
+              const hdr = sp.querySelector(":scope > div > div:first-child");
+              if (hdr) out.push({ key: "hd:hdr", el: hdr, compact: true });
+              btns.forEach((btn) => {
+                const oc = btn.getAttribute("onclick") || "";
+                const m = oc.match(/toggleHanhDongMenu\('([^']+)'/);
+                const card =
+                  btn.parentElement && btn.parentElement.parentElement;
+                if (m && card) out.push({ key: "hd:" + m[1], el: card });
+              });
+            } else {
+              const empty = sp.querySelector(":scope > div");
+              if (
+                empty &&
+                empty.querySelector("h3") &&
+                empty.textContent.includes("Chưa có quy trình")
+              ) {
+                out.push({
+                  key: "hd:empty",
+                  el: empty,
+                  isNewOk: true,
+                  isEmptyState: true,
+                });
+              }
+            }
+          } else if (scope === "instructions") {
+            const box = document.getElementById("tng-ins-list-container");
+            if (!box) return out;
+            const delBtns = box.querySelectorAll(
+              '[onclick*="tngDeleteInstruction("]',
+            );
+            if (delBtns.length > 0) {
+              if (box.firstElementChild) {
+                out.push({
+                  key: "ins:hdr",
+                  el: box.firstElementChild,
+                  compact: true,
+                });
+              }
+              const seen = {};
+              delBtns.forEach((btn) => {
+                const row = btn.parentElement;
+                if (!row) return;
+                const txt = row.firstElementChild
+                  ? row.firstElementChild.textContent.trim()
+                  : row.textContent.trim();
+                seen[txt] = (seen[txt] || 0) + 1;
+                out.push({ key: "ins:" + txt + "#" + seen[txt], el: row });
+              });
+            } else if (box.firstElementChild) {
+              out.push({
+                key: "ins:empty",
+                el: box.firstElementChild,
+                isNewOk: true,
+                isEmptyState: true,
+              });
+            }
+          } else if (scope === "accounts") {
+            const list = document.querySelector(".acc-expanded-list");
+            if (!list) return out;
+            list.querySelectorAll(".acc-wrap-box").forEach((el) => {
+              if (el.id) out.push({ key: "acc:" + el.id, el, compact: true });
+            });
+            list.querySelectorAll(".acc-row-btn").forEach((el, i) => {
+              out.push({
+                key: "accbtn:" + i + ":" + el.textContent.trim(),
+                el,
+                noEnter: true,
+              });
+            });
+          } else if (scope === "staging") {
+            ["file-staging-home", "file-staging-chat"].forEach((sid) => {
+              const box = document.getElementById(sid);
+              if (!box || box.style.display === "none") return;
+              box.querySelectorAll(".st-item").forEach((el) => {
+                const rm = el.querySelector(".st-rm");
+                const oc = (rm && rm.getAttribute("onclick")) || "";
+                const m = oc.match(/removePending\('([^']+)'\)/);
+                if (m) out.push({ key: sid + ":" + m[1], el, compact: true });
+              });
+            });
+          }
+          return out;
+        };
+
+        const getScopeCollisionContext = (sc) => {
+          const extras = [];
+          let boundaryEl = null;
+
+          if (typeof sc === "object" && sc.nodeType === 1) {
+            return { boundaryEl: sc, extras };
+          }
+          if (sc === "all-notes") {
+            boundaryEl = document.getElementById("all-notes-view");
+            const h1 = boundaryEl && boundaryEl.querySelector(":scope > h1");
+            if (h1) extras.push(h1);
+          } else if (sc === "my-content") {
+            boundaryEl = document.getElementById("my-content-view");
+            const hdr = document.querySelector("#my-content-body > .mc-header");
+            if (hdr) extras.push(hdr);
+          } else if (sc === "sidebar") {
+            boundaryEl = document.getElementById("sidebar");
+            if (boundaryEl) {
+              boundaryEl
+                .querySelectorAll(
+                  ":scope > .sb-header, :scope > .sb-item, :scope > .sb-title",
+                )
+                .forEach((el) => extras.push(el));
+            }
+          } else if (sc === "mailbox") {
+            boundaryEl = document.getElementById("tng-mailbox-list");
+          } else if (sc === "hanhdong") {
+            boundaryEl = document.getElementById("sp-body");
+            const hdr =
+              boundaryEl &&
+              boundaryEl.querySelector(":scope > div > div:first-child");
+            if (hdr) extras.push(hdr);
+          } else if (sc === "instructions") {
+            const box = document.getElementById("tng-ins-list-container");
+            boundaryEl = (box && box.parentElement) || box;
+            if (box && box.firstElementChild)
+              extras.push(box.firstElementChild);
+          } else if (sc === "accounts") {
+            boundaryEl = document.querySelector(".acc-expanded-list");
+            const hdr = document.querySelector(".acc-collapse-header");
+            if (hdr) extras.push(hdr);
+          } else if (sc === "staging") {
+            boundaryEl =
+              document.getElementById("file-staging-chat") ||
+              document.getElementById("file-staging-home");
+          }
+          return { boundaryEl, extras };
+        };
+
+        // 5. TÍNH TỶ LỆ NẢY AN TOÀN (TỐI ĐA 8%, CHỪA ĐỆM KHÔNG BAO GIỜ VA CHẠM)
+        const calcSafeRatio = (nodes, boundaryEl, maxCapPx = 0) => {
+          let r = 0.08;
+          const bRect =
+            boundaryEl && boundaryEl.getBoundingClientRect
+              ? boundaryEl.getBoundingClientRect()
+              : null;
+          const atTop = !boundaryEl || boundaryEl.scrollTop <= 1;
+
+          for (let i = 0; i < nodes.length; i++) {
+            const a = nodes[i];
+            if (a.dx === 0 && a.dy === 0) continue;
+
+            if (maxCapPx > 0) {
+              const dist = Math.hypot(a.dx, a.dy);
+              if (dist > maxCapPx / 0.08) r = Math.min(r, maxCapPx / dist);
+            }
+
+            for (let j = 0; j < nodes.length; j++) {
+              if (i === j) continue;
+              const b = nodes[j];
+
+              const ovY = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
+              if (ovY > 4) {
+                const gapL = a.left - b.right;
+                const relDxL = a.dx - b.dx;
+                if (gapL >= -1 && relDxL > 0) {
+                  const pad = Math.min(4.5, Math.max(2, gapL * 0.3));
+                  r = Math.min(r, Math.max(0, gapL - pad) / relDxL);
+                }
+                const gapR = b.left - a.right;
+                const relDxR = b.dx - a.dx;
+                if (gapR >= -1 && relDxR > 0) {
+                  const pad = Math.min(4.5, Math.max(2, gapR * 0.3));
+                  r = Math.min(r, Math.max(0, gapR - pad) / relDxR);
+                }
+              }
+
+              const ovX = Math.min(a.right, b.right) - Math.max(a.left, b.left);
+              if (ovX > 4) {
+                const gapT = a.top - b.bottom;
+                const relDyT = a.dy - b.dy;
+                if (gapT >= -1 && relDyT > 0) {
+                  const pad = Math.min(4.5, Math.max(2, gapT * 0.3));
+                  r = Math.min(r, Math.max(0, gapT - pad) / relDyT);
+                }
+                const gapB = b.top - a.bottom;
+                const relDyB = b.dy - a.dy;
+                if (gapB >= -1 && relDyB > 0) {
+                  const pad = Math.min(4.5, Math.max(2, gapB * 0.3));
+                  r = Math.min(r, Math.max(0, gapB - pad) / relDyB);
+                }
+              }
+            }
+
+            if (bRect && bRect.width > 0 && bRect.height > 0) {
+              if (a.dx > 0 && a.left >= bRect.left - 1) {
+                const clr = a.left - bRect.left - 4;
+                if (clr >= 0) r = Math.min(r, clr / a.dx);
+              } else if (a.dx < 0 && a.right <= bRect.right + 1) {
+                const clr = bRect.right - a.right - 4;
+                if (clr >= 0) r = Math.min(r, clr / -a.dx);
+              }
+              if (atTop && a.dy > 0 && a.top >= bRect.top - 1) {
+                const clr = a.top - bRect.top - 4;
+                if (clr >= 0) r = Math.min(r, clr / a.dy);
+              }
+            }
+          }
+          return Math.max(0, Math.min(0.08, r));
+        };
+
+        // 6. HIỆU ỨNG NỞ GIAO DIỆN TRỐNG PHÂN TẦNG CHUẨN IOS 27 (ICON -> TIÊU ĐỀ -> MÔ TẢ -> NÚT)
+        const animateEmptyBloom = (el, baseDelay = 75) => {
+          if (!el || !el.isConnected) return;
+          if (el._tngEmptyCleanup) el._tngEmptyCleanup();
+
+          const directChildren = Array.from(el.children).filter(
+            (c) => c.offsetParent !== null,
+          );
+          const useCascade =
+            directChildren.length >= 2 &&
+            !el.classList.contains("mc-empty-card");
+
+          if (useCascade) {
+            directChildren.forEach((ch, idx) => {
+              ch.classList.remove("tng-empty-child-play");
+              ch.style.setProperty("--empty-ease", SPRING_EMPTY);
+              ch.style.setProperty("--ec-delay", baseDelay + idx * 58 + "ms");
+              ch.classList.add("tng-empty-child");
+            });
+          } else {
+            el.classList.remove("tng-empty-bloom-play");
+            el.style.setProperty("--empty-ease", SPRING_EMPTY);
+            el.style.setProperty("--empty-delay", baseDelay + "ms");
+            el.classList.add("tng-empty-bloom");
+          }
+
+          void el.offsetWidth;
+
+          requestAnimationFrame(() =>
+            requestAnimationFrame(() => {
+              if (!el.isConnected) return;
+
+              if (useCascade) {
+                directChildren.forEach((ch) => {
+                  ch.classList.remove("tng-empty-child");
+                  ch.classList.add("tng-empty-child-play");
+                });
+                const totalMs =
+                  baseDelay + (directChildren.length - 1) * 58 + 760;
+                const cleanup = () => {
+                  clearTimeout(fb);
+                  el._tngEmptyCleanup = null;
+                  directChildren.forEach((ch) => {
+                    ch.classList.remove(
+                      "tng-empty-child",
+                      "tng-empty-child-play",
+                    );
+                    ch.style.removeProperty("--ec-delay");
+                    ch.style.removeProperty("--empty-ease");
+                  });
+                };
+                const fb = setTimeout(cleanup, totalMs);
+                el._tngEmptyCleanup = cleanup;
+              } else {
+                el.classList.remove("tng-empty-bloom");
+                el.classList.add("tng-empty-bloom-play");
+
+                let done = false;
+                const cleanup = () => {
+                  if (done) return;
+                  done = true;
+                  clearTimeout(fb);
+                  el.removeEventListener("transitionend", onEnd);
+                  el._tngEmptyCleanup = null;
+                  el.classList.remove("tng-empty-bloom-play");
+                  el.style.removeProperty("--empty-delay");
+                  el.style.removeProperty("--empty-ease");
+                };
+                const onEnd = (ev) => {
+                  if (ev.target === el && ev.propertyName === "transform") {
+                    cleanup();
+                  }
+                };
+                const fb = setTimeout(cleanup, baseDelay + 840);
+                el._tngEmptyCleanup = cleanup;
+                el.addEventListener("transitionend", onEnd);
+              }
+            }),
+          );
+        };
+
+        // 7. HIỆU ỨNG XUẤT HIỆN KẾT TỤ KÍNH MỜ CHO 1 PHẦN TỬ ĐỘC LẬP
+        const animateSingleEnter = (el, opts = {}) => {
+          if (!el || !el.isConnected) return;
+          const compact = !!opts.compact;
+          const delay = opts.delay || 0;
+          if (el._tngEnterCleanup) el._tngEnterCleanup();
+
+          el.classList.remove("tng-flip-enter-play");
+          el.style.setProperty("--enter-y", compact ? "11px" : "18px");
+          el.style.setProperty("--enter-scale", compact ? "0.9" : "0.86");
+          el.style.setProperty("--enter-blur", compact ? "5px" : "9px");
+          el.style.setProperty("--enter-dur", compact ? "580ms" : "660ms");
+          el.style.setProperty("--enter-delay", delay + "ms");
+          el.style.setProperty("--flip-ease", SPRING_8);
+          el.classList.add("tng-flip-enter");
+
+          void el.offsetWidth;
+
+          requestAnimationFrame(() =>
+            requestAnimationFrame(() => {
+              if (!el.isConnected) return;
+              el.classList.remove("tng-flip-enter");
+              el.classList.add("tng-flip-enter-play");
+
+              let done = false;
+              const cleanup = () => {
+                if (done) return;
+                done = true;
+                clearTimeout(fb);
+                el.removeEventListener("transitionend", onEnd);
+                el._tngEnterCleanup = null;
+                requestAnimationFrame(() => {
+                  el.classList.remove("tng-flip-enter-play");
+                  el.style.removeProperty("--enter-y");
+                  el.style.removeProperty("--enter-scale");
+                  el.style.removeProperty("--enter-blur");
+                  el.style.removeProperty("--enter-dur");
+                  el.style.removeProperty("--enter-delay");
+                  el.style.removeProperty("--flip-ease");
+                });
+              };
+              const onEnd = (ev) => {
+                if (ev.target === el && ev.propertyName === "transform") {
+                  cleanup();
+                }
+              };
+              const fb = setTimeout(cleanup, 860 + delay);
+              el._tngEnterCleanup = cleanup;
+              el.addEventListener("transitionend", onEnd);
+            }),
+          );
+        };
+
+        // 8. BỘ MÁY CHỤP & CHẠY FLIP HỢP NHẤT (DÙNG CHUNG CHO CẢ XÓA, THÊM & GHIM)
+        const captureScopes = (scopes, excludeEls = []) => {
+          const scopeList = (Array.isArray(scopes) ? scopes : [scopes]).filter(
+            Boolean,
+          );
+          const excludeSet = new Set(excludeEls.filter(Boolean));
+          const beforeMap = new Map();
+
+          scopeList.forEach((sc) => {
+            collectItems(sc).forEach(({ key, el }) => {
+              if (excludeSet.has(el) || el.dataset.tngEvap === "1") return;
+              const r = el.getBoundingClientRect();
+              if (r.width > 0 && r.height > 0) {
+                beforeMap.set(key, { left: r.left, top: r.top });
+              }
+            });
+          });
+          return { scopes: scopeList, beforeMap };
+        };
+
+        const playMotion = (snapshot, opts = {}) => {
+          if (!snapshot || !snapshot.scopes || !snapshot.scopes.length) return;
+          const { scopes, beforeMap } = snapshot;
+          const mode = opts.mode || "delete"; // "delete" | "add" | "reorder"
+          const moving = [];
+          const entering = [];
+          const emptyStates = [];
+
+          if (scopes.includes("my-content")) syncPinnedOrderSync();
+
+          scopes.forEach((sc) => {
+            const scopeItems = collectItems(sc);
+            const scopeMoving = [];
+            const nodes = [];
+            const seenEls = new Set();
+
+            scopeItems.forEach(
+              ({ key, el, isNewOk, isEmptyState, compact, noEnter }) => {
+                const rect = el.getBoundingClientRect();
+                if (rect.width <= 0 || rect.height <= 0) return;
+                seenEls.add(el);
+
+                const oldPos = beforeMap.get(key);
+                if (!oldPos) {
+                  if (isEmptyState) {
+                    emptyStates.push(el);
+                  } else if (
+                    (mode === "add" && !noEnter) ||
+                    (mode === "delete" && isNewOk) ||
+                    (mode === "reorder" && isNewOk)
+                  ) {
+                    entering.push({ el, compact: !!compact });
+                  }
+                  nodes.push({
+                    el,
+                    dx: 0,
+                    dy: 0,
+                    left: rect.left,
+                    right: rect.right,
+                    top: rect.top,
+                    bottom: rect.bottom,
+                  });
+                  return;
+                }
+
+                const dx = Math.round(oldPos.left - rect.left);
+                const dy = Math.round(oldPos.top - rect.top);
+                const node = {
+                  el,
+                  dx,
+                  dy,
+                  left: rect.left,
+                  right: rect.right,
+                  top: rect.top,
+                  bottom: rect.bottom,
+                };
+                nodes.push(node);
+                if (dx !== 0 || dy !== 0) scopeMoving.push(node);
+              },
+            );
+
+            if (!scopeMoving.length) return;
+
+            const { boundaryEl, extras } = getScopeCollisionContext(sc);
+            extras.forEach((ex) => {
+              if (!ex || seenEls.has(ex)) return;
+              const er = ex.getBoundingClientRect();
+              if (er.width > 0 && er.height > 0) {
+                seenEls.add(ex);
+                nodes.push({
+                  el: ex,
+                  dx: 0,
+                  dy: 0,
+                  left: er.left,
+                  right: er.right,
+                  top: er.top,
+                  bottom: er.bottom,
+                });
+              }
+            });
+
+            const maxDist = scopeMoving.reduce(
+              (m, n) => Math.max(m, Math.hypot(n.dx, n.dy)),
+              0,
+            );
+            const dur = calcAdaptiveDur(maxDist);
+            const capPx = mode === "add" || mode === "reorder" ? 18 : 0;
+            const safeR = calcSafeRatio(nodes, boundaryEl, capPx);
+            const ease = buildSpringEasing(safeR);
+
+            scopeMoving.forEach((item) => {
+              item.ease = ease;
+              item.dur = dur;
+              moving.push(item);
+            });
+          });
+
+          if (!moving.length && !entering.length && !emptyStates.length) return;
+
+          // Tạm mở tràn cho #history-list nếu không cuộn để mục đầu nảy không bị cắt mép trên
+          const histList = scopes.includes("sidebar")
+            ? document.getElementById("history-list")
+            : null;
+          let unclippedHist = false;
+          if (
+            moving.length &&
+            histList &&
+            histList.scrollHeight <= histList.clientHeight + 2
+          ) {
+            clearTimeout(histList._tngUnclipTimer);
+            histList.classList.add("tng-flip-unclip");
+            unclippedHist = true;
+          }
+
+          // INVERT: Khóa mục cũ về tọa độ cũ ngay lập tức (pixel nguyên)
+          moving.forEach(({ el, dx, dy, ease, dur }) => {
+            if (el._tngFlipCleanup) el._tngFlipCleanup();
+            el.classList.remove("tng-flip-play");
+            if (el.classList.contains("msg-row")) {
+              el.classList.add("tng-flip-noanim");
+            }
+            el.style.setProperty("--flip-x", dx + "px");
+            el.style.setProperty("--flip-y", dy + "px");
+            el.style.setProperty("--flip-ease", ease);
+            el.style.setProperty("--flip-dur", dur + "ms");
+            el.classList.add("tng-flip-hold");
+          });
+
+          // Giữ mục mới ở trạng thái kết tụ kính mờ
+          entering.forEach(({ el, compact }, idx) => {
+            if (el._tngEnterCleanup) el._tngEnterCleanup();
+            el.classList.remove("tng-flip-enter-play");
+            el.style.setProperty("--enter-y", compact ? "11px" : "18px");
+            el.style.setProperty("--enter-scale", compact ? "0.9" : "0.86");
+            el.style.setProperty("--enter-blur", compact ? "5px" : "9px");
+            el.style.setProperty("--enter-dur", compact ? "580ms" : "660ms");
+            el.style.setProperty(
+              "--enter-delay",
+              (moving.length ? 40 : 0) + Math.min(idx * 42, 160) + "ms",
+            );
+            el.style.setProperty("--flip-ease", SPRING_8);
+            el.classList.add("tng-flip-enter");
+          });
+
+          if (moving.length || entering.length) void document.body.offsetWidth;
+          moving.sort((a, b) => a.top - b.top || a.left - b.left);
+
+          const startPlay = () => {
+            moving.forEach(({ el, dur }) => {
+              if (!el.isConnected) return;
+              el.style.setProperty("--flip-delay", "0ms");
+              el.classList.remove("tng-flip-hold");
+              el.classList.add("tng-flip-play");
+
+              let cleaned = false;
+              const cleanup = () => {
+                if (cleaned) return;
+                cleaned = true;
+                clearTimeout(fb);
+                el.removeEventListener("transitionend", onEnd);
+                el._tngFlipCleanup = null;
+                requestAnimationFrame(() => {
+                  el.classList.remove("tng-flip-play");
+                  el.style.removeProperty("--flip-x");
+                  el.style.removeProperty("--flip-y");
+                  el.style.removeProperty("--flip-delay");
+                  el.style.removeProperty("--flip-ease");
+                  el.style.removeProperty("--flip-dur");
+                });
+              };
+              const onEnd = (ev) => {
+                if (ev.target === el && ev.propertyName === "transform") {
+                  cleanup();
+                }
+              };
+              const fb = setTimeout(cleanup, (dur || 640) + 220);
+              el._tngFlipCleanup = cleanup;
+              el.addEventListener("transitionend", onEnd);
+            });
+
+            entering.forEach(({ el }, idx) => {
+              if (!el.isConnected) return;
+              const d = (moving.length ? 40 : 0) + Math.min(idx * 42, 160);
+              el.classList.remove("tng-flip-enter");
+              el.classList.add("tng-flip-enter-play");
+
+              let cleaned = false;
+              const cleanup = () => {
+                if (cleaned) return;
+                cleaned = true;
+                clearTimeout(fb);
+                el.removeEventListener("transitionend", onEnd);
+                el._tngEnterCleanup = null;
+                requestAnimationFrame(() => {
+                  el.classList.remove("tng-flip-enter-play");
+                  el.style.removeProperty("--enter-y");
+                  el.style.removeProperty("--enter-scale");
+                  el.style.removeProperty("--enter-blur");
+                  el.style.removeProperty("--enter-dur");
+                  el.style.removeProperty("--enter-delay");
+                  el.style.removeProperty("--flip-ease");
+                });
+              };
+              const onEnd = (ev) => {
+                if (ev.target === el && ev.propertyName === "transform") {
+                  cleanup();
+                }
+              };
+              const fb = setTimeout(cleanup, 880 + d);
+              el._tngEnterCleanup = cleanup;
+              el.addEventListener("transitionend", onEnd);
+            });
+
+            if (unclippedHist && histList) {
+              histList._tngUnclipTimer = setTimeout(() => {
+                histList.classList.remove("tng-flip-unclip");
+              }, 820);
+            }
+          };
+
+          const playDelay = opts.flipPlayDelay || opts.playDelay || 0;
+          if (moving.length || entering.length) {
+            const schedule = () =>
+              requestAnimationFrame(() => requestAnimationFrame(startPlay));
+            if (playDelay > 0) setTimeout(schedule, playDelay);
+            else schedule();
+          }
+
+          // Giao diện trống nở mượt phân tầng sau khi sương bốc hơi vừa tan
+          emptyStates.forEach((emptyEl) => {
+            animateEmptyBloom(emptyEl, Math.max(75, playDelay));
+          });
+        };
+
+        // 9. TỰ ĐỘNG BỐC HƠI CÁC TIÊU ĐỀ / NÚT PHỤ ĐI KÈM KHI XÓA MỤC CUỐI
+        const expandCoEvaporatingElements = (els, opts = {}) => {
+          const set = new Set(els.filter(Boolean));
+          const extra = [];
+          const scopes = Array.isArray(opts.flipScopes)
+            ? opts.flipScopes
+            : opts.flipScopes
+              ? [opts.flipScopes]
+              : [];
+
+          // A. Thư viện: tiêu đề nhóm (.mc-section-title) rỗng
+          if (opts.autoSectionHeader || scopes.includes("my-content")) {
+            const checkedParents = new Set();
+            set.forEach((el) => {
+              const parent = el.parentElement;
+              if (!parent || checkedParents.has(parent)) return;
+              if (!parent.closest("#my-content-body")) return;
+              checkedParents.add(parent);
+
+              const wraps = Array.from(
+                parent.querySelectorAll(":scope > .mc-item-wrap"),
+              );
+              if (wraps.length > 0 && wraps.every((w) => set.has(w))) {
+                const prev = parent.previousElementSibling;
+                if (prev && prev.classList.contains("mc-section-title")) {
+                  extra.push(prev);
+                }
+              }
+            });
+          }
+
+          // B. Tất cả sổ ghi chú: xóa hết sổ -> bốc hơi nút "+" trên tiêu đề
+          if (scopes.includes("all-notes")) {
+            const cards = Array.from(
+              document.querySelectorAll("#all-notes-grid .note-card"),
+            );
+            if (cards.length > 0 && cards.every((c) => set.has(c))) {
+              const addBtn = document.querySelector(
+                "#all-notes-view > h1 button",
+              );
+              if (addBtn) extra.push(addBtn);
+            }
+          }
+
+          // C. Sidebar: giảm từ 3 sổ xuống 2 sổ -> bốc hơi nút "Tất cả sổ ghi chú"
+          if (
+            scopes.includes("sidebar") &&
+            typeof curA !== "undefined" &&
+            curA
+          ) {
+            const delNotes = Array.from(set).filter(
+              (el) =>
+                el.classList.contains("note-card") ||
+                !!el.closest("#sidebar-notes-list"),
+            );
+            if (delNotes.length > 0) {
+              const uniqueDelIds = new Set();
+              delNotes.forEach((el) => {
+                const id = el.getAttribute("data-id");
+                if (id) uniqueDelIds.add(id);
+                const dot = el.querySelector(".hist-dots");
+                const m = ((dot && dot.getAttribute("onclick")) || "").match(
+                  /openNoteMenu\([^,]+,\s*['"]?([^)'"]+)/,
+                );
+                if (m) uniqueDelIds.add(m[1]);
+              });
+              try {
+                const allNotes =
+                  JSON.parse(localStorage.getItem("tng_notes_" + curA.id)) ||
+                  [];
+                const allBtn = document.getElementById("btn-all-notes");
+                if (
+                  allBtn &&
+                  allBtn.style.display !== "none" &&
+                  allNotes.length > 2 &&
+                  allNotes.length - uniqueDelIds.size <= 2
+                ) {
+                  extra.push(allBtn);
+                }
+              } catch (e) {}
+            }
+          }
+
+          // D. Hành động đã lên lịch: xóa quy trình cuối -> bốc hơi thanh "Các quy trình của bạn"
+          if (scopes.includes("hanhdong")) {
+            const hdCards = Array.from(
+              document.querySelectorAll(
+                '#sp-body [onclick*="toggleHanhDongMenu("]',
+              ),
+            )
+              .map((b) => b.parentElement && b.parentElement.parentElement)
+              .filter(Boolean);
+            if (hdCards.length > 0 && hdCards.every((c) => set.has(c))) {
+              const hdr = document.querySelector(
+                "#sp-body > div > div:first-child",
+              );
+              if (hdr) extra.push(hdr);
+            }
+          }
+
+          // E. Chỉ dẫn AI: xóa chỉ dẫn cuối -> bốc hơi dòng "Đã lưu:"
+          if (scopes.includes("instructions")) {
+            const box = document.getElementById("tng-ins-list-container");
+            if (box) {
+              const rows = Array.from(
+                box.querySelectorAll('[onclick*="tngDeleteInstruction("]'),
+              )
+                .map((b) => b.parentElement)
+                .filter(Boolean);
+              if (
+                rows.length > 0 &&
+                rows.every((r) => set.has(r)) &&
+                box.firstElementChild &&
+                !set.has(box.firstElementChild)
+              ) {
+                extra.push(box.firstElementChild);
+              }
+            }
+          }
+
+          return [...els, ...extra];
+        };
+
+        // 10. NÂNG CẤP TRUNG TÂM XÓA BỐC HƠI (MỌI ĐIỂM XÓA TOÀN HỆ THỐNG TỰ HƯỞNG)
+        window.tngEvaporateRemove = function (elements, onDone, opts = {}) {
+          const rawList = (
+            Array.isArray(elements) ? elements : [elements]
+          ).filter((el) => el && el.isConnected && !el.dataset.tngEvap);
+          const expanded = expandCoEvaporatingElements(rawList, opts);
+
+          const visible = expanded.filter((el) => {
+            const r = el.getBoundingClientRect();
+            return r.width > 0 && r.height > 0;
+          });
+
+          if (!visible.length) {
+            if (typeof onDone === "function") onDone();
+            return;
+          }
+
+          const startDelay = opts.startDelay != null ? opts.startDelay : 80;
+          const dissolveAt = opts.dissolveAt != null ? opts.dissolveAt : 350;
+          const stagger = opts.stagger != null ? opts.stagger : 45;
+          const density = opts.density || 1;
+          const restoreAfter = !!opts.restoreAfter;
+
+          visible.forEach((el, idx) => {
+            el.dataset.tngEvap = "1";
+            const delay = startDelay + idx * stagger;
+
+            setTimeout(() => {
+              if (!el.isConnected) return;
+              const rect = el.getBoundingClientRect();
+              const isSecondary =
+                el.classList.contains("mc-section-title") ||
+                el.tagName === "BUTTON";
+              spawnVaporOverRect(rect, isSecondary ? 0.45 : density);
+
+              el.classList.add("tng-evap-prep");
+              void el.offsetWidth;
+              el.classList.add("tng-evap-go");
+            }, delay);
+          });
+
+          const commitWait =
+            startDelay + (visible.length - 1) * stagger + dissolveAt;
+
+          setTimeout(() => {
+            const snap = opts.flipScopes
+              ? captureScopes(opts.flipScopes, visible)
+              : null;
+
+            _inEvapCommit = true;
+            try {
+              if (typeof onDone === "function") onDone();
+            } finally {
+              _inEvapCommit = false;
+            }
+
+            if (snap) playMotion(snap, { ...opts, mode: "delete" });
+
+            if (restoreAfter) {
+              visible.forEach((el) => {
+                el.classList.remove("tng-evap-prep", "tng-evap-go");
+                delete el.dataset.tngEvap;
+              });
+            }
+          }, commitWait);
+        };
+
+        // 11. XÓA MỤC CUỐI TRONG QUẢN LÝ TÀI KHOẢN: NỞ GIAO DIỆN TRỐNG NGAY TẠI CHỖ (KHÔNG ĐÓNG/MỞ LẠI POPUP)
+        const MANAGE_EMPTY_META = {
+          childAcc: { title: "Tài khoản trẻ em", icon: "🧸" },
+          recovery: { title: "Liên hệ khôi phục", icon: "🛡️" },
+          thirdParty: { title: "Tài khoản bên thứ ba", icon: "🔗" },
+          address: { title: "Quản lý địa chỉ", icon: "📍" },
+        };
+
+        const buildManageEmptyHtml = (key) => {
+          const meta = MANAGE_EMPTY_META[key] || {
+            title: "dữ liệu",
+            icon: "📭",
+          };
+          return `<div data-tng-empty="1" style="display:flex; flex-direction:column; align-items:center; justify-content:center; padding:35px 20px; background:var(--inner-card-bg); border-radius:20px; border:1px dashed rgba(255,255,255,0.15); margin-bottom:15px; box-shadow:inset 0 4px 15px rgba(0,0,0,0.1);"><div style="font-size:55px; margin-bottom:12px; filter:drop-shadow(0 4px 8px rgba(0,0,0,0.4)); opacity:0.9;">${meta.icon}</div><div style="font-size:16px; font-weight:600; color:var(--text-main); margin-bottom:6px;">Chưa có ${meta.title.toLowerCase()}</div><div style="font-size:13px; color:var(--text-sub); text-align:center;">Vui lòng thêm mới để quản lý dễ dàng hơn.</div></div>`;
+        };
+
+        window.deleteChildAccount = function (id) {
+          const cmOverlay = document.getElementById("custom-modal-overlay");
+          if (cmOverlay) cmOverlay.style.zIndex = "99999999";
+          const btn = document.querySelector(
+            `#custom-child-manage-modal button[onclick*="deleteChildAccount(${id})"]`,
+          );
+          const row = btn ? btn.parentElement : null;
+          const parentList = row ? row.parentElement : null;
+
+          promptConfirm("Bạn muốn gỡ liên kết tài khoản này?", () => {
+            if (!Array.isArray(curA.childAcc)) return;
+            window.tngEvaporateRemove(
+              [row],
+              () => {
+                curA.childAcc = curA.childAcc.filter((acc) => acc.id !== id);
+                safeSaveCurA();
+                silentRefreshAccount();
+                if (row && row.isConnected) row.remove();
+                if (curA.childAcc.length === 0 && parentList) {
+                  parentList.innerHTML = `<div data-tng-empty="1" style="text-align: center; color: var(--text-sub); padding: 20px 0; font-size: 14px;">Chưa có tài khoản nào được liên kết.</div>`;
+                }
+              },
+              { startDelay: 80, flipScopes: parentList ? [parentList] : [] },
+            );
+          });
+        };
+
+        window.delManageItem = function (k, id, ref) {
+          const cm = document.getElementById("custom-modal-overlay");
+          if (cm) cm.style.zIndex = "99999999";
+          const btn = document.querySelector(
+            `#custom-manage-modal button[onclick*="delManageItem('${k}', ${id}"]`,
+          );
+          const row = btn ? btn.parentElement : null;
+          const parentList = row ? row.parentElement : null;
+
+          promptConfirm("Bạn muốn xóa liên kết này?", () => {
+            window.tngEvaporateRemove(
+              [row],
+              () => {
+                curA[k] = (curA[k] || []).filter((a) => a.id !== id);
+                safeSaveCurA();
+                silentRefreshAccount();
+                if (row && row.isConnected) row.remove();
+                if (curA[k].length === 0 && parentList) {
+                  parentList.innerHTML = buildManageEmptyHtml(k);
+                }
+              },
+              { startDelay: 80, flipScopes: parentList ? [parentList] : [] },
+            );
+          });
+        };
+
+        // 12. TRƯỢT LÒ XO MƯỢT KHI GHIM / BỎ GHIM (SỔ GHI CHÚ, THƯ VIỆN, LỊCH SỬ CHAT)
+        if (typeof window.execNote === "function") {
+          const _prevExecNote = window.execNote;
+          window.execNote = function (action) {
+            if (action !== "pin") return _prevExecNote.apply(this, arguments);
+            const scopes = ["sidebar"];
+            const anv = document.getElementById("all-notes-view");
+            if (anv && anv.style.display === "flex") scopes.push("all-notes");
+            const snap = captureScopes(scopes);
+            const res = _prevExecNote.apply(this, arguments);
+            playMotion(snap, { mode: "reorder" });
+            return res;
+          };
+        }
+
+        if (typeof window.execFile === "function") {
+          const _prevExecFile = window.execFile;
+          window.execFile = function (action) {
+            if (action !== "pin") return _prevExecFile.apply(this, arguments);
+            const mv = document.getElementById("my-content-view");
+            const snap =
+              mv && mv.style.display === "block"
+                ? captureScopes(["my-content"])
+                : null;
+            const res = _prevExecFile.apply(this, arguments);
+            if (snap) playMotion(snap, { mode: "reorder" });
+            return res;
+          };
+        }
+
+        if (typeof window.execHist === "function") {
+          const _prevExecHist = window.execHist;
+          window.execHist = function (action) {
+            if (action !== "pin") return _prevExecHist.apply(this, arguments);
+            const snap = captureScopes(["sidebar"]);
+            const res = _prevExecHist.apply(this, arguments);
+            playMotion(snap, { mode: "reorder" });
+            return res;
+          };
+        }
+
+        // 13. ĐỒNG BỘ & HIỆU ỨNG XUẤT HIỆN KHI TẠO PHẦN TỬ MỚI TOÀN HỆ THỐNG
+        let allNotesSyncTimer = null;
+
+        const syncAllNotesGridWithAnim = (delayMs = 240) => {
+          const anv = document.getElementById("all-notes-view");
+          if (!anv || anv.style.display !== "flex") {
+            clearTimeout(allNotesSyncTimer);
+            allNotesSyncTimer = null;
+            pendingNewNoteIds.clear();
+            return;
+          }
+
+          const checkMissing = () => {
+            let notes = [];
+            try {
+              if (typeof curA !== "undefined" && curA) {
+                notes =
+                  JSON.parse(localStorage.getItem("tng_notes_" + curA.id)) ||
+                  [];
+              }
+            } catch (e) {}
+
+            const domIds = new Set(
+              Array.from(
+                document.querySelectorAll("#all-notes-grid .note-card"),
+              )
+                .map((el) => el.getAttribute("data-id"))
+                .filter(Boolean),
+            );
+            return (
+              pendingNewNoteIds.size > 0 ||
+              notes.some((n) => !domIds.has(String(n.id)))
+            );
+          };
+
+          if (!checkMissing()) return;
+
+          clearTimeout(allNotesSyncTimer);
+          const runSync = () => {
+            allNotesSyncTimer = null;
+            if (!anv || anv.style.display !== "flex") return;
+            if (!checkMissing()) return;
+
+            const snap = captureScopes(["all-notes"]);
+            pendingNewNoteIds.clear();
+            if (typeof window.showAllNotes === "function") {
+              window._tngInternalSyncNotes = true;
+              try {
+                window.showAllNotes();
+              } finally {
+                window._tngInternalSyncNotes = false;
+              }
+            }
+            playMotion(snap, { mode: "add" });
+          };
+
+          if (delayMs > 0) allNotesSyncTimer = setTimeout(runSync, delayMs);
+          else runSync();
+        };
+
+        // A. Sổ ghi chú mới + bảo vệ currentNoteId khi bấm Lưu
+        if (typeof window.showAllNotes === "function") {
+          const _origShowAllNotes = window.showAllNotes;
+          let _inSaveNote = false;
+
+          window.showAllNotes = function () {
+            if (_inSaveNote) {
+              const keepId =
+                typeof currentNoteId !== "undefined" ? currentNoteId : null;
+              if (keepId != null && pendingNewNoteIds.has(String(keepId))) {
+                return;
+              }
+              const r = _origShowAllNotes.apply(this, arguments);
+              if (keepId != null) {
+                try {
+                  currentNoteId = keepId;
+                } catch (e) {}
+              }
+              return r;
+            }
+            if (!window._tngInternalSyncNotes) pendingNewNoteIds.clear();
+            return _origShowAllNotes.apply(this, arguments);
+          };
+
+          if (typeof window.saveNote === "function") {
+            const _origSaveNote = window.saveNote;
+            window.saveNote = function () {
+              _inSaveNote = true;
+              try {
+                return _origSaveNote.apply(this, arguments);
+              } finally {
+                _inSaveNote = false;
+              }
+            };
+          }
+        }
+
+        if (typeof window.createNewNote === "function") {
+          window.createNewNote = function () {
+            promptInput("Nhập tên quyển sổ mới:", (name) => {
+              if (!name || !name.trim()) return;
+              const cleanName = name.trim();
+              let notes =
+                JSON.parse(localStorage.getItem("tng_notes_" + curA.id)) || [];
+              const newId = Date.now();
+              notes.unshift({
+                id: newId,
+                name: cleanName,
+                title: "",
+                content: "",
+                pinned: false,
+              });
+              localStorage.setItem(
+                "tng_notes_" + curA.id,
+                JSON.stringify(notes),
+              );
+
+              pendingNewNoteIds.add(String(newId));
+
+              const sbSnap = captureScopes(["sidebar"]);
+              if (typeof openNoteEditor === "function") {
+                openNoteEditor(newId);
+              } else if (typeof renderSidebarNotes === "function") {
+                renderSidebarNotes();
+              }
+              playMotion(sbSnap, { mode: "add" });
+
+              setTimeout(() => {
+                const ov = document.getElementById("notebook-overlay");
+                if (!ov || !ov.classList.contains("show")) {
+                  syncAllNotesGridWithAnim(0);
+                }
+              }, 120);
+            });
+          };
+        }
+
+        if (typeof window.closeNoteEditor === "function") {
+          const _origCloseNote = window.closeNoteEditor;
+          window.closeNoteEditor = function () {
+            const res = _origCloseNote.apply(this, arguments);
+            syncAllNotesGridWithAnim(240);
+            return res;
+          };
+        }
+
+        const nbOverlay = document.getElementById("notebook-overlay");
+        if (nbOverlay) {
+          let wasNbOpen = nbOverlay.classList.contains("show");
+          new MutationObserver(() => {
+            const nowOpen = nbOverlay.classList.contains("show");
+            if (wasNbOpen && !nowOpen) syncAllNotesGridWithAnim(240);
+            wasNbOpen = nowOpen;
+          }).observe(nbOverlay, {
+            attributes: true,
+            attributeFilter: ["class"],
+          });
+        }
+
+        // B. Cuộc trò chuyện mới tự hiện mượt trên Sidebar
+        if (typeof window.safeSaveHist === "function") {
+          const _origSafeSaveHist = window.safeSaveHist;
+          window.safeSaveHist = function () {
+            const res = _origSafeSaveHist.apply(this, arguments);
+            if (_inEvapCommit) return res;
+            try {
+              const accId =
+                typeof curA !== "undefined" && curA ? String(curA.id) : null;
+              if (!accId || typeof sessions === "undefined") return res;
+              if (lastHistAccId && lastHistAccId !== accId) {
+                lastHistAccId = accId;
+                return res;
+              }
+              lastHistAccId = accId;
+
+              const hl = document.getElementById("history-list");
+              if (!hl) return res;
+              const domIds = new Set();
+              hl.querySelectorAll(".sb-item .hist-dots").forEach((dot) => {
+                const m = (dot.getAttribute("onclick") || "").match(
+                  /openHistMenu\([^,]+,\s*['"]([^'"]+)['"]/,
+                );
+                if (m) domIds.add(m[1]);
+              });
+
+              const hasNew = sessions.some((s) => !domIds.has(String(s.id)));
+              if (hasNew && typeof renderHist === "function") {
+                const snap = captureScopes(["sidebar"]);
+                renderHist();
+                playMotion(snap, { mode: "add" });
+
+                const sv = document.getElementById("search-view");
+                if (
+                  sv &&
+                  sv.style.display === "flex" &&
+                  typeof filterSearch === "function"
+                ) {
+                  filterSearch();
+                }
+              }
+            } catch (e) {}
+            return res;
+          };
+        }
+
+        // C. Thư viện (Ảnh / Video / Âm thanh / Tài liệu mới tạo)
+        if (typeof window.enforceStorageLimit === "function") {
+          const _origEnforce = window.enforceStorageLimit;
+          window.enforceStorageLimit = function () {
+            const res = _origEnforce.apply(this, arguments);
+            if (_inEvapCommit) return res;
+            try {
+              const mv = document.getElementById("my-content-view");
+              if (
+                mv &&
+                mv.style.display === "block" &&
+                typeof renderMyContent === "function"
+              ) {
+                const snap = captureScopes(["my-content"]);
+                renderMyContent();
+                playMotion(snap, { mode: "add" });
+              }
+            } catch (e) {}
+            return res;
+          };
+        }
+
+        // D. Hành động đã lên lịch (Quy trình mới)
+        if (typeof window.openHanhDongForm === "function") {
+          const _origOpenHD = window.openHanhDongForm;
+          window.openHanhDongForm = function (id, e) {
+            const res = _origOpenHD.apply(this, arguments);
+            if (!id) {
+              const saveBtn = document.getElementById("btn-save-routine");
+              if (saveBtn && typeof saveBtn.onclick === "function") {
+                const origClick = saveBtn.onclick;
+                saveBtn.onclick = function (ev) {
+                  const prevLen = (window.tngHanhDongList || []).length;
+                  const snap = captureScopes(["hanhdong"]);
+                  const r = origClick.call(this, ev);
+                  if ((window.tngHanhDongList || []).length > prevLen) {
+                    playMotion(snap, { mode: "add", playDelay: 170 });
+                  }
+                  return r;
+                };
+              }
+            }
+            return res;
+          };
+        }
+
+        // E. Chỉ dẫn mới trong Trí thông minh cá nhân
+        if (typeof window.tngAddInstructionModal === "function") {
+          const _origAddIns = window.tngAddInstructionModal;
+          window.tngAddInstructionModal = function (e) {
+            const res = _origAddIns.apply(this, arguments);
+            const submitBtn = document.getElementById("btn-submit-ins");
+            if (submitBtn && typeof submitBtn.onclick === "function") {
+              const origClick = submitBtn.onclick;
+              submitBtn.onclick = function (ev) {
+                const prevLen = (window.tngAiInstructions || []).length;
+                const snap = captureScopes(["instructions"]);
+                const r = origClick.call(this, ev);
+                if ((window.tngAiInstructions || []).length > prevLen) {
+                  playMotion(snap, { mode: "add", playDelay: 170 });
+                }
+                return r;
+              };
+            }
+            return res;
+          };
+        }
+
+        // F. Thêm tài khoản mới trong Menu Tài khoản
+        if (typeof window.renderAccList === "function") {
+          const _origRenderAccList = window.renderAccList;
+          window.renderAccList = function () {
+            if (_inEvapCommit) return _origRenderAccList.apply(this, arguments);
+            const modal = document.getElementById("acc-modal");
+            const listEl = document.getElementById("acc-expandable-list");
+            const canAnim =
+              modal &&
+              modal.classList.contains("show") &&
+              listEl &&
+              listEl.classList.contains("show");
+            const snap = canAnim ? captureScopes(["accounts"]) : null;
+            const res = _origRenderAccList.apply(this, arguments);
+            if (snap) playMotion(snap, { mode: "add", playDelay: 60 });
+            return res;
+          };
+        }
+
+        // G. Tệp đính kèm chờ gửi (Home & Chat)
+        if (typeof window.renderStaging === "function") {
+          const _origRenderStaging = window.renderStaging;
+          window.renderStaging = function () {
+            if (_inEvapCommit) return _origRenderStaging.apply(this, arguments);
+            const snap = captureScopes(["staging"]);
+            const res = _origRenderStaging.apply(this, arguments);
+            playMotion(snap, { mode: "add" });
+            return res;
+          };
+        }
+
+        // H. Thêm mới trong Quản lý tài khoản (Trẻ em, Khôi phục, Bên thứ ba, Địa chỉ)
+        [
+          ["saveChildAcc", "childAcc"],
+          ["saveNewChildAccount", "childAcc"],
+          ["saveRec", "recovery"],
+          ["saveTP", "thirdParty"],
+          ["saveAddr", "address"],
+        ].forEach(([fnName, key]) => {
+          if (typeof window[fnName] !== "function") return;
+          const origFn = window[fnName];
+          window[fnName] = function () {
+            const prevLen =
+              typeof curA !== "undefined" && curA && Array.isArray(curA[key])
+                ? curA[key].length
+                : 0;
+            const res = origFn.apply(this, arguments);
+            if (
+              typeof curA !== "undefined" &&
+              curA &&
+              Array.isArray(curA[key]) &&
+              curA[key].length > prevLen
+            ) {
+              const newest = curA[key][curA[key].length - 1];
+              if (newest && newest.id) {
+                pendingManageAnim = { key, id: String(newest.id) };
+              }
+            }
+            return res;
+          };
+        });
+
+        if (typeof window.openManagerModal === "function") {
+          const _origOpenMgr = window.openManagerModal;
+          window.openManagerModal = function (cfg) {
+            const res = _origOpenMgr.apply(this, arguments);
+            if (pendingManageAnim && cfg && cfg.key === pendingManageAnim.key) {
+              const target = pendingManageAnim;
+              pendingManageAnim = null;
+              setTimeout(() => {
+                const modal = document.getElementById("custom-manage-modal");
+                if (!modal) return;
+                const btn = modal.querySelector(
+                  `[onclick*="delManageItem('${target.key}', ${target.id}"]`,
+                );
+                if (btn && btn.parentElement) {
+                  animateSingleEnter(btn.parentElement, { delay: 120 });
+                }
+              }, 90);
+            }
+            return res;
+          };
+        }
+
+        // I. Thư mới trong Hòm thư TNG AI
+        if (typeof window.renderMailboxList === "function") {
+          const _origRenderMB = window.renderMailboxList;
+          window.renderMailboxList = function () {
+            if (_inEvapCommit) return _origRenderMB.apply(this, arguments);
+            const mb = document.getElementById("tng-mailbox-modal");
+            const isOpen = mb && mb.classList.contains("show");
+            const snap = isOpen ? captureScopes(["mailbox"]) : null;
+            const res = _origRenderMB.apply(this, arguments);
+            if (snap && snap.beforeMap.size > 0) {
+              playMotion(snap, { mode: "add" });
+            }
+            return res;
+          };
+        }
       })();
     </script>
   </body>
