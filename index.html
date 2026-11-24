@@ -10715,6 +10715,215 @@
         transform: rotate(-180deg);
         transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
       }
+
+      /* ============================================================ */
+      /* GIAO DIỆN QUYỀN RIÊNG TƯ & MENU DROPDOWN NƯỚC CHUẨN LẶP LẠI  */
+      /* ============================================================ */
+      html body #sp-body .tng-priv-wrap {
+        width: 100%;
+        padding: 4px 0 12px;
+        box-sizing: border-box;
+      }
+
+      html body #sp-body .tng-priv-card {
+        background: var(--inner-card-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 8px 26px rgba(0, 0, 0, 0.24);
+      }
+
+      html body[data-theme="light"] #sp-body .tng-priv-card {
+        background: #ffffff !important;
+        border: 1px solid rgba(15, 23, 42, 0.08) !important;
+        box-shadow: 0 6px 22px rgba(15, 23, 42, 0.06) !important;
+      }
+
+      html body #sp-body .tng-priv-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 18px 16px 20px;
+        cursor: pointer;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+        position: relative;
+        transition: background-color 0.2s ease;
+      }
+
+      html body #sp-body .tng-priv-row + .tng-priv-row::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 20px;
+        right: 20px;
+        height: 1px;
+        background: var(--glass-border);
+        pointer-events: none;
+      }
+
+      html
+        body[data-theme="light"]
+        #sp-body
+        .tng-priv-row
+        + .tng-priv-row::before {
+        background: rgba(15, 23, 42, 0.06);
+      }
+
+      @media (hover: hover) {
+        html body #sp-body .tng-priv-row:hover {
+          background-color: var(--glass-hover);
+        }
+        html body[data-theme="light"] #sp-body .tng-priv-row:hover {
+          background-color: rgba(15, 23, 42, 0.035);
+        }
+        /* Di chuột: lún nhẹ 0.965 giống hệt .am-item bên Quản lý tài khoản */
+        html
+          body
+          #sp-body
+          .tng-priv-row:hover:not(.tng-priv-nohover)
+          > .tng-priv-label,
+        html
+          body
+          #sp-body
+          .tng-priv-row:hover:not(.tng-priv-nohover)
+          > .tng-priv-right {
+          transform: scale(0.965) !important;
+        }
+      }
+
+      html body #sp-body .tng-priv-row:active,
+      html body #sp-body .tng-priv-row.tng-ios-active,
+      html body #sp-body .tng-priv-row.tng-priv-open {
+        background-color: rgba(255, 255, 255, 0.08);
+      }
+      html body[data-theme="light"] #sp-body .tng-priv-row:active,
+      html body[data-theme="light"] #sp-body .tng-priv-row.tng-ios-active,
+      html body[data-theme="light"] #sp-body .tng-priv-row.tng-priv-open {
+        background-color: rgba(15, 23, 42, 0.055);
+      }
+
+      html body #sp-body .tng-priv-label {
+        display: inline-block;
+        white-space: nowrap;
+        flex-shrink: 0;
+        margin-right: 40px;
+        font-size: 15.5px;
+        font-weight: 500;
+        color: var(--text-main);
+        letter-spacing: -0.1px;
+        line-height: 1.35;
+        will-change: transform;
+        transform-origin: left center;
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+      }
+
+      html body[data-theme="light"] #sp-body .tng-priv-label {
+        color: #111827 !important;
+      }
+
+      html body #sp-body .tng-priv-right {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 12px;
+        flex: 1;
+        min-width: 0;
+        will-change: transform;
+        transform-origin: center center;
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+      }
+
+      /* Nhấn giữ (PC & cảm ứng): lún sâu 0.88 tức thì trong 0.05s, không ảnh hưởng góc xoay mũi tên */
+      html body #sp-body .tng-priv-row:active > .tng-priv-label,
+      html body #sp-body .tng-priv-row:active > .tng-priv-right,
+      html body #sp-body .tng-priv-row.tng-ios-active > .tng-priv-label,
+      html body #sp-body .tng-priv-row.tng-ios-active > .tng-priv-right {
+        transition-duration: 0.05s !important;
+        transform: scale(0.88) !important;
+      }
+
+      /* Icon tròn trạng thái quyền (22x22 sắc nét) */
+      html body #sp-body .tng-priv-badge {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      html body #sp-body .tng-priv-badge.pop {
+        animation: tngPrivPop 0.42s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      @keyframes tngPrivPop {
+        0% {
+          transform: scale(0.65);
+        }
+        60% {
+          transform: scale(1.16);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      html body #sp-body .tng-priv-badge svg {
+        width: 22px;
+        height: 22px;
+        display: block;
+      }
+
+      /* Mũi tên > xoay xuống 90° thành v (bù lực lò xo nảy rõ như menu Lặp lại) */
+      html body #sp-body .tng-priv-arrow {
+        width: 20px;
+        height: 20px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-sub);
+        flex-shrink: 0;
+        transform: rotate(0deg);
+        transform-origin: center center;
+        will-change: transform, color;
+        transition:
+          transform 0.52s cubic-bezier(0.34, -0.72, 0.64, 1),
+          color 0.25s ease;
+      }
+
+      html body #sp-body .tng-priv-row.tng-priv-open .tng-priv-arrow {
+        transform: rotate(90deg);
+        color: var(--text-main);
+        transition:
+          transform 0.52s cubic-bezier(0.34, 1.95, 0.64, 1),
+          color 0.25s ease;
+      }
+
+      html body[data-theme="light"] #sp-body .tng-priv-arrow {
+        color: #9ca3af !important;
+      }
+      html
+        body[data-theme="light"]
+        #sp-body
+        .tng-priv-row.tng-priv-open
+        .tng-priv-arrow {
+        color: #111827 !important;
+      }
+
+      /* Menu dropdown Quyền riêng tư kế thừa 100% .tng-rp-list & giọt nước 3D */
+      body .tng-rp-list.tng-priv-dd {
+        min-width: 236px;
+        z-index: 10000000;
+      }
+      body .tng-rp-list.tng-priv-dd .tng-rp-opt {
+        font-size: 14px;
+        gap: 12px;
+        white-space: nowrap;
+      }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
@@ -16608,12 +16817,7 @@
           </div>
           <div
             class="d-item"
-            onclick="
-              openSetting(
-                'Quyền riêng tư',
-                '<div style=\'padding:10px;line-height:1.7;color:var(--text-sub);\'>Mọi dữ liệu của bạn trên TNG AI đều được mã hóa bằng chuẩn AES-256 mới nhất. Chúng tôi cam kết tuyệt đối không sử dụng thông tin cá nhân hay nội dung trò chuyện để huấn luyện mô hình ngôn ngữ chung.<br><br>Bạn có toàn quyền xóa lịch sử, quản lý file và điều chỉnh Trí thông minh cá nhân bất cứ lúc nào.</div>',
-              )
-            "
+            onclick="openSetting('Quyền riêng tư', getPrivacyContent())"
           >
             Quyền riêng tư
           </div>
@@ -31332,7 +31536,7 @@
       // 2. CẢM BIẾN THEO DÕI NGÓN TAY (SWIPE TO HIGHLIGHT NHƯ APP NATIVE IOS)
       let activeTouchItem = null;
       const touchSelectors =
-        "button, .sb-item, .d-item, .m-item, .s-item, .sv-item, .qa-item, .am-item, .chip, .avatar, .mc-item-wrap, .note-card, .act-card";
+        "button, .sb-item, .d-item, .m-item, .s-item, .sv-item, .qa-item, .am-item, .tng-priv-row, .chip, .avatar, .mc-item-wrap, .note-card, .act-card";
 
       // Chạm ngón tay xuống
       document.addEventListener(
@@ -31680,8 +31884,8 @@
         gap: 14px;
         cursor: pointer;
         transition:
-          transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-          box-shadow 0.3s;
+          transform 0.48s cubic-bezier(0.34, 1.85, 0.64, 1),
+          box-shadow 0.35s ease;
         border: 1px solid rgba(255, 255, 255, 0.25);
         box-shadow:
           inset 0 0 0 1.5px rgba(255, 255, 255, 0.15),
@@ -31692,14 +31896,15 @@
         will-change: transform;
         background-color: var(--modal-bg);
       }
-      .holiday-letter-card:not(.is-swiping):hover {
-        transform: translateY(-3px) scale(1.01);
+      .holiday-letter-card:not(.is-swiping):not([data-is-open="true"]):hover {
+        transform: translateY(-5px) scale(1.02);
         box-shadow:
-          inset 0 0 0 1.5px rgba(255, 255, 255, 0.25),
-          0 10px 25px rgba(0, 0, 0, 0.35);
+          inset 0 0 0 1.5px rgba(255, 255, 255, 0.3),
+          0 14px 30px rgba(0, 0, 0, 0.4);
       }
-      .holiday-letter-card:not(.is-swiping):active {
-        transform: scale(0.98);
+      .holiday-letter-card:not(.is-swiping):not([data-is-open="true"]):active {
+        transition-duration: 0.08s;
+        transform: translateY(-1px) scale(0.975);
       }
 
       .card-unread-dot {
@@ -43310,6 +43515,295 @@
             attributeFilter: ["class"],
           });
         });
+      })();
+    </script>
+
+    <script>
+      (() => {
+        const PRIVACY_ITEMS = [
+          { id: "location", label: "Vị trí", defaultVal: "deny" },
+          { id: "mic", label: "Micrô", defaultVal: "deny" },
+          { id: "audio", label: "Nhạc và âm thanh", defaultVal: "deny" },
+          { id: "sms", label: "Tin nhắn", defaultVal: "deny" },
+          { id: "contacts", label: "Liên hệ", defaultVal: "deny" },
+          { id: "calendar", label: "Lịch", defaultVal: "deny" },
+          { id: "nearby", label: "Thiết bị ở gần", defaultVal: "deny" },
+        ];
+
+        const PRIVACY_OPTS = [
+          { val: "deny", label: "Từ chối" },
+          { val: "ask", label: "Luôn hỏi" },
+          { val: "while_using", label: "Khi sử dụng ứng dụng" },
+          { val: "always", label: "Luôn cho phép" },
+        ];
+
+        const getStoreKey = () => {
+          const aid =
+            typeof curA !== "undefined" && curA && curA.id ? curA.id : "guest";
+          return "tng_privacy_perms_" + aid;
+        };
+
+        const loadPerms = () => {
+          const res = {};
+          PRIVACY_ITEMS.forEach((it) => (res[it.id] = it.defaultVal));
+          try {
+            const saved = JSON.parse(localStorage.getItem(getStoreKey()));
+            if (saved && typeof saved === "object") {
+              PRIVACY_ITEMS.forEach((it) => {
+                if (PRIVACY_OPTS.some((o) => o.val === saved[it.id])) {
+                  res[it.id] = saved[it.id];
+                }
+              });
+            }
+          } catch (e) {}
+          return res;
+        };
+
+        const savePerms = (perms) => {
+          try {
+            localStorage.setItem(getStoreKey(), JSON.stringify(perms));
+          } catch (e) {}
+        };
+
+        const renderBadgeSvg = (val) => {
+          if (val === "while_using") {
+            // Tròn xanh dương + biểu tượng khiên/ghim trắng chấm xanh như mục Lịch
+            return `<svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="11" fill="#4279f5"/>
+              <path d="M12 6.2c-2.65 0-4.8 2.12-4.8 4.74 0 3.28 4.8 7.36 4.8 7.36s4.8-4.08 4.8-7.36c0-2.62-2.15-4.74-4.8-4.74z" fill="#ffffff"/>
+              <circle cx="12" cy="10.8" r="1.75" fill="#4279f5"/>
+            </svg>`;
+          }
+          if (val === "always") {
+            // Tròn xanh lá + dấu tích trắng
+            return `<svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="11" fill="#22c55e"/>
+              <polyline points="7.5 12.4 10.6 15.4 16.6 9.2" fill="none" stroke="#ffffff" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>`;
+          }
+          if (val === "ask") {
+            // Tròn cam + dấu chấm hỏi trắng
+            return `<svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="11" fill="#f59e0b"/>
+              <path d="M9.7 9.4a2.4 2.4 0 0 1 4.65.8c0 1.45-1.55 1.85-2.1 2.45-.2.22-.25.45-.25.85" fill="none" stroke="#ffffff" stroke-width="2.1" stroke-linecap="round"/>
+              <circle cx="12" cy="16.7" r="1.15" fill="#ffffff"/>
+            </svg>`;
+          }
+          // Mặc định: Từ chối (Tròn đỏ + dấu X trắng)
+          return `<svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="11" fill="#e53935"/>
+            <line x1="8.6" y1="8.6" x2="15.4" y2="15.4" stroke="#ffffff" stroke-width="2.3" stroke-linecap="round"/>
+            <line x1="15.4" y1="8.6" x2="8.6" y2="15.4" stroke="#ffffff" stroke-width="2.3" stroke-linecap="round"/>
+          </svg>`;
+        };
+
+        window.getPrivacyContent = function () {
+          const perms = loadPerms();
+          const rowsHtml = PRIVACY_ITEMS.map((item) => {
+            const curVal = perms[item.id] || item.defaultVal;
+            return `
+              <div class="tng-priv-row" data-perm-id="${item.id}" data-perm-val="${curVal}" onclick="tngOpenPrivacyDropdown(event, '${item.id}')">
+                <span class="tng-priv-label">${item.label}</span>
+                <span class="tng-priv-right">
+                  <span class="tng-priv-badge" id="tng-priv-badge-${item.id}">${renderBadgeSvg(curVal)}</span>
+                  <span class="tng-priv-arrow" aria-hidden="true">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="9 6 15 12 9 18"></polyline>
+                    </svg>
+                  </span>
+                </span>
+              </div>
+            `;
+          }).join("");
+
+          return `<section class="tng-priv-wrap"><div class="tng-priv-card">${rowsHtml}</div></section>`;
+        };
+
+        window.tngOpenPrivacyDropdown = function (e, permId) {
+          if (e) e.stopPropagation();
+          const row = e.currentTarget;
+          if (!row) return;
+
+          if (row._unlockHover) row._unlockHover();
+
+          const oldOverlay = document.getElementById("tng-priv-dd-overlay");
+          if (oldOverlay) {
+            const sameRow =
+              oldOverlay._ownerRow === row && !oldOverlay._isClosing;
+            if (oldOverlay._closeImmediate) oldOverlay._closeImmediate();
+            if (sameRow) return;
+          }
+
+          const perms = loadPerms();
+          let selectedVal = perms[permId] || "deny";
+          const selectedOptObj =
+            PRIVACY_OPTS.find((o) => o.val === selectedVal) || PRIVACY_OPTS[0];
+
+          const rowRect = row.getBoundingClientRect();
+          const menuW = Math.min(246, window.innerWidth - 24);
+          const leftPos = Math.max(
+            12,
+            Math.min(
+              rowRect.right - 18 - menuW + 6,
+              window.innerWidth - menuW - 12,
+            ),
+          );
+          const estHeight = 180;
+          const topPos = Math.min(
+            rowRect.bottom + 4,
+            Math.max(12, window.innerHeight - estHeight - 12),
+          );
+          const posStyle = `top: ${topPos}px;`;
+
+          const overlay = document.createElement("div");
+          overlay.id = "tng-priv-dd-overlay";
+          overlay._ownerRow = row;
+          overlay.style.cssText =
+            "position: fixed; inset: 0; z-index: 99999999; background: transparent; cursor: default;";
+
+          const optsHtml = PRIVACY_OPTS.map(
+            (o) => `
+              <div class="tng-rp-opt ${o.val === selectedVal ? "active" : ""}" data-val="${o.val}" data-label="${o.label}">
+                <span>${o.label}</span>
+                <svg class="tng-rp-chk" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              </div>
+            `,
+          ).join("");
+
+          overlay.innerHTML = `
+            <div class="tng-rp-list tng-priv-dd" style="${posStyle} left: ${leftPos}px; width: ${menuW}px;">
+              <div class="tng-rp-pill"></div>
+              ${optsHtml}
+            </div>
+          `;
+
+          document.body.appendChild(overlay);
+          const menu = overlay.querySelector(".tng-rp-list");
+          menu.dataset.tngRpSelText = selectedOptObj.label;
+
+          let isClosing = false;
+          const spBody = document.getElementById("sp-body");
+
+          const closeMenu = () => {
+            if (isClosing) return;
+            isClosing = true;
+            overlay._isClosing = true;
+
+            if (row._unlockHover) row._unlockHover();
+            row.classList.add("tng-priv-nohover");
+            const cleanupUnlock = () => {
+              row.classList.remove("tng-priv-nohover");
+              document.removeEventListener("pointermove", unlockHover);
+              if (row._unlockHover === cleanupUnlock) row._unlockHover = null;
+            };
+            const unlockHover = (ev) => {
+              const r = row.getBoundingClientRect();
+              if (
+                !row.isConnected ||
+                ev.clientX < r.left ||
+                ev.clientX > r.right ||
+                ev.clientY < r.top ||
+                ev.clientY > r.bottom
+              ) {
+                cleanupUnlock();
+              }
+            };
+            row._unlockHover = cleanupUnlock;
+            document.addEventListener("pointermove", unlockHover, {
+              passive: true,
+            });
+
+            overlay.style.pointerEvents = "none";
+            row.classList.remove("tng-priv-open");
+            menu.classList.remove("show");
+            if (spBody) spBody.removeEventListener("scroll", closeMenu);
+            clearTimeout(overlay._rmTimer);
+            overlay._rmTimer = setTimeout(() => {
+              if (overlay.isConnected) overlay.remove();
+            }, 800);
+          };
+
+          overlay._closeImmediate = () => {
+            row.classList.remove("tng-priv-open");
+            if (spBody) spBody.removeEventListener("scroll", closeMenu);
+            clearTimeout(overlay._rmTimer);
+            if (overlay.isConnected) overlay.remove();
+          };
+
+          if (spBody)
+            spBody.addEventListener("scroll", closeMenu, { passive: true });
+
+          overlay.addEventListener("click", (ev) => {
+            if (ev.target === overlay) closeMenu();
+          });
+
+          const optEls = Array.from(menu.querySelectorAll(".tng-rp-opt"));
+          const canHover = window.matchMedia("(hover: hover)").matches;
+
+          const setActiveOpt = (val, isReturn) => {
+            menu.classList.toggle("returning", !!isReturn);
+            optEls.forEach((el) => {
+              el.classList.toggle(
+                "active",
+                el.getAttribute("data-val") === val,
+              );
+            });
+          };
+
+          optEls.forEach((optEl) => {
+            const optVal = optEl.getAttribute("data-val");
+            const optLabel = optEl.getAttribute("data-label");
+
+            if (canHover) {
+              optEl.addEventListener("mouseenter", () => {
+                if (!isClosing) setActiveOpt(optVal, false);
+              });
+            }
+
+            optEl.addEventListener("pointerdown", () => {
+              if (!isClosing) setActiveOpt(optVal, false);
+            });
+
+            optEl.addEventListener("click", (ev) => {
+              ev.stopPropagation();
+              if (isClosing) return;
+              selectedVal = optVal;
+              menu.dataset.tngRpSelText = optLabel;
+              setActiveOpt(optVal, false);
+
+              // Lưu trạng thái và cập nhật icon trạng thái ngay trên dòng
+              const updated = loadPerms();
+              updated[permId] = optVal;
+              savePerms(updated);
+              row.setAttribute("data-perm-val", optVal);
+
+              const badge = document.getElementById("tng-priv-badge-" + permId);
+              if (badge) {
+                badge.innerHTML = renderBadgeSvg(optVal);
+                badge.classList.remove("pop");
+                void badge.offsetWidth;
+                badge.classList.add("pop");
+              }
+
+              menu.style.pointerEvents = "none";
+              setTimeout(closeMenu, 170);
+            });
+          });
+
+          if (canHover) {
+            menu.addEventListener("mouseleave", () => {
+              if (!isClosing) setActiveOpt(selectedVal, true);
+            });
+          }
+
+          // Mở menu + xoay mũi tên đồng bộ
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              row.classList.add("tng-priv-open");
+              menu.classList.add("show");
+            });
+          });
+        };
       })();
     </script>
   </body>
